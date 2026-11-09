@@ -11,6 +11,7 @@ mimo 是喵撲使用的中文輸入核心。它用拼音或大千注音尋找繁
 ```sh
 python3 scripts/compile-emoji-associations.py
 python3 scripts/compile-native-lexicon.py build/lexicon
+python3 scripts/test-emoji-associations.py
 ```
 
 生成目錄包含 `native-pinyin.tsv`、`native-zhuyin.tsv`、`language-evidence.sqlite`、表情對應表及來源報告。呼叫端負責載入資料並維持 lexicon 在 session 存活期間有效。
