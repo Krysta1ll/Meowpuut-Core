@@ -1,0 +1,39 @@
+# Human-authored validation prompts, frozen before the development-set experiment.
+# Do not tune rules or weights against this set; target rank is not accuracy.
+# group|untoned input|simplified target|traditional target[|unselected suffix]
+character|mei|每|每
+character|zheng|整|整
+character|sheng|剩|剩
+character|fang|房|房
+character|leng|冷|冷
+character|ku|哭|哭
+character|kao|烤|烤
+character|xiu|修|修
+character|xing|醒|醒
+character|tiao|跳|跳
+phrase|yuyue|预约|預約
+phrase|cunchu|存储|存儲
+phrase|chongdian|充电|充電
+phrase|shijianzhou|时间轴|時間軸
+phrase|waimaipinglun|外卖评论|外賣評論
+phrase|tupianyulan|图片预览|圖片預覽
+phrase|yuehui|约会|約會
+phrase|lianxidianhua|联系电话|聯繫電話
+phrase|shenjingwangluo|神经网络|神經網絡
+phrase|kuaijiefangshi|快捷方式|快捷方式
+phrase|xiaoxitongzhi|消息通知|消息通知
+sentence|qingshouhaonidewupin|请收好你的物品|請收好你的物品
+sentence|woxingqitianqushudianmaileshu|我星期天去书店买了书|我星期天去書店買了書
+sentence|zhedaocaizuoqilaihenjiandan|这道菜做起来很简单|這道菜做起來很簡單
+sentence|woyijingwanquanmingbaile|我已经完全明白了|我已經完全明白了
+sentence|nizhaodaonajiajingdianlema|你找到那家景点了吗|你找到那家景點了嗎
+sentence|wozhaobudaodangqiandingdan|我找不到当前订单|我找不到當前訂單
+sentence|qingshubiaodianjizhegetubiao|请鼠标点击这个图标|請鼠標點擊這個圖標
+sentence|womenzhoubianyoumeiyouchaoshi|我们周边有没有超市|我們周邊有沒有超市
+sentence|tianqilenglechuqujidechuanyi|天气冷了出去记得穿衣|天氣冷了出去記得穿衣
+sentence|qingzaizhelishurunideshoujihao|请在这里输入你的手机号|請在這裡輸入你的手機號
+sentence|woxiangtiaozhengshoujizitidaxiao|我想调整手机字体大小|我想調整手機字體大小
+prefix|qingshouhaonidewupinz|请收好你的物品|請收好你的物品|z
+prefix|wozhaobudaodangqiandingdanh|我找不到当前订单|我找不到當前訂單|h
+prefix|woxiangtiaozhengshoujizitidaxiaos|我想调整手机字体大小|我想調整手機字體大小|s
+prefix|womenzhoubianyoumeiyouchaoshiz|我们周边有没有超市|我們周邊有沒有超市|z

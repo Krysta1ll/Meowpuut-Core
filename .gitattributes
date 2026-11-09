@@ -1,0 +1,7 @@
+# Pinned source files are hashed byte-for-byte on every platform.
+/DataSources/MimoNormalization/ICU-LICENSE.txt text eol=lf
+/DataSources/MimoNormalization/ICU-Hans_Hant.txt text eol=lf whitespace=-blank-at-eof
+/DataSources/MimoNormalization/reviewed-overrides.tsv text eol=lf
+/DataSources/MimoNormalization/conversions-icu78.2.tsv.gz binary
+
+/DataSources/UniDic/UNIDIC-COPYING.txt whitespace=-trailing-space,-blank-at-eof

@@ -1,0 +1,21 @@
+{
+  "name": "mimo fixed script conversions",
+  "format_version": 1,
+  "icu_version": "78.2",
+  "icu_source": "https://github.com/unicode-org/icu/releases/tag/release-78.2",
+  "icu_source_archive": "https://github.com/unicode-org/icu/releases/download/release-78.2/icu4c-78.2-sources.tgz",
+  "icu_source_archive_sha256": "3e99687b5c435d4b209630e2d2ebb79906c984685e78635078b672e03c89df35",
+  "rule_source": "https://github.com/unicode-org/icu/blob/release-78.2/icu4c/source/data/translit/Hans_Hant.txt",
+  "rule_file_sha256": "9f5945be3b0b286df3a2874203496e6ecd3ec6c95200edd4208f7d1830511ce2",
+  "license": "Unicode-3.0; copyright notices retained in ICU-Hans_Hant.txt",
+  "license_source": "https://github.com/unicode-org/icu/blob/release-78.2/LICENSE",
+  "license_sha256": "e55522d81edc687a341a4411e0776e54ca654e90147f354a90458aaced4116af",
+  "transform": "Traditional-Simplified, forward for t2s and reverse for s2t",
+  "snapshot_file": "conversions-icu78.2.tsv.gz",
+  "snapshot_sha256": "2625b5f4f939997c573d640d00418e36fa0d296ca28aa625751df17d42329d0d",
+  "snapshot_content_sha256": "9719cdaa0a8abc6c5d7a3c621f539c9face91a09f700a88764e6a2c5e7057cd8",
+  "overrides_file": "reviewed-overrides.tsv",
+  "overrides_sha256": "3e0b73d2cbcaa2e27e37a63f7ff4a02f2014b500d2fdd16e2040acecd0df2c56",
+  "snapshot_generator_sha256": "5acd485d2da2eabc790c8c2dca47ad075da217ed8c52a75a928628959f8e3c54",
+  "notes": "Generated from pinned Meowpuut source vocabulary, including McBopomofo 745e864, with ICU 78.2; eleven individually reviewed local overrides preserve established wording. The snapshot is used only at build time."
+}

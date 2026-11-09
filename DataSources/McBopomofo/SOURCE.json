@@ -1,0 +1,33 @@
+{
+  "source": "https://github.com/openvanilla/McBopomofo",
+  "revision": "745e8641a95d958532f0820c3ee679c2a585d8e3",
+  "license": "MIT",
+  "files": {
+    "BPMFBase.txt": "46e64a53dc9c6baa2cbe6e0b1af572f8ef6aafb50597178b5fd53df804316ce7",
+    "BPMFMappings.txt": "fde900aa3dca527a4d410b6655f5d61671f021ef0b296ca563a669dff565856b",
+    "LICENSE.txt": "72ed32193b0c629def66df63791b2fb125946b593a3251380e6b949488f47b72",
+    "heterophony1.list": "7fddbb6a66022b1809181484c7627d79dee4231849cb2d3c8c8cd4578b3d22cb",
+    "heterophony2.list": "4afd69a2702ae3af533cd01b755f81d77a430ace91311a8229319334aec24e37",
+    "heterophony3.list": "8be3f37fe419744c3792df1bdfc67a0abdb215dbbb759c92204d4f8d68a32cd9",
+    "phrase.occ": "d7f8966959f1d6e0672915df3de2e07f7e4ef96502e24a999de73738f62d3882"
+  },
+  "data_updates": {
+    "BPMFMappings.txt": "2026-11-06T23:17:36Z",
+    "phrase.occ": "2026-11-06T23:17:36Z",
+    "BPMFBase.txt": "2026-09-02T04:43:16Z"
+  },
+  "reading_exclusions": {
+    "file": "Resources/Lexicon/source-reading-exclusions.json",
+    "sha256": "4e2a593d4d97ff905f93f0dbebf1386aa71c1416c1bda997faae645b5b6f8133"
+  },
+  "retained_phrases": {
+    "file": "Resources/Lexicon/mcbopomofo-retained.tsv",
+    "sha256": "95d2def9ee72ee82644c82b6e56e0daa9996946703d8042e58db161e85020a14",
+    "license": "MIT",
+    "source_revision": "df084385e546287fc072dfce486d46f102ef9bd4",
+    "upstream_removal_revision": "745e8641a95d958532f0820c3ee679c2a585d8e3",
+    "original_file": "Source/Data/BPMFMappings.txt",
+    "original_occurrence_file": "Source/Data/phrase.occ",
+    "rows": 23
+  }
+}

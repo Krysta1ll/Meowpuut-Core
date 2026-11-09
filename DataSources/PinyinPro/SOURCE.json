@@ -1,0 +1,13 @@
+{
+  "source": "https://github.com/zh-lx/pinyin-pro",
+  "revision": "0785234b4dc0fa3ea9f244e3d77703b2df6a9db4",
+  "license": "MIT",
+  "data_path": "packages/data/json/complete.json",
+  "data_commit": "7ed6b19f0e1a71e951ecaf4468bd40f8b4989ad8",
+  "data_commit_date": "2026-07-22T02:23:21Z",
+  "files": {
+    "complete.json": "ede39817cbcdeb0d252fee6f5ac7b218326e5a6f3b52b9ce34c01e2c7ebe176b",
+    "LICENSE": "b067f06144168bd83317c1dbd12a5d5dd0cb8c0c153c4b04ddf194ac61f1925e",
+    "README.md": "215d66e84c4a3129c26c134977deddd774ca8153e6c095e811d487d4af674cf3"
+  }
+}
