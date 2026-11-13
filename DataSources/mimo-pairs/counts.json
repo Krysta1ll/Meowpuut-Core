@@ -1,0 +1,223 @@
+{
+ "rule": "kl:2000000",
+ "spoken_weight": 10,
+ "pairs_counted": 875804,
+ "pairs_kept": 855124,
+ "bytes": 2735576,
+ "exclude_files": {
+  "abbrev.pinyin-hans.jsonl": "b265672659a853e7ba743ff467943d18fdb9caf95545cf1833a36c7615ce6b85",
+  "abbrev.pinyin-hant.jsonl": "43ded4154351339e6003fbe68f68d31b2ab537d549d22fe2f744f150b4f40886",
+  "all.pinyin-hans.jsonl": "c402d7935970dd6b54126d72617f37617e383fb7e199d77dbdf3d06540e4b2c0",
+  "all.pinyin-hant.jsonl": "f717929a4b6788bcac9b8c402c3d3ddfce34bee4aa5ddf3ba61864ce9d3f1305",
+  "all.zhuyin.jsonl": "8f13262493ad90ad4daaabe3014fa9ed51567c2b5588678d46d96a4a4eab739b",
+  "chat.pinyin-hans.jsonl": "af57deb805b62fe22399ef96de86c3702b6e005daca887bfdf062a91fb9a4518",
+  "chat.pinyin-hant.jsonl": "d1d96d709e58b5250775470091b9e9a4bd8640f43febede9699026d32fbe47a9",
+  "chat.zhuyin.jsonl": "7a32da5ff36a82a58cc6ffde104dbba5b0138c6bb9add1ced589b5ad6c2387bd",
+  "fuzzy.pinyin-hans.jsonl": "5f522b68e768e57c74082f003c4cb1da9f75b314316ab2b904d549369c8d5bf2",
+  "fuzzy.pinyin-hant.jsonl": "002f244b3b59ce82ccf0b4d85efba7ef58335bb9b1b96406772c5c427810a6a0",
+  "mixed.pinyin-hans.jsonl": "721af5703fb65e9fb00cfb88652c9edd5cc6a55120864e4486acbf97b7516c12",
+  "mixed.pinyin-hant.jsonl": "966757f1df5b6cdfe861be622f92b1234baf1c59bb097a49079aa11cd0f40ca7",
+  "sentences.pinyin-hans.jsonl": "a4e6a639d6c035d67ca14c19592cf0b89d424fb99c734d6ea0830393ad24cf6b",
+  "sentences.pinyin-hant.jsonl": "cdfaf09efa93dbd5563814e7a8a906729459ee72a7e29a39809ac2f1d76bde5f",
+  "sentences.zhuyin.jsonl": "4504f82197472caae83e93951eb4342fdfc2c4b48ab85f1847837b6c19692934",
+  "tricky.pinyin-hans.jsonl": "2d6edee4085024609f72f94f525e859830a7abde7c26774d234c05e9269574a3",
+  "tricky.pinyin-hant.jsonl": "d711ee70394f432bb8df38ffebe589565fa2e214829e75b3220e736c71a84206",
+  "tricky.zhuyin.jsonl": "c8a74bfc6ee2f8584fa8a0fdefc47c5b245dbc944c37b5ac0fc9e0eb36ae2a74",
+  "words.pinyin-hans.jsonl": "5c3cebb7ba64379595845c2da1b721b7001cf0977e4d4f848d7a07ce8ebc9829",
+  "words.pinyin-hant.jsonl": "a252fbd250298e525208989f7d1fa7e0fe63ec9bcee142b5a79281848c4ac3ca",
+  "words.zhuyin.jsonl": "c8c744e42ddecaf192e789ca163cb63257c96c66207161a308533cfb2240e7ca",
+  "dev_tatoeba.jsonl": "37a831ce485672a640c9233e3ccc20912b6a3819beaf4458f2dda9827c56fe91",
+  "dev.jsonl": "b150efe272aac698867dd748dee6fd335d1ee0194c56e0c19df4903f852dec67",
+  "heldout.jsonl": "dd356ab8554ba8cfb45fa8a735c100bcc743103ef14e775f9b6a0de04743aac1",
+  "heldout-abbrev.jsonl": "2d32281f9d7eedc29b8821e64af0e14fb0d98b5ef9e99cb57d3043af88b7efda"
+ },
+ "excluded_texts": 2399,
+ "excluded_tatoeba_ids": 7000,
+ "sources": {
+  "tatoeba": {
+   "clauses": 103108,
+   "characters": 862613,
+   "clauses_excluded": 241,
+   "sentences_blocked": 846,
+   "pairs": 235193,
+   "pair_tokens": 609352,
+   "words": 509122
+  },
+  "commonvoice-zh-TW": {
+   "clauses": 15760,
+   "characters": 116161,
+   "sentences_blocked": 441,
+   "clauses_excluded": 3,
+   "pairs": 51913,
+   "pair_tokens": 79469,
+   "words": 63732
+  },
+  "commonvoice-zh-CN": {
+   "clauses": 1006,
+   "characters": 9642,
+   "sentences_blocked": 54,
+   "pairs": 5258,
+   "pair_tokens": 6423,
+   "words": 5420
+  },
+  "everyday": {
+   "clauses": 135643,
+   "characters": 992710,
+   "clauses_excluded": 326,
+   "sentences_blocked": 31,
+   "pairs": 206274,
+   "pair_tokens": 733952,
+   "words": 599169
+  },
+  "everyday-chat-2": {
+   "clauses": 69048,
+   "characters": 459553,
+   "sentences_blocked": 8,
+   "clauses_excluded": 94,
+   "pairs": 137161,
+   "pair_tokens": 342518,
+   "words": 273706
+  },
+  "everyday-written-2": {
+   "clauses": 109039,
+   "characters": 880228,
+   "sentences_blocked": 33,
+   "clauses_excluded": 72,
+   "pairs": 247963,
+   "pair_tokens": 622694,
+   "words": 514128
+  },
+  "everyday-mixed-2": {
+   "clauses": 13077,
+   "characters": 48678,
+   "clauses_excluded": 16,
+   "pairs": 15316,
+   "pair_tokens": 44818,
+   "words": 31758
+  },
+  "crosswoz-train": {
+   "clauses": 216004,
+   "characters": 1689521,
+   "sentences_blocked": 1643,
+   "clauses_excluded": 249,
+   "pairs": 70029,
+   "pair_tokens": 1201110,
+   "words": 1026483
+  },
+  "crosswoz-val": {
+   "clauses": 21812,
+   "characters": 169195,
+   "sentences_blocked": 148,
+   "clauses_excluded": 24,
+   "pairs": 19541,
+   "pair_tokens": 120318,
+   "words": 102742
+  },
+  "crosswoz-test": {
+   "clauses": 21624,
+   "characters": 169095,
+   "sentences_blocked": 158,
+   "clauses_excluded": 13,
+   "pairs": 19592,
+   "pair_tokens": 119906,
+   "words": 102436
+  },
+  "kdconv-film-train": {
+   "clauses": 63598,
+   "characters": 450324,
+   "clauses_excluded": 55,
+   "sentences_blocked": 207,
+   "pairs": 68574,
+   "pair_tokens": 324135,
+   "words": 270602
+  },
+  "kdconv-film-dev": {
+   "clauses": 9440,
+   "characters": 68693,
+   "sentences_blocked": 29,
+   "clauses_excluded": 6,
+   "pairs": 18304,
+   "pair_tokens": 48477,
+   "words": 40706
+  },
+  "kdconv-film-test": {
+   "clauses": 9929,
+   "characters": 71930,
+   "sentences_blocked": 36,
+   "clauses_excluded": 5,
+   "pairs": 17809,
+   "pair_tokens": 50859,
+   "words": 42750
+  },
+  "kdconv-music-train": {
+   "clauses": 39019,
+   "characters": 284539,
+   "sentences_blocked": 54,
+   "clauses_excluded": 21,
+   "pairs": 38399,
+   "pair_tokens": 208915,
+   "words": 176581
+  },
+  "kdconv-music-dev": {
+   "clauses": 5917,
+   "characters": 44413,
+   "sentences_blocked": 7,
+   "pairs": 11164,
+   "pair_tokens": 31903,
+   "words": 27145
+  },
+  "kdconv-music-test": {
+   "clauses": 6402,
+   "characters": 47985,
+   "sentences_blocked": 11,
+   "pairs": 11038,
+   "pair_tokens": 34334,
+   "words": 29056
+  },
+  "kdconv-travel-train": {
+   "clauses": 41941,
+   "characters": 304232,
+   "sentences_blocked": 291,
+   "clauses_excluded": 278,
+   "pairs": 41305,
+   "pair_tokens": 210153,
+   "words": 179747
+  },
+  "kdconv-travel-dev": {
+   "clauses": 6343,
+   "characters": 47331,
+   "clauses_excluded": 28,
+   "sentences_blocked": 20,
+   "pairs": 10964,
+   "pair_tokens": 32030,
+   "words": 27590
+  },
+  "kdconv-travel-test": {
+   "clauses": 6338,
+   "characters": 47689,
+   "sentences_blocked": 96,
+   "clauses_excluded": 15,
+   "pairs": 9866,
+   "pair_tokens": 32355,
+   "words": 27869
+  },
+  "massive-zh-TW": {
+   "clauses": 16813,
+   "characters": 147869,
+   "clauses_excluded": 38,
+   "sentences_blocked": 200,
+   "pairs": 36737,
+   "pair_tokens": 103039,
+   "words": 86269
+  },
+  "massive-zh-CN": {
+   "clauses": 16486,
+   "characters": 167942,
+   "clauses_excluded": 45,
+   "sentences_blocked": 179,
+   "pairs": 38525,
+   "pair_tokens": 115697,
+   "words": 99259
+  }
+ }
+}

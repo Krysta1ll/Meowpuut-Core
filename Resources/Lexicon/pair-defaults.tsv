@@ -1,0 +1,9 @@
+# Usage conventions (scripts/mimo_pairs.py cap_variants, compile-native-lexicon.py spoken_weights).
+# Columns: variant|default|why. Simplified characters, as the pair table keys words.
+# A word with the variant character never gets a higher pair score than the same word with the
+# default character, next to the same word or the clause end, and spoken counts do not raise it
+# above the default; the lexicon weight still decides.
+她|他|he is the unmarked pronoun when nothing in the text says otherwise
+它|他|same; 它 for things is chosen when the person picks it
+嘛|吗|a question ends in 吗; between words such as 干嘛 and 干吗 the lexicon weight decides
+妳|你|你 is the unmarked "you"; 妳 is chosen when the person picks it

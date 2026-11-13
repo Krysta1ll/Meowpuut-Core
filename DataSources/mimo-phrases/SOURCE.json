@@ -1,0 +1,10 @@
+{
+  "name": "mimo-phrases",
+  "description": "Short runs of lexicon words that people say on their own (辛苦了, 知道了, 真的吗), found by scripts/mimo_phrases.py in the spoken texts of DataSources/mimo-pairs and added to the lexicon at build time.",
+  "license": "The list is the project's own work; sources and their terms as in DataSources/mimo-pairs/SOURCE.json.",
+  "rule": "a whole clause of the spoken sources 5 times or more, and at least 0.2 of its spoken uses are whole clauses; 2 to 4 characters; no blocked term",
+  "phrases": 433,
+  "files": {
+    "phrases.tsv": "17da45f12640806374a0f626db96327bcdc09fd16c7f40173aa5ba2e01f550e8"
+  }
+}

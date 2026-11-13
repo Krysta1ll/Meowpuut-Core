@@ -1,0 +1,57 @@
+{
+  "name": "mimo-everyday",
+  "description": "Short everyday chat sentences in Chinese, Taiwan usage in Traditional characters and mainland usage in Simplified characters. Written on 2026-11-11 by language-model runs for this project, one writer per topic; the writers were not shown the benchmark or the held-out sets. A second batch (batch_2) followed on 2026-11-12. Used as text for the word-pair counts and the word weights (scripts/mimo_pairs.py).",
+  "license": "written for this project; no third-party text",
+  "author": "Meowpuut project (machine-written, cleaned by scripts/mimo_everyday.py)",
+  "topics": {
+    "taiwan": "meals and ordering; convenience stores, markets, paying; commuting and transport; school; work; online shopping; health; weather; family and home; meeting friends; relationships; moods and complaints; phones, computers, internet; anime and manga; games; film, music, concerts, streamers; travel; money; pets; exercise and diet; renting and moving; short replies and reactions; requests, thanks, apologies; questions; time, dates, numbers, arrangements; holidays and life events; cooking; appearance and clothes; learning Japanese and Japan; small talk",
+    "mainland": "meals and ordering; commuting and transport; school; work; online shopping and parcels; health; family and home; meeting friends; relationships; moods; phones, computers, internet; anime, manga and games; film, music, variety shows, streamers; travel; money; short replies and reactions; requests, thanks, apologies and questions; time, dates, numbers, arrangements and life events"
+  },
+  "counts": {
+    "writer_files": 288,
+    "lines_read": 106073,
+    "lines_kept": 96627,
+    "kept_taiwan": 59991,
+    "kept_mainland": 36636,
+    "dropped": {
+      "exact duplicate": 9422,
+      "no Han character or broken": 24
+    }
+  },
+  "files": {
+    "everyday.txt.xz": "be5cf088bd6aabf6df0fc61eb4de67d41fd7bb3727a7f432342592ba6cf4819c",
+    "chat-2.txt.xz": "45dedd87f2aa8e2b084b6e4a569f7601c0ae98b8d35f55faba3852d82ced5ce6",
+    "written-2.txt.xz": "fbf902dfa2f10111dd7f97320ad9d7c32975b3d0aef8a6b77a16eb36370496d4",
+    "mixed-2.txt.xz": "8ca6a7a236e1583dcc96d6bf81cd94158c26e03d7b26602af109158446da30ba"
+  },
+  "batch_2": {
+    "written": {
+      "writer_files": 244,
+      "lines_kept": 54676,
+      "kept_taiwan": 31434,
+      "kept_mainland": 23242,
+      "dropped": {
+        "exact duplicate": 61
+      }
+    },
+    "chat": {
+      "writer_files": 144,
+      "lines_kept": 45606,
+      "kept_taiwan": 24366,
+      "kept_mainland": 21240,
+      "dropped": {
+        "exact duplicate": 3471,
+        "no Han character or broken": 7
+      }
+    },
+    "mixed": {
+      "writer_files": 40,
+      "lines_kept": 9436,
+      "kept_taiwan": 4589,
+      "kept_mainland": 4847,
+      "dropped": {
+        "exact duplicate": 25
+      }
+    }
+  }
+}

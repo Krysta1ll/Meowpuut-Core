@@ -1,0 +1,12 @@
+[package]
+name = "meowpuut-lexicon"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "SoA lexicon compiler, phonetics encoder, and word evidence store for Meowpuut"
+
+[dependencies]
+meowpuut-core = { path = "../meowpuut-core" }
+
+[lints]
+workspace = true

@@ -1,0 +1,22 @@
+# Terms the counted text must not contain (Simplified characters; the text is converted before the check).
+# A sentence with one of these is left out of the word-pair, phrase and word counts, and no phrase with one
+# is added, so the keyboard never offers them as a phrase or as the next word. The words themselves stay in
+# the lexicon: a person can still type them.
+# Three groups: politics and public conflict; words that put down a group of people; abuse, sex, drugs, self-harm.
+
+# politics and public conflict
+政治 政府 政党 政权 政客 政变 总统 总理 首相 主席 总书记 书记 议员 立委 立法院 国会 议会 选举 大选 竞选 候选人 选票 公投
+执政 在野 共产 国民党 民进党 民众党 共和党 民主党 自民党 纳粹 法西斯 独裁 极权 专制 民主 自由派 保守派 左派 右派 左翼 右翼
+革命 起义 抗议 示威 暴动 镇压 戒严 战争 内战 侵略 殖民 军队 军事 导弹 核武 恐怖分子 恐怖主义 恐袭 难民 制裁 主权 领土
+台独 港独 藏独 疆独 两岸 统战 一国两制 九二共识 文革 文化大革命 六四 天安门 法轮功 外交 间谍 特务 叛国 汉奸 卖国 反共 亲中 亲美
+小粉红 五毛党 公知 习近平 毛泽东 邓小平 江泽民 胡锦涛 蒋介石 蒋经国 李登辉 陈水扁 马英九 蔡英文 赖清德 柯文哲 韩国瑜
+特朗普 川普 拜登 奥巴马 欧巴马 普京 普丁 希特勒 斯大林 史达林 金正恩 泽连斯基
+
+# putting down a group of people
+支那 鬼子 小日本 倭寇 棒子 阿三 黑鬼 尼哥 白皮猪 鬼佬 蝗虫 台巴子 呆湾 阿陆仔 大陆狗 强国人 番仔 外劳 乡巴佬 土包子 穷鬼
+娘炮 娘娘腔 基佬 人妖 婊 荡妇 骚货 贱人 贱货 母狗 女拳 直男癌 肥猪 死胖子 丑八怪 矮冬瓜 秃驴 老不死 智障 弱智 脑残 白痴 低能
+残废 瘸子 异教徒 邪教 圣战 种族 歧视 屠杀 灭绝 地域黑
+
+# abuse, sex, drugs, self-harm
+傻逼 傻屄 煞笔 他妈的 操你 草泥马 干你娘 去死 废物 人渣 畜生 杂种 强奸 轮奸 性侵 猥亵 色情 卖淫 嫖 妓女 毒品 吸毒 贩毒 大麻 冰毒
+海洛因 自杀 自残 赌博 赌场

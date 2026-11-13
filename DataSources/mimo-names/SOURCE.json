@@ -1,0 +1,252 @@
+{
+  "name": "mimo-names",
+  "description": "Names and terms with a Chinese label on Wikidata (works, characters, medicine, chemistry, life, food, computing, companies, places and more; no persons); made by scripts/mimo_names.py and added to the lexicon at build time.",
+  "license": "CC0-1.0 (Wikidata)",
+  "source": {
+    "endpoint": "https://query.wikidata.org/sparql",
+    "fetched": "2026-11-12",
+    "classes": {
+      "anime": [
+        "is Q63952888, 2+ editions",
+        "is Q21198342, 2+ editions",
+        "is Q20650540, 2+ editions",
+        "is Q1107, 2+ editions",
+        "is Q747381, 2+ editions",
+        "is Q104213567, 2+ editions",
+        "is Q8274, 2+ editions"
+      ],
+      "characters": [
+        "is Q15711870, 2+ editions",
+        "is Q80447738, 2+ editions",
+        "is Q87576284, 2+ editions",
+        "is Q1569167, 2+ editions",
+        "is Q15773347, 2+ editions",
+        "is Q95074, 2+ editions"
+      ],
+      "games": [
+        "is Q7889, 6+ editions",
+        "is Q7058673, 6+ editions"
+      ],
+      "screen": [
+        "is Q11424, 40+ editions",
+        "is Q5398426, 20+ editions",
+        "is Q24856, 20+ editions",
+        "is Q202866, 20+ editions"
+      ],
+      "books": [
+        "is Q7725634, 25+ editions",
+        "is Q47461344, 25+ editions",
+        "is Q8261, 25+ editions"
+      ],
+      "medicine": [
+        "kind Q12136, 10+ editions",
+        "kind Q169872, 10+ editions",
+        "is kind Q12140, 8+ editions",
+        "kind Q796194, 10+ editions",
+        "kind Q4936952, 15+ editions",
+        "is Q113145171, 25+ editions",
+        "is Q11344, 30+ editions"
+      ],
+      "food": [
+        "kind Q746549, 8+ editions",
+        "kind Q40050, 10+ editions",
+        "kind Q3314483, 10+ editions",
+        "kind Q11004, 10+ editions",
+        "kind Q25403900, 10+ editions"
+      ],
+      "life": [
+        "is Q55983715, 20+ editions",
+        "is Q39367, 8+ editions",
+        "is Q43577, 5+ editions",
+        "is Q16521, 90+ editions"
+      ],
+      "computing": [
+        "is Q9143, 10+ editions",
+        "is Q7397, 20+ editions",
+        "is Q9135, 10+ editions",
+        "is Q235557, 10+ editions",
+        "kind Q8366, 10+ editions",
+        "is Q35127, 25+ editions",
+        "is Q15836568, 10+ editions"
+      ],
+      "companies": [
+        "is Q4830453, 25+ editions",
+        "is Q891723, 25+ editions",
+        "is Q431289, 15+ editions",
+        "is Q46970, 25+ editions",
+        "is Q22687, 25+ editions"
+      ],
+      "products": [
+        "is Q3231690, 10+ editions"
+      ],
+      "places": [
+        "is Q570116, 20+ editions",
+        "is Q33506, 25+ editions",
+        "is Q8502, 30+ editions",
+        "is Q4022, 35+ editions",
+        "is Q23397, 30+ editions",
+        "is Q23442, 35+ editions",
+        "is Q46169, 25+ editions",
+        "is Q515, 60+ editions",
+        "is Q5119, 40+ editions",
+        "is Q50337, 10+ editions",
+        "is Q494721, 15+ editions",
+        "is Q55488, 8+ editions",
+        "is Q928830, 8+ editions",
+        "is Q1248784, 25+ editions"
+      ],
+      "space": [
+        "is Q634, 20+ editions",
+        "is Q8928, 20+ editions",
+        "is Q523, 30+ editions",
+        "is Q318, 25+ editions",
+        "is Q2537, 25+ editions",
+        "is Q3863, 40+ editions"
+      ],
+      "music": [
+        "kind Q34379, 10+ editions",
+        "is Q188451, 15+ editions"
+      ],
+      "sports": [
+        "is Q31629, 15+ editions",
+        "kind Q349, 15+ editions",
+        "is Q476028, 40+ editions"
+      ],
+      "study": [
+        "is Q11862829, 20+ editions",
+        "is Q3918, 40+ editions",
+        "is Q65943, 15+ editions",
+        "kind Q107715, 15+ editions",
+        "kind Q47574, 15+ editions"
+      ],
+      "work": [
+        "is kind Q28640, 10+ editions"
+      ],
+      "things": [
+        "kind Q39546, 15+ editions",
+        "kind Q11460, 12+ editions",
+        "is Q7946, 25+ editions",
+        "kind Q42889, 20+ editions"
+      ],
+      "culture": [
+        "is Q132241, 15+ editions",
+        "is Q1445650, 15+ editions",
+        "is Q7366, 40+ editions"
+      ]
+    },
+    "answered": [
+      "anime-Q104213567",
+      "anime-Q1107",
+      "anime-Q20650540",
+      "anime-Q21198342",
+      "anime-Q63952888",
+      "anime-Q747381",
+      "anime-Q8274",
+      "books-Q47461344",
+      "books-Q7725634",
+      "books-Q8261",
+      "characters-Q1569167",
+      "characters-Q15711870",
+      "characters-Q15773347",
+      "characters-Q80447738",
+      "characters-Q87576284",
+      "characters-Q95074",
+      "companies-Q22687",
+      "companies-Q431289",
+      "companies-Q46970",
+      "companies-Q4830453",
+      "companies-Q891723",
+      "computing-Q15836568",
+      "computing-Q235557",
+      "computing-Q35127",
+      "computing-Q7397",
+      "computing-Q8366",
+      "computing-Q9135",
+      "computing-Q9143",
+      "culture-Q132241",
+      "culture-Q1445650",
+      "culture-Q7366",
+      "food-Q11004",
+      "food-Q25403900",
+      "food-Q3314483",
+      "food-Q40050",
+      "food-Q746549",
+      "games-Q7058673",
+      "games-Q7889",
+      "life-Q39367",
+      "life-Q43577",
+      "life-Q55983715",
+      "medicine-Q113145171",
+      "medicine-Q11344",
+      "medicine-Q12136",
+      "medicine-Q12140",
+      "medicine-Q169872",
+      "medicine-Q4936952",
+      "medicine-Q796194",
+      "music-Q188451",
+      "music-Q34379",
+      "places-Q1248784",
+      "places-Q23397",
+      "places-Q23442",
+      "places-Q33506",
+      "places-Q4022",
+      "places-Q46169",
+      "places-Q494721",
+      "places-Q50337",
+      "places-Q5119",
+      "places-Q515",
+      "places-Q55488",
+      "places-Q570116",
+      "places-Q8502",
+      "places-Q928830",
+      "products-Q3231690",
+      "screen-Q11424",
+      "screen-Q202866",
+      "screen-Q24856",
+      "screen-Q5398426",
+      "space-Q2537",
+      "space-Q318",
+      "space-Q3863",
+      "space-Q634",
+      "space-Q8928",
+      "sports-Q31629",
+      "sports-Q349",
+      "sports-Q476028",
+      "study-Q107715",
+      "study-Q11862829",
+      "study-Q3918",
+      "study-Q47574",
+      "study-Q65943",
+      "things-Q11460",
+      "things-Q39546",
+      "things-Q42889",
+      "things-Q7946",
+      "work-Q28640"
+    ],
+    "rows": {
+      "anime": 8855,
+      "books": 1536,
+      "characters": 10605,
+      "companies": 2691,
+      "computing": 1462,
+      "culture": 265,
+      "food": 5767,
+      "games": 11247,
+      "life": 824,
+      "medicine": 11817,
+      "music": 1645,
+      "places": 17884,
+      "products": 3179,
+      "screen": 3636,
+      "space": 1801,
+      "sports": 1685,
+      "study": 2799,
+      "things": 9567,
+      "work": 1235
+    }
+  },
+  "names": 57810,
+  "files": {
+    "names.tsv": "1e54afc48510a1a86828c4681dee01ec1b063affa5a18771455cbe3d81a15d79"
+  }
+}

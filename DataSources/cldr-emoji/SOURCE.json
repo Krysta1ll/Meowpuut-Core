@@ -1,0 +1,20 @@
+{
+  "name": "cldr-emoji",
+  "version": "2",
+  "source_version": "CLDR 49 (tag release-49)",
+  "source_files": {
+    "https://raw.githubusercontent.com/unicode-org/cldr/release-49/common/annotations/zh.xml": "820de5034133077d2baa31464de0c91e748ae3c659880c2918bf6a55e560a282",
+    "https://raw.githubusercontent.com/unicode-org/cldr/release-49/common/annotations/zh_Hant.xml": "af3512dfbb82e71d2d4dc2ca2fa42c62d689cc5457639fabca84b4f555e7cda7",
+    "https://raw.githubusercontent.com/unicode-org/cldr/release-49/common/annotations/ja.xml": "74b6889ca7ad882b547e388a1e36a576ab4bdf00d12f59381eea286be44b15d3"
+  },
+  "license": "Unicode-3.0",
+  "license_sha256": {
+    "LICENSE.txt": "65eb33419e22a297550a811b5b535f5e532f9a7e0114b516c0ea18afd53c3804"
+  },
+  "derived_table_sha256": "61279e51a993caa9dfb7aaf95b22e8a3aa85e6f6bc8e619ad811dc5314c52cea",
+  "curated_file": "cldr-emoji.tsv",
+  "derived_table_ja_sha256": "ac1e8c5621b7d1971784e1ee38e1ff4b3dea7687dba364b5ecc8c4b546e74572",
+  "curated_file_ja": "cldr-emoji-ja.tsv",
+  "reviewed_at": "2026-11-12",
+  "notes": "cldr-emoji.tsv: Chinese words (1-4 Han characters) and up to two emoji each, from the emoji names and keywords of zh.xml and zh_Hant.xml. cldr-emoji-ja.tsv: Japanese words (1-6 kana or kanji) from ja.xml, by the same rules. Built by scripts/build-emoji-associations.py --cldr and --cldr-ja; a keyword shared by more than six emoji and a single character that is only a keyword are left out."
+}

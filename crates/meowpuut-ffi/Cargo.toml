@@ -1,0 +1,24 @@
+[package]
+name = "meowpuut-ffi"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "C ABI for the Meowpuut engine (the only crate permitted to contain unsafe code)"
+
+[lib]
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[dependencies]
+meowpuut-core = { path = "../meowpuut-core" }
+
+# Not `workspace = true`: this crate is the single audited exception to the
+# workspace-wide `unsafe_code = "forbid"`. Unsafe is denied by default and only
+# allowed item-by-item, and every unsafe block must carry a SAFETY comment.
+[lints.rust]
+unsafe_code = "deny"
+unsafe_op_in_unsafe_fn = "deny"
+missing_docs = "warn"
+
+[lints.clippy]
+undocumented_unsafe_blocks = "deny"
+multiple_unsafe_ops_per_block = "deny"

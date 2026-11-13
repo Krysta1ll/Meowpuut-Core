@@ -1,0 +1,132 @@
+# Mandarin readings of kanji in Japanese words, for the pinyin aliases of mimo-jp.
+# kanji<TAB>reading [second reading]<TAB>note
+# The first reading replaces the generated one in DataSources/mimo-jp/kanji-pinyin.tsv.
+# A second reading gives the word a second alias key. A line that repeats the generated
+# reading marks the character as checked. Readings chosen for a whole word (音楽 yin yue)
+# are not changed by this file. "unsure" in a note asks for a second opinion.
+#
+# The twelve lines of the design.
+都	du	都内 都合; dou is the adverb
+着	zhuo zhe	着る 到着; zhe accepted as a second key (owner question 7); zhao is not
+了	liao	了承 完了
+還	huan	還暦 返還
+給	ji gei	給料 時給; gei is what many people would type
+的	de di	most words end in 的 (基本的); di in 的中
+長	chang zhang	長い; 社長 comes from the word-level rule
+行	xing hang	行く 行う; 銀行 comes from the word-level rule
+重	zhong chong	重い 重ねる
+調	diao tiao	調べる; 調整 comes from the word-level rule
+楽	le yue	楽しい; 音楽 comes from the word-level rule
+働	dong	kokuji, read like 動; replaces the Unihan guess
+#
+# Characters with two or more readings in mimo-tc that occur in 20 words or more.
+大	da	checked; dai only in 大夫
+地	di	checked; de is the particle
+込	ru yu	unsure. Kokuji without a Mandarin reading of its own: ru as 入, yu from Unihan. Owner question 8
+見	jian	checked; xian is the old way to write 現
+学	xue	checked
+子	zi	checked
+会	hui	checked; kuai only in 会計
+食	shi	checked; si is classical
+数	shu	checked; shuo is classical
+白	bai	checked; bo is a literary reading
+家	jia	checked
+車	che	checked; ju is the chess piece
+落	luo	checked; lao and la are colloquial
+期	qi	checked
+足	zu	checked
+意	yi	checked
+石	shi	checked; dan is the measure
+女	nv	checked
+身	shen	checked
+度	du	checked; duo only in 忖度
+乗	cheng	checked; sheng is classical
+読	du	checked; dou only in 句読
+員	yuan	checked
+解	jie	checked; xie is a surname
+信	xin	checked
+悪	e	悪い; wu in 嫌悪 comes from the word-level rule
+和	he	checked; han is the spoken Taiwan reading of the conjunction
+血	xue xie	xie is the spoken reading and the usual one in Taiwan
+強	qiang	checked; jiang only in 倔強
+差	cha	checked; chai is an errand, ci only in 参差
+校	xiao	checked; jiao in 校正 comes from the word-level rule
+葉	ye	checked; she is a place name
+巻	juan	checked
+親	qin	checked; qing only in 親家
+角	jiao	角度 三角; jue is a role
+殺	sha	checked
+伝	chuan	伝える; zhuan in 伝記 comes from the word-level rule
+側	ce	checked
+盛	sheng	unsure. 盛大 is sheng; 盛る (to heap, to serve) would be cheng in Chinese
+湯	tang	checked
+波	bo po	po is common in Taiwan
+価	jia	checked
+降	jiang	降る 降りる; xiang in 降伏 comes from the word-level rule
+居	ju	checked
+参	can	checked; shen in 人参 comes from the word-level rule
+得	de	checked; dei is "must"
+射	she	checked
+薄	bao bo	薄い; bo is the literary reading and the usual one in Taiwan
+告	gao	checked
+弾	tan dan	tan to pluck or bounce (弾く 弾ける); dan the bullet (銃弾)
+洗	xi	checked; xian is a surname
+便	bian	checked; pian only in 便宜
+単	dan	checked; chan and shan are names
+朝	zhao chao	unsure about the order. zhao is the morning (朝食 今朝); chao is the dynasty and the more common reading
+覚	jue	覚える; jiao is sleep
+説	shuo	checked; shui only in 遊説
+県	xian	checked
+暴	bao	checked
+遺	yi	checked; wei is classical
+祭	ji	checked; zhai is a surname
+液	ye yi	yi is the Taiwan dictionary reading
+町	ding ting	unsure about the order. ding as in 西門町; ting is the dictionary reading for a field path
+若	ruo	checked; re only in 般若
+奇	qi	checked; ji in 奇数 comes from the word-level rule
+夏	xia	checked
+宿	su	checked; xiu only in 星宿
+属	shu	checked
+被	bei	checked
+区	qu	checked; ou is a surname
+率	lv shuai	lv the rate (確率 効率); shuai to lead (率いる 引率)
+識	shi	checked; zhi only in 標識 as Chinese reads it
+景	jing	checked
+査	cha	checked; zha is a surname
+秘	mi	checked; bi in 秘魯 and as an older Taiwan reading
+称	cheng	checked; chen in 対称 comes from the word-level rule
+縮	suo	checked
+著	zhu	著者 著しい; zhe is the particle 着 in Traditional text
+児	er	checked
+従	cong	checked
+滑	hua	checked; gu is the old reading of 滑稽
+省	sheng xing	sheng to save, a ministry (省エネ 省く); xing to reflect (省みる 反省)
+露	lu	checked; lou is colloquial
+更	geng	checked
+臭	chou	checked; xiu is "to smell"
+宅	zhai	checked
+比	bi	checked
+紅	hong	checked; gong only in 女紅
+脚	jiao	checked; jue is a role
+模	mo	checked; mu in 模様 comes from the word-level rule
+陸	lu	checked; liu is the numeral
+埋	mai	checked; man only in 埋怨
+将	jiang	checked
+提	ti	checked; di only in 提防
+脈	mai	checked; mo only in 脈脈
+免	mian	checked
+尾	wei	checked; yi is colloquial
+熟	shu shou	shou is the usual reading in Taiwan
+蔵	cang	冷蔵 貯蔵; zang is a treasure store and Tibet
+卒	zu	checked
+句	ju	checked
+#
+# Fewer than 20 words, but the generated reading is wrong for Japanese words.
+沈	chen	沈む 沈黙; Chinese writes this sense 沉, shen is the surname
+没	mo	没頭 日没; mei is the negation
+伯	bo	伯父 画伯; bai only in 大伯子
+咳	ke	咳 咳払い; hai is the interjection
+誰	shui shei	shei is the spoken reading
+駄	tuo	Japanese form of 馱 (無駄 駄目); replaces the Unihan guess
+頚	jing	Japanese form of 頸; replaces the Unihan guess
+傀	kui	傀儡; replaces the Unihan guess

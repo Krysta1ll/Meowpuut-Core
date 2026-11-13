@@ -1,0 +1,22 @@
+name: Portable core
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  rust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo build --locked --release --workspace
+      - run: cargo test --locked --workspace --lib
+      - run: cargo test --locked --workspace --doc
+  lexicon:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: bash scripts/build-lexicon.sh
+      - run: cargo test --locked --workspace
+      - run: python3 scripts/check-chinese-golden.py
+      - run: python3 scripts/check-japanese-lexicon.py

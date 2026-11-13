@@ -1,0 +1,29 @@
+{
+  "name": "mimo-latin",
+  "description": "English (Latin-letter) words written inside Chinese text, with their weighted count and most frequent spelling; made by scripts/mimo_latin.py count and added to the pinyin image of mimo_base.bin at build time (upper-case keys, crates/meowpuut-core/src/latin.rs).",
+  "license": "The list is the project's own work; sources and their terms as in DataSources/mimo-pairs/SOURCE.json.",
+  "attribution": "Tatoeba (https://tatoeba.org) and its contributors; Mozilla Common Voice sentence-collector contributors; CrossWOZ and KdConv (Tsinghua University CoAI group); MASSIVE (Amazon.com, Inc. or its affiliates).",
+  "sources": "The texts of DataSources/mimo-pairs/SOURCE.json (same files, versions and SHA-256; licence files there), including the project's own sentences (DataSources/mimo-everyday); most English words come from its mixed-2 file.",
+  "rule": "A word is counted where it stands next to a Han character (one space at most) and not next to another Latin word, digit or markup; spoken text counts x10; key = spelling in lower case without hyphens. Casing: the most frequent spelling, in lower case when that is at least a third of uses next to Han, or when it is capitalised only in its first letter and the lower-case form makes up at least 0.2 of its capitalised uses (and 20 or more) anywhere in lines with Han (version, team; Google, Eason keep their capital).",
+  "files": {
+    "latin.tsv": "fec578b6654f50b0476c6292786a95d36744bdf00f4593c469540c9625052b7e"
+  },
+  "counts": {
+    "words_kept": 1675,
+    "min_weighted_count": 5,
+    "min_short": {
+      "2": 100,
+      "3": 30
+    },
+    "limit": 12000,
+    "latin_tokens_per_source": {
+      "commonvoice-zh-CN": 2,
+      "commonvoice-zh-TW": 6,
+      "everyday": 573,
+      "everyday-chat-2": 214,
+      "everyday-mixed-2": 8501,
+      "everyday-written-2": 431,
+      "tatoeba": 1424
+    }
+  }
+}

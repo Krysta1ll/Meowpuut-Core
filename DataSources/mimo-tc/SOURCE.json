@@ -1,0 +1,29 @@
+{
+  "name": "mimo-tc",
+  "version": "1.0",
+  "license": "MIT AND Apache-2.0",
+  "upstreams": [
+    {
+      "name": "McBopomofoData",
+      "repo": "https://github.com/openvanilla/McBopomofoData",
+      "revision": "df084385e546287fc072dfce486d46f102ef9bd4",
+      "license": "MIT"
+    },
+    {
+      "name": "OpenCC",
+      "repo": "https://github.com/BYVoid/OpenCC",
+      "license": "Apache-2.0"
+    },
+    {
+      "name": "jieba",
+      "repo": "https://github.com/fxsjy/jieba",
+      "license": "MIT"
+    }
+  ],
+  "files": {
+    "mimo-tc.json": "70944b490f6711ebb67dbf8ac07b0fc59a204f0fdd6405755f2321b30b195003",
+    "LICENSE.txt": "72ed32193b0c629def66df63791b2fb125946b593a3251380e6b949488f47b72",
+    "OPENCC-LICENSE.txt": "b534e465949558eec2597b04f5092b5e161236a68dfbfd04d547592ac3964308",
+    "JIEBA-LICENSE.txt": "18ba0984839f85853b29fadaf992f7dba8fd0ca0fbeae34de2b8735222dc7a37"
+  }
+}

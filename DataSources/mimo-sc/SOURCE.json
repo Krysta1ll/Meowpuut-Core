@@ -1,0 +1,17 @@
+{
+  "name": "mimo-sc",
+  "version": "1.0",
+  "license": "MIT",
+  "upstreams": [
+    {
+      "name": "pinyin-pro",
+      "repo": "https://github.com/zh-lx/pinyin-pro",
+      "revision": "0785234b4dc0fa3ea9f244e3d77703b2df6a9db4",
+      "license": "MIT"
+    }
+  ],
+  "files": {
+    "mimo-sc.json": "45decafd5a4dc6632cfff81cbf8c8268da5b2ab8f2b63088b6a8dda771e7eb45",
+    "LICENSE": "b067f06144168bd83317c1dbd12a5d5dd0cb8c0c153c4b04ddf194ac61f1925e"
+  }
+}

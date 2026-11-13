@@ -1,0 +1,127 @@
+{
+ "name": "mimo-jp",
+ "version": "2.0",
+ "license": "BSD-3-Clause AND NAIST-2003 AND Apache-2.0 AND Unicode-3.0 AND MIT",
+ "generated_by": "scripts/mimo_jp_pipeline.py build",
+ "parameters": {
+  "cost_cut": 7800,
+  "bc_gap": 400,
+  "place_cut": 6600,
+  "stem_penalty": 800,
+  "class_offsets": {
+   "verb": 680,
+   "adj": 340,
+   "adverb": 200,
+   "interjection": 600,
+   "pronoun": 390
+  },
+  "weight": "round(700*ln(1+59.7e6*exp(-cost/500))) clamped to 1..10000"
+ },
+ "upstreams": [
+  {
+   "name": "Mozc dictionary_oss",
+   "repo": "https://github.com/google/mozc",
+   "revision": "a4541df29db443b49f81cf54665873b68fde9efa",
+   "license": "BSD-3-Clause AND NAIST-2003",
+   "inputs": {
+    "src/data/dictionary_oss/dictionary00.txt": "9e07ce292932c4fff327ed8cb06274c09acca556bd8bdf7c7ef1f6173eae3b61",
+    "src/data/dictionary_oss/dictionary01.txt": "836fd5fd8399510de0d8ef7b33be913cca6bbaee7b712cc8045fba03f4c75a89",
+    "src/data/dictionary_oss/dictionary02.txt": "93943858d0cfd092b849a78def6901eaf228177e1ac5663544e865a3a1e45a9e",
+    "src/data/dictionary_oss/dictionary03.txt": "cb9f1b0b4a7550d682d86244a021cd17e0b15366328819e69135b5f183a1a24b",
+    "src/data/dictionary_oss/dictionary04.txt": "9fdc4e3948d03463de13ab5782adffbc11dd06e934cb80138c5920029cd3d2f6",
+    "src/data/dictionary_oss/dictionary05.txt": "199e3b0f050b691823ae7ba943090d437f51af6436b27c5f3dc69cafa12000e4",
+    "src/data/dictionary_oss/dictionary06.txt": "b95b14f7770ae2a824bc8e9fad8b03c1bc45c504f93a36554b8b56daa0368d2a",
+    "src/data/dictionary_oss/dictionary07.txt": "7f53649b529d4c8c495d3a8dd9c4d489dfe7696080f7423107ff01331174be48",
+    "src/data/dictionary_oss/dictionary08.txt": "50a31bb5fc1646721b00be371a5695dffab1292bda143e1e59cc70cbbdd8643f",
+    "src/data/dictionary_oss/dictionary09.txt": "4e5fcd4cbfbf11395166a37b506f547fc54d20edc0884f5184ecd3fc705f0d9a",
+    "src/data/dictionary_oss/connection_single_column.txt": "68823a1f6617372ccb89afdbcb334d7a0bcfa82c9c5dda03fc1f80f1cab5c48e",
+    "src/data/dictionary_oss/id.def": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
+    "src/data/dictionary_oss/reading_correction.tsv": "08066c2af7e6d3eba0ff7b1a9e10d876436b639d036680d1f7f91a8306ec22d7"
+   }
+  },
+  {
+   "name": "UniDic unidic-cwj",
+   "url": "https://clrd.ninjal.ac.jp/unidic_archive/2512/unidic-cwj-202512_full.zip",
+   "version": "2025.12",
+   "license": "BSD-3-Clause (chosen from GPL-2.0, LGPL-2.1, BSD-3-Clause)",
+   "archive_sha256": "ca02ad51c8ae238373dcb150eec014f1ad9f05f54c7416a16c2fe444fd4921b3",
+   "inputs": {
+    "lex.csv": "bd00a695ba897a3250965257341e1929ae062dfa2e63b223a05bcc02f22e74a2"
+   }
+  },
+  {
+   "name": "OpenCC",
+   "repo": "https://github.com/BYVoid/OpenCC",
+   "revision": "fae2a0a911c30764e669a7d8b0591cd8e852934a",
+   "license": "Apache-2.0",
+   "inputs": {
+    "data/dictionary/JPShinjitaiCharacters.txt": "12cec7250b873ef52b36d8f92218d4f92c0aaf5d8cd7c58fe42d9785bdcdc43a"
+   }
+  },
+  {
+   "name": "Unihan",
+   "url": "https://www.unicode.org/Public/18.0.0/ucd/Unihan.zip",
+   "version": "18.0.0",
+   "license": "Unicode-3.0",
+   "archive_sha256": "4c93ea9c1f636451729a840978f1667a53886af37ba854fdcce109721c63d43e",
+   "inputs": {
+    "Unihan_Readings.txt": "9d39995b5de714e8ce93716ed5d15eaa0792d68e407cdf8a0add2893b8f4150b",
+    "Unihan_Variants.txt": "4ccfd34b08ac7b9c14353f6668ba43e3796d85c4cdce7952b635be16015aafa2"
+   }
+  },
+  {
+   "name": "mimo-sc entries",
+   "path": "DataSources/mimo-sc/mimo-sc.json",
+   "license": "MIT",
+   "notice": "DataSources/mimo-sc/LICENSE (pinyin-pro)",
+   "entries_sha256": "6d3230d8ad5764eaceea644e63eb667862fcac0d75848d3f41c6b5a40a55e501",
+   "note": "only `entries` is read and only `entries` is hashed: sha256 of json.dumps(entries, ensure_ascii=False, separators=(',', ':'))"
+  },
+  {
+   "name": "mimo-tc",
+   "path": "DataSources/mimo-tc/mimo-tc.json",
+   "license": "MIT AND Apache-2.0",
+   "notice": "DataSources/mimo-tc/LICENSE.txt (McBopomofoData)",
+   "sha256": "70944b490f6711ebb67dbf8ac07b0fc59a204f0fdd6405755f2321b30b195003"
+  }
+ ],
+ "references": [
+  {
+   "name": "TUBELEX-JA",
+   "repo": "https://github.com/naist-nlp/tubelex",
+   "revision": "7cb5fb36add76b83a266d1967536e1a1d3faa513",
+   "license": "BSD-3-Clause",
+   "use": "five class offsets kept as constants; not read by the build"
+  },
+  {
+   "name": "JMdict",
+   "url": "http://ftp.edrdg.org/pub/Nihongo/JMdict_e.gz",
+   "version": "file dated 2026-11-10",
+   "sha256": "8e511b59c1efb57d7dc90f58f386058035ca662cb4a23d5693b5e185190c5ede",
+   "license": "CC-BY-SA-4.0",
+   "use": "chose which rows a reviewer read first for Resources/Lexicon/japanese-deny.tsv; not read by the build, nothing copied"
+  },
+  {
+   "name": "SudachiDict",
+   "url": "https://sudachi.s3.ap-northeast-1.amazonaws.com/sudachidict-raw/v1/20261015/",
+   "version": "20261015",
+   "sha256": {
+    "small_lex.zip": "981b78cdc532ce058b34c76cd9acd3c9a6c771cc0ce528d7de92424b21172125",
+    "core_lex.zip": "e9ac06222f0ce401a0fef9b129e61e93d59e3ff395a1b037f498962ee5b8ad8b",
+    "notcore_lex.zip": "16072d75abe6a048947aacbcecfe1ab65a200965a9f1ddb7ceab366348fa21f2"
+   },
+   "license": "Apache-2.0",
+   "use": "same as JMdict"
+  }
+ ],
+ "history": "Versions 1.0-1.1 held 60 hand-picked rows, now in Resources/Lexicon/japanese-reviewed.tsv. Their record named two checksums that no script verified and that match no 2025.12 file. Old sources: https://clrd.ninjal.ac.jp/unidic/ and https://github.com/google/mozc (UniDic-to-Mozc table v1.1.0), see commit d4b6136.",
+ "files": {
+  "mimo-jp.tsv": "57c5e86c5dfcd4047fb41dfafa52f8484a0901d1bbf5976b3af046cf8cac7850",
+  "kanji-pinyin.tsv": "e82c19b7500edcb5d7c377cdbaae072e86564e5932c55b1ee920735d8028f246",
+  "LICENSE.txt": "770a75de30705439084f869dbcb0bc4ebcffcb7c7124c0d74f5083170318a9bb",
+  "BSD.txt": "9980b1824f0d1dac41ea93dc96780c222e5cca3c4d1b5677ac8ab923a8533c3f",
+  "COPYING.txt": "2694852d16fccf37701a2fb85435a860bd0be9d697e8ff2e35b7d35b50129fe0",
+  "MOZC-LICENSE.txt": "44cdd923b91ea9199293abecc2762c70c87dbf1e581c027a94c416368d1a648c",
+  "UNICODE-LICENSE.txt": "e7a93b009565cfce55919a381437ac4db883e9da2126fa28b91d12732bc53d96"
+ }
+}

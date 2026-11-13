@@ -1,0 +1,13 @@
+[package]
+name = "meowpuut-client"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Cross-platform client engine, choice memory, candidate layout, and platform adapters for Meowpuut"
+
+[dependencies]
+meowpuut-core = { path = "../meowpuut-core" }
+meowpuut-lexicon = { path = "../meowpuut-lexicon" }
+
+[lints]
+workspace = true

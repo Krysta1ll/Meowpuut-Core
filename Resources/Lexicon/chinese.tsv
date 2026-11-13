@@ -1,20 +1,14 @@
 # Independently authored vocabulary and overrides. Columns: traditional|simplified|pinyin|editorial priority.
 # Priorities are design choices, not measured corpus frequencies. No imported dictionary rows.
-戰略夥伴|战略伙伴|zhan4 lve4 huo3 ban4|970
 你好|你好|ni3 hao3|10000
-妳好|你好|ni3 hao3|1000
+妳好|妳好|ni3 hao3|1000
 你|你|ni3|9000
-妳|你|ni3|1000
+妳|妳|ni3|1000
 擬|拟|ni3|300
 泥|泥|ni2|500
 好|好|hao3|9000
 號|号|hao4|6500
 我|我|wo3|10000
-# Common simplified-Pinyin vocabulary. Keep the alternatives selectable.
-微信|微信|wei1 xin4|9000
-嗶哩嗶哩|哔哩哔哩|bi4 li3 bi4 li3|8500
-收貨地址|收货地址|shou1 huo4 di4 zhi3|8000
-喝點|喝点|he1 dian3|7000
 # Reviewed common single-character homophones; weights are editorial priors.
 幫|帮|bang1|8200
 棒|棒|bang4|7300
@@ -121,9 +115,6 @@
 已經|已经|yi3 jing1|7000
 現在|现在|xian4 zai4|9000
 今天|今天|jin1 tian1|9000
-想吃|想吃|xiang3 chi1|9000
-想去|想去|xiang3 qu4|9000
-超市|超市|chao1 shi4|9000
 明天|明天|ming2 tian1|8000
 昨天|昨天|zuo2 tian1|7000
 時間|时间|shi2 jian1|8000
@@ -191,8 +182,6 @@
 滑鼠|滑鼠|hua2 shu3|6000
 鼠標|鼠标|shu3 biao1|6000
 螢幕|萤幕|ying2 mu4|6000
-# 地區詞彙對應：保留台灣常用的繁體「螢幕」，簡體優先使用「荧幕」。
-螢幕|荧幕|ying2 mu4|6100
 屏幕|屏幕|ping2 mu4|6000
 游標|游标|you2 biao1|6000
 光標|光标|guang1 biao1|6000
@@ -255,7 +244,7 @@
 實際|实际|shi2 ji4|7000
 紀錄|记录|ji4 lu4|6000
 記錄|记录|ji4 lu4|6500
-打破紀錄|打破纪录|da3 po4 ji4 lu4|6500
+打破紀錄|打破记录|da3 po4 ji4 lu4|6500
 安全|安全|an1 quan2|6000
 方便|方便|fang1 bian4|6000
 正常|正常|zheng4 chang2|7000
@@ -264,7 +253,6 @@
 小巧|小巧|xiao3 qiao3|5000
 美學|美学|mei3 xue2|5000
 藝術|艺术|yi4 shu4|5000
-
 我想|我想|wo3 xiang3|10000
 優化|优化|you1 hua4|10000
 詞庫|词库|ci2 ku4|9500
@@ -353,157 +341,59 @@
 賽博|赛博|sai4 bo2|7000
 永遠的神|永远的神|yong3 yuan3 de5 shen2|7000
 絕了|绝了|jue2 le5|7500
-
 喵|喵|miao1|7000
 喵撲|喵扑|miao1 pu1|9000
-
-# Community vocabulary: independently authored readings and editorial priorities.
-二次元|二次元|er4 ci4 yuan2|7600
-三次元|三次元|san1 ci4 yuan2|7200
-同人女|同人女|tong2 ren2 nv3|6600
-同人文|同人文|tong2 ren2 wen2|7200
-同人圖|同人图|tong2 ren2 tu2|7000
-同人誌|同人志|tong2 ren2 zhi4|6800
-同人創作|同人创作|tong2 ren2 chuang4 zuo4|7000
-人設|人设|ren2 she4|7600
-官設|官设|guan1 she4|2900
-私設|私设|si1 she4|2900
-原創角色|原创角色|yuan2 chuang4 jue2 se4|6300
-嗑糖|嗑糖|ke1 tang2|4300
-磕糖|磕糖|ke1 tang2|4300
-嗑到了|嗑到了|ke1 dao4 le5|6800
-磕到了|磕到了|ke1 dao4 le5|6800
-嗑生嗑死|嗑生嗑死|ke1 sheng1 ke1 si3|6200
-拉郎|拉郎|la1 lang2|6500
-拉郎配|拉郎配|la1 lang2 pei4|6400
-冷門配對|冷门配对|leng3 men2 pei4 dui4|6100
-雙向奔赴|双向奔赴|shuang1 xiang4 ben1 fu4|7200
-意難平|意难平|yi4 nan2 ping2|7300
-破鏡重圓|破镜重圆|po4 jing4 chong2 yuan2|7000
-互相救贖|互相救赎|hu4 xiang1 jiu4 shu2|6800
-救贖文學|救赎文学|jiu4 shu2 wen2 xue2|6200
-年下|年下|nian2 xia4|6400
-年上|年上|nian2 shang4|6400
-耽美|耽美|dan1 mei3|6500
-夢女|梦女|meng4 nv3|6600
-夢向|梦向|meng4 xiang4|4600
-夢設|梦设|meng4 she4|6000
-乙女|乙女|yi3 nv3|6800
-乙女遊戲|乙女游戏|yi3 nv3 you2 xi4|6900
-同擔拒否|同担拒否|tong2 dan1 ju4 fou3|6100
-谷圈|谷圈|gu3 quan1|5400
-買谷|买谷|mai3 gu3|6500
-出谷|出谷|chu1 gu3|6100
-立牌|立牌|li4 pai2|6800
-吧唧|吧唧|ba1 ji1|6500
-痛包|痛包|tong4 bao1|4500
-痛車|痛车|tong4 che1|4700
-痛衣|痛衣|tong4 yi1|4500
-返圖|返图|fan3 tu2|6400
-無料|无料|wu2 liao4|4100
-無料交換|无料交换|wu2 liao4 jiao1 huan4|5900
-合志|合志|he2 zhi4|3400
-漫展|漫展|man4 zhan3|7200
-場照|场照|chang3 zhao4|6300
-谷美|谷美|gu3 mei3|5600
-番劇|番剧|fan1 ju4|7300
-補番|补番|bu3 fan1|3900
-追番|追番|zhui1 fan1|7000
-新番|新番|xin1 fan1|3200
-彈幕|弹幕|dan4 mu4|7400
-高能預警|高能预警|gao1 neng2 yu4 jing3|6900
-名場面|名场面|ming2 chang3 mian4|7200
-混剪|混剪|hun4 jian3|6600
-安利|安利|an1 li4|4300
-入坑|入坑|ru4 keng1|7400
-出坑|出坑|chu1 keng1|6900
-爬牆|爬墙|pa2 qiang2|6100
-產糧|产粮|chan3 liang2|5800
-神仙太太|神仙太太|shen2 xian1 tai4 tai5|6200
-飯飯|饭饭|fan4 fan4|6100
-餓餓|饿饿|e4 e4|6100
-好磕|好磕|hao3 ke1|4200
-貼貼|贴贴|tie1 tie1|7200
-可可愛愛|可可爱爱|ke3 ke3 ai4 ai4|6800
-好喜歡|好喜欢|hao3 xi3 huan1|7600
-喜歡死了|喜欢死了|xi3 huan1 si3 le5|6700
-我哭死|我哭死|wo3 ku1 si3|6800
-狠狠共情|狠狠共情|hen3 hen3 gong4 qing2|6100
-精神狀態|精神状态|jing1 shen2 zhuang4 tai4|7300
-電子寵物|电子宠物|dian4 zi3 chong3 wu4|6800
-電子閨蜜|电子闺蜜|dian4 zi3 gui1 mi4|6300
-賽博朋友|赛博朋友|sai4 bo2 peng2 you5|6300
-生活碎片|生活碎片|sheng1 huo2 sui4 pian4|7000
-今日份|今日份|jin1 ri4 fen4|6800
-朋友圈|朋友圈|peng2 you5 quan1|7900
-空間文案|空间文案|kong1 jian1 wen2 an4|6500
-發瘋文學|发疯文学|fa1 feng1 wen2 xue2|6500
-碎碎念|碎碎念|sui4 sui4 nian4|7200
-治癒系|治愈系|zhi4 yu4 xi4|6800
-好活|好活|hao3 huo2|6300
-神回|神回|shen2 hui2|6200
-封神|封神|feng1 shen2|7000
-狠狠喜歡|狠狠喜欢|hen3 hen3 xi3 huan1|6400
-致敬|致敬|zhi4 jing4|7000
-外星小綠貓|外星小绿猫|wai4 xing1 xiao3 lv4 mao1|5700
-白菜對我笑|白菜对我笑|bai2 cai4 dui4 wo3 xiao4|5700
-真愛假說|真爱假说|zhen1 ai4 jia3 shuo1|5700
-蹦沙卡拉卡|蹦沙卡拉卡|beng4 sha1 ka3 la1 ka3|5500
-同擔|同担|tong2 dan1|6500
-谷子|谷子|gu3 zi5|5500
-磕生磕死|磕生磕死|ke1 sheng1 ke1 si3|6200
-# Community creation and collecting, manually checked 2026-11-06.
-二創|二创|er4 chuang4|6800
-二創作品|二创作品|er4 chuang4 zuo4 pin3|6800
-自設|自设|zi4 she4|3400
-改設|改设|gai3 she4|2700
-拼團|拼团|pin1 tuan2|6700
-圈圖|圈图|quan1 tu2|5800
-# Animation, creative work and everyday terms, manually reviewed 2026-11-07.
-單推|单推|dan1 tui1|3800
-幼馴染|幼驯染|you4 xun4 ran3|6500
-傲嬌|傲娇|ao4 jiao1|6000
-番外|番外|fan1 wai4|6300
-國漫|国漫|guo2 man4|5100
-日漫|日漫|ri4 man4|5100
-字幕組|字幕组|zi4 mu4 zu3|6100
-打軸|打轴|da3 zhou2|3000
-立繪|立绘|li4 hui4|3500
-繪師|绘师|hui4 shi1|3800
-吃谷|吃谷|chi1 gu3|3500
-金句|金句|jin1 ju4|5000
-記賬|记账|ji4 zhang4|4900
-# 常用量詞搭配；有助於區分「一部／一步／一不」的整句候選。
-一部電影|一部电影|yi2 bu4 dian4 ying3|7800
-一部動畫|一部动画|yi2 bu4 dong4 hua4|7800
-一部動漫|一部动漫|yi2 bu4 dong4 man4|7800
-一部小說|一部小说|yi2 bu4 xiao3 shuo1|7800
-一部作品|一部作品|yi2 bu4 zuo4 pin3|7800
-一步一步|一步一步|yi2 bu4 yi2 bu4|8500
-# 「新包」保留較低的獨立權重，購物語境另以相鄰詞加分。
-新包|新包|xin1 bao1|3000
-# Community discussion and collecting; editorial priorities, not frequency counts.
-拼單|拼单|pin1 dan1|6100
-拆盒|拆盒|chai1 he2|5900
-卡套|卡套|ka3 tao4|5300
-自印|自印|zi4 yin4|4400
-場刊|场刊|chang3 kan1|3400
-合誌|合志|he2 zhi4|3100
-轉推|转推|zhuan3 tui1|4900
-存圖|存图|cun2 tu2|5200
-互關|互关|hu4 guan1|4900
-評論區|评论区|ping2 lun4 qu1|6800
-追更|追更|zhui1 geng1|6200
-番組|番组|fan1 zu3|5100
-圖透|图透|tu2 tou4|4500
-劇透|剧透|ju4 tou4|4000
-超話|超话|chao1 hua4|5600
-同人展|同人展|tong2 ren2 zhan3|5200
-聲優|声优|sheng1 you1|4700
-集卡|集卡|ji2 ka3|5200
-換谷|换谷|huan4 gu3|3500
-補款|补款|bu3 kuan3|5400
-# Protect everyday homophones while keeping community terms available.
-省油|省油|sheng3 you2|5000
-日本聲優|日本声优|ri4 ben3 sheng1 you1|7200
-動畫聲優|动画声优|dong4 hua4 sheng1 you1|6500
+# Everyday digital, mobile, transport & AI vocabulary.
+截圖|截图|jie2 tu2|6800
+錄影|录影|lu4 ying3|6500
+轉帳|转账|zhuan3 zhang4|6800
+帳號|账号|zhang4 hao4|7200
+密碼|密码|mi4 ma3|7200
+驗證碼|验证码|yan4 zheng4 ma3|7200
+二維碼|二维码|er4 wei2 ma3|6800
+掃碼|扫码|sao3 ma3|6600
+購物車|购物车|gou4 wu4 che1|6800
+免運|免运|mian3 yun4|6400
+包郵|包邮|bao1 you2|6400
+外送|外送|wai4 song4|6600
+外賣|外卖|wai4 mai4|7000
+內用|内用|nei4 yong4|6200
+外帶|外带|wai4 dai4|6400
+載具|载具|zai3 ju4|6200
+發票|发票|fa1 piao4|6800
+結帳|结账|jie2 zhang4|6800
+捷運|捷运|jie2 yun4|7200
+地鐵|地铁|di4 tie3|7200
+高鐵|高铁|gao1 tie3|7200
+計程車|计程车|ji4 cheng2 che1|6800
+導航|导航|dao3 hang2|7000
+藍牙|蓝牙|lan2 ya2|6800
+耳機|耳机|er3 ji1|7000
+電量|电量|dian4 liang4|6600
+充電|充电|chong1 dian4|7000
+備份|备份|bei4 fen4|6600
+相簿|相簿|xiang4 bu4|6400
+相冊|相册|xiang4 ce4|6400
+貼文|贴文|tie1 wen2|6400
+限時動態|限时动态|xian4 shi2 dong4 tai4|6500
+置頂|置顶|zhi4 ding3|6400
+私訊|私讯|si1 xun4|6500
+私信|私信|si1 xin4|6500
+通知|通知|tong1 zhi1|7200
+訊息|讯息|xun4 xi2|7200
+消息|消息|xiao1 xi5|7500
+連結|连结|lian2 jie2|6800
+鏈接|链接|lian4 jie1|6800
+人工智能|人工智能|ren2 gong1 zhi4 neng2|7500
+人工智慧|人工智慧|ren2 gong1 zhi4 hui4|7500
+大模型|大模型|da4 mo2 xing2|7200
+智能體|智能体|zhi4 neng2 ti3|6800
+提示詞|提示词|ti2 shi4 ci2|6800
+調優|调优|tiao2 you1|7200
+重構|重构|chong2 gou4|7200
+編譯|编译|bian1 yi4|6800
+部署|部署|bu4 shu3|6800
+開源|开源|kai1 yuan2|7000
+快捷鍵|快捷键|kuai4 jie2 jian4|6800
+深色模式|深色模式|shen1 se4 mo2 shi4|6600
+觸覺回饋|触觉回馈|chu4 jue2 hui2 kui4|6400

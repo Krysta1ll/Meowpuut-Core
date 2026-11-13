@@ -1,0 +1,9 @@
+[package]
+name = "meowpuut-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "SoA zero-allocation hot-loop decoding engine for Meowpuut input method"
+
+[lints]
+workspace = true

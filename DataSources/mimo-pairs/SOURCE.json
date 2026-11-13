@@ -1,0 +1,222 @@
+{
+  "name": "mimo-pairs",
+  "description": "Counts of which word follows which, made by scripts/mimo_pairs.py from the texts below; packed into mimo_pairs.bin at build time. A sentence with a term of Resources/Lexicon/blocked-terms.txt (politics, words that put down a group of people, abuse) is not counted.",
+  "license": "The counts are the project's own work; the texts they were counted in are CC-BY-2.0-FR (Tatoeba), CC0-1.0 (Common Voice), Apache-2.0 (CrossWOZ, KdConv), CC-BY-4.0 (MASSIVE) and the project's own sentences. No share-alike source.",
+  "attribution": "Tatoeba (https://tatoeba.org) and its contributors; Mozilla Common Voice sentence-collector contributors; CrossWOZ and KdConv (Tsinghua University CoAI group); MASSIVE (Amazon.com, Inc. or its affiliates). Sentences written for this project (DataSources/mimo-everyday).",
+  "sources": {
+    "tatoeba": {
+      "url": "https://downloads.tatoeba.org/exports/per_language/cmn/cmn_sentences_detailed.tsv.bz2",
+      "sha256": "df15b916580d97db21a4f28c4f49f47aad7755025bc969b81762bcde6a47ea6a",
+      "cache": "tatoeba-cmn_sentences_detailed.tsv.bz2",
+      "kind": "tatoeba",
+      "group": "spoken",
+      "version": "weekly export downloaded 2026-11-11; the file at the URL changes every week",
+      "license": "CC-BY-2.0-FR",
+      "license_file": "CC-BY-2.0-FR.html"
+    },
+    "commonvoice-zh-TW": {
+      "url": "https://raw.githubusercontent.com/common-voice/common-voice/bc5d2c4cc31f2fd853f7ef0026581fe50c67779b/server/data/zh-TW/sentence-collector.txt",
+      "sha256": "c85d4b4cb9f20195c015d4c74c947c520e6bdc9e50c83d75d0eaa77c67cf2e7b",
+      "cache": "commonvoice-zh-TW-sentence-collector.txt",
+      "kind": "lines",
+      "group": "spoken",
+      "version": "git commit bc5d2c4cc31f2fd853f7ef0026581fe50c67779b",
+      "license": "CC0-1.0",
+      "license_file": "CC0-1.0.txt",
+      "license_note": "commonvoice-README.md: sentence-collector submissions are CC0; other files in server/data are not used"
+    },
+    "commonvoice-zh-CN": {
+      "url": "https://raw.githubusercontent.com/common-voice/common-voice/bc5d2c4cc31f2fd853f7ef0026581fe50c67779b/server/data/zh-CN/sentence-collector.txt",
+      "sha256": "c3431534ec4dc0a087546c6e9f254295babec6a42f70bce738da629d41c76ca8",
+      "cache": "commonvoice-zh-CN-sentence-collector.txt",
+      "kind": "lines",
+      "group": "spoken",
+      "version": "git commit bc5d2c4cc31f2fd853f7ef0026581fe50c67779b",
+      "license": "CC0-1.0",
+      "license_file": "CC0-1.0.txt",
+      "license_note": "commonvoice-README.md: sentence-collector submissions are CC0; other files in server/data are not used"
+    },
+    "everyday": {
+      "path": "DataSources/mimo-everyday/everyday.txt.xz",
+      "kind": "lines",
+      "group": "spoken",
+      "version": "written 2026-11-11 for this project (DataSources/mimo-everyday/SOURCE.json)",
+      "license": "written for this project"
+    },
+    "everyday-chat-2": {
+      "path": "DataSources/mimo-everyday/chat-2.txt.xz",
+      "group": "spoken",
+      "kind": "lines",
+      "version": "written 2026-11-12 for this project (DataSources/mimo-everyday/SOURCE.json)",
+      "license": "written for this project"
+    },
+    "everyday-written-2": {
+      "path": "DataSources/mimo-everyday/written-2.txt.xz",
+      "group": "written",
+      "kind": "lines",
+      "version": "written 2026-11-12 for this project (DataSources/mimo-everyday/SOURCE.json)",
+      "license": "written for this project"
+    },
+    "everyday-mixed-2": {
+      "path": "DataSources/mimo-everyday/mixed-2.txt.xz",
+      "group": "written",
+      "kind": "lines",
+      "version": "written 2026-11-12 for this project (DataSources/mimo-everyday/SOURCE.json)",
+      "license": "written for this project"
+    },
+    "crosswoz-train": {
+      "url": "https://raw.githubusercontent.com/thu-coai/CrossWOZ/df82c9fdff91b9b130f2d6b89110d3870ba6260e/data/crosswoz/train.json.zip",
+      "sha256": "b81f6a0845011bb4593d21dd58e2d76af4dd5d52e300ecc68cb8dee17ccc3cf8",
+      "cache": "crosswoz-train.json.zip",
+      "kind": "crosswoz",
+      "group": "written",
+      "version": "git commit df82c9fdff91b9b130f2d6b89110d3870ba6260e",
+      "license": "Apache-2.0",
+      "license_file": "Apache-2.0.txt"
+    },
+    "crosswoz-val": {
+      "url": "https://raw.githubusercontent.com/thu-coai/CrossWOZ/df82c9fdff91b9b130f2d6b89110d3870ba6260e/data/crosswoz/val.json.zip",
+      "sha256": "b2b717990f6f0a1c98daaf5dc465e61d42f7de69c0d31e88e674275b1f34c94c",
+      "cache": "crosswoz-val.json.zip",
+      "kind": "crosswoz",
+      "group": "written",
+      "version": "git commit df82c9fdff91b9b130f2d6b89110d3870ba6260e",
+      "license": "Apache-2.0",
+      "license_file": "Apache-2.0.txt"
+    },
+    "crosswoz-test": {
+      "url": "https://raw.githubusercontent.com/thu-coai/CrossWOZ/df82c9fdff91b9b130f2d6b89110d3870ba6260e/data/crosswoz/test.json.zip",
+      "sha256": "e57703894995211bba8638f130dc7df81e8992b71f3c05c10022ad23d6ca5310",
+      "cache": "crosswoz-test.json.zip",
+      "kind": "crosswoz",
+      "group": "written",
+      "version": "git commit df82c9fdff91b9b130f2d6b89110d3870ba6260e",
+      "license": "Apache-2.0",
+      "license_file": "Apache-2.0.txt"
+    },
+    "kdconv-film-train": {
+      "url": "https://raw.githubusercontent.com/thu-coai/KdConv/653db76432de09a004ba708a68f8bbd5500e6bec/data/film/train.json",
+      "sha256": "b48a491c30ace856914c6863679ba5c8ea95d7e3a1734f45177f69afbcd88e74",
+      "cache": "kdconv-film-train.json",
+      "kind": "kdconv",
+      "group": "written",
+      "version": "git commit 653db76432de09a004ba708a68f8bbd5500e6bec",
+      "license": "Apache-2.0",
+      "license_file": "Apache-2.0.txt"
+    },
+    "kdconv-film-dev": {
+      "url": "https://raw.githubusercontent.com/thu-coai/KdConv/653db76432de09a004ba708a68f8bbd5500e6bec/data/film/dev.json",
+      "sha256": "2f156d8d34bdd3eac31c196772156d36e017f8cb2255a2c312bd98e367ed363e",
+      "cache": "kdconv-film-dev.json",
+      "kind": "kdconv",
+      "group": "written",
+      "version": "git commit 653db76432de09a004ba708a68f8bbd5500e6bec",
+      "license": "Apache-2.0",
+      "license_file": "Apache-2.0.txt"
+    },
+    "kdconv-film-test": {
+      "url": "https://raw.githubusercontent.com/thu-coai/KdConv/653db76432de09a004ba708a68f8bbd5500e6bec/data/film/test.json",
+      "sha256": "5ba2b79f9791bedbe5fe8a1bf5d7cbf277697743ee426ecd05459d9e28bcf21b",
+      "cache": "kdconv-film-test.json",
+      "kind": "kdconv",
+      "group": "written",
+      "version": "git commit 653db76432de09a004ba708a68f8bbd5500e6bec",
+      "license": "Apache-2.0",
+      "license_file": "Apache-2.0.txt"
+    },
+    "kdconv-music-train": {
+      "url": "https://raw.githubusercontent.com/thu-coai/KdConv/653db76432de09a004ba708a68f8bbd5500e6bec/data/music/train.json",
+      "sha256": "d5835bb6a61da0067ab2d0dc3ba90059f07cfa781a70206a8266ecafd22641ad",
+      "cache": "kdconv-music-train.json",
+      "kind": "kdconv",
+      "group": "written",
+      "version": "git commit 653db76432de09a004ba708a68f8bbd5500e6bec",
+      "license": "Apache-2.0",
+      "license_file": "Apache-2.0.txt"
+    },
+    "kdconv-music-dev": {
+      "url": "https://raw.githubusercontent.com/thu-coai/KdConv/653db76432de09a004ba708a68f8bbd5500e6bec/data/music/dev.json",
+      "sha256": "ee34a4af167195db43fdcc910f8d125956222517f0572d248a069057493d557f",
+      "cache": "kdconv-music-dev.json",
+      "kind": "kdconv",
+      "group": "written",
+      "version": "git commit 653db76432de09a004ba708a68f8bbd5500e6bec",
+      "license": "Apache-2.0",
+      "license_file": "Apache-2.0.txt"
+    },
+    "kdconv-music-test": {
+      "url": "https://raw.githubusercontent.com/thu-coai/KdConv/653db76432de09a004ba708a68f8bbd5500e6bec/data/music/test.json",
+      "sha256": "46f048c5db9dde45127cf6630b2fa06b685be369b71c5bc2dc3022d3f4bbad65",
+      "cache": "kdconv-music-test.json",
+      "kind": "kdconv",
+      "group": "written",
+      "version": "git commit 653db76432de09a004ba708a68f8bbd5500e6bec",
+      "license": "Apache-2.0",
+      "license_file": "Apache-2.0.txt"
+    },
+    "kdconv-travel-train": {
+      "url": "https://raw.githubusercontent.com/thu-coai/KdConv/653db76432de09a004ba708a68f8bbd5500e6bec/data/travel/train.json",
+      "sha256": "b582a7171f8a7bb6b579bbf8d31a06cebd0966e520c95301a143b1629d20fb2f",
+      "cache": "kdconv-travel-train.json",
+      "kind": "kdconv",
+      "group": "written",
+      "version": "git commit 653db76432de09a004ba708a68f8bbd5500e6bec",
+      "license": "Apache-2.0",
+      "license_file": "Apache-2.0.txt"
+    },
+    "kdconv-travel-dev": {
+      "url": "https://raw.githubusercontent.com/thu-coai/KdConv/653db76432de09a004ba708a68f8bbd5500e6bec/data/travel/dev.json",
+      "sha256": "8d1f31295888cf61eff398bab8aa042f7fccd04a088bd63c939f0b79625a9093",
+      "cache": "kdconv-travel-dev.json",
+      "kind": "kdconv",
+      "group": "written",
+      "version": "git commit 653db76432de09a004ba708a68f8bbd5500e6bec",
+      "license": "Apache-2.0",
+      "license_file": "Apache-2.0.txt"
+    },
+    "kdconv-travel-test": {
+      "url": "https://raw.githubusercontent.com/thu-coai/KdConv/653db76432de09a004ba708a68f8bbd5500e6bec/data/travel/test.json",
+      "sha256": "730426b0997b8375c8477c7e658c0ec645fced6ab8d546adda114b21cf30faac",
+      "cache": "kdconv-travel-test.json",
+      "kind": "kdconv",
+      "group": "written",
+      "version": "git commit 653db76432de09a004ba708a68f8bbd5500e6bec",
+      "license": "Apache-2.0",
+      "license_file": "Apache-2.0.txt"
+    },
+    "massive-zh-TW": {
+      "url": "https://amazon-massive-nlu-dataset.s3.amazonaws.com/amazon-massive-dataset-1.1.tar.gz",
+      "sha256": "4cba5faa11c71437928e17cb1b9b3d8b8e727e7ea363a3a9a8045e19c0491577",
+      "cache": "amazon-massive-dataset-1.1.tar.gz",
+      "member": "1.1/data/zh-TW.jsonl",
+      "kind": "massive",
+      "group": "written",
+      "version": "MASSIVE 1.1",
+      "license": "CC-BY-4.0",
+      "license_file": "CC-BY-4.0.txt"
+    },
+    "massive-zh-CN": {
+      "url": "https://amazon-massive-nlu-dataset.s3.amazonaws.com/amazon-massive-dataset-1.1.tar.gz",
+      "sha256": "4cba5faa11c71437928e17cb1b9b3d8b8e727e7ea363a3a9a8045e19c0491577",
+      "cache": "amazon-massive-dataset-1.1.tar.gz",
+      "member": "1.1/data/zh-CN.jsonl",
+      "kind": "massive",
+      "group": "written",
+      "version": "MASSIVE 1.1",
+      "license": "CC-BY-4.0",
+      "license_file": "CC-BY-4.0.txt"
+    }
+  },
+  "not_used": "Wikipedia and its sister projects (CC BY-SA), any share-alike, non-commercial or no-derivatives text, news and government text, and web crawls whose publishers do not own the text.",
+  "files": {
+    "counts.txt.xz": "3c008fa4c083c353f9261efa9f23d7689988591b3bd937288901f8e406445546",
+    "counts.json": "fb4bfc54572ad09e577cc28a04fc02c81a87ae4ef1b94d161daf9a92f6fbc085"
+  },
+  "license_files": {
+    "CC-BY-2.0-FR.html": "597d4c64f6606c64da65ba6c079e5cc87e4cce2b5187eda908c939b538e7ab9b",
+    "CC0-1.0.txt": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+    "commonvoice-README.md": "8a64679b9ba392f0517ddb0c708f71f6cc9f4d792ef34bcea10c2b856313c001",
+    "Apache-2.0.txt": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "CC-BY-4.0.txt": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411"
+  }
+}

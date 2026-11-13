@@ -1,0 +1,14111 @@
+{
+ "name": "mimo-jp",
+ "version": "2.0",
+ "parameters": {
+  "cost_cut": 7800,
+  "bc_gap": 400,
+  "place_cut": 6600,
+  "stem_penalty": 800,
+  "class_offsets": {
+   "verb": 680,
+   "adj": 340,
+   "adverb": 200,
+   "interjection": 600,
+   "pronoun": 390
+  },
+  "weight": "round(700*ln(1+59.7e6*exp(-cost/500))) clamped to 1..10000"
+ },
+ "counts": {
+  "mozc_rows": 1289076,
+  "r0_dropped": 39433,
+  "r1_r2_dropped": 582720,
+  "pairs_before_cut": 128476,
+  "after_r6_with_u3006": 49650,
+  "r0_u3006_dropped": 2,
+  "after_r6": 49648,
+  "r7_dropped": 70,
+  "after_r7": 49578,
+  "r8_hiragana_dropped": 2522,
+  "r8_katakana_dropped": 871,
+  "r8_katakana_kept_as_loanword": 200,
+  "rows": 46185,
+  "tiers": {
+   "A": 39906,
+   "B": 5969,
+   "C": 310
+  }
+ },
+ "selection_stats": {
+  "A": 108425,
+  "A place": 305,
+  "B": 18674,
+  "C": 1072,
+  "R0 dropped": 39433,
+  "R1/R2 dropped": 582720,
+  "UniDic content word, no acceptable Mozc row": 1266,
+  "UniDic lists it only as a name, place, affix or number": 29387,
+  "mozc rows": 1289076,
+  "not in UniDic, no content row": 182069,
+  "not in UniDic, rejected": 242537
+ },
+ "classes": {
+  "adj-i": 527,
+  "adj-na": 886,
+  "adj?": 137,
+  "adn": 54,
+  "adv": 1191,
+  "conj": 92,
+  "int": 212,
+  "n": 38058,
+  "place": 303,
+  "pn": 115,
+  "v1": 1628,
+  "v5b": 38,
+  "v5g": 50,
+  "v5k": 347,
+  "v5m": 316,
+  "v5n": 1,
+  "v5r": 868,
+  "v5s": 669,
+  "v5t": 74,
+  "v5w": 292,
+  "v?": 218,
+  "vk": 2,
+  "vs": 107
+ },
+ "weights": {
+  "max": 9858,
+  "min": 1680,
+  "distinct_costs": 3562,
+  "rows_at_least": {
+   "6000": 679,
+   "5000": 2968,
+   "4500": 5229,
+   "4000": 8643,
+   "3200": 17467,
+   "2500": 29598
+  }
+ },
+ "romaji": {
+  "rows_without": 169,
+  "rows": [
+   [
+    "あぁ",
+    "あぁ"
+   ],
+   [
+    "あっ",
+    "あっ"
+   ],
+   [
+    "あっ",
+    "あッ"
+   ],
+   [
+    "あっ",
+    "アッ"
+   ],
+   [
+    "あれっ",
+    "アレッ"
+   ],
+   [
+    "いやぁ",
+    "いやぁ"
+   ],
+   [
+    "いやっ",
+    "いやっ"
+   ],
+   [
+    "いらっ",
+    "イラッ"
+   ],
+   [
+    "いらねぇ",
+    "いらねぇ"
+   ],
+   [
+    "いんたゔゅー",
+    "インタヴュー"
+   ],
+   [
+    "うるせぇ",
+    "うるせぇ"
+   ],
+   [
+    "えぇ",
+    "えぇ"
+   ],
+   [
+    "えっ",
+    "えっ"
+   ],
+   [
+    "えぶりぃ",
+    "エブリィ"
+   ],
+   [
+    "えーっ",
+    "えーっ"
+   ],
+   [
+    "おえっ",
+    "オエッ"
+   ],
+   [
+    "おぉ",
+    "おぉ"
+   ],
+   [
+    "おっ",
+    "おっ"
+   ],
+   [
+    "おやっ",
+    "おやっ"
+   ],
+   [
+    "かちっ",
+    "カチッ"
+   ],
+   [
+    "かっ",
+    "カッ"
+   ],
+   [
+    "かっけぇ",
+    "かっけぇ"
+   ],
+   [
+    "からっ",
+    "カラッ"
+   ],
+   [
+    "かりっ",
+    "カリッ"
+   ],
+   [
+    "かろっつぇりあ",
+    "カロッツェリア"
+   ],
+   [
+    "がくっ",
+    "ガクッ"
+   ],
+   [
+    "がしっ",
+    "ガシッ"
+   ],
+   [
+    "がばっ",
+    "ガバッ"
+   ],
+   [
+    "がらっ",
+    "ガラッ"
+   ],
+   [
+    "きっ",
+    "キッ"
+   ],
+   [
+    "きゃっ",
+    "キャッ"
+   ],
+   [
+    "きゅっ",
+    "キュッ"
+   ],
+   [
+    "きゅっきゅっ",
+    "キュッキュッ"
+   ],
+   [
+    "きりっ",
+    "キリッ"
+   ],
+   [
+    "ぎゅっ",
+    "ギュッ"
+   ],
+   [
+    "ぎょっ",
+    "ギョッ"
+   ],
+   [
+    "くぃあ",
+    "クィア"
+   ],
+   [
+    "くぉりてぃ",
+    "クォリティ"
+   ],
+   [
+    "くぉーく",
+    "クォーク"
+   ],
+   [
+    "くぉーた",
+    "クォータ"
+   ],
+   [
+    "くぉーたー",
+    "クォーター"
+   ],
+   [
+    "くぉーつ",
+    "クォーツ"
+   ],
+   [
+    "くぉーてーしょん",
+    "クォーテーション"
+   ],
+   [
+    "くぉーと",
+    "クォート"
+   ],
+   [
+    "くすっ",
+    "クスッ"
+   ],
+   [
+    "くそっ",
+    "くそっ"
+   ],
+   [
+    "ぐいっ",
+    "グイッ"
+   ],
+   [
+    "ぐさっ",
+    "グサッ"
+   ],
+   [
+    "ぐっ",
+    "グッ"
+   ],
+   [
+    "げっ",
+    "げっ"
+   ],
+   [
+    "ころっ",
+    "コロッ"
+   ],
+   [
+    "ごっつぁん",
+    "ごっつぁん"
+   ],
+   [
+    "ごろっ",
+    "ゴロッ"
+   ],
+   [
+    "さぁ",
+    "さぁ"
+   ],
+   [
+    "さぁて",
+    "さぁて"
+   ],
+   [
+    "さくっ",
+    "サクッ"
+   ],
+   [
+    "さらっ",
+    "サラッ"
+   ],
+   [
+    "ざくっ",
+    "ザクッ"
+   ],
+   [
+    "ざっ",
+    "ザッ"
+   ],
+   [
+    "しゃきっ",
+    "シャキッ"
+   ],
+   [
+    "しゅっ",
+    "シュッ"
+   ],
+   [
+    "しーっ",
+    "シーッ"
+   ],
+   [
+    "じっ",
+    "ジッ"
+   ],
+   [
+    "じゃぁ",
+    "じゃぁ"
+   ],
+   [
+    "じゅっ",
+    "じゅっ"
+   ],
+   [
+    "じゅわっ",
+    "じゅわっ"
+   ],
+   [
+    "じわっ",
+    "じわっ"
+   ],
+   [
+    "すかっ",
+    "スカッ"
+   ],
+   [
+    "すけるつぉ",
+    "スケルツォ"
+   ],
+   [
+    "すげぇ",
+    "すげぇ"
+   ],
+   [
+    "すっ",
+    "スッ"
+   ],
+   [
+    "すっげぇ",
+    "すっげぇ"
+   ],
+   [
+    "すぱっ",
+    "スパッ"
+   ],
+   [
+    "すぽっ",
+    "スポッ"
+   ],
+   [
+    "するっ",
+    "スルッ"
+   ],
+   [
+    "すーっ",
+    "スーッ"
+   ],
+   [
+    "ずばっ",
+    "ズバッ"
+   ],
+   [
+    "ずらっ",
+    "ズラッ"
+   ],
+   [
+    "そっ",
+    "そっ"
+   ],
+   [
+    "そりゃぁ",
+    "そりゃぁ"
+   ],
+   [
+    "ぞくっ",
+    "ゾクッ"
+   ],
+   [
+    "ちぇっ",
+    "チェッ"
+   ],
+   [
+    "ちくっ",
+    "チクッ"
+   ],
+   [
+    "ちゃちゃっ",
+    "ちゃちゃっ"
+   ],
+   [
+    "ちゅっ",
+    "チュッ"
+   ],
+   [
+    "ちょっ",
+    "チョッ"
+   ],
+   [
+    "ちらっ",
+    "チラッ"
+   ],
+   [
+    "つぁー",
+    "ツァー"
+   ],
+   [
+    "つぃーたー",
+    "ツィーター"
+   ],
+   [
+    "つるっ",
+    "ツルッ"
+   ],
+   [
+    "てめぇ",
+    "てめぇ"
+   ],
+   [
+    "とろっ",
+    "トロッ"
+   ],
+   [
+    "どぉ",
+    "どぉ"
+   ],
+   [
+    "どきっ",
+    "ドキッ"
+   ],
+   [
+    "どっ",
+    "ドッ"
+   ],
+   [
+    "どばっ",
+    "ドバッ"
+   ],
+   [
+    "どろっ",
+    "ドロッ"
+   ],
+   [
+    "どんっ",
+    "ドンッ"
+   ],
+   [
+    "にこっ",
+    "ニコッ"
+   ],
+   [
+    "にやっ",
+    "ニヤッ"
+   ],
+   [
+    "ねぇ",
+    "ねぇ"
+   ],
+   [
+    "はぁ",
+    "はぁ"
+   ],
+   [
+    "はぁはぁ",
+    "ハァハァ"
+   ],
+   [
+    "はっ",
+    "はっ"
+   ],
+   [
+    "ははっ",
+    "ハハッ"
+   ],
+   [
+    "はやっ",
+    "はやっ"
+   ],
+   [
+    "ばきっ",
+    "バキッ"
+   ],
+   [
+    "ばしっ",
+    "バシッ"
+   ],
+   [
+    "ばちっ",
+    "バチッ"
+   ],
+   [
+    "ばっ",
+    "バッ"
+   ],
+   [
+    "ばーっ",
+    "バーッ"
+   ],
+   [
+    "ぱきっ",
+    "パキッ"
+   ],
+   [
+    "ぱっ",
+    "パッ"
+   ],
+   [
+    "ぱりっ",
+    "パリッ"
+   ],
+   [
+    "ひやっ",
+    "ヒヤッ"
+   ],
+   [
+    "びくっ",
+    "ビクッ"
+   ],
+   [
+    "びしっ",
+    "ビシッ"
+   ],
+   [
+    "びっ",
+    "ビッ"
+   ],
+   [
+    "ぴかっ",
+    "ピカッ"
+   ],
+   [
+    "ぴしっ",
+    "ピシッ"
+   ],
+   [
+    "ぴたっ",
+    "ピタッ"
+   ],
+   [
+    "ぴっ",
+    "ピッ"
+   ],
+   [
+    "ぴっつぁ",
+    "ピッツァ"
+   ],
+   [
+    "ぴぴっ",
+    "ピピッ"
+   ],
+   [
+    "ぴりっ",
+    "ピリッ"
+   ],
+   [
+    "ふぅ",
+    "ふぅ"
+   ],
+   [
+    "ふっ",
+    "フッ"
+   ],
+   [
+    "ふふっ",
+    "ふふっ"
+   ],
+   [
+    "ふらっ",
+    "フラッ"
+   ],
+   [
+    "ふわっ",
+    "フワッ"
+   ],
+   [
+    "ぶらっ",
+    "ぶらっ"
+   ],
+   [
+    "ぶわっ",
+    "ブワッ"
+   ],
+   [
+    "ぷちっ",
+    "プチッ"
+   ],
+   [
+    "ぷっ",
+    "プッ"
+   ],
+   [
+    "ぷりっ",
+    "プリッ"
+   ],
+   [
+    "ぷれっつぇる",
+    "プレッツェル"
+   ],
+   [
+    "へぇ",
+    "へぇ"
+   ],
+   [
+    "へっ",
+    "へっ"
+   ],
+   [
+    "へびぃ",
+    "ヘビィ"
+   ],
+   [
+    "ぺたっ",
+    "ペタッ"
+   ],
+   [
+    "ぺっ",
+    "ペッ"
+   ],
+   [
+    "ぺろっ",
+    "ペロッ"
+   ],
+   [
+    "ほぅ",
+    "ほぅ"
+   ],
+   [
+    "ほっ",
+    "ホッ"
+   ],
+   [
+    "ぼそっ",
+    "ボソッ"
+   ],
+   [
+    "ぼーっ",
+    "ボーッ"
+   ],
+   [
+    "ぽちっ",
+    "ポチッ"
+   ],
+   [
+    "ぽっ",
+    "ポッ"
+   ],
+   [
+    "ぽろっ",
+    "ポロッ"
+   ],
+   [
+    "まぁ",
+    "まぁ"
+   ],
+   [
+    "まぁまぁ",
+    "まぁまぁ"
+   ],
+   [
+    "むぅ",
+    "むぅ"
+   ],
+   [
+    "むっ",
+    "ムッ"
+   ],
+   [
+    "むむっ",
+    "むむっ"
+   ],
+   [
+    "めんどくせぇ",
+    "めんどくせぇ"
+   ],
+   [
+    "もぅ",
+    "もぅ"
+   ],
+   [
+    "もぉ",
+    "もぉ"
+   ],
+   [
+    "もちっ",
+    "もちっ"
+   ],
+   [
+    "もっつぁれら",
+    "モッツァレラ"
+   ],
+   [
+    "もっつぁれらちーず",
+    "モッツァレラチーズ"
+   ],
+   [
+    "やぁ",
+    "やぁ"
+   ],
+   [
+    "やべぇ",
+    "やべぇ"
+   ],
+   [
+    "よしっ",
+    "よしっ"
+   ],
+   [
+    "ららぁ",
+    "ララァ"
+   ],
+   [
+    "れゔゅー",
+    "レヴュー"
+   ],
+   [
+    "わぁ",
+    "わぁ"
+   ],
+   [
+    "わぁー",
+    "わぁー"
+   ],
+   [
+    "わっ",
+    "わっ"
+   ],
+   [
+    "ゐる",
+    "ゐる"
+   ]
+  ]
+ },
+ "pinyin": {
+  "kanji": 3289,
+  "routes": {
+   "mimo-sc": 2765,
+   "mimo-tc": 61,
+   "old-form+mimo-sc": 360,
+   "old-form+mimo-tc": 3,
+   "unihan-kMandarin": 77,
+   "unihan-variant+mimo-sc": 23
+  },
+  "rows_by_rule": {
+   "char": 20526,
+   "none": 11881,
+   "word": 13778
+  },
+  "unihan_guesses": [
+   [
+    "込",
+    "yu*",
+    259
+   ],
+   [
+    "働",
+    "dong*",
+    18
+   ],
+   [
+    "枠",
+    "hua*",
+    15
+   ],
+   [
+    "揃",
+    "jian*",
+    13
+   ],
+   [
+    "駄",
+    "tuo*",
+    9
+   ],
+   [
+    "喰",
+    "can*",
+    6
+   ],
+   [
+    "嚢",
+    "nang*",
+    6
+   ],
+   [
+    "匂",
+    "xiong*",
+    5
+   ],
+   [
+    "喩",
+    "yu*",
+    5
+   ],
+   [
+    "覗",
+    "si*",
+    5
+   ],
+   [
+    "辿",
+    "chan*",
+    5
+   ],
+   [
+    "梱",
+    "kun*",
+    4
+   ],
+   [
+    "捗",
+    "bu*",
+    3
+   ],
+   [
+    "燗",
+    "lan*",
+    3
+   ],
+   [
+    "篭",
+    "long*",
+    3
+   ],
+   [
+    "讃",
+    "zan*",
+    3
+   ],
+   [
+    "辻",
+    "shi*",
+    3
+   ],
+   [
+    "鉾",
+    "mou*",
+    3
+   ],
+   [
+    "頚",
+    "jing*",
+    3
+   ],
+   [
+    "傀",
+    "kui*",
+    2
+   ],
+   [
+    "凧",
+    "zheng*",
+    2
+   ],
+   [
+    "凪",
+    "zhi*",
+    2
+   ],
+   [
+    "呟",
+    "juan*",
+    2
+   ],
+   [
+    "塀",
+    "ping*",
+    2
+   ],
+   [
+    "壷",
+    "hu*",
+    2
+   ],
+   [
+    "栃",
+    "li*",
+    2
+   ],
+   [
+    "楕",
+    "tuo*",
+    2
+   ],
+   [
+    "癪",
+    "ji*",
+    2
+   ],
+   [
+    "笹",
+    "shi*",
+    2
+   ],
+   [
+    "籾",
+    "ni*",
+    2
+   ],
+   [
+    "罫",
+    "gua*",
+    2
+   ],
+   [
+    "蝿",
+    "ying*",
+    2
+   ],
+   [
+    "躾",
+    "mei*",
+    2
+   ],
+   [
+    "鋲",
+    "bing*",
+    2
+   ],
+   [
+    "靱",
+    "ren*",
+    2
+   ],
+   [
+    "鯱",
+    "hu*",
+    2
+   ],
+   [
+    "冴",
+    "hu*",
+    1
+   ],
+   [
+    "囃",
+    "ca*",
+    1
+   ],
+   [
+    "堺",
+    "jie*",
+    1
+   ],
+   [
+    "峠",
+    "qia*",
+    1
+   ],
+   [
+    "掟",
+    "zheng*",
+    1
+   ],
+   [
+    "杢",
+    "jie*",
+    1
+   ],
+   [
+    "栞",
+    "kan*",
+    1
+   ],
+   [
+    "楢",
+    "you*",
+    1
+   ],
+   [
+    "榊",
+    "shen*",
+    1
+   ],
+   [
+    "樫",
+    "jian*",
+    1
+   ],
+   [
+    "欅",
+    "ju*",
+    1
+   ],
+   [
+    "漑",
+    "gai*",
+    1
+   ],
+   [
+    "澪",
+    "ling*",
+    1
+   ],
+   [
+    "燵",
+    "da*",
+    1
+   ],
+   [
+    "狛",
+    "bo*",
+    1
+   ],
+   [
+    "筈",
+    "kuo*",
+    1
+   ],
+   [
+    "簀",
+    "ze*",
+    1
+   ],
+   [
+    "糀",
+    "hua*",
+    1
+   ],
+   [
+    "絽",
+    "lv*",
+    1
+   ],
+   [
+    "罠",
+    "min*",
+    1
+   ],
+   [
+    "膣",
+    "zhi*",
+    1
+   ],
+   [
+    "蕗",
+    "lu*",
+    1
+   ],
+   [
+    "褄",
+    "qi*",
+    1
+   ],
+   [
+    "褌",
+    "kun*",
+    1
+   ],
+   [
+    "襞",
+    "bi*",
+    1
+   ],
+   [
+    "襷",
+    "ju*",
+    1
+   ],
+   [
+    "諌",
+    "dong*",
+    1
+   ],
+   [
+    "躙",
+    "lin*",
+    1
+   ],
+   [
+    "躰",
+    "ti*",
+    1
+   ],
+   [
+    "酛",
+    "yuan*",
+    1
+   ],
+   [
+    "鍮",
+    "tou*",
+    1
+   ],
+   [
+    "鏑",
+    "di*",
+    1
+   ],
+   [
+    "鏝",
+    "man*",
+    1
+   ],
+   [
+    "雫",
+    "na*",
+    1
+   ],
+   [
+    "鞄",
+    "pao*",
+    1
+   ],
+   [
+    "騨",
+    "tuo*",
+    1
+   ],
+   [
+    "髷",
+    "qu*",
+    1
+   ],
+   [
+    "鰊",
+    "lian*",
+    1
+   ],
+   [
+    "鰤",
+    "shi*",
+    1
+   ],
+   [
+    "鰯",
+    "ruo*",
+    1
+   ],
+   [
+    "鵺",
+    "ye*",
+    1
+   ]
+  ],
+  "polyphones_listed": 292,
+  "polyphones_in_20_words_or_more": 110,
+  "polyphones_in_50_words_or_more": 46,
+  "word_level_differences": 329
+ },
+ "review": {
+  "note": "polyphones: kanji with two or more single-character readings in mimo-tc after the old-form mapping; `default` is what column 4 uses. word_level_differences: kana, surface, reading of the Chinese entry, per-character reading.",
+  "polyphones": [
+   {
+    "kanji": "大",
+    "chinese_form": "大",
+    "default": "da",
+    "readings": [
+     [
+      "da",
+      7996
+     ],
+     [
+      "dai",
+      999
+     ]
+    ],
+    "words": 371,
+    "examples": [
+     "大きな",
+     "大切",
+     "大学"
+    ]
+   },
+   {
+    "kanji": "的",
+    "chinese_form": "的",
+    "default": "de",
+    "readings": [
+     [
+      "de",
+      9331
+     ],
+     [
+      "di",
+      1166
+     ]
+    ],
+    "words": 351,
+    "examples": [
+     "目的",
+     "基本的",
+     "具体的"
+    ]
+   },
+   {
+    "kanji": "地",
+    "chinese_form": "地",
+    "default": "di",
+    "readings": [
+     [
+      "di",
+      7553
+     ],
+     [
+      "de",
+      5438
+     ]
+    ],
+    "words": 259,
+    "examples": [
+     "地域",
+     "地元",
+     "地方"
+    ]
+   },
+   {
+    "kanji": "込",
+    "chinese_form": "込",
+    "default": "yu*",
+    "readings": [
+     [
+      "ru",
+      1
+     ],
+     [
+      "yu",
+      1
+     ]
+    ],
+    "words": 259,
+    "examples": [
+     "申し込み",
+     "絞り込む",
+     "申込み"
+    ]
+   },
+   {
+    "kanji": "見",
+    "chinese_form": "見",
+    "default": "jian",
+    "readings": [
+     [
+      "jian",
+      6684
+     ],
+     [
+      "xian",
+      6684
+     ]
+    ],
+    "words": 238,
+    "examples": [
+     "見る",
+     "見える",
+     "見つける"
+    ]
+   },
+   {
+    "kanji": "学",
+    "chinese_form": "學",
+    "default": "xue",
+    "readings": [
+     [
+      "xue",
+      7686
+     ],
+     [
+      "xiao",
+      960
+     ]
+    ],
+    "words": 235,
+    "examples": [
+     "学ぶ",
+     "学校",
+     "大学"
+    ]
+   },
+   {
+    "kanji": "行",
+    "chinese_form": "行",
+    "default": "xing",
+    "readings": [
+     [
+      "xing",
+      7478
+     ],
+     [
+      "hang",
+      5384
+     ]
+    ],
+    "words": 235,
+    "examples": [
+     "行う",
+     "行く",
+     "行動"
+    ]
+   },
+   {
+    "kanji": "子",
+    "chinese_form": "子",
+    "default": "zi",
+    "readings": [
+     [
+      "zi",
+      7445
+     ],
+     [
+      "ze",
+      3350
+     ]
+    ],
+    "words": 228,
+    "examples": [
+     "子ども",
+     "子供",
+     "様子"
+    ]
+   },
+   {
+    "kanji": "会",
+    "chinese_form": "會",
+    "default": "hui",
+    "readings": [
+     [
+      "hui",
+      8036
+     ],
+     [
+      "kuai",
+      1004
+     ]
+    ],
+    "words": 187,
+    "examples": [
+     "社会",
+     "会社",
+     "株式会社"
+    ]
+   },
+   {
+    "kanji": "長",
+    "chinese_form": "長",
+    "default": "chang",
+    "readings": [
+     [
+      "chang",
+      7338
+     ],
+     [
+      "zhang",
+      917
+     ]
+    ],
+    "words": 171,
+    "examples": [
+     "成長",
+     "長い",
+     "長期"
+    ]
+   },
+   {
+    "kanji": "食",
+    "chinese_form": "食",
+    "default": "shi",
+    "readings": [
+     [
+      "shi",
+      6084
+     ],
+     [
+      "si",
+      760
+     ]
+    ],
+    "words": 157,
+    "examples": [
+     "食べる",
+     "食事",
+     "食品"
+    ]
+   },
+   {
+    "kanji": "数",
+    "chinese_form": "數",
+    "default": "shu",
+    "readings": [
+     [
+      "shu",
+      6765
+     ],
+     [
+      "shuo",
+      3044
+     ]
+    ],
+    "words": 150,
+    "examples": [
+     "複数",
+     "多数",
+     "数字"
+    ]
+   },
+   {
+    "kanji": "白",
+    "chinese_form": "白",
+    "default": "bai",
+    "readings": [
+     [
+      "bai",
+      6351
+     ],
+     [
+      "bo",
+      793
+     ]
+    ],
+    "words": 145,
+    "examples": [
+     "面白い",
+     "白い",
+     "白"
+    ]
+   },
+   {
+    "kanji": "家",
+    "chinese_form": "家",
+    "default": "jia",
+    "readings": [
+     [
+      "jia",
+      7564
+     ],
+     [
+      "gu",
+      945
+     ]
+    ],
+    "words": 134,
+    "examples": [
+     "家族",
+     "家",
+     "家庭"
+    ]
+   },
+   {
+    "kanji": "着",
+    "chinese_form": "着",
+    "default": "zhe",
+    "readings": [
+     [
+      "zhao",
+      1
+     ],
+     [
+      "zhe",
+      1
+     ],
+     [
+      "zhu",
+      1
+     ],
+     [
+      "zhuo",
+      1
+     ]
+    ],
+    "words": 133,
+    "examples": [
+     "到着",
+     "着る",
+     "着用"
+    ]
+   },
+   {
+    "kanji": "車",
+    "chinese_form": "車",
+    "default": "che",
+    "readings": [
+     [
+      "che",
+      6684
+     ],
+     [
+      "ju",
+      835
+     ]
+    ],
+    "words": 118,
+    "examples": [
+     "車",
+     "車両",
+     "自動車"
+    ]
+   },
+   {
+    "kanji": "落",
+    "chinese_form": "落",
+    "default": "luo",
+    "readings": [
+     [
+      "luo",
+      6187
+     ],
+     [
+      "lao",
+      4455
+     ],
+     [
+      "la",
+      2784
+     ]
+    ],
+    "words": 114,
+    "examples": [
+     "落ちる",
+     "落とす",
+     "落ち着く"
+    ]
+   },
+   {
+    "kanji": "重",
+    "chinese_form": "重",
+    "default": "zhong",
+    "readings": [
+     [
+      "chong",
+      7128
+     ],
+     [
+      "zhong",
+      7128
+     ]
+    ],
+    "words": 105,
+    "examples": [
+     "重要",
+     "重視",
+     "重い"
+    ]
+   },
+   {
+    "kanji": "期",
+    "chinese_form": "期",
+    "default": "qi",
+    "readings": [
+     [
+      "qi",
+      6921
+     ],
+     [
+      "ji",
+      865
+     ]
+    ],
+    "words": 104,
+    "examples": [
+     "期間",
+     "期待",
+     "時期"
+    ]
+   },
+   {
+    "kanji": "足",
+    "chinese_form": "足",
+    "default": "zu",
+    "readings": [
+     [
+      "zu",
+      6074
+     ],
+     [
+      "ju",
+      759
+     ]
+    ],
+    "words": 103,
+    "examples": [
+     "満足",
+     "足",
+     "足"
+    ]
+   },
+   {
+    "kanji": "意",
+    "chinese_form": "意",
+    "default": "yi",
+    "readings": [
+     [
+      "ye",
+      7149
+     ],
+     [
+      "yi",
+      7149
+     ]
+    ],
+    "words": 101,
+    "examples": [
+     "意味",
+     "注意",
+     "意識"
+    ]
+   },
+   {
+    "kanji": "石",
+    "chinese_form": "石",
+    "default": "shi",
+    "readings": [
+     [
+      "shi",
+      5935
+     ],
+     [
+      "dan",
+      741
+     ]
+    ],
+    "words": 100,
+    "examples": [
+     "石",
+     "流石",
+     "宝石"
+    ]
+   },
+   {
+    "kanji": "女",
+    "chinese_form": "女",
+    "default": "nv",
+    "readings": [
+     [
+      "nv",
+      6776
+     ],
+     [
+      "ru",
+      847
+     ]
+    ],
+    "words": 96,
+    "examples": [
+     "彼女",
+     "女性",
+     "女子"
+    ]
+   },
+   {
+    "kanji": "身",
+    "chinese_form": "身",
+    "default": "shen",
+    "readings": [
+     [
+      "shen",
+      6743
+     ],
+     [
+      "juan",
+      842
+     ]
+    ],
+    "words": 96,
+    "examples": [
+     "自身",
+     "身",
+     "出身"
+    ]
+   },
+   {
+    "kanji": "度",
+    "chinese_form": "度",
+    "default": "du",
+    "readings": [
+     [
+      "du",
+      7007
+     ],
+     [
+      "duo",
+      875
+     ]
+    ],
+    "words": 94,
+    "examples": [
+     "制度",
+     "速度",
+     "温度"
+    ]
+   },
+   {
+    "kanji": "乗",
+    "chinese_form": "乘",
+    "default": "cheng",
+    "readings": [
+     [
+      "cheng",
+      4936
+     ],
+     [
+      "sheng",
+      617
+     ]
+    ],
+    "words": 85,
+    "examples": [
+     "乗る",
+     "名乗る",
+     "乗り越える"
+    ]
+   },
+   {
+    "kanji": "読",
+    "chinese_form": "讀",
+    "default": "du",
+    "readings": [
+     [
+      "du",
+      6128
+     ],
+     [
+      "dou",
+      766
+     ]
+    ],
+    "words": 81,
+    "examples": [
+     "読む",
+     "読める",
+     "読者"
+    ]
+   },
+   {
+    "kanji": "調",
+    "chinese_form": "調",
+    "default": "tiao",
+    "readings": [
+     [
+      "tiao",
+      6601
+     ],
+     [
+      "diao",
+      825
+     ]
+    ],
+    "words": 80,
+    "examples": [
+     "調査",
+     "調整",
+     "調べる"
+    ]
+   },
+   {
+    "kanji": "員",
+    "chinese_form": "員",
+    "default": "yuan",
+    "readings": [
+     [
+      "yuan",
+      7221
+     ],
+     [
+      "yun",
+      902
+     ]
+    ],
+    "words": 79,
+    "examples": [
+     "社員",
+     "委員",
+     "会員"
+    ]
+   },
+   {
+    "kanji": "解",
+    "chinese_form": "解",
+    "default": "jie",
+    "readings": [
+     [
+      "jie",
+      6764
+     ],
+     [
+      "xie",
+      845
+     ]
+    ],
+    "words": 78,
+    "examples": [
+     "理解",
+     "解説",
+     "解決"
+    ]
+   },
+   {
+    "kanji": "信",
+    "chinese_form": "信",
+    "default": "xin",
+    "readings": [
+     [
+      "xin",
+      6581
+     ],
+     [
+      "shen",
+      822
+     ]
+    ],
+    "words": 77,
+    "examples": [
+     "配信",
+     "信頼",
+     "通信"
+    ]
+   },
+   {
+    "kanji": "悪",
+    "chinese_form": "惡",
+    "default": "e",
+    "readings": [
+     [
+      "e",
+      5472
+     ],
+     [
+      "wu",
+      684
+     ]
+    ],
+    "words": 76,
+    "examples": [
+     "悪い",
+     "悪化",
+     "悪魔"
+    ]
+   },
+   {
+    "kanji": "和",
+    "chinese_form": "和",
+    "default": "he",
+    "readings": [
+     [
+      "han",
+      7385
+     ],
+     [
+      "he",
+      5317
+     ],
+     [
+      "huo",
+      923
+     ]
+    ],
+    "words": 75,
+    "examples": [
+     "平和",
+     "違和感",
+     "緩和"
+    ]
+   },
+   {
+    "kanji": "血",
+    "chinese_form": "血",
+    "default": "xue",
+    "readings": [
+     [
+      "xie",
+      5826
+     ],
+     [
+      "xue",
+      728
+     ]
+    ],
+    "words": 74,
+    "examples": [
+     "血",
+     "血液",
+     "血管"
+    ]
+   },
+   {
+    "kanji": "強",
+    "chinese_form": "強",
+    "default": "qiang",
+    "readings": [
+     [
+      "qiang",
+      6519
+     ],
+     [
+      "jiang",
+      814
+     ]
+    ],
+    "words": 72,
+    "examples": [
+     "強い",
+     "勉強",
+     "強化"
+    ]
+   },
+   {
+    "kanji": "差",
+    "chinese_form": "差",
+    "default": "cha",
+    "readings": [
+     [
+      "cha",
+      6042
+     ],
+     [
+      "chai",
+      755
+     ],
+     [
+      "ci",
+      755
+     ]
+    ],
+    "words": 71,
+    "examples": [
+     "差",
+     "差別",
+     "差し込む"
+    ]
+   },
+   {
+    "kanji": "楽",
+    "chinese_form": "樂",
+    "default": "le",
+    "readings": [
+     [
+      "le",
+      6644
+     ],
+     [
+      "yao",
+      830
+     ],
+     [
+      "yue",
+      830
+     ]
+    ],
+    "words": 70,
+    "examples": [
+     "楽しめる",
+     "楽しむ",
+     "楽しい"
+    ]
+   },
+   {
+    "kanji": "校",
+    "chinese_form": "校",
+    "default": "xiao",
+    "readings": [
+     [
+      "xiao",
+      6583
+     ],
+     [
+      "jiao",
+      822
+     ]
+    ],
+    "words": 68,
+    "examples": [
+     "学校",
+     "高校",
+     "小学校"
+    ]
+   },
+   {
+    "kanji": "葉",
+    "chinese_form": "葉",
+    "default": "ye",
+    "readings": [
+     [
+      "ye",
+      5692
+     ],
+     [
+      "she",
+      711
+     ]
+    ],
+    "words": 66,
+    "examples": [
+     "言葉",
+     "葉",
+     "千葉"
+    ]
+   },
+   {
+    "kanji": "巻",
+    "chinese_form": "卷",
+    "default": "juan",
+    "readings": [
+     [
+      "juan",
+      5009
+     ],
+     [
+      "quan",
+      626
+     ]
+    ],
+    "words": 63,
+    "examples": [
+     "取り巻く",
+     "巻く",
+     "巻き込む"
+    ]
+   },
+   {
+    "kanji": "親",
+    "chinese_form": "親",
+    "default": "qin",
+    "readings": [
+     [
+      "qin",
+      6300
+     ],
+     [
+      "qing",
+      787
+     ]
+    ],
+    "words": 60,
+    "examples": [
+     "親",
+     "母親",
+     "父親"
+    ]
+   },
+   {
+    "kanji": "角",
+    "chinese_form": "角",
+    "default": "jiao",
+    "readings": [
+     [
+      "jiao",
+      6092
+     ],
+     [
+      "jue",
+      761
+     ]
+    ],
+    "words": 60,
+    "examples": [
+     "角度",
+     "三角",
+     "四角い"
+    ]
+   },
+   {
+    "kanji": "殺",
+    "chinese_form": "殺",
+    "default": "sha",
+    "readings": [
+     [
+      "sha",
+      5629
+     ],
+     [
+      "shai",
+      703
+     ]
+    ],
+    "words": 59,
+    "examples": [
+     "殺す",
+     "殺人",
+     "自殺"
+    ]
+   },
+   {
+    "kanji": "伝",
+    "chinese_form": "傳",
+    "default": "chuan",
+    "readings": [
+     [
+      "chuan",
+      6610
+     ],
+     [
+      "zhuan",
+      826
+     ]
+    ],
+    "words": 53,
+    "examples": [
+     "伝える",
+     "伝わる",
+     "伝統"
+    ]
+   },
+   {
+    "kanji": "側",
+    "chinese_form": "側",
+    "default": "ce",
+    "readings": [
+     [
+      "ce",
+      4772
+     ],
+     [
+      "ze",
+      596
+     ]
+    ],
+    "words": 52,
+    "examples": [
+     "側面",
+     "右側",
+     "裏側"
+    ]
+   },
+   {
+    "kanji": "盛",
+    "chinese_form": "盛",
+    "default": "sheng",
+    "readings": [
+     [
+      "sheng",
+      5406
+     ],
+     [
+      "cheng",
+      675
+     ]
+    ],
+    "words": 50,
+    "examples": [
+     "盛り上がる",
+     "盛り上げる",
+     "盛ん"
+    ]
+   },
+   {
+    "kanji": "湯",
+    "chinese_form": "湯",
+    "default": "tang",
+    "readings": [
+     [
+      "tang",
+      4914
+     ],
+     [
+      "shang",
+      614
+     ]
+    ],
+    "words": 49,
+    "examples": [
+     "湯",
+     "給湯",
+     "銭湯"
+    ]
+   },
+   {
+    "kanji": "波",
+    "chinese_form": "波",
+    "default": "bo",
+    "readings": [
+     [
+      "po",
+      5769
+     ],
+     [
+      "bo",
+      4154
+     ]
+    ],
+    "words": 48,
+    "examples": [
+     "波",
+     "電波",
+     "周波数"
+    ]
+   },
+   {
+    "kanji": "価",
+    "chinese_form": "價",
+    "default": "jia",
+    "readings": [
+     [
+      "jia",
+      6514
+     ],
+     [
+      "ga",
+      814
+     ]
+    ],
+    "words": 47,
+    "examples": [
+     "評価",
+     "価格",
+     "価値"
+    ]
+   },
+   {
+    "kanji": "降",
+    "chinese_form": "降",
+    "default": "jiang",
+    "readings": [
+     [
+      "jiang",
+      5729
+     ],
+     [
+      "xiang",
+      716
+     ]
+    ],
+    "words": 47,
+    "examples": [
+     "以降",
+     "降る",
+     "降りる"
+    ]
+   },
+   {
+    "kanji": "居",
+    "chinese_form": "居",
+    "default": "ju",
+    "readings": [
+     [
+      "ju",
+      5986
+     ],
+     [
+      "ji",
+      748
+     ]
+    ],
+    "words": 46,
+    "examples": [
+     "居る",
+     "入居",
+     "居住"
+    ]
+   },
+   {
+    "kanji": "参",
+    "chinese_form": "參",
+    "default": "can",
+    "readings": [
+     [
+      "can",
+      6533
+     ],
+     [
+      "cen",
+      816
+     ],
+     [
+      "san",
+      816
+     ],
+     [
+      "shen",
+      816
+     ]
+    ],
+    "words": 45,
+    "examples": [
+     "参加",
+     "参考",
+     "参照"
+    ]
+   },
+   {
+    "kanji": "得",
+    "chinese_form": "得",
+    "default": "de",
+    "readings": [
+     [
+      "de",
+      7542
+     ],
+     [
+      "dei",
+      942
+     ]
+    ],
+    "words": 45,
+    "examples": [
+     "得る",
+     "取得",
+     "獲得"
+    ]
+   },
+   {
+    "kanji": "射",
+    "chinese_form": "射",
+    "default": "she",
+    "readings": [
+     [
+      "she",
+      5426
+     ],
+     [
+      "shi",
+      678
+     ],
+     [
+      "ye",
+      678
+     ]
+    ],
+    "words": 44,
+    "examples": [
+     "反射",
+     "注射",
+     "発射"
+    ]
+   },
+   {
+    "kanji": "薄",
+    "chinese_form": "薄",
+    "default": "bao",
+    "readings": [
+     [
+      "bo",
+      4742
+     ],
+     [
+      "bao",
+      592
+     ]
+    ],
+    "words": 43,
+    "examples": [
+     "薄い",
+     "薄手",
+     "薄切り"
+    ]
+   },
+   {
+    "kanji": "告",
+    "chinese_form": "告",
+    "default": "gao",
+    "readings": [
+     [
+      "gao",
+      6482
+     ],
+     [
+      "gu",
+      810
+     ]
+    ],
+    "words": 42,
+    "examples": [
+     "報告",
+     "広告",
+     "申告"
+    ]
+   },
+   {
+    "kanji": "弾",
+    "chinese_form": "彈",
+    "default": "tan",
+    "readings": [
+     [
+      "tan",
+      5578
+     ],
+     [
+      "dan",
+      697
+     ]
+    ],
+    "words": 42,
+    "examples": [
+     "弾く",
+     "爆弾",
+     "弾ける"
+    ]
+   },
+   {
+    "kanji": "洗",
+    "chinese_form": "洗",
+    "default": "xi",
+    "readings": [
+     [
+      "xi",
+      5324
+     ],
+     [
+      "xian",
+      5324
+     ]
+    ],
+    "words": 42,
+    "examples": [
+     "洗う",
+     "洗濯",
+     "洗浄"
+    ]
+   },
+   {
+    "kanji": "給",
+    "chinese_form": "給",
+    "default": "gei",
+    "readings": [
+     [
+      "gei",
+      6716
+     ],
+     [
+      "ji",
+      839
+     ]
+    ],
+    "words": 42,
+    "examples": [
+     "給与",
+     "支給",
+     "供給"
+    ]
+   },
+   {
+    "kanji": "便",
+    "chinese_form": "便",
+    "default": "bian",
+    "readings": [
+     [
+      "bian",
+      6422
+     ],
+     [
+      "pian",
+      4624
+     ]
+    ],
+    "words": 41,
+    "examples": [
+     "便利",
+     "郵便",
+     "利便"
+    ]
+   },
+   {
+    "kanji": "単",
+    "chinese_form": "單",
+    "default": "dan",
+    "readings": [
+     [
+      "dan",
+      6576
+     ],
+     [
+      "chan",
+      822
+     ],
+     [
+      "shan",
+      822
+     ]
+    ],
+    "words": 41,
+    "examples": [
+     "簡単",
+     "単位",
+     "単に"
+    ]
+   },
+   {
+    "kanji": "都",
+    "chinese_form": "都",
+    "default": "dou",
+    "readings": [
+     [
+      "dou",
+      7564
+     ],
+     [
+      "du",
+      945
+     ]
+    ],
+    "words": 41,
+    "examples": [
+     "都市",
+     "京都",
+     "都合"
+    ]
+   },
+   {
+    "kanji": "朝",
+    "chinese_form": "朝",
+    "default": "chao",
+    "readings": [
+     [
+      "chao",
+      5606
+     ],
+     [
+      "zhao",
+      700
+     ]
+    ],
+    "words": 40,
+    "examples": [
+     "朝",
+     "朝",
+     "朝食"
+    ]
+   },
+   {
+    "kanji": "覚",
+    "chinese_form": "覺",
+    "default": "jue",
+    "readings": [
+     [
+      "jue",
+      6775
+     ],
+     [
+      "jiao",
+      846
+     ]
+    ],
+    "words": 40,
+    "examples": [
+     "感覚",
+     "覚える",
+     "視覚"
+    ]
+   },
+   {
+    "kanji": "説",
+    "chinese_form": "說",
+    "default": "shuo",
+    "readings": [
+     [
+      "shuo",
+      7557
+     ],
+     [
+      "shui",
+      944
+     ],
+     [
+      "yue",
+      944
+     ]
+    ],
+    "words": 40,
+    "examples": [
+     "説明",
+     "解説",
+     "小説"
+    ]
+   },
+   {
+    "kanji": "県",
+    "chinese_form": "縣",
+    "default": "xian",
+    "readings": [
+     [
+      "xian",
+      6179
+     ],
+     [
+      "xuan",
+      772
+     ]
+    ],
+    "words": 37,
+    "examples": [
+     "県",
+     "県内",
+     "都道府県"
+    ]
+   },
+   {
+    "kanji": "暴",
+    "chinese_form": "暴",
+    "default": "bao",
+    "readings": [
+     [
+      "bao",
+      5381
+     ],
+     [
+      "pu",
+      672
+     ]
+    ],
+    "words": 36,
+    "examples": [
+     "暴力",
+     "暴走",
+     "暴力団"
+    ]
+   },
+   {
+    "kanji": "遺",
+    "chinese_form": "遺",
+    "default": "yi",
+    "readings": [
+     [
+      "yi",
+      5453
+     ],
+     [
+      "wei",
+      3926
+     ]
+    ],
+    "words": 36,
+    "examples": [
+     "遺産",
+     "遺伝子",
+     "遺跡"
+    ]
+   },
+   {
+    "kanji": "祭",
+    "chinese_form": "祭",
+    "default": "ji",
+    "readings": [
+     [
+      "ji",
+      4887
+     ],
+     [
+      "zhai",
+      610
+     ]
+    ],
+    "words": 35,
+    "examples": [
+     "祭り",
+     "祭神",
+     "夏祭り"
+    ]
+   },
+   {
+    "kanji": "液",
+    "chinese_form": "液",
+    "default": "ye",
+    "readings": [
+     [
+      "ye",
+      4910
+     ],
+     [
+      "yi",
+      4910
+     ]
+    ],
+    "words": 34,
+    "examples": [
+     "血液",
+     "液体",
+     "液晶"
+    ]
+   },
+   {
+    "kanji": "町",
+    "chinese_form": "町",
+    "default": "ting",
+    "readings": [
+     [
+      "ding",
+      3876
+     ],
+     [
+      "ting",
+      3876
+     ]
+    ],
+    "words": 34,
+    "examples": [
+     "町",
+     "町",
+     "市町村"
+    ]
+   },
+   {
+    "kanji": "若",
+    "chinese_form": "若",
+    "default": "ruo",
+    "readings": [
+     [
+      "ruo",
+      5925
+     ],
+     [
+      "re",
+      740
+     ]
+    ],
+    "words": 33,
+    "examples": [
+     "若い",
+     "若干",
+     "若者"
+    ]
+   },
+   {
+    "kanji": "奇",
+    "chinese_form": "奇",
+    "default": "qi",
+    "readings": [
+     [
+      "qi",
+      5872
+     ],
+     [
+      "ji",
+      734
+     ]
+    ],
+    "words": 32,
+    "examples": [
+     "奇跡",
+     "奇妙",
+     "好奇心"
+    ]
+   },
+   {
+    "kanji": "夏",
+    "chinese_form": "夏",
+    "default": "xia",
+    "readings": [
+     [
+      "xia",
+      5343
+     ],
+     [
+      "jia",
+      667
+     ]
+    ],
+    "words": 31,
+    "examples": [
+     "夏",
+     "夏休み",
+     "夏場"
+    ]
+   },
+   {
+    "kanji": "宿",
+    "chinese_form": "宿",
+    "default": "su",
+    "readings": [
+     [
+      "su",
+      5092
+     ],
+     [
+      "xiu",
+      636
+     ]
+    ],
+    "words": 31,
+    "examples": [
+     "宿泊",
+     "宿",
+     "宿"
+    ]
+   },
+   {
+    "kanji": "属",
+    "chinese_form": "屬",
+    "default": "shu",
+    "readings": [
+     [
+      "shu",
+      5957
+     ],
+     [
+      "zhu",
+      744
+     ]
+    ],
+    "words": 31,
+    "examples": [
+     "所属",
+     "属性",
+     "属する"
+    ]
+   },
+   {
+    "kanji": "被",
+    "chinese_form": "被",
+    "default": "bei",
+    "readings": [
+     [
+      "bei",
+      6887
+     ],
+     [
+      "pi",
+      860
+     ]
+    ],
+    "words": 31,
+    "examples": [
+     "被害",
+     "被害者",
+     "被る"
+    ]
+   },
+   {
+    "kanji": "区",
+    "chinese_form": "區",
+    "default": "qu",
+    "readings": [
+     [
+      "qu",
+      6841
+     ],
+     [
+      "ou",
+      855
+     ]
+    ],
+    "words": 30,
+    "examples": [
+     "地区",
+     "区分",
+     "区間"
+    ]
+   },
+   {
+    "kanji": "率",
+    "chinese_form": "率",
+    "default": "lv",
+    "readings": [
+     [
+      "lv",
+      6195
+     ],
+     [
+      "shuai",
+      4460
+     ],
+     [
+      "shuo",
+      774
+     ]
+    ],
+    "words": 30,
+    "examples": [
+     "効率",
+     "確率",
+     "効率的"
+    ]
+   },
+   {
+    "kanji": "識",
+    "chinese_form": "識",
+    "default": "shi",
+    "readings": [
+     [
+      "shi",
+      6252
+     ],
+     [
+      "zhi",
+      781
+     ]
+    ],
+    "words": 30,
+    "examples": [
+     "意識",
+     "知識",
+     "認識"
+    ]
+   },
+   {
+    "kanji": "景",
+    "chinese_form": "景",
+    "default": "jing",
+    "readings": [
+     [
+      "jing",
+      6097
+     ],
+     [
+      "ying",
+      762
+     ]
+    ],
+    "words": 29,
+    "examples": [
+     "背景",
+     "風景",
+     "景色"
+    ]
+   },
+   {
+    "kanji": "査",
+    "chinese_form": "查",
+    "default": "cha",
+    "readings": [
+     [
+      "cha",
+      6400
+     ],
+     [
+      "zha",
+      800
+     ]
+    ],
+    "words": 29,
+    "examples": [
+     "調査",
+     "検査",
+     "審査"
+    ]
+   },
+   {
+    "kanji": "秘",
+    "chinese_form": "祕",
+    "default": "mi",
+    "readings": [
+     [
+      "mi",
+      4414
+     ],
+     [
+      "bi",
+      551
+     ]
+    ],
+    "words": 29,
+    "examples": [
+     "秘密",
+     "神秘",
+     "秘訣"
+    ]
+   },
+   {
+    "kanji": "称",
+    "chinese_form": "稱",
+    "default": "cheng",
+    "readings": [
+     [
+      "cheng",
+      6152
+     ],
+     [
+      "chen",
+      769
+     ]
+    ],
+    "words": 29,
+    "examples": [
+     "名称",
+     "通称",
+     "称する"
+    ]
+   },
+   {
+    "kanji": "縮",
+    "chinese_form": "縮",
+    "default": "suo",
+    "readings": [
+     [
+      "suo",
+      5200
+     ],
+     [
+      "su",
+      650
+     ]
+    ],
+    "words": 28,
+    "examples": [
+     "短縮",
+     "圧縮",
+     "縮小"
+    ]
+   },
+   {
+    "kanji": "著",
+    "chinese_form": "著",
+    "default": "zhe",
+    "readings": [
+     [
+      "zhe",
+      7186
+     ],
+     [
+      "zhao",
+      5174
+     ],
+     [
+      "zhu",
+      3234
+     ],
+     [
+      "zhuo",
+      3234
+     ]
+    ],
+    "words": 28,
+    "examples": [
+     "著作",
+     "著者",
+     "著書"
+    ]
+   },
+   {
+    "kanji": "児",
+    "chinese_form": "兒",
+    "default": "er",
+    "readings": [
+     [
+      "er",
+      6388
+     ],
+     [
+      "ni",
+      2875
+     ]
+    ],
+    "words": 27,
+    "examples": [
+     "児童",
+     "育児",
+     "幼児"
+    ]
+   },
+   {
+    "kanji": "従",
+    "chinese_form": "從",
+    "default": "cong",
+    "readings": [
+     [
+      "cong",
+      6981
+     ],
+     [
+      "zong",
+      872
+     ]
+    ],
+    "words": 27,
+    "examples": [
+     "従来",
+     "従う",
+     "従業"
+    ]
+   },
+   {
+    "kanji": "滑",
+    "chinese_form": "滑",
+    "default": "hua",
+    "readings": [
+     [
+      "hua",
+      4905
+     ],
+     [
+      "gu",
+      613
+     ]
+    ],
+    "words": 27,
+    "examples": [
+     "滑らか",
+     "円滑",
+     "滑る"
+    ]
+   },
+   {
+    "kanji": "省",
+    "chinese_form": "省",
+    "default": "sheng",
+    "readings": [
+     [
+      "sheng",
+      5920
+     ],
+     [
+      "xing",
+      740
+     ]
+    ],
+    "words": 27,
+    "examples": [
+     "反省",
+     "省略",
+     "省エネ"
+    ]
+   },
+   {
+    "kanji": "露",
+    "chinese_form": "露",
+    "default": "lu",
+    "readings": [
+     [
+      "lu",
+      5450
+     ],
+     [
+      "lou",
+      681
+     ]
+    ],
+    "words": 27,
+    "examples": [
+     "披露",
+     "露出",
+     "露天風呂"
+    ]
+   },
+   {
+    "kanji": "更",
+    "chinese_form": "更",
+    "default": "geng",
+    "readings": [
+     [
+      "geng",
+      6902
+     ],
+     [
+      "jing",
+      862
+     ]
+    ],
+    "words": 26,
+    "examples": [
+     "変更",
+     "更新",
+     "更に"
+    ]
+   },
+   {
+    "kanji": "臭",
+    "chinese_form": "臭",
+    "default": "chou",
+    "readings": [
+     [
+      "chou",
+      4422
+     ],
+     [
+      "xiu",
+      552
+     ]
+    ],
+    "words": 26,
+    "examples": [
+     "臭い",
+     "臭い",
+     "消臭"
+    ]
+   },
+   {
+    "kanji": "宅",
+    "chinese_form": "宅",
+    "default": "zhai",
+    "readings": [
+     [
+      "zhai",
+      5088
+     ],
+     [
+      "zhe",
+      636
+     ]
+    ],
+    "words": 25,
+    "examples": [
+     "住宅",
+     "自宅",
+     "在宅"
+    ]
+   },
+   {
+    "kanji": "比",
+    "chinese_form": "比",
+    "default": "bi",
+    "readings": [
+     [
+      "bi",
+      7032
+     ],
+     [
+      "pi",
+      879
+     ]
+    ],
+    "words": 25,
+    "examples": [
+     "比較",
+     "比べる",
+     "比率"
+    ]
+   },
+   {
+    "kanji": "紅",
+    "chinese_form": "紅",
+    "default": "hong",
+    "readings": [
+     [
+      "hong",
+      5922
+     ],
+     [
+      "gong",
+      740
+     ]
+    ],
+    "words": 25,
+    "examples": [
+     "紅葉",
+     "紅茶",
+     "紅白"
+    ]
+   },
+   {
+    "kanji": "脚",
+    "chinese_form": "腳",
+    "default": "jiao",
+    "readings": [
+     [
+      "jiao",
+      5600
+     ],
+     [
+      "jue",
+      700
+     ]
+    ],
+    "words": 25,
+    "examples": [
+     "脚",
+     "脚本",
+     "三脚"
+    ]
+   },
+   {
+    "kanji": "模",
+    "chinese_form": "模",
+    "default": "mo",
+    "readings": [
+     [
+      "mo",
+      5953
+     ],
+     [
+      "mu",
+      5953
+     ]
+    ],
+    "words": 24,
+    "examples": [
+     "規模",
+     "模様",
+     "小規模"
+    ]
+   },
+   {
+    "kanji": "陸",
+    "chinese_form": "陸",
+    "default": "lu",
+    "readings": [
+     [
+      "lu",
+      6204
+     ],
+     [
+      "liu",
+      775
+     ]
+    ],
+    "words": 24,
+    "examples": [
+     "陸上",
+     "大陸",
+     "上陸"
+    ]
+   },
+   {
+    "kanji": "埋",
+    "chinese_form": "埋",
+    "default": "mai",
+    "readings": [
+     [
+      "mai",
+      4565
+     ],
+     [
+      "man",
+      4565
+     ]
+    ],
+    "words": 23,
+    "examples": [
+     "埋める",
+     "埋め込む",
+     "埋まる"
+    ]
+   },
+   {
+    "kanji": "将",
+    "chinese_form": "將",
+    "default": "jiang",
+    "readings": [
+     [
+      "jiang",
+      7197
+     ],
+     [
+      "qiang",
+      899
+     ]
+    ],
+    "words": 23,
+    "examples": [
+     "将来",
+     "将来的",
+     "武将"
+    ]
+   },
+   {
+    "kanji": "提",
+    "chinese_form": "提",
+    "default": "ti",
+    "readings": [
+     [
+      "ti",
+      7013
+     ],
+     [
+      "shi",
+      876
+     ]
+    ],
+    "words": 23,
+    "examples": [
+     "提供",
+     "提案",
+     "提出"
+    ]
+   },
+   {
+    "kanji": "脈",
+    "chinese_form": "脈",
+    "default": "mai",
+    "readings": [
+     [
+      "mai",
+      4840
+     ],
+     [
+      "mo",
+      605
+     ]
+    ],
+    "words": 23,
+    "examples": [
+     "文脈",
+     "静脈",
+     "脈"
+    ]
+   },
+   {
+    "kanji": "免",
+    "chinese_form": "免",
+    "default": "mian",
+    "readings": [
+     [
+      "mian",
+      6000
+     ],
+     [
+      "wen",
+      750
+     ]
+    ],
+    "words": 22,
+    "examples": [
+     "免許",
+     "免疫",
+     "免除"
+    ]
+   },
+   {
+    "kanji": "尾",
+    "chinese_form": "尾",
+    "default": "wei",
+    "readings": [
+     [
+      "wei",
+      5133
+     ],
+     [
+      "yi",
+      641
+     ]
+    ],
+    "words": 22,
+    "examples": [
+     "尻尾",
+     "尾",
+     "尾根"
+    ]
+   },
+   {
+    "kanji": "熟",
+    "chinese_form": "熟",
+    "default": "shu",
+    "readings": [
+     [
+      "shou",
+      5397
+     ],
+     [
+      "shu",
+      674
+     ]
+    ],
+    "words": 22,
+    "examples": [
+     "熟成",
+     "熟練",
+     "成熟"
+    ]
+   },
+   {
+    "kanji": "蔵",
+    "chinese_form": "藏",
+    "default": "cang",
+    "readings": [
+     [
+      "cang",
+      5528
+     ],
+     [
+      "zang",
+      691
+     ]
+    ],
+    "words": 22,
+    "examples": [
+     "冷蔵庫",
+     "内蔵",
+     "貯蔵"
+    ]
+   },
+   {
+    "kanji": "了",
+    "chinese_form": "了",
+    "default": "le",
+    "readings": [
+     [
+      "le",
+      8115
+     ],
+     [
+      "liao",
+      8115
+     ]
+    ],
+    "words": 21,
+    "examples": [
+     "終了",
+     "了承",
+     "完了"
+    ]
+   },
+   {
+    "kanji": "卒",
+    "chinese_form": "卒",
+    "default": "zu",
+    "readings": [
+     [
+      "zu",
+      3396
+     ],
+     [
+      "cu",
+      424
+     ]
+    ],
+    "words": 21,
+    "examples": [
+     "卒業",
+     "何卒",
+     "新卒"
+    ]
+   },
+   {
+    "kanji": "句",
+    "chinese_form": "句",
+    "default": "ju",
+    "readings": [
+     [
+      "ju",
+      5693
+     ],
+     [
+      "gou",
+      711
+     ]
+    ],
+    "words": 21,
+    "examples": [
+     "文句",
+     "俳句",
+     "句"
+    ]
+   },
+   {
+    "kanji": "乾",
+    "chinese_form": "乾",
+    "default": "gan",
+    "readings": [
+     [
+      "gan",
+      5413
+     ],
+     [
+      "qian",
+      676
+     ]
+    ],
+    "words": 19,
+    "examples": [
+     "乾燥",
+     "乾かす",
+     "乾く"
+    ]
+   },
+   {
+    "kanji": "否",
+    "chinese_form": "否",
+    "default": "fou",
+    "readings": [
+     [
+      "fou",
+      6103
+     ],
+     [
+      "pi",
+      762
+     ]
+    ],
+    "words": 19,
+    "examples": [
+     "否定",
+     "拒否",
+     "可否"
+    ]
+   },
+   {
+    "kanji": "曜",
+    "chinese_form": "曜",
+    "default": "yao",
+    "readings": [
+     [
+      "yao",
+      3380
+     ],
+     [
+      "yue",
+      422
+     ]
+    ],
+    "words": 19,
+    "examples": [
+     "日曜日",
+     "土曜日",
+     "月曜日"
+    ]
+   },
+   {
+    "kanji": "泊",
+    "chinese_form": "泊",
+    "default": "bo",
+    "readings": [
+     [
+      "bo",
+      3979
+     ],
+     [
+      "po",
+      497
+     ]
+    ],
+    "words": 19,
+    "examples": [
+     "宿泊",
+     "泊まる",
+     "宿泊施設"
+    ]
+   },
+   {
+    "kanji": "責",
+    "chinese_form": "責",
+    "default": "ze",
+    "readings": [
+     [
+      "ze",
+      6006
+     ],
+     [
+      "zhai",
+      750
+     ]
+    ],
+    "words": 19,
+    "examples": [
+     "責任",
+     "責める",
+     "責任者"
+    ]
+   },
+   {
+    "kanji": "削",
+    "chinese_form": "削",
+    "default": "xiao",
+    "readings": [
+     [
+      "xiao",
+      4444
+     ],
+     [
+      "xue",
+      555
+     ]
+    ],
+    "words": 18,
+    "examples": [
+     "削除",
+     "削減",
+     "削る"
+    ]
+   },
+   {
+    "kanji": "軸",
+    "chinese_form": "軸",
+    "default": "zhou",
+    "readings": [
+     [
+      "zhou",
+      4233
+     ],
+     [
+      "zhu",
+      529
+     ]
+    ],
+    "words": 18,
+    "examples": [
+     "軸",
+     "主軸",
+     "縦軸"
+    ]
+   },
+   {
+    "kanji": "剥",
+    "chinese_form": "剥",
+    "default": "bao",
+    "readings": [
+     [
+      "bao",
+      1
+     ],
+     [
+      "bo",
+      1
+     ]
+    ],
+    "words": 17,
+    "examples": [
+     "剥がす",
+     "剥離",
+     "剥がれる"
+    ]
+   },
+   {
+    "kanji": "潰",
+    "chinese_form": "潰",
+    "default": "kui",
+    "readings": [
+     [
+      "kui",
+      4272
+     ],
+     [
+      "hui",
+      3076
+     ]
+    ],
+    "words": 17,
+    "examples": [
+     "潰す",
+     "潰れる",
+     "潰瘍"
+    ]
+   },
+   {
+    "kanji": "許",
+    "chinese_form": "許",
+    "default": "xu",
+    "readings": [
+     [
+      "xu",
+      6637
+     ],
+     [
+      "hu",
+      829
+     ]
+    ],
+    "words": 17,
+    "examples": [
+     "許可",
+     "免許",
+     "許す"
+    ]
+   },
+   {
+    "kanji": "徴",
+    "chinese_form": "徵",
+    "default": "zheng",
+    "readings": [
+     [
+      "zheng",
+      5669
+     ],
+     [
+      "zhi",
+      708
+     ]
+    ],
+    "words": 16,
+    "examples": [
+     "特徴",
+     "象徴",
+     "特徴的"
+    ]
+   },
+   {
+    "kanji": "沈",
+    "chinese_form": "沈",
+    "default": "shen",
+    "readings": [
+     [
+      "chen",
+      5112
+     ],
+     [
+      "shen",
+      639
+     ]
+    ],
+    "words": 16,
+    "examples": [
+     "沈む",
+     "沈黙",
+     "沈める"
+    ]
+   },
+   {
+    "kanji": "般",
+    "chinese_form": "般",
+    "default": "ban",
+    "readings": [
+     [
+      "ban",
+      6078
+     ],
+     [
+      "bo",
+      759
+     ],
+     [
+      "pan",
+      759
+     ]
+    ],
+    "words": 16,
+    "examples": [
+     "一般",
+     "一般的",
+     "全般"
+    ]
+   },
+   {
+    "kanji": "丁",
+    "chinese_form": "丁",
+    "default": "ding",
+    "readings": [
+     [
+      "ding",
+      5116
+     ],
+     [
+      "zheng",
+      639
+     ]
+    ],
+    "words": 15,
+    "examples": [
+     "丁寧",
+     "丁度",
+     "包丁"
+    ]
+   },
+   {
+    "kanji": "枝",
+    "chinese_form": "枝",
+    "default": "zhi",
+    "readings": [
+     [
+      "zhi",
+      4779
+     ],
+     [
+      "qi",
+      597
+     ]
+    ],
+    "words": 15,
+    "examples": [
+     "枝",
+     "枝豆",
+     "枝分かれ"
+    ]
+   },
+   {
+    "kanji": "概",
+    "chinese_form": "槪",
+    "default": "gai",
+    "readings": [
+     [
+      "gai",
+      1
+     ],
+     [
+      "kai",
+      1
+     ]
+    ],
+    "words": 15,
+    "examples": [
+     "概要",
+     "概念",
+     "概ね"
+    ]
+   },
+   {
+    "kanji": "没",
+    "chinese_form": "沒",
+    "default": "mei",
+    "readings": [
+     [
+      "mei",
+      7394
+     ],
+     [
+      "mo",
+      924
+     ]
+    ],
+    "words": 15,
+    "examples": [
+     "没入",
+     "没頭",
+     "出没"
+    ]
+   },
+   {
+    "kanji": "絡",
+    "chinese_form": "絡",
+    "default": "luo",
+    "readings": [
+     [
+      "luo",
+      5003
+     ],
+     [
+      "lao",
+      625
+     ]
+    ],
+    "words": 15,
+    "examples": [
+     "連絡",
+     "連絡先",
+     "絡む"
+    ]
+   },
+   {
+    "kanji": "亡",
+    "chinese_form": "亡",
+    "default": "wang",
+    "readings": [
+     [
+      "wang",
+      5193
+     ],
+     [
+      "wu",
+      649
+     ]
+    ],
+    "words": 14,
+    "examples": [
+     "死亡",
+     "亡くなる",
+     "逃亡"
+    ]
+   },
+   {
+    "kanji": "姉",
+    "chinese_form": "姊",
+    "default": "jie",
+    "readings": [
+     [
+      "jie",
+      4767
+     ],
+     [
+      "zi",
+      595
+     ]
+    ],
+    "words": 14,
+    "examples": [
+     "姉妹",
+     "お姉さん",
+     "姉"
+    ]
+   },
+   {
+    "kanji": "斜",
+    "chinese_form": "斜",
+    "default": "xie",
+    "readings": [
+     [
+      "xie",
+      4281
+     ],
+     [
+      "xia",
+      535
+     ]
+    ],
+    "words": 14,
+    "examples": [
+     "斜め",
+     "傾斜",
+     "斜面"
+    ]
+   },
+   {
+    "kanji": "氏",
+    "chinese_form": "氏",
+    "default": "shi",
+    "readings": [
+     [
+      "shi",
+      5025
+     ],
+     [
+      "zhi",
+      628
+     ]
+    ],
+    "words": 14,
+    "examples": [
+     "氏名",
+     "彼氏",
+     "同氏"
+    ]
+   },
+   {
+    "kanji": "蛇",
+    "chinese_form": "蛇",
+    "default": "she",
+    "readings": [
+     [
+      "she",
+      4656
+     ],
+     [
+      "yi",
+      582
+     ]
+    ],
+    "words": 14,
+    "examples": [
+     "蛇口",
+     "蛇",
+     "蛇"
+    ]
+   },
+   {
+    "kanji": "還",
+    "chinese_form": "還",
+    "default": "hai",
+    "readings": [
+     [
+      "hai",
+      7354
+     ],
+     [
+      "huan",
+      5295
+     ],
+     [
+      "xuan",
+      919
+     ]
+    ],
+    "words": 14,
+    "examples": [
+     "還元",
+     "返還",
+     "帰還"
+    ]
+   },
+   {
+    "kanji": "携",
+    "chinese_form": "携",
+    "default": "xie",
+    "readings": [
+     [
+      "xi",
+      1
+     ],
+     [
+      "xie",
+      1
+     ]
+    ],
+    "words": 12,
+    "examples": [
+     "連携",
+     "携わる",
+     "携帯"
+    ]
+   },
+   {
+    "kanji": "椎",
+    "chinese_form": "椎",
+    "default": "zhui",
+    "readings": [
+     [
+      "zhui",
+      3662
+     ],
+     [
+      "chui",
+      457
+     ]
+    ],
+    "words": 12,
+    "examples": [
+     "腰椎",
+     "椎茸",
+     "脊椎"
+    ]
+   },
+   {
+    "kanji": "殻",
+    "chinese_form": "殼",
+    "default": "ke",
+    "readings": [
+     [
+      "ke",
+      4630
+     ],
+     [
+      "qiao",
+      578
+     ],
+     [
+      "que",
+      578
+     ]
+    ],
+    "words": 12,
+    "examples": [
+     "殻",
+     "殻",
+     "貝殻"
+    ]
+   },
+   {
+    "kanji": "蓋",
+    "chinese_form": "蓋",
+    "default": "gai",
+    "readings": [
+     [
+      "gai",
+      5346
+     ],
+     [
+      "he",
+      668
+     ]
+    ],
+    "words": 12,
+    "examples": [
+     "蓋",
+     "頭蓋骨",
+     "裏蓋"
+    ]
+   },
+   {
+    "kanji": "摘",
+    "chinese_form": "摘",
+    "default": "zhai",
+    "readings": [
+     [
+      "zhai",
+      4364
+     ],
+     [
+      "zhe",
+      545
+     ]
+    ],
+    "words": 11,
+    "examples": [
+     "指摘",
+     "摘出",
+     "摘む"
+    ]
+   },
+   {
+    "kanji": "疎",
+    "chinese_form": "疎",
+    "default": "shu",
+    "readings": [
+     [
+      "shu",
+      1
+     ],
+     [
+      "su",
+      1
+     ]
+    ],
+    "words": 11,
+    "examples": [
+     "疎通",
+     "過疎",
+     "疎い"
+    ]
+   },
+   {
+    "kanji": "谷",
+    "chinese_form": "谷",
+    "default": "gu",
+    "readings": [
+     [
+      "gu",
+      4904
+     ],
+     [
+      "yu",
+      613
+     ]
+    ],
+    "words": 11,
+    "examples": [
+     "渋谷",
+     "谷",
+     "渓谷"
+    ]
+   },
+   {
+    "kanji": "賃",
+    "chinese_form": "賃",
+    "default": "lin",
+    "readings": [
+     [
+      "ren",
+      2994
+     ],
+     [
+      "lin",
+      2156
+     ]
+    ],
+    "words": 11,
+    "examples": [
+     "賃貸",
+     "賃金",
+     "家賃"
+    ]
+   },
+   {
+    "kanji": "傍",
+    "chinese_form": "傍",
+    "default": "bang",
+    "readings": [
+     [
+      "bang",
+      3842
+     ],
+     [
+      "pang",
+      480
+     ]
+    ],
+    "words": 10,
+    "examples": [
+     "傍ら",
+     "傍聴",
+     "傍"
+    ]
+   },
+   {
+    "kanji": "括",
+    "chinese_form": "括",
+    "default": "kuo",
+    "readings": [
+     [
+      "gua",
+      5896
+     ],
+     [
+      "kuo",
+      737
+     ]
+    ],
+    "words": 10,
+    "examples": [
+     "一括",
+     "包括",
+     "統括"
+    ]
+   },
+   {
+    "kanji": "拾",
+    "chinese_form": "拾",
+    "default": "shi",
+    "readings": [
+     [
+      "shi",
+      4236
+     ],
+     [
+      "she",
+      529
+     ]
+    ],
+    "words": 10,
+    "examples": [
+     "拾う",
+     "拾える",
+     "拾い"
+    ]
+   },
+   {
+    "kanji": "沸",
+    "chinese_form": "沸",
+    "default": "fei",
+    "readings": [
+     [
+      "fei",
+      3574
+     ],
+     [
+      "fu",
+      3574
+     ]
+    ],
+    "words": 10,
+    "examples": [
+     "沸騰",
+     "沸く",
+     "沸かす"
+    ]
+   },
+   {
+    "kanji": "錯",
+    "chinese_form": "錯",
+    "default": "cuo",
+    "readings": [
+     [
+      "cuo",
+      6060
+     ],
+     [
+      "cu",
+      757
+     ]
+    ],
+    "words": 10,
+    "examples": [
+     "試行錯誤",
+     "錯覚",
+     "錯誤"
+    ]
+   },
+   {
+    "kanji": "召",
+    "chinese_form": "召",
+    "default": "zhao",
+    "readings": [
+     [
+      "zhao",
+      5343
+     ],
+     [
+      "shao",
+      667
+     ]
+    ],
+    "words": 9,
+    "examples": [
+     "召喚",
+     "召し上がる",
+     "召集"
+    ]
+   },
+   {
+    "kanji": "塞",
+    "chinese_form": "塞",
+    "default": "sai",
+    "readings": [
+     [
+      "sai",
+      5088
+     ],
+     [
+      "se",
+      636
+     ]
+    ],
+    "words": 9,
+    "examples": [
+     "塞ぐ",
+     "要塞",
+     "閉塞"
+    ]
+   },
+   {
+    "kanji": "契",
+    "chinese_form": "契",
+    "default": "qi",
+    "readings": [
+     [
+      "qi",
+      4977
+     ],
+     [
+      "qie",
+      622
+     ],
+     [
+      "xie",
+      622
+     ]
+    ],
+    "words": 9,
+    "examples": [
+     "契約",
+     "契約書",
+     "契機"
+    ]
+   },
+   {
+    "kanji": "爪",
+    "chinese_form": "爪",
+    "default": "zhua",
+    "readings": [
+     [
+      "zhua",
+      3813
+     ],
+     [
+      "zhao",
+      476
+     ]
+    ],
+    "words": 9,
+    "examples": [
+     "爪",
+     "爪切り",
+     "爪楊枝"
+    ]
+   },
+   {
+    "kanji": "禅",
+    "chinese_form": "禪",
+    "default": "chan",
+    "readings": [
+     [
+      "chan",
+      4511
+     ],
+     [
+      "shan",
+      563
+     ]
+    ],
+    "words": 9,
+    "examples": [
+     "禅",
+     "坐禅",
+     "友禅"
+    ]
+   },
+   {
+    "kanji": "繋",
+    "chinese_form": "繫",
+    "default": "xi",
+    "readings": [
+     [
+      "xi",
+      4779
+     ],
+     [
+      "ji",
+      597
+     ]
+    ],
+    "words": 9,
+    "examples": [
+     "繋がる",
+     "繋ぐ",
+     "繋げる"
+    ]
+   },
+   {
+    "kanji": "駄",
+    "chinese_form": "駄",
+    "default": "tuo*",
+    "readings": [
+     [
+      "duo",
+      1
+     ],
+     [
+      "tuo",
+      1
+     ]
+    ],
+    "words": 9,
+    "examples": [
+     "無駄",
+     "駄目",
+     "無駄遣い"
+    ]
+   },
+   {
+    "kanji": "騎",
+    "chinese_form": "騎",
+    "default": "qi",
+    "readings": [
+     [
+      "qi",
+      4797
+     ],
+     [
+      "ji",
+      599
+     ]
+    ],
+    "words": 9,
+    "examples": [
+     "騎士",
+     "騎乗",
+     "騎手"
+    ]
+   },
+   {
+    "kanji": "丼",
+    "chinese_form": "丼",
+    "default": "jing",
+    "readings": [
+     [
+      "dan",
+      1456
+     ],
+     [
+      "jing",
+      1456
+     ]
+    ],
+    "words": 8,
+    "examples": [
+     "丼",
+     "丼",
+     "牛丼"
+    ]
+   },
+   {
+    "kanji": "尋",
+    "chinese_form": "尋",
+    "default": "xun",
+    "readings": [
+     [
+      "xun",
+      5603
+     ],
+     [
+      "xin",
+      4034
+     ]
+    ],
+    "words": 8,
+    "examples": [
+     "尋ねる",
+     "お尋ね",
+     "尋常"
+    ]
+   },
+   {
+    "kanji": "趣",
+    "chinese_form": "趣",
+    "default": "qu",
+    "readings": [
+     [
+      "qu",
+      5798
+     ],
+     [
+      "cu",
+      724
+     ]
+    ],
+    "words": 8,
+    "examples": [
+     "趣味",
+     "趣旨",
+     "趣"
+    ]
+   },
+   {
+    "kanji": "戯",
+    "chinese_form": "戲",
+    "default": "xi",
+    "readings": [
+     [
+      "xi",
+      5916
+     ],
+     [
+      "hu",
+      739
+     ]
+    ],
+    "words": 7,
+    "examples": [
+     "遊戯",
+     "戯れる",
+     "戯曲"
+    ]
+   },
+   {
+    "kanji": "拓",
+    "chinese_form": "拓",
+    "default": "tuo",
+    "readings": [
+     [
+      "ta",
+      4528
+     ],
+     [
+      "tuo",
+      4528
+     ]
+    ],
+    "words": 7,
+    "examples": [
+     "開拓",
+     "切り拓く",
+     "拓く"
+    ]
+   },
+   {
+    "kanji": "挟",
+    "chinese_form": "挾",
+    "default": "xie",
+    "readings": [
+     [
+      "jia",
+      3539
+     ],
+     [
+      "xia",
+      442
+     ],
+     [
+      "xie",
+      442
+     ]
+    ],
+    "words": 7,
+    "examples": [
+     "挟む",
+     "挟み込む",
+     "挟まる"
+    ]
+   },
+   {
+    "kanji": "畜",
+    "chinese_form": "畜",
+    "default": "chu",
+    "readings": [
+     [
+      "chu",
+      3865
+     ],
+     [
+      "xu",
+      483
+     ]
+    ],
+    "words": 7,
+    "examples": [
+     "家畜",
+     "畜産",
+     "鬼畜"
+    ]
+   },
+   {
+    "kanji": "衰",
+    "chinese_form": "衰",
+    "default": "shuai",
+    "readings": [
+     [
+      "shuai",
+      4757
+     ],
+     [
+      "cui",
+      594
+     ]
+    ],
+    "words": 7,
+    "examples": [
+     "衰退",
+     "衰える",
+     "減衰"
+    ]
+   },
+   {
+    "kanji": "仔",
+    "chinese_form": "仔",
+    "default": "zai",
+    "readings": [
+     [
+      "zai",
+      5102
+     ],
+     [
+      "zi",
+      5102
+     ]
+    ],
+    "words": 6,
+    "examples": [
+     "仔",
+     "仔犬",
+     "仔猫"
+    ]
+   },
+   {
+    "kanji": "伯",
+    "chinese_form": "伯",
+    "default": "bai",
+    "readings": [
+     [
+      "bo",
+      5266
+     ],
+     [
+      "ba",
+      658
+     ]
+    ],
+    "words": 6,
+    "examples": [
+     "伯爵",
+     "伯",
+     "伯父"
+    ]
+   },
+   {
+    "kanji": "咽",
+    "chinese_form": "咽",
+    "default": "yan",
+    "readings": [
+     [
+      "yan",
+      3599
+     ],
+     [
+      "ye",
+      449
+     ]
+    ],
+    "words": 6,
+    "examples": [
+     "咽頭",
+     "耳鼻咽喉科",
+     "咽び泣く"
+    ]
+   },
+   {
+    "kanji": "圏",
+    "chinese_form": "圈",
+    "default": "quan",
+    "readings": [
+     [
+      "quan",
+      5121
+     ],
+     [
+      "juan",
+      640
+     ]
+    ],
+    "words": 6,
+    "examples": [
+     "圏内",
+     "首都圏",
+     "圏外"
+    ]
+   },
+   {
+    "kanji": "甚",
+    "chinese_form": "甚",
+    "default": "shen",
+    "readings": [
+     [
+      "shen",
+      6085
+     ],
+     [
+      "she",
+      760
+     ]
+    ],
+    "words": 6,
+    "examples": [
+     "甚大",
+     "甚だしい",
+     "甚だ"
+    ]
+   },
+   {
+    "kanji": "癌",
+    "chinese_form": "癌",
+    "default": "ai",
+    "readings": [
+     [
+      "yan",
+      5245
+     ],
+     [
+      "ai",
+      3776
+     ]
+    ],
+    "words": 6,
+    "examples": [
+     "癌",
+     "乳癌",
+     "肺癌"
+    ]
+   },
+   {
+    "kanji": "賊",
+    "chinese_form": "賊",
+    "default": "zei",
+    "readings": [
+     [
+      "zei",
+      3997
+     ],
+     [
+      "ze",
+      499
+     ]
+    ],
+    "words": 6,
+    "examples": [
+     "海賊",
+     "盗賊",
+     "山賊"
+    ]
+   },
+   {
+    "kanji": "賜",
+    "chinese_form": "賜",
+    "default": "ci",
+    "readings": [
+     [
+      "ci",
+      4002
+     ],
+     [
+      "si",
+      500
+     ]
+    ],
+    "words": 6,
+    "examples": [
+     "賜物",
+     "賜る",
+     "賜"
+    ]
+   },
+   {
+    "kanji": "這",
+    "chinese_form": "這",
+    "default": "zhe",
+    "readings": [
+     [
+      "zhe",
+      8150
+     ],
+     [
+      "zhei",
+      8150
+     ]
+    ],
+    "words": 6,
+    "examples": [
+     "這う",
+     "這い上がる",
+     "這いつくばる"
+    ]
+   },
+   {
+    "kanji": "雀",
+    "chinese_form": "雀",
+    "default": "que",
+    "readings": [
+     [
+      "que",
+      4143
+     ],
+     [
+      "qiao",
+      517
+     ]
+    ],
+    "words": 6,
+    "examples": [
+     "麻雀",
+     "雀",
+     "孔雀"
+    ]
+   },
+   {
+    "kanji": "呆",
+    "chinese_form": "呆",
+    "default": "dai",
+    "readings": [
+     [
+      "ai",
+      4477
+     ],
+     [
+      "dai",
+      4477
+     ]
+    ],
+    "words": 5,
+    "examples": [
+     "呆れる",
+     "呆然",
+     "痴呆"
+    ]
+   },
+   {
+    "kanji": "咳",
+    "chinese_form": "咳",
+    "default": "hai",
+    "readings": [
+     [
+      "ke",
+      3544
+     ],
+     [
+      "hai",
+      443
+     ],
+     [
+      "ka",
+      443
+     ],
+     [
+      "kai",
+      443
+     ]
+    ],
+    "words": 5,
+    "examples": [
+     "咳",
+     "咳き込む",
+     "咳嗽"
+    ]
+   },
+   {
+    "kanji": "唄",
+    "chinese_form": "唄",
+    "default": "bai",
+    "readings": [
+     [
+      "bai",
+      1795
+     ],
+     [
+      "bei",
+      1795
+     ]
+    ],
+    "words": 5,
+    "examples": [
+     "唄",
+     "唄う",
+     "長唄"
+    ]
+   },
+   {
+    "kanji": "嵌",
+    "chinese_form": "嵌",
+    "default": "qian",
+    "readings": [
+     [
+      "kan",
+      3650
+     ],
+     [
+      "qian",
+      3650
+     ]
+    ],
+    "words": 5,
+    "examples": [
+     "嵌める",
+     "嵌まる",
+     "象嵌"
+    ]
+   },
+   {
+    "kanji": "弄",
+    "chinese_form": "弄",
+    "default": "nong",
+    "readings": [
+     [
+      "long",
+      5088
+     ],
+     [
+      "nong",
+      5088
+     ]
+    ],
+    "words": 5,
+    "examples": [
+     "翻弄",
+     "弄る",
+     "弄ぶ"
+    ]
+   },
+   {
+    "kanji": "桁",
+    "chinese_form": "桁",
+    "default": "heng",
+    "readings": [
+     [
+      "hang",
+      1362
+     ],
+     [
+      "heng",
+      1362
+     ]
+    ],
+    "words": 5,
+    "examples": [
+     "桁",
+     "桁数",
+     "桁違い"
+    ]
+   },
+   {
+    "kanji": "棲",
+    "chinese_form": "棲",
+    "default": "qi",
+    "readings": [
+     [
+      "qi",
+      4598
+     ],
+     [
+      "xi",
+      574
+     ]
+    ],
+    "words": 5,
+    "examples": [
+     "棲む",
+     "同棲",
+     "棲息"
+    ]
+   },
+   {
+    "kanji": "泌",
+    "chinese_form": "泌",
+    "default": "mi",
+    "readings": [
+     [
+      "bi",
+      3709
+     ],
+     [
+      "mi",
+      3709
+     ]
+    ],
+    "words": 5,
+    "examples": [
+     "分泌",
+     "分泌",
+     "泌尿器"
+    ]
+   },
+   {
+    "kanji": "漆",
+    "chinese_form": "漆",
+    "default": "qi",
+    "readings": [
+     [
+      "qi",
+      4066
+     ],
+     [
+      "qu",
+      508
+     ]
+    ],
+    "words": 5,
+    "examples": [
+     "漆",
+     "漆黒",
+     "漆喰"
+    ]
+   },
+   {
+    "kanji": "遡",
+    "chinese_form": "遡",
+    "default": "su",
+    "readings": [
+     [
+      "su",
+      1
+     ],
+     [
+      "suo",
+      1
+     ]
+    ],
+    "words": 5,
+    "examples": [
+     "遡る",
+     "遡上",
+     "遡及"
+    ]
+   },
+   {
+    "kanji": "阿",
+    "chinese_form": "阿",
+    "default": "a",
+    "readings": [
+     [
+      "a",
+      6003
+     ],
+     [
+      "e",
+      750
+     ]
+    ],
+    "words": 5,
+    "examples": [
+     "阿弥陀如来",
+     "阿吽",
+     "南無阿弥陀仏"
+    ]
+   },
+   {
+    "kanji": "亀",
+    "chinese_form": "龜",
+    "default": "gui",
+    "readings": [
+     [
+      "gui",
+      4414
+     ],
+     [
+      "jun",
+      551
+     ],
+     [
+      "qiu",
+      551
+     ]
+    ],
+    "words": 4,
+    "examples": [
+     "亀",
+     "亀裂",
+     "亀頭"
+    ]
+   },
+   {
+    "kanji": "伽",
+    "chinese_form": "伽",
+    "default": "jia",
+    "readings": [
+     [
+      "qie",
+      2528
+     ],
+     [
+      "jia",
+      1820
+     ]
+    ],
+    "words": 4,
+    "examples": [
+     "伽藍",
+     "伽",
+     "伽羅"
+    ]
+   },
+   {
+    "kanji": "其",
+    "chinese_form": "其",
+    "default": "qi",
+    "readings": [
+     [
+      "qi",
+      7268
+     ],
+     [
+      "ji",
+      908
+     ]
+    ],
+    "words": 4,
+    "examples": [
+     "其の",
+     "其れ",
+     "其処"
+    ]
+   },
+   {
+    "kanji": "嘲",
+    "chinese_form": "嘲",
+    "default": "chao",
+    "readings": [
+     [
+      "chao",
+      3810
+     ],
+     [
+      "zhao",
+      3810
+     ]
+    ],
+    "words": 4,
+    "examples": [
+     "嘲笑",
+     "嘲笑う",
+     "嘲る"
+    ]
+   },
+   {
+    "kanji": "堕",
+    "chinese_form": "墮",
+    "default": "duo",
+    "readings": [
+     [
+      "duo",
+      3733
+     ],
+     [
+      "hui",
+      3733
+     ]
+    ],
+    "words": 4,
+    "examples": [
+     "堕ちる",
+     "堕落",
+     "堕天使"
+    ]
+   },
+   {
+    "kanji": "宛",
+    "chinese_form": "宛",
+    "default": "wan",
+    "readings": [
+     [
+      "wan",
+      3944
+     ],
+     [
+      "yuan",
+      493
+     ]
+    ],
+    "words": 4,
+    "examples": [
+     "宛",
+     "宛先",
+     "宛名"
+    ]
+   },
+   {
+    "kanji": "尉",
+    "chinese_form": "尉",
+    "default": "wei",
+    "readings": [
+     [
+      "wei",
+      2954
+     ],
+     [
+      "yu",
+      2954
+     ]
+    ],
+    "words": 4,
+    "examples": [
+     "大尉",
+     "中尉",
+     "尉"
+    ]
+   },
+   {
+    "kanji": "怯",
+    "chinese_form": "怯",
+    "default": "qie",
+    "readings": [
+     [
+      "que",
+      3251
+     ],
+     [
+      "qie",
+      406
+     ]
+    ],
+    "words": 4,
+    "examples": [
+     "怯える",
+     "卑怯",
+     "怯む"
+    ]
+   },
+   {
+    "kanji": "暫",
+    "chinese_form": "暫",
+    "default": "zan",
+    "readings": [
+     [
+      "zhan",
+      5170
+     ],
+     [
+      "zan",
+      646
+     ]
+    ],
+    "words": 4,
+    "examples": [
+     "暫く",
+     "暫定",
+     "暫定的"
+    ]
+   },
+   {
+    "kanji": "碁",
+    "chinese_form": "碁",
+    "default": "qi",
+    "readings": [
+     [
+      "ji",
+      3339
+     ],
+     [
+      "qi",
+      3339
+     ]
+    ],
+    "words": 4,
+    "examples": [
+     "囲碁",
+     "碁",
+     "碁盤"
+    ]
+   },
+   {
+    "kanji": "稽",
+    "chinese_form": "稽",
+    "default": "ji",
+    "readings": [
+     [
+      "ji",
+      4038
+     ],
+     [
+      "qi",
+      2907
+     ]
+    ],
+    "words": 4,
+    "examples": [
+     "稽古",
+     "お稽古",
+     "滑稽"
+    ]
+   },
+   {
+    "kanji": "誰",
+    "chinese_form": "誰",
+    "default": "shui",
+    "readings": [
+     [
+      "shei",
+      5698
+     ],
+     [
+      "shui",
+      712
+     ]
+    ],
+    "words": 4,
+    "examples": [
+     "誰",
+     "誰",
+     "誰々"
+    ]
+   },
+   {
+    "kanji": "遍",
+    "chinese_form": "遍",
+    "default": "bian",
+    "readings": [
+     [
+      "bian",
+      5242
+     ],
+     [
+      "pian",
+      655
+     ]
+    ],
+    "words": 4,
+    "examples": [
+     "普遍",
+     "普遍的",
+     "遍路"
+    ]
+   },
+   {
+    "kanji": "那",
+    "chinese_form": "那",
+    "default": "na",
+    "readings": [
+     [
+      "na",
+      7436
+     ],
+     [
+      "nei",
+      929
+     ]
+    ],
+    "words": 4,
+    "examples": [
+     "旦那",
+     "那覇",
+     "刹那"
+    ]
+   },
+   {
+    "kanji": "仇",
+    "chinese_form": "仇",
+    "default": "chou",
+    "readings": [
+     [
+      "chou",
+      4049
+     ],
+     [
+      "qiu",
+      506
+     ]
+    ],
+    "words": 3,
+    "examples": [
+     "仇",
+     "仇討ち",
+     "仇"
+    ]
+   },
+   {
+    "kanji": "俊",
+    "chinese_form": "俊",
+    "default": "jun",
+    "readings": [
+     [
+      "jun",
+      5126
+     ],
+     [
+      "zun",
+      640
+     ]
+    ],
+    "words": 3,
+    "examples": [
+     "俊敏",
+     "俊足",
+     "俊英"
+    ]
+   },
+   {
+    "kanji": "凸",
+    "chinese_form": "凸",
+    "default": "tu",
+    "readings": [
+     [
+      "tu",
+      4002
+     ],
+     [
+      "gu",
+      500
+     ]
+    ],
+    "words": 3,
+    "examples": [
+     "凸",
+     "凹凸",
+     "凸凹"
+    ]
+   },
+   {
+    "kanji": "嘘",
+    "chinese_form": "噓",
+    "default": "xu",
+    "readings": [
+     [
+      "shi",
+      3976
+     ],
+     [
+      "xu",
+      3976
+     ]
+    ],
+    "words": 3,
+    "examples": [
+     "嘘",
+     "嘘つき",
+     "大嘘"
+    ]
+   },
+   {
+    "kanji": "姥",
+    "chinese_form": "姥",
+    "default": "lao",
+    "readings": [
+     [
+      "lao",
+      1896
+     ],
+     [
+      "mu",
+      237
+     ]
+    ],
+    "words": 3,
+    "examples": [
+     "山姥",
+     "姥",
+     "山姥"
+    ]
+   },
+   {
+    "kanji": "屯",
+    "chinese_form": "屯",
+    "default": "tun",
+    "readings": [
+     [
+      "tun",
+      3871
+     ],
+     [
+      "zhun",
+      2787
+     ]
+    ],
+    "words": 3,
+    "examples": [
+     "駐屯",
+     "屯",
+     "屯田"
+    ]
+   },
+   {
+    "kanji": "扁",
+    "chinese_form": "扁",
+    "default": "bian",
+    "readings": [
+     [
+      "bian",
+      4859
+     ],
+     [
+      "pian",
+      607
+     ]
+    ],
+    "words": 3,
+    "examples": [
+     "扁平",
+     "扁桃",
+     "扁額"
+    ]
+   },
+   {
+    "kanji": "斉",
+    "chinese_form": "齊",
+    "default": "qi",
+    "readings": [
+     [
+      "qi",
+      5076
+     ],
+     [
+      "zhai",
+      634
+     ],
+     [
+      "zi",
+      634
+     ]
+    ],
+    "words": 3,
+    "examples": [
+     "一斉",
+     "斉唱",
+     "不斉"
+    ]
+   },
+   {
+    "kanji": "杉",
+    "chinese_form": "杉",
+    "default": "shan",
+    "readings": [
+     [
+      "shan",
+      4042
+     ],
+     [
+      "sha",
+      505
+     ]
+    ],
+    "words": 3,
+    "examples": [
+     "杉",
+     "杉並",
+     "杉板"
+    ]
+   },
+   {
+    "kanji": "杓",
+    "chinese_form": "杓",
+    "default": "shao",
+    "readings": [
+     [
+      "biao",
+      2195
+     ],
+     [
+      "shao",
+      2195
+     ]
+    ],
+    "words": 3,
+    "examples": [
+     "柄杓",
+     "杓子",
+     "茶杓"
+    ]
+   },
+   {
+    "kanji": "渓",
+    "chinese_form": "溪",
+    "default": "xi",
+    "readings": [
+     [
+      "xi",
+      5262
+     ],
+     [
+      "qi",
+      657
+     ]
+    ],
+    "words": 3,
+    "examples": [
+     "渓谷",
+     "渓流",
+     "雪渓"
+    ]
+   },
+   {
+    "kanji": "癬",
+    "chinese_form": "癬",
+    "default": "xuan",
+    "readings": [
+     [
+      "xian",
+      2792
+     ],
+     [
+      "xuan",
+      2792
+     ]
+    ],
+    "words": 3,
+    "examples": [
+     "乾癬",
+     "白癬",
+     "疥癬"
+    ]
+   },
+   {
+    "kanji": "盾",
+    "chinese_form": "盾",
+    "default": "dun",
+    "readings": [
+     [
+      "dun",
+      4448
+     ],
+     [
+      "shun",
+      556
+     ]
+    ],
+    "words": 3,
+    "examples": [
+     "盾",
+     "矛盾",
+     "後ろ盾"
+    ]
+   },
+   {
+    "kanji": "肋",
+    "chinese_form": "肋",
+    "default": "lei",
+    "readings": [
+     [
+      "le",
+      2738
+     ],
+     [
+      "lei",
+      1971
+     ]
+    ],
+    "words": 3,
+    "examples": [
+     "肋骨",
+     "肋",
+     "肋間"
+    ]
+   },
+   {
+    "kanji": "腋",
+    "chinese_form": "腋",
+    "default": "ye",
+    "readings": [
+     [
+      "ye",
+      2633
+     ],
+     [
+      "yi",
+      2633
+     ]
+    ],
+    "words": 3,
+    "examples": [
+     "腋窩",
+     "腋",
+     "葉腋"
+    ]
+   },
+   {
+    "kanji": "頚",
+    "chinese_form": "頚",
+    "default": "jing*",
+    "readings": [
+     [
+      "geng",
+      1
+     ],
+     [
+      "jing",
+      1
+     ]
+    ],
+    "words": 3,
+    "examples": [
+     "頚椎",
+     "頚部",
+     "頚"
+    ]
+   },
+   {
+    "kanji": "鶴",
+    "chinese_form": "鶴",
+    "default": "he",
+    "readings": [
+     [
+      "he",
+      3647
+     ],
+     [
+      "hao",
+      455
+     ]
+    ],
+    "words": 3,
+    "examples": [
+     "鶴",
+     "鶴見",
+     "折り鶴"
+    ]
+   },
+   {
+    "kanji": "伺",
+    "chinese_form": "伺",
+    "default": "si",
+    "readings": [
+     [
+      "si",
+      3993
+     ],
+     [
+      "ci",
+      499
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "伺う",
+     "伺える"
+    ]
+   },
+   {
+    "kanji": "傀",
+    "chinese_form": "傀",
+    "default": "kui*",
+    "readings": [
+     [
+      "gui",
+      2225
+     ],
+     [
+      "kui",
+      2225
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "傀儡",
+     "傀儡"
+    ]
+   },
+   {
+    "kanji": "凛",
+    "chinese_form": "凛",
+    "default": "lin",
+    "readings": [
+     [
+      "lin",
+      1
+     ],
+     [
+      "qin",
+      1
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "凛と",
+     "凛々しい"
+    ]
+   },
+   {
+    "kanji": "剖",
+    "chinese_form": "剖",
+    "default": "pou",
+    "readings": [
+     [
+      "po",
+      4040
+     ],
+     [
+      "pou",
+      4040
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "解剖",
+     "解剖学"
+    ]
+   },
+   {
+    "kanji": "厩",
+    "chinese_form": "厩",
+    "default": "jiu",
+    "readings": [
+     [
+      "ji",
+      1
+     ],
+     [
+      "jiu",
+      1
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "厩舎",
+     "厩"
+    ]
+   },
+   {
+    "kanji": "叶",
+    "chinese_form": "叶",
+    "default": "ye",
+    "readings": [
+     [
+      "she",
+      1
+     ],
+     [
+      "xie",
+      1
+     ],
+     [
+      "ye",
+      1
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "叶える",
+     "叶う"
+    ]
+   },
+   {
+    "kanji": "吽",
+    "chinese_form": "吽",
+    "default": "hong",
+    "readings": [
+     [
+      "hong",
+      485
+     ],
+     [
+      "ou",
+      485
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "阿吽",
+     "吽"
+    ]
+   },
+   {
+    "kanji": "咥",
+    "chinese_form": "咥",
+    "default": "xi",
+    "readings": [
+     [
+      "die",
+      485
+     ],
+     [
+      "xi",
+      485
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "咥える",
+     "咥え込む"
+    ]
+   },
+   {
+    "kanji": "嗟",
+    "chinese_form": "嗟",
+    "default": "jie",
+    "readings": [
+     [
+      "jie",
+      2724
+     ],
+     [
+      "jue",
+      340
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "咄嗟",
+     "怨嗟"
+    ]
+   },
+   {
+    "kanji": "堆",
+    "chinese_form": "堆",
+    "default": "dui",
+    "readings": [
+     [
+      "dui",
+      5141
+     ],
+     [
+      "zui",
+      642
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "堆積",
+     "堆肥"
+    ]
+   },
+   {
+    "kanji": "娠",
+    "chinese_form": "娠",
+    "default": "shen",
+    "readings": [
+     [
+      "chen",
+      1739
+     ],
+     [
+      "shen",
+      1739
+     ],
+     [
+      "zhen",
+      1739
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "妊娠",
+     "妊娠中"
+    ]
+   },
+   {
+    "kanji": "屑",
+    "chinese_form": "屑",
+    "default": "xie",
+    "readings": [
+     [
+      "xie",
+      3599
+     ],
+     [
+      "xue",
+      3599
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "屑",
+     "星屑"
+    ]
+   },
+   {
+    "kanji": "帥",
+    "chinese_form": "帥",
+    "default": "shuai",
+    "readings": [
+     [
+      "shuai",
+      4204
+     ],
+     [
+      "shuo",
+      525
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "元帥",
+     "総帥"
+    ]
+   },
+   {
+    "kanji": "拗",
+    "chinese_form": "拗",
+    "default": "ao",
+    "readings": [
+     [
+      "ao",
+      2738
+     ],
+     [
+      "niu",
+      2738
+     ],
+     [
+      "yao",
+      2738
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "執拗",
+     "拗ねる"
+    ]
+   },
+   {
+    "kanji": "撹",
+    "chinese_form": "攪",
+    "default": "jiao",
+    "readings": [
+     [
+      "jiao",
+      3658
+     ],
+     [
+      "gao",
+      457
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "撹拌",
+     "撹乱"
+    ]
+   },
+   {
+    "kanji": "攪",
+    "chinese_form": "攪",
+    "default": "jiao",
+    "readings": [
+     [
+      "jiao",
+      3658
+     ],
+     [
+      "gao",
+      457
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "攪拌",
+     "攪乱"
+    ]
+   },
+   {
+    "kanji": "曾",
+    "chinese_form": "曾",
+    "default": "ceng",
+    "readings": [
+     [
+      "ceng",
+      6220
+     ],
+     [
+      "zeng",
+      777
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "未曾有",
+     "曾孫"
+    ]
+   },
+   {
+    "kanji": "朴",
+    "chinese_form": "朴",
+    "default": "pu",
+    "readings": [
+     [
+      "pu",
+      3434
+     ],
+     [
+      "po",
+      2472
+     ],
+     [
+      "piao",
+      1545
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "素朴",
+     "純朴"
+    ]
+   },
+   {
+    "kanji": "瀕",
+    "chinese_form": "瀕",
+    "default": "bin",
+    "readings": [
+     [
+      "bin",
+      3553
+     ],
+     [
+      "pin",
+      444
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "瀕死",
+     "瀕する"
+    ]
+   },
+   {
+    "kanji": "畦",
+    "chinese_form": "畦",
+    "default": "qi",
+    "readings": [
+     [
+      "qi",
+      1847
+     ],
+     [
+      "xi",
+      1847
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "畦",
+     "畦"
+    ]
+   },
+   {
+    "kanji": "茄",
+    "chinese_form": "茄",
+    "default": "qie",
+    "readings": [
+     [
+      "jia",
+      3779
+     ],
+     [
+      "qie",
+      3779
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "茄子",
+     "茄子"
+    ]
+   },
+   {
+    "kanji": "荼",
+    "chinese_form": "荼",
+    "default": "tu",
+    "readings": [
+     [
+      "shu",
+      2994
+     ],
+     [
+      "tu",
+      2994
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "曼荼羅",
+     "荼毘"
+    ]
+   },
+   {
+    "kanji": "蛆",
+    "chinese_form": "蛆",
+    "default": "qu",
+    "readings": [
+     [
+      "qu",
+      1847
+     ],
+     [
+      "ju",
+      230
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "蛆虫",
+     "蛆"
+    ]
+   },
+   {
+    "kanji": "裳",
+    "chinese_form": "裳",
+    "default": "shang",
+    "readings": [
+     [
+      "chang",
+      3142
+     ],
+     [
+      "shang",
+      3142
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "衣裳",
+     "裳"
+    ]
+   },
+   {
+    "kanji": "軋",
+    "chinese_form": "軋",
+    "default": "ya",
+    "readings": [
+     [
+      "ya",
+      2984
+     ],
+     [
+      "ga",
+      373
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "軋む",
+     "軋轢"
+    ]
+   },
+   {
+    "kanji": "轍",
+    "chinese_form": "轍",
+    "default": "zhe",
+    "readings": [
+     [
+      "che",
+      3188
+     ],
+     [
+      "zhe",
+      3188
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "轍",
+     "轍"
+    ]
+   },
+   {
+    "kanji": "酪",
+    "chinese_form": "酪",
+    "default": "lao",
+    "readings": [
+     [
+      "lao",
+      3351
+     ],
+     [
+      "luo",
+      3351
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "酪農",
+     "酪酸"
+    ]
+   },
+   {
+    "kanji": "鮎",
+    "chinese_form": "鮎",
+    "default": "nian",
+    "readings": [
+     [
+      "nian",
+      1
+     ],
+     [
+      "yan",
+      1
+     ]
+    ],
+    "words": 2,
+    "examples": [
+     "鮎",
+     "鮎釣り"
+    ]
+   },
+   {
+    "kanji": "亘",
+    "chinese_form": "亙",
+    "default": "gen",
+    "readings": [
+     [
+      "gen",
+      2468
+     ],
+     [
+      "geng",
+      2468
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "亘る"
+    ]
+   },
+   {
+    "kanji": "什",
+    "chinese_form": "什",
+    "default": "shen",
+    "readings": [
+     [
+      "shi",
+      6878
+     ],
+     [
+      "shen",
+      4952
+     ],
+     [
+      "she",
+      3095
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "什器"
+    ]
+   },
+   {
+    "kanji": "匙",
+    "chinese_form": "匙",
+    "default": "chi",
+    "readings": [
+     [
+      "chi",
+      3766
+     ],
+     [
+      "shi",
+      2712
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "匙"
+    ]
+   },
+   {
+    "kanji": "吃",
+    "chinese_form": "吃",
+    "default": "chi",
+    "readings": [
+     [
+      "chi",
+      6324
+     ],
+     [
+      "ji",
+      4553
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "吃音"
+    ]
+   },
+   {
+    "kanji": "唖",
+    "chinese_form": "啞",
+    "default": "ya",
+    "readings": [
+     [
+      "ya",
+      3396
+     ],
+     [
+      "e",
+      424
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "唖然"
+    ]
+   },
+   {
+    "kanji": "喀",
+    "chinese_form": "喀",
+    "default": "ka",
+    "readings": [
+     [
+      "ka",
+      3418
+     ],
+     [
+      "ke",
+      3418
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "喀痰"
+    ]
+   },
+   {
+    "kanji": "噓",
+    "chinese_form": "噓",
+    "default": "xu",
+    "readings": [
+     [
+      "shi",
+      3976
+     ],
+     [
+      "xu",
+      3976
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "噓"
+    ]
+   },
+   {
+    "kanji": "嚇",
+    "chinese_form": "嚇",
+    "default": "xia",
+    "readings": [
+     [
+      "xia",
+      4755
+     ],
+     [
+      "he",
+      3424
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "威嚇"
+    ]
+   },
+   {
+    "kanji": "嚼",
+    "chinese_form": "嚼",
+    "default": "jiao",
+    "readings": [
+     [
+      "jiao",
+      3759
+     ],
+     [
+      "jue",
+      469
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "咀嚼"
+    ]
+   },
+   {
+    "kanji": "娩",
+    "chinese_form": "娩",
+    "default": "mian",
+    "readings": [
+     [
+      "mian",
+      2307
+     ],
+     [
+      "wan",
+      2307
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "分娩"
+    ]
+   },
+   {
+    "kanji": "屏",
+    "chinese_form": "屏",
+    "default": "ping",
+    "readings": [
+     [
+      "ping",
+      4945
+     ],
+     [
+      "bing",
+      618
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "屏風"
+    ]
+   },
+   {
+    "kanji": "屓",
+    "chinese_form": "屓",
+    "default": "xi",
+    "readings": [
+     [
+      "bi",
+      1
+     ],
+     [
+      "mei",
+      1
+     ],
+     [
+      "xi",
+      1
+     ],
+     [
+      "xie",
+      1
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "贔屓"
+    ]
+   },
+   {
+    "kanji": "弛",
+    "chinese_form": "弛",
+    "default": "chi",
+    "readings": [
+     [
+      "chi",
+      3297
+     ],
+     [
+      "shi",
+      3297
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "弛緩"
+    ]
+   },
+   {
+    "kanji": "恫",
+    "chinese_form": "恫",
+    "default": "dong",
+    "readings": [
+     [
+      "dong",
+      2131
+     ],
+     [
+      "tong",
+      2131
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "恫喝"
+    ]
+   },
+   {
+    "kanji": "撞",
+    "chinese_form": "撞",
+    "default": "zhuang",
+    "readings": [
+     [
+      "zhuang",
+      4700
+     ],
+     [
+      "chuang",
+      587
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "撞く"
+    ]
+   },
+   {
+    "kanji": "曽",
+    "chinese_form": "曾",
+    "default": "ceng",
+    "readings": [
+     [
+      "ceng",
+      6220
+     ],
+     [
+      "zeng",
+      777
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "未曽有"
+    ]
+   },
+   {
+    "kanji": "杷",
+    "chinese_form": "杷",
+    "default": "pa",
+    "readings": [
+     [
+      "ba",
+      1847
+     ],
+     [
+      "pa",
+      1847
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "枇杷"
+    ]
+   },
+   {
+    "kanji": "桔",
+    "chinese_form": "桔",
+    "default": "ju",
+    "readings": [
+     [
+      "jie",
+      2489
+     ],
+     [
+      "ju",
+      311
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "桔梗"
+    ]
+   },
+   {
+    "kanji": "棹",
+    "chinese_form": "棹",
+    "default": "zhao",
+    "readings": [
+     [
+      "zhao",
+      1795
+     ],
+     [
+      "zhuo",
+      1795
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "棹"
+    ]
+   },
+   {
+    "kanji": "檻",
+    "chinese_form": "檻",
+    "default": "kan",
+    "readings": [
+     [
+      "kan",
+      3666
+     ],
+     [
+      "jian",
+      458
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "檻"
+    ]
+   },
+   {
+    "kanji": "沁",
+    "chinese_form": "沁",
+    "default": "qin",
+    "readings": [
+     [
+      "qin",
+      2468
+     ],
+     [
+      "shen",
+      308
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "沁みる"
+    ]
+   },
+   {
+    "kanji": "浣",
+    "chinese_form": "浣",
+    "default": "huan",
+    "readings": [
+     [
+      "huan",
+      970
+     ],
+     [
+      "wan",
+      970
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "浣腸"
+    ]
+   },
+   {
+    "kanji": "烙",
+    "chinese_form": "烙",
+    "default": "lao",
+    "readings": [
+     [
+      "lao",
+      2922
+     ],
+     [
+      "luo",
+      2922
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "烙印"
+    ]
+   },
+   {
+    "kanji": "熨",
+    "chinese_form": "熨",
+    "default": "yun",
+    "readings": [
+     [
+      "yu",
+      2164
+     ],
+     [
+      "yun",
+      2164
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "熨斗"
+    ]
+   },
+   {
+    "kanji": "獏",
+    "chinese_form": "獏",
+    "default": "mo",
+    "readings": [
+     [
+      "mo",
+      1
+     ],
+     [
+      "mu",
+      1
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "獏"
+    ]
+   },
+   {
+    "kanji": "琶",
+    "chinese_form": "琶",
+    "default": "pa",
+    "readings": [
+     [
+      "ba",
+      3158
+     ],
+     [
+      "pa",
+      3158
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "琵琶"
+    ]
+   },
+   {
+    "kanji": "矜",
+    "chinese_form": "矜",
+    "default": "jin",
+    "readings": [
+     [
+      "guan",
+      2546
+     ],
+     [
+      "jin",
+      2546
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "矜持"
+    ]
+   },
+   {
+    "kanji": "禰",
+    "chinese_form": "禰",
+    "default": "mi",
+    "readings": [
+     [
+      "mi",
+      485
+     ],
+     [
+      "ni",
+      485
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "禰宜"
+    ]
+   },
+   {
+    "kanji": "窄",
+    "chinese_form": "窄",
+    "default": "zhai",
+    "readings": [
+     [
+      "zhai",
+      4066
+     ],
+     [
+      "ze",
+      508
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "狭窄"
+    ]
+   },
+   {
+    "kanji": "紮",
+    "chinese_form": "紮",
+    "default": "zha",
+    "readings": [
+     [
+      "za",
+      3794
+     ],
+     [
+      "zha",
+      474
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "結紮"
+    ]
+   },
+   {
+    "kanji": "絣",
+    "chinese_form": "絣",
+    "default": "bei",
+    "readings": [
+     [
+      "beng",
+      1
+     ],
+     [
+      "ping",
+      1
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "絣"
+    ]
+   },
+   {
+    "kanji": "繫",
+    "chinese_form": "繫",
+    "default": "xi",
+    "readings": [
+     [
+      "xi",
+      4779
+     ],
+     [
+      "ji",
+      597
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "繫がる"
+    ]
+   },
+   {
+    "kanji": "罷",
+    "chinese_form": "罷",
+    "default": "ba",
+    "readings": [
+     [
+      "ba",
+      4717
+     ],
+     [
+      "pi",
+      589
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "罷免"
+    ]
+   },
+   {
+    "kanji": "耀",
+    "chinese_form": "耀",
+    "default": "yao",
+    "readings": [
+     [
+      "yao",
+      4706
+     ],
+     [
+      "yue",
+      3388
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "耀く"
+    ]
+   },
+   {
+    "kanji": "聘",
+    "chinese_form": "聘",
+    "default": "pin",
+    "readings": [
+     [
+      "pin",
+      4682
+     ],
+     [
+      "ping",
+      4682
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "招聘"
+    ]
+   },
+   {
+    "kanji": "膀",
+    "chinese_form": "膀",
+    "default": "bang",
+    "readings": [
+     [
+      "pang",
+      4147
+     ],
+     [
+      "bang",
+      518
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "膀胱"
+    ]
+   },
+   {
+    "kanji": "臂",
+    "chinese_form": "臂",
+    "default": "bi",
+    "readings": [
+     [
+      "bei",
+      4042
+     ],
+     [
+      "bi",
+      505
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "臂"
+    ]
+   },
+   {
+    "kanji": "蓼",
+    "chinese_form": "蓼",
+    "default": "liao",
+    "readings": [
+     [
+      "liao",
+      2164
+     ],
+     [
+      "lu",
+      2164
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "蓼"
+    ]
+   },
+   {
+    "kanji": "藏",
+    "chinese_form": "藏",
+    "default": "cang",
+    "readings": [
+     [
+      "cang",
+      5528
+     ],
+     [
+      "zang",
+      691
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "藏"
+    ]
+   },
+   {
+    "kanji": "蛤",
+    "chinese_form": "蛤",
+    "default": "ha",
+    "readings": [
+     [
+      "ge",
+      2281
+     ],
+     [
+      "ha",
+      2281
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "蛤"
+    ]
+   },
+   {
+    "kanji": "蛸",
+    "chinese_form": "蛸",
+    "default": "shao",
+    "readings": [
+     [
+      "shao",
+      485
+     ],
+     [
+      "xiao",
+      485
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "蛸"
+    ]
+   },
+   {
+    "kanji": "蝦",
+    "chinese_form": "蝦",
+    "default": "xia",
+    "readings": [
+     [
+      "ha",
+      4132
+     ],
+     [
+      "xia",
+      4132
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "蝦"
+    ]
+   },
+   {
+    "kanji": "蠕",
+    "chinese_form": "蠕",
+    "default": "ru",
+    "readings": [
+     [
+      "ru",
+      2448
+     ],
+     [
+      "ruan",
+      2448
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "蠕動"
+    ]
+   },
+   {
+    "kanji": "褌",
+    "chinese_form": "褌",
+    "default": "kun*",
+    "readings": [
+     [
+      "hui",
+      1
+     ],
+     [
+      "kun",
+      1
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "褌"
+    ]
+   },
+   {
+    "kanji": "趨",
+    "chinese_form": "趨",
+    "default": "qu",
+    "readings": [
+     [
+      "qu",
+      5173
+     ],
+     [
+      "cu",
+      646
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "趨勢"
+    ]
+   },
+   {
+    "kanji": "辟",
+    "chinese_form": "辟",
+    "default": "pi",
+    "readings": [
+     [
+      "pi",
+      3110
+     ],
+     [
+      "bi",
+      388
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "辟易"
+    ]
+   },
+   {
+    "kanji": "鎬",
+    "chinese_form": "鎬",
+    "default": "hao",
+    "readings": [
+     [
+      "gao",
+      2131
+     ],
+     [
+      "hao",
+      2131
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "鎬"
+    ]
+   },
+   {
+    "kanji": "閤",
+    "chinese_form": "閤",
+    "default": "he",
+    "readings": [
+     [
+      "ge",
+      1538
+     ],
+     [
+      "he",
+      1538
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "太閤"
+    ]
+   },
+   {
+    "kanji": "鰓",
+    "chinese_form": "鰓",
+    "default": "sai",
+    "readings": [
+     [
+      "sai",
+      2680
+     ],
+     [
+      "xi",
+      2680
+     ]
+    ],
+    "words": 1,
+    "examples": [
+     "鰓"
+    ]
+   }
+  ],
+  "word_level_differences": [
+   [
+    "あさがすみ",
+    "朝霞",
+    "zhao xia",
+    "chao xia"
+   ],
+   [
+    "あさつゆ",
+    "朝露",
+    "zhao lu",
+    "chao lu"
+   ],
+   [
+    "あさゆう",
+    "朝夕",
+    "zhao xi",
+    "chao xi"
+   ],
+   [
+    "あっちゃく",
+    "圧着",
+    "ya zhao",
+    "ya zhe"
+   ],
+   [
+    "あわもり",
+    "泡盛",
+    "pao cheng",
+    "pao sheng"
+   ],
+   [
+    "いいんちょう",
+    "委員長",
+    "wei yuan zhang",
+    "wei yuan chang"
+   ],
+   [
+    "いかく",
+    "威嚇",
+    "wei he",
+    "wei xia"
+   ],
+   [
+    "いちもくりょうぜん",
+    "一目瞭然",
+    "yi mu liao ran",
+    "yi mu le ran"
+   ],
+   [
+    "いちやく",
+    "一躍",
+    "yi yao",
+    "yi yue"
+   ],
+   [
+    "いちょう",
+    "移調",
+    "yi diao",
+    "yi tiao"
+   ],
+   [
+    "いっこう",
+    "一行",
+    "yi hang",
+    "yi xing"
+   ],
+   [
+    "いっちょういっせき",
+    "一朝一夕",
+    "yi zhao yi xi",
+    "yi chao yi xi"
+   ],
+   [
+    "いとこ",
+    "従兄",
+    "zong xiong",
+    "cong xiong"
+   ],
+   [
+    "いとこ",
+    "従兄弟",
+    "zong xiong di",
+    "cong xiong di"
+   ],
+   [
+    "いんちょう",
+    "院長",
+    "yuan zhang",
+    "yuan chang"
+   ],
+   [
+    "うつのみや",
+    "宇都宮",
+    "yu du gong",
+    "yu dou gong"
+   ],
+   [
+    "えんちょう",
+    "園長",
+    "yuan zhang",
+    "yuan chang"
+   ],
+   [
+    "おうかん",
+    "往還",
+    "wang huan",
+    "wang hai"
+   ],
+   [
+    "おえつ",
+    "嗚咽",
+    "wu ye",
+    "wu yan"
+   ],
+   [
+    "おおくら",
+    "大蔵",
+    "da zang",
+    "da cang"
+   ],
+   [
+    "おじ",
+    "伯父",
+    "bo fu",
+    "bai fu"
+   ],
+   [
+    "おば",
+    "伯母",
+    "bo mu",
+    "bai mu"
+   ],
+   [
+    "おんがく",
+    "音楽",
+    "yin yue",
+    "yin le"
+   ],
+   [
+    "おんがくか",
+    "音楽家",
+    "yin yue jia",
+    "yin le jia"
+   ],
+   [
+    "おんがくせい",
+    "音楽性",
+    "yin yue xing",
+    "yin le xing"
+   ],
+   [
+    "かいぎょう",
+    "改行",
+    "gai hang",
+    "gai xing"
+   ],
+   [
+    "かいけい",
+    "会計",
+    "kuai ji",
+    "hui ji"
+   ],
+   [
+    "かいちょう",
+    "会長",
+    "hui zhang",
+    "hui chang"
+   ],
+   [
+    "かぎづめ",
+    "鉤爪",
+    "gou zhao",
+    "gou zhua"
+   ],
+   [
+    "かくちょう",
+    "格調",
+    "ge diao",
+    "ge tiao"
+   ],
+   [
+    "かちょう",
+    "家長",
+    "jia zhang",
+    "jia chang"
+   ],
+   [
+    "かちょう",
+    "課長",
+    "ke zhang",
+    "ke chang"
+   ],
+   [
+    "かべん",
+    "花弁",
+    "hua ban",
+    "hua bian"
+   ],
+   [
+    "かんがっき",
+    "管楽器",
+    "guan yue qi",
+    "guan le qi"
+   ],
+   [
+    "かんげんがく",
+    "管弦楽",
+    "guan xian yue",
+    "guan xian le"
+   ],
+   [
+    "かんせん",
+    "乾癬",
+    "gan xian",
+    "gan xuan"
+   ],
+   [
+    "かんちょう",
+    "艦長",
+    "jian zhang",
+    "jian chang"
+   ],
+   [
+    "かんちょう",
+    "館長",
+    "guan zhang",
+    "guan chang"
+   ],
+   [
+    "かんぼつ",
+    "陥没",
+    "xian mo",
+    "xian mei"
+   ],
+   [
+    "がいそう",
+    "咳嗽",
+    "ke sou",
+    "hai sou"
+   ],
+   [
+    "がいでん",
+    "外伝",
+    "wai zhuan",
+    "wai chuan"
+   ],
+   [
+    "ががく",
+    "雅楽",
+    "ya yue",
+    "ya le"
+   ],
+   [
+    "がくしょう",
+    "楽章",
+    "yue zhang",
+    "le zhang"
+   ],
+   [
+    "がくだん",
+    "楽団",
+    "yue tuan",
+    "le tuan"
+   ],
+   [
+    "がくちょう",
+    "学長",
+    "xue zhang",
+    "xue chang"
+   ],
+   [
+    "がくふ",
+    "楽譜",
+    "yue pu",
+    "le pu"
+   ],
+   [
+    "がっき",
+    "楽器",
+    "yue qi",
+    "le qi"
+   ],
+   [
+    "がっきょく",
+    "楽曲",
+    "yue qu",
+    "le qu"
+   ],
+   [
+    "がらん",
+    "伽藍",
+    "qie lan",
+    "jia lan"
+   ],
+   [
+    "きかん",
+    "帰還",
+    "gui huan",
+    "gui hai"
+   ],
+   [
+    "きがく",
+    "器楽",
+    "qi yue",
+    "qi le"
+   ],
+   [
+    "ききょう",
+    "桔梗",
+    "jie geng",
+    "ju geng"
+   ],
+   [
+    "きすう",
+    "奇数",
+    "ji shu",
+    "qi shu"
+   ],
+   [
+    "きせい",
+    "帰省",
+    "gui xing",
+    "gui sheng"
+   ],
+   [
+    "きちょう",
+    "基調",
+    "ji diao",
+    "ji tiao"
+   ],
+   [
+    "きちょう",
+    "機長",
+    "ji zhang",
+    "ji chang"
+   ],
+   [
+    "きつえん",
+    "喫煙",
+    "chi wan",
+    "chi yan"
+   ],
+   [
+    "きゃくしょく",
+    "脚色",
+    "jue se",
+    "jiao se"
+   ],
+   [
+    "きゅうすい",
+    "給水",
+    "ji shui",
+    "gei shui"
+   ],
+   [
+    "きゅうはいすい",
+    "給排水",
+    "ji pai shui",
+    "gei pai shui"
+   ],
+   [
+    "きゅうふ",
+    "給付",
+    "ji fu",
+    "gei fu"
+   ],
+   [
+    "きゅうよ",
+    "給与",
+    "ji yu",
+    "gei yu"
+   ],
+   [
+    "きょういくちょう",
+    "教育長",
+    "jiao yu zhang",
+    "jiao yu chang"
+   ],
+   [
+    "きょうきゅう",
+    "供給",
+    "gong ji",
+    "gong gei"
+   ],
+   [
+    "きょうちょう",
+    "強調",
+    "qiang diao",
+    "qiang tiao"
+   ],
+   [
+    "きょうと",
+    "京都",
+    "jing du",
+    "jing dou"
+   ],
+   [
+    "きょくちょう",
+    "局長",
+    "ju zhang",
+    "ju chang"
+   ],
+   [
+    "きょくちょう",
+    "曲調",
+    "qu diao",
+    "qu tiao"
+   ],
+   [
+    "きれつ",
+    "亀裂",
+    "jun lie",
+    "gui lie"
+   ],
+   [
+    "ぎちょう",
+    "議長",
+    "yi zhang",
+    "yi chang"
+   ],
+   [
+    "ぎゅうどん",
+    "牛丼",
+    "niu dong",
+    "niu jing"
+   ],
+   [
+    "ぎょうかん",
+    "行間",
+    "hang jian",
+    "xing jian"
+   ],
+   [
+    "ぎょうしょう",
+    "行商",
+    "hang shang",
+    "xing shang"
+   ],
+   [
+    "ぎょうすう",
+    "行数",
+    "hang shu",
+    "xing shu"
+   ],
+   [
+    "ぎょうれつ",
+    "行列",
+    "hang lie",
+    "xing lie"
+   ],
+   [
+    "ぎんこう",
+    "銀行",
+    "yin hang",
+    "yin xing"
+   ],
+   [
+    "くちょう",
+    "区長",
+    "qu zhang",
+    "qu chang"
+   ],
+   [
+    "くっきょう",
+    "屈強",
+    "qu jiang",
+    "qu qiang"
+   ],
+   [
+    "くみちょう",
+    "組長",
+    "zu zhang",
+    "zu chang"
+   ],
+   [
+    "くろうど",
+    "蔵人",
+    "zang ren",
+    "cang ren"
+   ],
+   [
+    "けいおんがく",
+    "軽音楽",
+    "qing yin yue",
+    "qing yin le"
+   ],
+   [
+    "けいそつ",
+    "軽率",
+    "qing shuai",
+    "qing lv"
+   ],
+   [
+    "けいはく",
+    "軽薄",
+    "qing bo",
+    "qing bao"
+   ],
+   [
+    "けさ",
+    "今朝",
+    "jin zhao",
+    "jin chao"
+   ],
+   [
+    "けっさつ",
+    "結紮",
+    "jie za",
+    "jie zha"
+   ],
+   [
+    "けつべん",
+    "血便",
+    "xie bian",
+    "xue bian"
+   ],
+   [
+    "けんお",
+    "嫌悪",
+    "xian wu",
+    "xian e"
+   ],
+   [
+    "けんけつ",
+    "献血",
+    "xian xie",
+    "xian xue"
+   ],
+   [
+    "げきちん",
+    "撃沈",
+    "ji chen",
+    "ji shen"
+   ],
+   [
+    "げんがく",
+    "弦楽",
+    "xian yue",
+    "xian le"
+   ],
+   [
+    "げんがっき",
+    "弦楽器",
+    "xian yue qi",
+    "xian le qi"
+   ],
+   [
+    "こうえつ",
+    "校閲",
+    "jiao yue",
+    "xiao yue"
+   ],
+   [
+    "こうかく",
+    "甲殻",
+    "jia qiao",
+    "jia ke"
+   ],
+   [
+    "こうさ",
+    "交差",
+    "jiao chai",
+    "jiao cha"
+   ],
+   [
+    "こうさ",
+    "公差",
+    "gong chai",
+    "gong cha"
+   ],
+   [
+    "こうじゅん",
+    "降順",
+    "xiang shun",
+    "jiang shun"
+   ],
+   [
+    "こうせい",
+    "校正",
+    "jiao zheng",
+    "xiao zheng"
+   ],
+   [
+    "こうそく",
+    "梗塞",
+    "geng se",
+    "geng sai"
+   ],
+   [
+    "こうちゃく",
+    "膠着",
+    "jiao zhuo",
+    "jiao zhe"
+   ],
+   [
+    "こうちょう",
+    "校長",
+    "xiao zhang",
+    "xiao chang"
+   ],
+   [
+    "こうちょう",
+    "高調",
+    "gao diao",
+    "gao tiao"
+   ],
+   [
+    "こうちょうしつ",
+    "校長室",
+    "xiao zhang shi",
+    "xiao chang shi"
+   ],
+   [
+    "こうてい",
+    "校訂",
+    "jiao ding",
+    "xiao ding"
+   ],
+   [
+    "こうふく",
+    "降伏",
+    "xiang fu",
+    "jiang fu"
+   ],
+   [
+    "ここのえ",
+    "九重",
+    "jiu chong",
+    "jiu zhong"
+   ],
+   [
+    "こちゃく",
+    "固着",
+    "gu zhuo",
+    "gu zhe"
+   ],
+   [
+    "こと",
+    "古都",
+    "gu du",
+    "gu dou"
+   ],
+   [
+    "こぶん",
+    "子分",
+    "zhi fen",
+    "zi fen"
+   ],
+   [
+    "こもり",
+    "子守",
+    "zhi shou",
+    "zi shou"
+   ],
+   [
+    "ごうべん",
+    "合弁",
+    "he ban",
+    "he bian"
+   ],
+   [
+    "さいけつ",
+    "採血",
+    "cai xie",
+    "cai xue"
+   ],
+   [
+    "さくげん",
+    "削減",
+    "xue jian",
+    "xiao jian"
+   ],
+   [
+    "さんぞう",
+    "三蔵",
+    "san zang",
+    "san cang"
+   ],
+   [
+    "さんだん",
+    "散弾",
+    "san dan",
+    "san tan"
+   ],
+   [
+    "しきちょう",
+    "色調",
+    "se diao",
+    "se tiao"
+   ],
+   [
+    "しさい",
+    "仔細",
+    "zi xi",
+    "zai xi"
+   ],
+   [
+    "しちょう",
+    "市長",
+    "shi zhang",
+    "shi chang"
+   ],
+   [
+    "しつちょう",
+    "室長",
+    "shi zhang",
+    "shi chang"
+   ],
+   [
+    "しつよう",
+    "執拗",
+    "zhi niu",
+    "zhi ao"
+   ],
+   [
+    "しゃくし",
+    "杓子",
+    "biao zi",
+    "shao zi"
+   ],
+   [
+    "しゃちょう",
+    "社長",
+    "she zhang",
+    "she chang"
+   ],
+   [
+    "しゅうじゃく",
+    "執着",
+    "zhi zhuo",
+    "zhi zhe"
+   ],
+   [
+    "しゅうちゃく",
+    "執着",
+    "zhi zhuo",
+    "zhi zhe"
+   ],
+   [
+    "しゅうちょう",
+    "酋長",
+    "qiu zhang",
+    "qiu chang"
+   ],
+   [
+    "しゅうりょう",
+    "終了",
+    "zhong liao",
+    "zhong le"
+   ],
+   [
+    "しゅちょう",
+    "首長",
+    "shou zhang",
+    "shou chang"
+   ],
+   [
+    "しゅっけつ",
+    "出血",
+    "chu xie",
+    "chu xue"
+   ],
+   [
+    "しゅつぼつ",
+    "出没",
+    "chu mo",
+    "chu mei"
+   ],
+   [
+    "しゅと",
+    "首都",
+    "shou du",
+    "shou dou"
+   ],
+   [
+    "しゅりゅうだん",
+    "手榴弾",
+    "shou liu dan",
+    "shou liu tan"
+   ],
+   [
+    "しょうかん",
+    "償還",
+    "chang huan",
+    "chang hai"
+   ],
+   [
+    "しょちょう",
+    "所長",
+    "suo zhang",
+    "suo chang"
+   ],
+   [
+    "しょちょう",
+    "署長",
+    "shu zhang",
+    "shu chang"
+   ],
+   [
+    "しんと",
+    "新都",
+    "xin du",
+    "xin dou"
+   ],
+   [
+    "じきでん",
+    "直伝",
+    "zhi zhuan",
+    "zhi chuan"
+   ],
+   [
+    "じきゅう",
+    "自給",
+    "zi ji",
+    "zi gei"
+   ],
+   [
+    "じきゅうじそく",
+    "自給自足",
+    "zi ji zi zu",
+    "zi gei zi zu"
+   ],
+   [
+    "じせい",
+    "自省",
+    "zi xing",
+    "zi sheng"
+   ],
+   [
+    "じちょう",
+    "次長",
+    "ci zhang",
+    "ci chang"
+   ],
+   [
+    "じつだん",
+    "実弾",
+    "shi dan",
+    "shi tan"
+   ],
+   [
+    "じでん",
+    "自伝",
+    "zi zhuan",
+    "zi chuan"
+   ],
+   [
+    "じゅうけいてい",
+    "従兄弟",
+    "zong xiong di",
+    "cong xiong di"
+   ],
+   [
+    "じゅうごう",
+    "重合",
+    "chong he",
+    "zhong he"
+   ],
+   [
+    "じゅうそう",
+    "重奏",
+    "chong zou",
+    "zhong zou"
+   ],
+   [
+    "じゅうそう",
+    "重装",
+    "chong zhuang",
+    "zhong zhuang"
+   ],
+   [
+    "じゅうはん",
+    "重版",
+    "chong ban",
+    "zhong ban"
+   ],
+   [
+    "じゅうふく",
+    "重複",
+    "chong fu",
+    "zhong fu"
+   ],
+   [
+    "じゅくせい",
+    "熟成",
+    "shou cheng",
+    "shu cheng"
+   ],
+   [
+    "じょこう",
+    "徐行",
+    "xu hang",
+    "xu xing"
+   ],
+   [
+    "じょちょう",
+    "助長",
+    "zhu zhang",
+    "zhu chang"
+   ],
+   [
+    "じんこう",
+    "沈香",
+    "chen xiang",
+    "shen xiang"
+   ],
+   [
+    "じんましん",
+    "蕁麻疹",
+    "xun ma zhen",
+    "qian ma zhen"
+   ],
+   [
+    "すいそうがく",
+    "吹奏楽",
+    "chui zou yue",
+    "chui zou le"
+   ],
+   [
+    "すうこう",
+    "数行",
+    "shu hang",
+    "shu xing"
+   ],
+   [
+    "せいかん",
+    "生還",
+    "sheng huan",
+    "sheng hai"
+   ],
+   [
+    "せいがく",
+    "声楽",
+    "sheng yue",
+    "sheng le"
+   ],
+   [
+    "せいさつ",
+    "省察",
+    "xing cha",
+    "sheng cha"
+   ],
+   [
+    "せいちょう",
+    "声調",
+    "sheng diao",
+    "sheng tiao"
+   ],
+   [
+    "せいちょう",
+    "成長",
+    "cheng zhang",
+    "cheng chang"
+   ],
+   [
+    "せいちょう",
+    "生長",
+    "sheng zhang",
+    "sheng chang"
+   ],
+   [
+    "せいちょうせい",
+    "成長性",
+    "cheng zhang xing",
+    "cheng chang xing"
+   ],
+   [
+    "せっさたくま",
+    "切磋琢磨",
+    "qie cuo zuo mo",
+    "qie cuo zhuo mo"
+   ],
+   [
+    "せっとく",
+    "説得",
+    "shui de",
+    "shuo de"
+   ],
+   [
+    "せんちょう",
+    "船長",
+    "chuan zhang",
+    "chuan chang"
+   ],
+   [
+    "せんと",
+    "遷都",
+    "qian du",
+    "qian dou"
+   ],
+   [
+    "ぜんだん",
+    "全弾",
+    "quan dan",
+    "quan tan"
+   ],
+   [
+    "そうかん",
+    "送還",
+    "song huan",
+    "song hai"
+   ],
+   [
+    "そうそん",
+    "曾孫",
+    "zeng sun",
+    "ceng sun"
+   ],
+   [
+    "そうだん",
+    "装弾",
+    "zhuang dan",
+    "zhuang tan"
+   ],
+   [
+    "そうちょう",
+    "総長",
+    "zong zhang",
+    "zong chang"
+   ],
+   [
+    "そしゃく",
+    "咀嚼",
+    "ju jue",
+    "zui jiao"
+   ],
+   [
+    "そっせん",
+    "率先",
+    "shuai xian",
+    "lv xian"
+   ],
+   [
+    "そっちょく",
+    "率直",
+    "shuai zhi",
+    "lv zhi"
+   ],
+   [
+    "そんたく",
+    "忖度",
+    "cun duo",
+    "cun du"
+   ],
+   [
+    "そんちょう",
+    "村長",
+    "cun zhang",
+    "cun chang"
+   ],
+   [
+    "ぞうお",
+    "憎悪",
+    "zeng wu",
+    "zeng e"
+   ],
+   [
+    "ぞうけつ",
+    "造血",
+    "zao xie",
+    "zao xue"
+   ],
+   [
+    "ぞうちょう",
+    "増長",
+    "zeng zhang",
+    "zeng chang"
+   ],
+   [
+    "ぞくちょう",
+    "族長",
+    "zu zhang",
+    "zu chang"
+   ],
+   [
+    "たいしょう",
+    "対称",
+    "dui chen",
+    "dui cheng"
+   ],
+   [
+    "たいしょうせい",
+    "対称性",
+    "dui chen xing",
+    "dui cheng xing"
+   ],
+   [
+    "たいちょう",
+    "隊長",
+    "dui zhang",
+    "dui chang"
+   ],
+   [
+    "たいふ",
+    "大夫",
+    "dai fu",
+    "da fu"
+   ],
+   [
+    "たくほん",
+    "拓本",
+    "ta ben",
+    "tuo ben"
+   ],
+   [
+    "たじゅう",
+    "多重",
+    "duo chong",
+    "duo zhong"
+   ],
+   [
+    "たんちょう",
+    "単調",
+    "dan diao",
+    "dan tiao"
+   ],
+   [
+    "たんてき",
+    "端的",
+    "duan di",
+    "duan de"
+   ],
+   [
+    "だいとし",
+    "大都市",
+    "da du shi",
+    "da dou shi"
+   ],
+   [
+    "だいぶ",
+    "大夫",
+    "dai fu",
+    "da fu"
+   ],
+   [
+    "だんがん",
+    "弾丸",
+    "dan wan",
+    "tan wan"
+   ],
+   [
+    "だんちょう",
+    "団長",
+    "tuan zhang",
+    "tuan chang"
+   ],
+   [
+    "だんとう",
+    "弾頭",
+    "dan tou",
+    "tan tou"
+   ],
+   [
+    "だんどう",
+    "弾道",
+    "dan dao",
+    "tan dao"
+   ],
+   [
+    "だんまく",
+    "弾幕",
+    "dan mu",
+    "tan mu"
+   ],
+   [
+    "だんやく",
+    "弾薬",
+    "dan yao",
+    "tan yao"
+   ],
+   [
+    "ちかく",
+    "地殻",
+    "di qiao",
+    "di ke"
+   ],
+   [
+    "ちくさん",
+    "畜産",
+    "xu chan",
+    "chu chan"
+   ],
+   [
+    "ちゃくい",
+    "着衣",
+    "zhuo yi",
+    "zhe yi"
+   ],
+   [
+    "ちゃくがん",
+    "着眼",
+    "zhuo yan",
+    "zhe yan"
+   ],
+   [
+    "ちゃくしゅ",
+    "着手",
+    "zhuo shou",
+    "zhe shou"
+   ],
+   [
+    "ちゃくしょう",
+    "着床",
+    "zhuo chuang",
+    "zhe chuang"
+   ],
+   [
+    "ちゃくしょく",
+    "着色",
+    "zhuo se",
+    "zhe se"
+   ],
+   [
+    "ちゃくじつ",
+    "着実",
+    "zhuo shi",
+    "zhe shi"
+   ],
+   [
+    "ちゃくそう",
+    "着想",
+    "zhuo xiang",
+    "zhe xiang"
+   ],
+   [
+    "ちゃくそう",
+    "着装",
+    "zhuo zhuang",
+    "zhe zhuang"
+   ],
+   [
+    "ちゃくち",
+    "着地",
+    "zhuo di",
+    "zhe di"
+   ],
+   [
+    "ちゃくりく",
+    "着陸",
+    "zhuo lu",
+    "zhe lu"
+   ],
+   [
+    "ちゃっか",
+    "着火",
+    "zhao huo",
+    "zhe huo"
+   ],
+   [
+    "ちょうかん",
+    "長官",
+    "zhang guan",
+    "chang guan"
+   ],
+   [
+    "ちょうけい",
+    "長兄",
+    "zhang xiong",
+    "chang xiong"
+   ],
+   [
+    "ちょうさ",
+    "調査",
+    "diao cha",
+    "tiao cha"
+   ],
+   [
+    "ちょうさけんきゅう",
+    "調査研究",
+    "diao cha yan jiu",
+    "tiao cha yan jiu"
+   ],
+   [
+    "ちょうし",
+    "調子",
+    "diao zi",
+    "tiao zi"
+   ],
+   [
+    "ちょうし",
+    "長子",
+    "zhang zi",
+    "chang zi"
+   ],
+   [
+    "ちょうじゃ",
+    "長者",
+    "zhang zhe",
+    "chang zhe"
+   ],
+   [
+    "ちょうじょ",
+    "長女",
+    "zhang nv",
+    "chang nv"
+   ],
+   [
+    "ちょうじょう",
+    "重畳",
+    "chong die",
+    "zhong die"
+   ],
+   [
+    "ちょうせい",
+    "調性",
+    "diao xing",
+    "tiao xing"
+   ],
+   [
+    "ちょうだい",
+    "長大",
+    "zhang da",
+    "chang da"
+   ],
+   [
+    "ちょうちょう",
+    "長調",
+    "chang diao",
+    "chang tiao"
+   ],
+   [
+    "ちょうど",
+    "調度",
+    "diao du",
+    "tiao du"
+   ],
+   [
+    "ちょうなん",
+    "長男",
+    "zhang nan",
+    "chang nan"
+   ],
+   [
+    "ちょうふく",
+    "重複",
+    "chong fu",
+    "zhong fu"
+   ],
+   [
+    "ちょうぼ",
+    "帳簿",
+    "zhang bu",
+    "zhang bo"
+   ],
+   [
+    "ちょうよう",
+    "重陽",
+    "chong yang",
+    "zhong yang"
+   ],
+   [
+    "ちょうろう",
+    "長老",
+    "zhang lao",
+    "chang lao"
+   ],
+   [
+    "ちょさくしゃ",
+    "著作者",
+    "zhu zuo zhe",
+    "zhe zuo zhe"
+   ],
+   [
+    "ちょさくぶつ",
+    "著作物",
+    "zhu zuo wu",
+    "zhe zuo wu"
+   ],
+   [
+    "ちょしょ",
+    "著書",
+    "zhu shu",
+    "zhe shu"
+   ],
+   [
+    "ちんこう",
+    "沈降",
+    "chen jiang",
+    "shen jiang"
+   ],
+   [
+    "ちんちゃく",
+    "沈着",
+    "chen zhuo",
+    "shen zhe"
+   ],
+   [
+    "ちんぼつ",
+    "沈没",
+    "chen mo",
+    "shen mei"
+   ],
+   [
+    "ついたい",
+    "椎体",
+    "chui ti",
+    "zhui ti"
+   ],
+   [
+    "つめあと",
+    "爪痕",
+    "zhao hen",
+    "zhua hen"
+   ],
+   [
+    "ていちょう",
+    "低調",
+    "di diao",
+    "di tiao"
+   ],
+   [
+    "ていと",
+    "帝都",
+    "di du",
+    "di dou"
+   ],
+   [
+    "てきかく",
+    "的確",
+    "di que",
+    "de que"
+   ],
+   [
+    "てんちょう",
+    "店長",
+    "dian zhang",
+    "dian chang"
+   ],
+   [
+    "てんちょう",
+    "転調",
+    "zhuan diao",
+    "zhuan tiao"
+   ],
+   [
+    "でんき",
+    "伝記",
+    "zhuan ji",
+    "chuan ji"
+   ],
+   [
+    "とうこう",
+    "投降",
+    "tou xiang",
+    "tou jiang"
+   ],
+   [
+    "とうそつ",
+    "統率",
+    "tong shuai",
+    "tong lv"
+   ],
+   [
+    "とえい",
+    "都営",
+    "du ying",
+    "dou ying"
+   ],
+   [
+    "とけつ",
+    "吐血",
+    "tu xie",
+    "tu xue"
+   ],
+   [
+    "とし",
+    "都市",
+    "du shi",
+    "dou shi"
+   ],
+   [
+    "としん",
+    "都心",
+    "du xin",
+    "dou xin"
+   ],
+   [
+    "とちょう",
+    "徒長",
+    "tu zhang",
+    "tu chang"
+   ],
+   [
+    "とちょう",
+    "都庁",
+    "du ting",
+    "dou ting"
+   ],
+   [
+    "どうこう",
+    "同行",
+    "tong hang",
+    "tong xing"
+   ],
+   [
+    "どうちょう",
+    "同調",
+    "tong diao",
+    "tong tiao"
+   ],
+   [
+    "どちゃく",
+    "土着",
+    "tu zhu",
+    "tu zhe"
+   ],
+   [
+    "ないしゅっけつ",
+    "内出血",
+    "nei chu xie",
+    "nei chu xue"
+   ],
+   [
+    "ないせい",
+    "内省",
+    "nei xing",
+    "nei sheng"
+   ],
+   [
+    "なむ",
+    "南無",
+    "na mo",
+    "nan wu"
+   ],
+   [
+    "なんと",
+    "南都",
+    "nan du",
+    "nan dou"
+   ],
+   [
+    "にくだん",
+    "肉弾",
+    "rou dan",
+    "rou tan"
+   ],
+   [
+    "にちぼつ",
+    "日没",
+    "ri mo",
+    "ri mei"
+   ],
+   [
+    "にゅうこう",
+    "入行",
+    "ru hang",
+    "ru xing"
+   ],
+   [
+    "にんじん",
+    "人参",
+    "ren shen",
+    "ren can"
+   ],
+   [
+    "ねんちゃく",
+    "粘着",
+    "nian zhuo",
+    "nian zhe"
+   ],
+   [
+    "ねんちゃくりょく",
+    "粘着力",
+    "nian zhuo li",
+    "nian zhe li"
+   ],
+   [
+    "ねんちょう",
+    "年長",
+    "nian zhang",
+    "nian chang"
+   ],
+   [
+    "のうしゅっけつ",
+    "脳出血",
+    "nao chu xie",
+    "nao chu xue"
+   ],
+   [
+    "のうそっちゅう",
+    "脳卒中",
+    "nao cu zhong",
+    "nao zu zhong"
+   ],
+   [
+    "はいきゅう",
+    "配給",
+    "pei ji",
+    "pei gei"
+   ],
+   [
+    "はくしゃく",
+    "伯爵",
+    "bo jue",
+    "bai jue"
+   ],
+   [
+    "はくじょう",
+    "薄情",
+    "bo qing",
+    "bao qing"
+   ],
+   [
+    "はくだつ",
+    "剥奪",
+    "bo duo",
+    "bao duo"
+   ],
+   [
+    "はくふ",
+    "伯父",
+    "bo fu",
+    "bai fu"
+   ],
+   [
+    "はくぼ",
+    "薄暮",
+    "bo mu",
+    "bao mu"
+   ],
+   [
+    "はくまく",
+    "薄膜",
+    "bo mo",
+    "bao mo"
+   ],
+   [
+    "はくらく",
+    "剥落",
+    "bo luo",
+    "bao luo"
+   ],
+   [
+    "はくり",
+    "剥離",
+    "bo li",
+    "bao li"
+   ],
+   [
+    "はっこう",
+    "醗酵",
+    "po xiao",
+    "po jiao"
+   ],
+   [
+    "はなぢ",
+    "鼻血",
+    "bi xie",
+    "bi xue"
+   ],
+   [
+    "はなびら",
+    "花弁",
+    "hua ban",
+    "hua bian"
+   ],
+   [
+    "はんせい",
+    "反省",
+    "fan xing",
+    "fan sheng"
+   ],
+   [
+    "はんちょう",
+    "班長",
+    "ban zhang",
+    "ban chang"
+   ],
+   [
+    "はんにゃ",
+    "般若",
+    "bo re",
+    "ban ruo"
+   ],
+   [
+    "ひたいしょう",
+    "非対称",
+    "fei dui chen",
+    "fei dui cheng"
+   ],
+   [
+    "ひべん",
+    "皮弁",
+    "pi ban",
+    "pi bian"
+   ],
+   [
+    "ひょうてき",
+    "標的",
+    "biao di",
+    "biao de"
+   ],
+   [
+    "ひょうでん",
+    "評伝",
+    "ping zhuan",
+    "ping chuan"
+   ],
+   [
+    "びてき",
+    "美的",
+    "mei di",
+    "mei de"
+   ],
+   [
+    "ふくちょう",
+    "復調",
+    "fu diao",
+    "fu tiao"
+   ],
+   [
+    "ふちゃく",
+    "不着",
+    "bu zhao",
+    "bu zhe"
+   ],
+   [
+    "ふちょう",
+    "不調",
+    "bu diao",
+    "bu tiao"
+   ],
+   [
+    "ぶちょう",
+    "部長",
+    "bu zhang",
+    "bu chang"
+   ],
+   [
+    "へいそく",
+    "閉塞",
+    "bi se",
+    "bi sai"
+   ],
+   [
+    "へんかん",
+    "返還",
+    "fan huan",
+    "fan hai"
+   ],
+   [
+    "へんちょ",
+    "編著",
+    "bian zhu",
+    "bian zhe"
+   ],
+   [
+    "へんちょう",
+    "変調",
+    "bian diao",
+    "bian tiao"
+   ],
+   [
+    "べんぎ",
+    "便宜",
+    "pian yi",
+    "bian yi"
+   ],
+   [
+    "べんまく",
+    "弁膜",
+    "ban mo",
+    "bian mo"
+   ],
+   [
+    "ほうぞう",
+    "宝蔵",
+    "bao zang",
+    "bao cang"
+   ],
+   [
+    "ほうだん",
+    "砲弾",
+    "pao dan",
+    "pao tan"
+   ],
+   [
+    "ほうふつ",
+    "彷彿",
+    "fang fu",
+    "pang fo"
+   ],
+   [
+    "ほきゅう",
+    "補給",
+    "bu ji",
+    "bu gei"
+   ],
+   [
+    "ほちょう",
+    "歩調",
+    "bu diao",
+    "bu tiao"
+   ],
+   [
+    "ぼうこう",
+    "膀胱",
+    "pang guang",
+    "bang guang"
+   ],
+   [
+    "ぼうだん",
+    "防弾",
+    "fang dan",
+    "fang tan"
+   ],
+   [
+    "ぼき",
+    "簿記",
+    "bu ji",
+    "bo ji"
+   ],
+   [
+    "ぼくちく",
+    "牧畜",
+    "mu xu",
+    "mu chu"
+   ],
+   [
+    "ぼっしゅう",
+    "没収",
+    "mo shou",
+    "mei shou"
+   ],
+   [
+    "ぼつにゅう",
+    "没入",
+    "mo ru",
+    "mei ru"
+   ],
+   [
+    "ぼつらく",
+    "没落",
+    "mo luo",
+    "mei luo"
+   ],
+   [
+    "まいぼつ",
+    "埋没",
+    "mai mo",
+    "mai mei"
+   ],
+   [
+    "みえ",
+    "三重",
+    "san chong",
+    "san zhong"
+   ],
+   [
+    "みやこ",
+    "京都",
+    "jing du",
+    "jing dou"
+   ],
+   [
+    "めいちょ",
+    "名著",
+    "ming zhu",
+    "ming zhe"
+   ],
+   [
+    "めいぼ",
+    "名簿",
+    "ming bu",
+    "ming bo"
+   ],
+   [
+    "めいりょう",
+    "明瞭",
+    "ming liao",
+    "ming le"
+   ],
+   [
+    "もうせい",
+    "猛省",
+    "meng xing",
+    "meng sheng"
+   ],
+   [
+    "もくてき",
+    "目的",
+    "mu di",
+    "mu de"
+   ],
+   [
+    "もくてきち",
+    "目的地",
+    "mu di di",
+    "mu de di"
+   ],
+   [
+    "もよう",
+    "模様",
+    "mu yang",
+    "mo yang"
+   ],
+   [
+    "もんちゃく",
+    "悶着",
+    "men zhao",
+    "men zhe"
+   ],
+   [
+    "やまうば",
+    "山姥",
+    "shan mu",
+    "shan lao"
+   ],
+   [
+    "やまんば",
+    "山姥",
+    "shan mu",
+    "shan lao"
+   ],
+   [
+    "らくのう",
+    "酪農",
+    "luo nong",
+    "lao nong"
+   ],
+   [
+    "りじちょう",
+    "理事長",
+    "li shi zhang",
+    "li shi chang"
+   ],
+   [
+    "りゅうだん",
+    "榴弾",
+    "liu dan",
+    "liu tan"
+   ],
+   [
+    "りょうかい",
+    "了解",
+    "liao jie",
+    "le jie"
+   ],
+   [
+    "れいちょう",
+    "霊長",
+    "ling zhang",
+    "ling chang"
+   ],
+   [
+    "れつでん",
+    "列伝",
+    "lie zhuan",
+    "lie chuan"
+   ],
+   [
+    "れんこう",
+    "連行",
+    "lian hang",
+    "lian xing"
+   ],
+   [
+    "ろこう",
+    "露光",
+    "lou guang",
+    "lu guang"
+   ],
+   [
+    "ろとう",
+    "露頭",
+    "lou tou",
+    "lu tou"
+   ],
+   [
+    "ろんちょう",
+    "論調",
+    "lun diao",
+    "lun tiao"
+   ]
+  ],
+  "conjugation_unknown_tier_a": [
+   [
+    "あっち",
+    "あっち",
+    [
+     "形容詞"
+    ]
+   ],
+   [
+    "いきる",
+    "イキる",
+    [
+     "上一段-カ行",
+     "五段-ラ行"
+    ]
+   ],
+   [
+    "いる",
+    "いる",
+    [
+     "上一段-ア行",
+     "五段-ラ行"
+    ]
+   ],
+   [
+    "いる",
+    "射る",
+    [
+     "上一段-ア行",
+     "五段-ラ行"
+    ]
+   ],
+   [
+    "いー",
+    "イー",
+    [
+     "形容詞"
+    ]
+   ],
+   [
+    "う",
+    "う",
+    [
+     "文語下二段-ア行"
+    ]
+   ],
+   [
+    "うるせぇ",
+    "うるせぇ",
+    [
+     "形容詞"
+    ]
+   ],
+   [
+    "うるせえ",
+    "うるせえ",
+    [
+     "形容詞"
+    ]
+   ],
+   [
+    "うるせー",
+    "うるせー",
+    [
+     "形容詞"
+    ]
+   ],
+   [
+    "ええ",
+    "ええ",
+    [
+     "形容詞"
+    ]
+   ],
+   [
+    "えっ",
+    "えっ",
+    [
+     "形容詞"
+    ]
+   ],
+   [
+    "えー",
+    "えー",
+    [
+     "形容詞"
+    ]
+   ],
+   [
+    "おそる",
+    "恐る",
+    [
+     "文語下二段-ラ行"
+    ]
+   ],
+   [
+    "かける",
+    "かける",
+    [
+     "下一段-カ行",
+     "五段-ラ行"
+    ]
+   ],
+   [
+    "かける",
+    "翔ける",
+    [
+     "下一段-カ行",
+     "五段-ラ行"
+    ]
+   ],
+   [
+    "かっけえ",
+    "かっけえ",
+    [
+     "形容詞"
+    ]
+   ],
+   [
+    "かわええ",
+    "かわええ",
+    [
+     "形容詞"
+    ]
+   ],
+   [
+    "きたる",
+    "来る",
+    [
+     "文語四段-ラ行"
+    ]
+   ],
+   [
+    "こじる",
+    "こじる",
+    [
+     "上一段-ザ行",
+     "五段-ラ行"
+    ]
+   ],
+   [
+    "ごわす",
+    "ごわす",
+    [
+     "文語サ行変格"
+    ]
+   ],
+   [
+    "しかり",
+    "然り",
+    [
+     "文語ラ行変格"
+    ]
+   ],
+   [
+    "しける",
+    "しける",
+    [
+     "下一段-カ行",
+     "五段-ラ行"
+    ]
+   ],
+   [
+    "しす",
+    "死す",
+    [
+     "文語サ行変格"
+    ]
+   ],
+   [
+    "すげぇ",
+    "すげぇ",
+    [
+     "形容詞"
+    ]
+   ],
+   [
+    "すげえ",
+    "すげえ",
+    [
+     "形容詞"
+    ]
+   ],
+   [
+    "すげー",
+    "すげー",
+    [
+     "形容詞"
+    ]
+   ],
+   [
+    "する",
+    "する",
+    [
+     "サ行変格",
+     "五段-ラ行"
+    ]
+   ],
+   [
+    "つぐ",
+    "告ぐ",
+    [
+     "文語下二段-ガ行"
+    ]
+   ],
+   [
+    "ふける",
+    "ふける",
+    [
+     "下一段-カ行",
+     "五段-ラ行"
+    ]
+   ],
+   [
+    "ふせる",
+    "伏せる",
+    [
+     "下一段-サ行",
+     "五段-ラ行"
+    ]
+   ],
+   [
+    "まれ",
+    "まれ",
+    [
+     "形容詞"
+    ]
+   ],
+   [
+    "やべぇ",
+    "やべぇ",
+    [
+     "形容詞"
+    ]
+   ],
+   [
+    "やべえ",
+    "やべえ",
+    [
+     "形容詞"
+    ]
+   ],
+   [
+    "やべー",
+    "やべー",
+    [
+     "形容詞"
+    ]
+   ],
+   [
+    "われ",
+    "われ",
+    [
+     "形容詞"
+    ]
+   ]
+  ],
+  "r7_voiced_duplicates": [
+   [
+    "がえり",
+    "帰り"
+   ],
+   [
+    "がた",
+    "方"
+   ],
+   [
+    "がため",
+    "固め"
+   ],
+   [
+    "がたり",
+    "語り"
+   ],
+   [
+    "がまえ",
+    "構え"
+   ],
+   [
+    "がみ",
+    "紙"
+   ],
+   [
+    "がわり",
+    "代わり"
+   ],
+   [
+    "ぎらい",
+    "嫌い"
+   ],
+   [
+    "ぎり",
+    "切り"
+   ],
+   [
+    "ぎり",
+    "斬り"
+   ],
+   [
+    "ぎる",
+    "切る"
+   ],
+   [
+    "ぐつ",
+    "靴"
+   ],
+   [
+    "ぐらし",
+    "暮らし"
+   ],
+   [
+    "ぐろい",
+    "黒い"
+   ],
+   [
+    "ごこち",
+    "心地"
+   ],
+   [
+    "ごし",
+    "腰"
+   ],
+   [
+    "ごのみ",
+    "好み"
+   ],
+   [
+    "ごろし",
+    "殺し"
+   ],
+   [
+    "ざかり",
+    "盛り"
+   ],
+   [
+    "ざき",
+    "崎"
+   ],
+   [
+    "ざけ",
+    "酒"
+   ],
+   [
+    "ざら",
+    "皿"
+   ],
+   [
+    "じかけ",
+    "仕掛け"
+   ],
+   [
+    "じたて",
+    "仕立て"
+   ],
+   [
+    "じに",
+    "死に"
+   ],
+   [
+    "じま",
+    "島"
+   ],
+   [
+    "ずまい",
+    "住まい"
+   ],
+   [
+    "ずり",
+    "摺り"
+   ],
+   [
+    "ぜめ",
+    "攻め"
+   ],
+   [
+    "だかい",
+    "高い"
+   ],
+   [
+    "だち",
+    "立ち"
+   ],
+   [
+    "だつ",
+    "立つ"
+   ],
+   [
+    "だて",
+    "立て"
+   ],
+   [
+    "だに",
+    "谷"
+   ],
+   [
+    "だのみ",
+    "頼み"
+   ],
+   [
+    "だれ",
+    "垂れ"
+   ],
+   [
+    "づか",
+    "塚"
+   ],
+   [
+    "づかれ",
+    "疲れ"
+   ],
+   [
+    "づき",
+    "月"
+   ],
+   [
+    "づくえ",
+    "机"
+   ],
+   [
+    "づくり",
+    "造り"
+   ],
+   [
+    "づける",
+    "付ける"
+   ],
+   [
+    "づめ",
+    "詰め"
+   ],
+   [
+    "づよい",
+    "強い"
+   ],
+   [
+    "づり",
+    "釣り"
+   ],
+   [
+    "どうふ",
+    "豆腐"
+   ],
+   [
+    "どおい",
+    "遠い"
+   ],
+   [
+    "どおす",
+    "通す"
+   ],
+   [
+    "どくほん",
+    "読本"
+   ],
+   [
+    "どけい",
+    "時計"
+   ],
+   [
+    "ばたけ",
+    "畑"
+   ],
+   [
+    "ばち",
+    "鉢"
+   ],
+   [
+    "ばやい",
+    "早い"
+   ],
+   [
+    "ばやい",
+    "速い"
+   ],
+   [
+    "ばり",
+    "張り"
+   ],
+   [
+    "ばり",
+    "貼り"
+   ],
+   [
+    "ばる",
+    "張る"
+   ],
+   [
+    "ばる",
+    "貼る"
+   ],
+   [
+    "ばれ",
+    "晴れ"
+   ],
+   [
+    "びき",
+    "引き"
+   ],
+   [
+    "ぶ",
+    "歩"
+   ],
+   [
+    "ぶくろ",
+    "袋"
+   ],
+   [
+    "ぶとい",
+    "太い"
+   ],
+   [
+    "ぶね",
+    "船"
+   ],
+   [
+    "ぶり",
+    "振り"
+   ],
+   [
+    "ぶり",
+    "降り"
+   ],
+   [
+    "ぶる",
+    "振る"
+   ],
+   [
+    "ぶろ",
+    "風呂"
+   ],
+   [
+    "べや",
+    "部屋"
+   ],
+   [
+    "ぼね",
+    "骨"
+   ]
+  ],
+  "r8_katakana_dropped": [
+   [
+    "あぁ",
+    "アァ"
+   ],
+   [
+    "あいご",
+    "アイゴ"
+   ],
+   [
+    "あいつ",
+    "アイツ"
+   ],
+   [
+    "あお",
+    "アオ"
+   ],
+   [
+    "あおい",
+    "アオイ"
+   ],
+   [
+    "あおり",
+    "アオリ"
+   ],
+   [
+    "あか",
+    "アカ"
+   ],
+   [
+    "あかまつ",
+    "アカマツ"
+   ],
+   [
+    "あかめ",
+    "アカメ"
+   ],
+   [
+    "あかん",
+    "アカン"
+   ],
+   [
+    "あき",
+    "アキ"
+   ],
+   [
+    "あく",
+    "アク"
+   ],
+   [
+    "あご",
+    "アゴ"
+   ],
+   [
+    "あさ",
+    "アサ"
+   ],
+   [
+    "あさがお",
+    "アサガオ"
+   ],
+   [
+    "あざ",
+    "アザ"
+   ],
+   [
+    "あし",
+    "アシ"
+   ],
+   [
+    "あじさい",
+    "アジサイ"
+   ],
+   [
+    "あずき",
+    "アズキ"
+   ],
+   [
+    "あそこ",
+    "アソコ"
+   ],
+   [
+    "あそび",
+    "アソビ"
+   ],
+   [
+    "あたい",
+    "アタイ"
+   ],
+   [
+    "あたくし",
+    "アタクシ"
+   ],
+   [
+    "あたし",
+    "アタシ"
+   ],
+   [
+    "あたふた",
+    "アタフタ"
+   ],
+   [
+    "あたま",
+    "アタマ"
+   ],
+   [
+    "あだ",
+    "アダ"
+   ],
+   [
+    "あちこち",
+    "アチコチ"
+   ],
+   [
+    "あっさり",
+    "アッサリ"
+   ],
+   [
+    "あっし",
+    "アッシ"
+   ],
+   [
+    "あっち",
+    "アッチ"
+   ],
+   [
+    "あつあつ",
+    "アツアツ"
+   ],
+   [
+    "あつい",
+    "アツイ"
+   ],
+   [
+    "あて",
+    "アテ"
+   ],
+   [
+    "あなご",
+    "アナゴ"
+   ],
+   [
+    "あなた",
+    "アナタ"
+   ],
+   [
+    "あねご",
+    "アネゴ"
+   ],
+   [
+    "あの",
+    "アノ"
+   ],
+   [
+    "あはは",
+    "アハハ"
+   ],
+   [
+    "あぶない",
+    "アブナイ"
+   ],
+   [
+    "あぶら",
+    "アブラ"
+   ],
+   [
+    "あめ",
+    "アメ"
+   ],
+   [
+    "あや",
+    "アヤ"
+   ],
+   [
+    "あやしい",
+    "アヤシイ"
+   ],
+   [
+    "あやめ",
+    "アヤメ"
+   ],
+   [
+    "あゆ",
+    "アユ"
+   ],
+   [
+    "あら",
+    "アラ"
+   ],
+   [
+    "あられ",
+    "アラレ"
+   ],
+   [
+    "あり",
+    "アリ"
+   ],
+   [
+    "ありがとう",
+    "アリガトウ"
+   ],
+   [
+    "あれ",
+    "アレ"
+   ],
+   [
+    "あれこれ",
+    "アレコレ"
+   ],
+   [
+    "あわせ",
+    "アワセ"
+   ],
+   [
+    "あんか",
+    "アンカ"
+   ],
+   [
+    "あんこ",
+    "アンコ"
+   ],
+   [
+    "あんこう",
+    "アンコウ"
+   ],
+   [
+    "あんず",
+    "アンズ"
+   ],
+   [
+    "あんた",
+    "アンタ"
+   ],
+   [
+    "いか",
+    "イカ"
+   ],
+   [
+    "いかだ",
+    "イカダ"
+   ],
+   [
+    "いかん",
+    "イカン"
+   ],
+   [
+    "いきいき",
+    "イキイキ"
+   ],
+   [
+    "いきなり",
+    "イキナリ"
+   ],
+   [
+    "いけ",
+    "イケ"
+   ],
+   [
+    "いざ",
+    "イザ"
+   ],
+   [
+    "いじめ",
+    "イジメ"
+   ],
+   [
+    "いた",
+    "イタ"
+   ],
+   [
+    "いたい",
+    "イタイ"
+   ],
+   [
+    "いたずら",
+    "イタズラ"
+   ],
+   [
+    "いちい",
+    "イチイ"
+   ],
+   [
+    "いちおし",
+    "イチオシ"
+   ],
+   [
+    "いちご",
+    "イチゴ"
+   ],
+   [
+    "いちゃもん",
+    "イチャモン"
+   ],
+   [
+    "いちょう",
+    "イチョウ"
+   ],
+   [
+    "いっき",
+    "イッキ"
+   ],
+   [
+    "いっぱい",
+    "イッパイ"
+   ],
+   [
+    "いと",
+    "イト"
+   ],
+   [
+    "いなずま",
+    "イナズマ"
+   ],
+   [
+    "いぬ",
+    "イヌ"
+   ],
+   [
+    "いね",
+    "イネ"
+   ],
+   [
+    "いばら",
+    "イバラ"
+   ],
+   [
+    "いびき",
+    "イビキ"
+   ],
+   [
+    "いまどき",
+    "イマドキ"
+   ],
+   [
+    "いも",
+    "イモ"
+   ],
+   [
+    "いやいや",
+    "イヤイヤ"
+   ],
+   [
+    "いやみ",
+    "イヤミ"
+   ],
+   [
+    "いろ",
+    "イロ"
+   ],
+   [
+    "いろいろ",
+    "イロイロ"
+   ],
+   [
+    "いろは",
+    "イロハ"
+   ],
+   [
+    "いんげん",
+    "インゲン"
+   ],
+   [
+    "うお",
+    "ウオ"
+   ],
+   [
+    "うき",
+    "ウキ"
+   ],
+   [
+    "うぐいす",
+    "ウグイス"
+   ],
+   [
+    "うさ",
+    "ウサ"
+   ],
+   [
+    "うさぎ",
+    "ウサギ"
+   ],
+   [
+    "うし",
+    "ウシ"
+   ],
+   [
+    "うじ",
+    "ウジ"
+   ],
+   [
+    "うずら",
+    "ウズラ"
+   ],
+   [
+    "うそ",
+    "ウソ"
+   ],
+   [
+    "うだうだ",
+    "ウダウダ"
+   ],
+   [
+    "うち",
+    "ウチ"
+   ],
+   [
+    "うっとり",
+    "ウットリ"
+   ],
+   [
+    "うで",
+    "ウデ"
+   ],
+   [
+    "うなぎ",
+    "ウナギ"
+   ],
+   [
+    "うねうね",
+    "ウネウネ"
+   ],
+   [
+    "うねり",
+    "ウネリ"
+   ],
+   [
+    "うふふ",
+    "ウフフ"
+   ],
+   [
+    "うぶ",
+    "ウブ"
+   ],
+   [
+    "うま",
+    "ウマ"
+   ],
+   [
+    "うまい",
+    "ウマイ"
+   ],
+   [
+    "うみ",
+    "ウミ"
+   ],
+   [
+    "うみねこ",
+    "ウミネコ"
+   ],
+   [
+    "うむ",
+    "ウム"
+   ],
+   [
+    "うめ",
+    "ウメ"
+   ],
+   [
+    "うるうる",
+    "ウルウル"
+   ],
+   [
+    "うるさい",
+    "ウルサイ"
+   ],
+   [
+    "うるし",
+    "ウルシ"
+   ],
+   [
+    "うれしい",
+    "ウレシイ"
+   ],
+   [
+    "うろこ",
+    "ウロコ"
+   ],
+   [
+    "うわさ",
+    "ウワサ"
+   ],
+   [
+    "うん",
+    "ウン"
+   ],
+   [
+    "うんこ",
+    "ウンコ"
+   ],
+   [
+    "うんざり",
+    "ウンザリ"
+   ],
+   [
+    "うんちく",
+    "ウンチク"
+   ],
+   [
+    "うーむ",
+    "ウーム"
+   ],
+   [
+    "うーん",
+    "ウーン"
+   ],
+   [
+    "ええ",
+    "エエ"
+   ],
+   [
+    "えさ",
+    "エサ"
+   ],
+   [
+    "えっ",
+    "エッ"
+   ],
+   [
+    "えのき",
+    "エノキ"
+   ],
+   [
+    "えびす",
+    "エビス"
+   ],
+   [
+    "えらい",
+    "エライ"
+   ],
+   [
+    "えり",
+    "エリ"
+   ],
+   [
+    "えんじ",
+    "エンジ"
+   ],
+   [
+    "えんどう",
+    "エンドウ"
+   ],
+   [
+    "えー",
+    "エー"
+   ],
+   [
+    "おい",
+    "オイ"
+   ],
+   [
+    "おいおい",
+    "オイオイ"
+   ],
+   [
+    "おいしい",
+    "オイシイ"
+   ],
+   [
+    "おいら",
+    "オイラ"
+   ],
+   [
+    "おおかみ",
+    "オオカミ"
+   ],
+   [
+    "おかしい",
+    "オカシイ"
+   ],
+   [
+    "おかず",
+    "オカズ"
+   ],
+   [
+    "おし",
+    "オシ"
+   ],
+   [
+    "おしっこ",
+    "オシッコ"
+   ],
+   [
+    "おしゃれ",
+    "オシャレ"
+   ],
+   [
+    "おじ",
+    "オジ"
+   ],
+   [
+    "おじさん",
+    "オジサン"
+   ],
+   [
+    "おす",
+    "オス"
+   ],
+   [
+    "おすすめ",
+    "オススメ"
+   ],
+   [
+    "おっさん",
+    "オッサン"
+   ],
+   [
+    "おっぱい",
+    "オッパイ"
+   ],
+   [
+    "おとこ",
+    "オトコ"
+   ],
+   [
+    "おとな",
+    "オトナ"
+   ],
+   [
+    "おどおど",
+    "オドオド"
+   ],
+   [
+    "おなら",
+    "オナラ"
+   ],
+   [
+    "おに",
+    "オニ"
+   ],
+   [
+    "おば",
+    "オバ"
+   ],
+   [
+    "おばさん",
+    "オバサン"
+   ],
+   [
+    "おまえ",
+    "オマエ"
+   ],
+   [
+    "おまけ",
+    "オマケ"
+   ],
+   [
+    "おむつ",
+    "オムツ"
+   ],
+   [
+    "おもしろい",
+    "オモシロイ"
+   ],
+   [
+    "おもちゃ",
+    "オモチャ"
+   ],
+   [
+    "おもて",
+    "オモテ"
+   ],
+   [
+    "おもり",
+    "オモリ"
+   ],
+   [
+    "おもろい",
+    "オモロイ"
+   ],
+   [
+    "おやじ",
+    "オヤジ"
+   ],
+   [
+    "おら",
+    "オラ"
+   ],
+   [
+    "おり",
+    "オリ"
+   ],
+   [
+    "おろち",
+    "オロチ"
+   ],
+   [
+    "おんち",
+    "オンチ"
+   ],
+   [
+    "おんな",
+    "オンナ"
+   ],
+   [
+    "かい",
+    "カイ"
+   ],
+   [
+    "かいこ",
+    "カイコ"
+   ],
+   [
+    "かいしゃ",
+    "カイシャ"
+   ],
+   [
+    "かいぜん",
+    "カイゼン"
+   ],
+   [
+    "かいどう",
+    "カイドウ"
+   ],
+   [
+    "かいり",
+    "カイリ"
+   ],
+   [
+    "かいわれ",
+    "カイワレ"
+   ],
+   [
+    "かえで",
+    "カエデ"
+   ],
+   [
+    "かえる",
+    "カエル"
+   ],
+   [
+    "かかと",
+    "カカト"
+   ],
+   [
+    "かきこみ",
+    "カキコミ"
+   ],
+   [
+    "かぎ",
+    "カギ"
+   ],
+   [
+    "かく",
+    "カク"
+   ],
+   [
+    "かぐら",
+    "カグラ"
+   ],
+   [
+    "かけら",
+    "カケラ"
+   ],
+   [
+    "かげ",
+    "カゲ"
+   ],
+   [
+    "かげろう",
+    "カゲロウ"
+   ],
+   [
+    "かし",
+    "カシ"
+   ],
+   [
+    "かじ",
+    "カジ"
+   ],
+   [
+    "かす",
+    "カス"
+   ],
+   [
+    "かぜ",
+    "カゼ"
+   ],
+   [
+    "かたぎ",
+    "カタギ"
+   ],
+   [
+    "かたち",
+    "カタチ"
+   ],
+   [
+    "かたな",
+    "カタナ"
+   ],
+   [
+    "かっこいい",
+    "カッコイイ"
+   ],
+   [
+    "かっこう",
+    "カッコウ"
+   ],
+   [
+    "かつら",
+    "カツラ"
+   ],
+   [
+    "かど",
+    "カド"
+   ],
+   [
+    "かな",
+    "カナ"
+   ],
+   [
+    "かなめ",
+    "カナメ"
+   ],
+   [
+    "かなり",
+    "カナリ"
+   ],
+   [
+    "かね",
+    "カネ"
+   ],
+   [
+    "かのじょ",
+    "カノジョ"
+   ],
+   [
+    "かぶと",
+    "カブト"
+   ],
+   [
+    "かべ",
+    "カベ"
+   ],
+   [
+    "かぼす",
+    "カボス"
+   ],
+   [
+    "かま",
+    "カマ"
+   ],
+   [
+    "かまぼこ",
+    "カマボコ"
+   ],
+   [
+    "かみ",
+    "カミ"
+   ],
+   [
+    "かみなり",
+    "カミナリ"
+   ],
+   [
+    "かもめ",
+    "カモメ"
+   ],
+   [
+    "かや",
+    "カヤ"
+   ],
+   [
+    "からくり",
+    "カラクリ"
+   ],
+   [
+    "からて",
+    "カラテ"
+   ],
+   [
+    "かりん",
+    "カリン"
+   ],
+   [
+    "かれ",
+    "カレ"
+   ],
+   [
+    "かれい",
+    "カレイ"
+   ],
+   [
+    "かわいい",
+    "カワイイ"
+   ],
+   [
+    "かんじ",
+    "カンジ"
+   ],
+   [
+    "かんぞう",
+    "カンゾウ"
+   ],
+   [
+    "かんたん",
+    "カンタン"
+   ],
+   [
+    "かんばん",
+    "カンバン"
+   ],
+   [
+    "が",
+    "ガ"
+   ],
+   [
+    "がいこつ",
+    "ガイコツ"
+   ],
+   [
+    "がく",
+    "ガク"
+   ],
+   [
+    "がさ",
+    "ガサ"
+   ],
+   [
+    "がた",
+    "ガタ"
+   ],
+   [
+    "がっかり",
+    "ガッカリ"
+   ],
+   [
+    "がっくり",
+    "ガックリ"
+   ],
+   [
+    "がっしり",
+    "ガッシリ"
+   ],
+   [
+    "がまん",
+    "ガマン"
+   ],
+   [
+    "がれき",
+    "ガレキ"
+   ],
+   [
+    "がわ",
+    "ガワ"
+   ],
+   [
+    "がんこ",
+    "ガンコ"
+   ],
+   [
+    "がんばる",
+    "ガンバル"
+   ],
+   [
+    "ききょう",
+    "キキョウ"
+   ],
+   [
+    "きく",
+    "キク"
+   ],
+   [
+    "きくらげ",
+    "キクラゲ"
+   ],
+   [
+    "きけん",
+    "キケン"
+   ],
+   [
+    "きじ",
+    "キジ"
+   ],
+   [
+    "きず",
+    "キズ"
+   ],
+   [
+    "きずな",
+    "キズナ"
+   ],
+   [
+    "きせき",
+    "キセキ"
+   ],
+   [
+    "きっかけ",
+    "キッカケ"
+   ],
+   [
+    "きっぱり",
+    "キッパリ"
+   ],
+   [
+    "きっぷ",
+    "キップ"
+   ],
+   [
+    "きつい",
+    "キツイ"
+   ],
+   [
+    "きつね",
+    "キツネ"
+   ],
+   [
+    "きのこ",
+    "キノコ"
+   ],
+   [
+    "きば",
+    "キバ"
+   ],
+   [
+    "きび",
+    "キビ"
+   ],
+   [
+    "きみ",
+    "キミ"
+   ],
+   [
+    "きもち",
+    "キモチ"
+   ],
+   [
+    "きゃー",
+    "キャー"
+   ],
+   [
+    "きゅう",
+    "キュウ"
+   ],
+   [
+    "きゅうり",
+    "キュウリ"
+   ],
+   [
+    "きらい",
+    "キライ"
+   ],
+   [
+    "きらら",
+    "キララ"
+   ],
+   [
+    "きりん",
+    "キリン"
+   ],
+   [
+    "きれい",
+    "キレイ"
+   ],
+   [
+    "きわ",
+    "キワ"
+   ],
+   [
+    "きん",
+    "キン"
+   ],
+   [
+    "きんかん",
+    "キンカン"
+   ],
+   [
+    "きんもくせい",
+    "キンモクセイ"
+   ],
+   [
+    "ぎゃ",
+    "ギャ"
+   ],
+   [
+    "ぎゅ",
+    "ギュ"
+   ],
+   [
+    "ぎゅうぎゅう",
+    "ギュウギュウ"
+   ],
+   [
+    "ぎり",
+    "ギリ"
+   ],
+   [
+    "ぎん",
+    "ギン"
+   ],
+   [
+    "ぎんが",
+    "ギンガ"
+   ],
+   [
+    "くぎ",
+    "クギ"
+   ],
+   [
+    "くさ",
+    "クサ"
+   ],
+   [
+    "くさい",
+    "クサイ"
+   ],
+   [
+    "くし",
+    "クシ"
+   ],
+   [
+    "くじゃく",
+    "クジャク"
+   ],
+   [
+    "くすり",
+    "クスリ"
+   ],
+   [
+    "くせ",
+    "クセ"
+   ],
+   [
+    "くそっ",
+    "クソッ"
+   ],
+   [
+    "くちこみ",
+    "クチコミ"
+   ],
+   [
+    "くちばし",
+    "クチバシ"
+   ],
+   [
+    "くっきり",
+    "クッキリ"
+   ],
+   [
+    "くない",
+    "クナイ"
+   ],
+   [
+    "くに",
+    "クニ"
+   ],
+   [
+    "くねくね",
+    "クネクネ"
+   ],
+   [
+    "くび",
+    "クビ"
+   ],
+   [
+    "くま",
+    "クマ"
+   ],
+   [
+    "くも",
+    "クモ"
+   ],
+   [
+    "くよくよ",
+    "クヨクヨ"
+   ],
+   [
+    "くるくる",
+    "クルクル"
+   ],
+   [
+    "くるま",
+    "クルマ"
+   ],
+   [
+    "くるみ",
+    "クルミ"
+   ],
+   [
+    "くろまつ",
+    "クロマツ"
+   ],
+   [
+    "くわ",
+    "クワ"
+   ],
+   [
+    "ぐすく",
+    "グスク"
+   ],
+   [
+    "ぐち",
+    "グチ"
+   ],
+   [
+    "ぐちゃぐちゃ",
+    "グチャグチャ"
+   ],
+   [
+    "ぐったり",
+    "グッタリ"
+   ],
+   [
+    "ぐつぐつ",
+    "グツグツ"
+   ],
+   [
+    "ぐるぐる",
+    "グルグル"
+   ],
+   [
+    "ぐんぐん",
+    "グングン"
+   ],
+   [
+    "けい",
+    "ケイ"
+   ],
+   [
+    "けいこ",
+    "ケイコ"
+   ],
+   [
+    "けが",
+    "ケガ"
+   ],
+   [
+    "けし",
+    "ケシ"
+   ],
+   [
+    "けじめ",
+    "ケジメ"
+   ],
+   [
+    "けた",
+    "ケタ"
+   ],
+   [
+    "けむり",
+    "ケムリ"
+   ],
+   [
+    "けもの",
+    "ケモノ"
+   ],
+   [
+    "けやき",
+    "ケヤキ"
+   ],
+   [
+    "けり",
+    "ケリ"
+   ],
+   [
+    "けんか",
+    "ケンカ"
+   ],
+   [
+    "げき",
+    "ゲキ"
+   ],
+   [
+    "げた",
+    "ゲタ"
+   ],
+   [
+    "げっ",
+    "ゲッ"
+   ],
+   [
+    "げん",
+    "ゲン"
+   ],
+   [
+    "げんか",
+    "ゲンカ"
+   ],
+   [
+    "げんだい",
+    "ゲンダイ"
+   ],
+   [
+    "こい",
+    "コイ"
+   ],
+   [
+    "こいつ",
+    "コイツ"
+   ],
+   [
+    "こう",
+    "コウ"
+   ],
+   [
+    "こうじ",
+    "コウジ"
+   ],
+   [
+    "こけ",
+    "コケ"
+   ],
+   [
+    "こし",
+    "コシ"
+   ],
+   [
+    "こしょう",
+    "コショウ"
+   ],
+   [
+    "こたつ",
+    "コタツ"
+   ],
+   [
+    "こだわり",
+    "コダワリ"
+   ],
+   [
+    "こち",
+    "コチ"
+   ],
+   [
+    "こちら",
+    "コチラ"
+   ],
+   [
+    "こっそり",
+    "コッソリ"
+   ],
+   [
+    "こっち",
+    "コッチ"
+   ],
+   [
+    "こってり",
+    "コッテリ"
+   ],
+   [
+    "ことば",
+    "コトバ"
+   ],
+   [
+    "こども",
+    "コドモ"
+   ],
+   [
+    "こはく",
+    "コハク"
+   ],
+   [
+    "こぶ",
+    "コブ"
+   ],
+   [
+    "こぶし",
+    "コブシ"
+   ],
+   [
+    "こむぎ",
+    "コムギ"
+   ],
+   [
+    "こりゃ",
+    "コリャ"
+   ],
+   [
+    "これこれ",
+    "コレコレ"
+   ],
+   [
+    "ころ",
+    "コロ"
+   ],
+   [
+    "こわい",
+    "コワイ"
+   ],
+   [
+    "こんにちは",
+    "コンニチハ"
+   ],
+   [
+    "こんにちわ",
+    "コンニチワ"
+   ],
+   [
+    "こんにゃく",
+    "コンニャク"
+   ],
+   [
+    "こんぶ",
+    "コンブ"
+   ],
+   [
+    "ごかい",
+    "ゴカイ"
+   ],
+   [
+    "ごき",
+    "ゴキ"
+   ],
+   [
+    "ごくごく",
+    "ゴクゴク"
+   ],
+   [
+    "ごちゃごちゃ",
+    "ゴチャゴチャ"
+   ],
+   [
+    "ごっそり",
+    "ゴッソリ"
+   ],
+   [
+    "ごつい",
+    "ゴツイ"
+   ],
+   [
+    "ごぼう",
+    "ゴボウ"
+   ],
+   [
+    "ごま",
+    "ゴマ"
+   ],
+   [
+    "ごめん",
+    "ゴメン"
+   ],
+   [
+    "ごめんなさい",
+    "ゴメンナサイ"
+   ],
+   [
+    "ごや",
+    "ゴヤ"
+   ],
+   [
+    "さいさい",
+    "サイサイ"
+   ],
+   [
+    "さいふ",
+    "サイフ"
+   ],
+   [
+    "さお",
+    "サオ"
+   ],
+   [
+    "さかき",
+    "サカキ"
+   ],
+   [
+    "さかな",
+    "サカナ"
+   ],
+   [
+    "さぎ",
+    "サギ"
+   ],
+   [
+    "さくら",
+    "サクラ"
+   ],
+   [
+    "さくらんぼ",
+    "サクランボ"
+   ],
+   [
+    "さけ",
+    "サケ"
+   ],
+   [
+    "ささ",
+    "ササ"
+   ],
+   [
+    "さし",
+    "サシ"
+   ],
+   [
+    "さしば",
+    "サシバ"
+   ],
+   [
+    "さじ",
+    "サジ"
+   ],
+   [
+    "さっくり",
+    "サックリ"
+   ],
+   [
+    "さっぱり",
+    "サッパリ"
+   ],
+   [
+    "さつき",
+    "サツキ"
+   ],
+   [
+    "さつまいも",
+    "サツマイモ"
+   ],
+   [
+    "さといも",
+    "サトイモ"
+   ],
+   [
+    "さなぎ",
+    "サナギ"
+   ],
+   [
+    "さむらい",
+    "サムライ"
+   ],
+   [
+    "さや",
+    "サヤ"
+   ],
+   [
+    "さようなら",
+    "サヨウナラ"
+   ],
+   [
+    "さよなら",
+    "サヨナラ"
+   ],
+   [
+    "さらし",
+    "サラシ"
+   ],
+   [
+    "さらば",
+    "サラバ"
+   ],
+   [
+    "さる",
+    "サル"
+   ],
+   [
+    "さんご",
+    "サンゴ"
+   ],
+   [
+    "さんさん",
+    "サンサン"
+   ],
+   [
+    "ざく",
+    "ザク"
+   ],
+   [
+    "ざこ",
+    "ザコ"
+   ],
+   [
+    "ざっくり",
+    "ザックリ"
+   ],
+   [
+    "ざま",
+    "ザマ"
+   ],
+   [
+    "ざわ",
+    "ザワ"
+   ],
+   [
+    "ざわざわ",
+    "ザワザワ"
+   ],
+   [
+    "しい",
+    "シイ"
+   ],
+   [
+    "しいたけ",
+    "シイタケ"
+   ],
+   [
+    "しお",
+    "シオ"
+   ],
+   [
+    "しか",
+    "シカ"
+   ],
+   [
+    "しぎ",
+    "シギ"
+   ],
+   [
+    "しごと",
+    "シゴト"
+   ],
+   [
+    "しし",
+    "シシ"
+   ],
+   [
+    "しじみ",
+    "シジミ"
+   ],
+   [
+    "しそ",
+    "シソ"
+   ],
+   [
+    "しだれざくら",
+    "シダレザクラ"
+   ],
+   [
+    "しっかり",
+    "シッカリ"
+   ],
+   [
+    "しっとり",
+    "シットリ"
+   ],
+   [
+    "しっぽ",
+    "シッポ"
+   ],
+   [
+    "しな",
+    "シナ"
+   ],
+   [
+    "しのぎ",
+    "シノギ"
+   ],
+   [
+    "しのび",
+    "シノビ"
+   ],
+   [
+    "しば",
+    "シバ"
+   ],
+   [
+    "しびれ",
+    "シビレ"
+   ],
+   [
+    "しむ",
+    "シム"
+   ],
+   [
+    "しめじ",
+    "シメジ"
+   ],
+   [
+    "しゃくやく",
+    "シャクヤク"
+   ],
+   [
+    "しゃけ",
+    "シャケ"
+   ],
+   [
+    "しゃこ",
+    "シャコ"
+   ],
+   [
+    "しょうが",
+    "ショウガ"
+   ],
+   [
+    "しょぼい",
+    "ショボイ"
+   ],
+   [
+    "しらかば",
+    "シラカバ"
+   ],
+   [
+    "しらす",
+    "シラス"
+   ],
+   [
+    "しろ",
+    "シロ"
+   ],
+   [
+    "しろくま",
+    "シロクマ"
+   ],
+   [
+    "じか",
+    "ジカ"
+   ],
+   [
+    "じじ",
+    "ジジ"
+   ],
+   [
+    "じっくり",
+    "ジックリ"
+   ],
+   [
+    "じぶん",
+    "ジブン"
+   ],
+   [
+    "じゃ",
+    "ジャ"
+   ],
+   [
+    "じゃがいも",
+    "ジャガイモ"
+   ],
+   [
+    "じゃばら",
+    "ジャバラ"
+   ],
+   [
+    "じゃぶじゃぶ",
+    "ジャブジャブ"
+   ],
+   [
+    "じゃま",
+    "ジャマ"
+   ],
+   [
+    "じゃんけん",
+    "ジャンケン"
+   ],
+   [
+    "じゃんじゃん",
+    "ジャンジャン"
+   ],
+   [
+    "じゅわっ",
+    "ジュワッ"
+   ],
+   [
+    "じわじわ",
+    "ジワジワ"
+   ],
+   [
+    "すいせん",
+    "スイセン"
+   ],
+   [
+    "すいません",
+    "スイマセン"
+   ],
+   [
+    "すいれん",
+    "スイレン"
+   ],
+   [
+    "すき",
+    "スキ"
+   ],
+   [
+    "すきま",
+    "スキマ"
+   ],
+   [
+    "すぎ",
+    "スギ"
+   ],
+   [
+    "すくすく",
+    "スクスク"
+   ],
+   [
+    "すぐ",
+    "スグ"
+   ],
+   [
+    "すごい",
+    "スゴイ"
+   ],
+   [
+    "すし",
+    "スシ"
+   ],
+   [
+    "すじ",
+    "スジ"
+   ],
+   [
+    "すす",
+    "スス"
+   ],
+   [
+    "すず",
+    "スズ"
+   ],
+   [
+    "すずめ",
+    "スズメ"
+   ],
+   [
+    "すずらん",
+    "スズラン"
+   ],
+   [
+    "すだち",
+    "スダチ"
+   ],
+   [
+    "すっぴん",
+    "スッピン"
+   ],
+   [
+    "すっぽん",
+    "スッポン"
+   ],
+   [
+    "すてき",
+    "ステキ"
+   ],
+   [
+    "すな",
+    "スナ"
+   ],
+   [
+    "すのこ",
+    "スノコ"
+   ],
+   [
+    "すべり",
+    "スベリ"
+   ],
+   [
+    "すまん",
+    "スマン"
+   ],
+   [
+    "すみません",
+    "スミマセン"
+   ],
+   [
+    "すみれ",
+    "スミレ"
+   ],
+   [
+    "すもも",
+    "スモモ"
+   ],
+   [
+    "すやすや",
+    "スヤスヤ"
+   ],
+   [
+    "ずい",
+    "ズイ"
+   ],
+   [
+    "ずく",
+    "ズク"
+   ],
+   [
+    "ずっしり",
+    "ズッシリ"
+   ],
+   [
+    "ずぶ",
+    "ズブ"
+   ],
+   [
+    "ずり",
+    "ズリ"
+   ],
+   [
+    "ずるい",
+    "ズルイ"
+   ],
+   [
+    "せいご",
+    "セイゴ"
+   ],
+   [
+    "せかい",
+    "セカイ"
+   ],
+   [
+    "せり",
+    "セリ"
+   ],
+   [
+    "せんせい",
+    "センセイ"
+   ],
+   [
+    "せんばつ",
+    "センバツ"
+   ],
+   [
+    "せんぱい",
+    "センパイ"
+   ],
+   [
+    "ぜったい",
+    "ゼッタイ"
+   ],
+   [
+    "そいつ",
+    "ソイツ"
+   ],
+   [
+    "そこ",
+    "ソコ"
+   ],
+   [
+    "そこそこ",
+    "ソコソコ"
+   ],
+   [
+    "そっくり",
+    "ソックリ"
+   ],
+   [
+    "そば",
+    "ソバ"
+   ],
+   [
+    "そばかす",
+    "ソバカス"
+   ],
+   [
+    "そら",
+    "ソラ"
+   ],
+   [
+    "そらまめ",
+    "ソラマメ"
+   ],
+   [
+    "ぞう",
+    "ゾウ"
+   ],
+   [
+    "ぞくぞく",
+    "ゾクゾク"
+   ],
+   [
+    "ぞろぞろ",
+    "ゾロゾロ"
+   ],
+   [
+    "たいこ",
+    "タイコ"
+   ],
+   [
+    "たいま",
+    "タイマ"
+   ],
+   [
+    "たか",
+    "タカ"
+   ],
+   [
+    "たけ",
+    "タケ"
+   ],
+   [
+    "たけのこ",
+    "タケノコ"
+   ],
+   [
+    "たた",
+    "タタ"
+   ],
+   [
+    "ただ",
+    "タダ"
+   ],
+   [
+    "たち",
+    "タチ"
+   ],
+   [
+    "たっぷり",
+    "タップリ"
+   ],
+   [
+    "たて",
+    "タテ"
+   ],
+   [
+    "たで",
+    "タデ"
+   ],
+   [
+    "たな",
+    "タナ"
+   ],
+   [
+    "たぬき",
+    "タヌキ"
+   ],
+   [
+    "たね",
+    "タネ"
+   ],
+   [
+    "たび",
+    "タビ"
+   ],
+   [
+    "たま",
+    "タマ"
+   ],
+   [
+    "たまご",
+    "タマゴ"
+   ],
+   [
+    "たまねぎ",
+    "タマネギ"
+   ],
+   [
+    "たら",
+    "タラ"
+   ],
+   [
+    "たらい",
+    "タライ"
+   ],
+   [
+    "たらこ",
+    "タラコ"
+   ],
+   [
+    "たわし",
+    "タワシ"
+   ],
+   [
+    "たんか",
+    "タンカ"
+   ],
+   [
+    "たんちょう",
+    "タンチョウ"
+   ],
+   [
+    "たんぱく",
+    "タンパク"
+   ],
+   [
+    "たんぽぽ",
+    "タンポポ"
+   ],
+   [
+    "だいおう",
+    "ダイオウ"
+   ],
+   [
+    "だいこん",
+    "ダイコン"
+   ],
+   [
+    "だいず",
+    "ダイズ"
+   ],
+   [
+    "ださい",
+    "ダサイ"
+   ],
+   [
+    "だし",
+    "ダシ"
+   ],
+   [
+    "だま",
+    "ダマ"
+   ],
+   [
+    "だめ",
+    "ダメ"
+   ],
+   [
+    "だん",
+    "ダン"
+   ],
+   [
+    "だんご",
+    "ダンゴ"
+   ],
+   [
+    "だんぼーる",
+    "ダンボール"
+   ],
+   [
+    "ちから",
+    "チカラ"
+   ],
+   [
+    "ちく",
+    "チク"
+   ],
+   [
+    "ちち",
+    "チチ"
+   ],
+   [
+    "ちと",
+    "チト"
+   ],
+   [
+    "ちどり",
+    "チドリ"
+   ],
+   [
+    "ちび",
+    "チビ"
+   ],
+   [
+    "ちびちび",
+    "チビチビ"
+   ],
+   [
+    "ちまちま",
+    "チマチマ"
+   ],
+   [
+    "ちゃ",
+    "チャ"
+   ],
+   [
+    "ちゃちゃ",
+    "チャチャ"
+   ],
+   [
+    "ちゅう",
+    "チュウ"
+   ],
+   [
+    "ちょい",
+    "チョイ"
+   ],
+   [
+    "ちょう",
+    "チョウ"
+   ],
+   [
+    "ちょっと",
+    "チョット"
+   ],
+   [
+    "ちょろちょろ",
+    "チョロチョロ"
+   ],
+   [
+    "ちらほら",
+    "チラホラ"
+   ],
+   [
+    "つき",
+    "ツキ"
+   ],
+   [
+    "つけ",
+    "ツケ"
+   ],
+   [
+    "つて",
+    "ツテ"
+   ],
+   [
+    "つなぎ",
+    "ツナギ"
+   ],
+   [
+    "つの",
+    "ツノ"
+   ],
+   [
+    "つば",
+    "ツバ"
+   ],
+   [
+    "つばき",
+    "ツバキ"
+   ],
+   [
+    "つばさ",
+    "ツバサ"
+   ],
+   [
+    "つばめ",
+    "ツバメ"
+   ],
+   [
+    "つま",
+    "ツマ"
+   ],
+   [
+    "つまみ",
+    "ツマミ"
+   ],
+   [
+    "つみ",
+    "ツミ"
+   ],
+   [
+    "つめ",
+    "ツメ"
+   ],
+   [
+    "つら",
+    "ツラ"
+   ],
+   [
+    "つらい",
+    "ツライ"
+   ],
+   [
+    "つる",
+    "ツル"
+   ],
+   [
+    "つわもの",
+    "ツワモノ"
+   ],
+   [
+    "づる",
+    "ヅル"
+   ],
+   [
+    "てくてく",
+    "テクテク"
+   ],
+   [
+    "てこ",
+    "テコ"
+   ],
+   [
+    "てめぇ",
+    "テメェ"
+   ],
+   [
+    "てめえ",
+    "テメエ"
+   ],
+   [
+    "てり",
+    "テリ"
+   ],
+   [
+    "てんぐ",
+    "テング"
+   ],
+   [
+    "でかい",
+    "デカイ"
+   ],
+   [
+    "でこぼこ",
+    "デコボコ"
+   ],
+   [
+    "でっかい",
+    "デッカイ"
+   ],
+   [
+    "でん",
+    "デン"
+   ],
+   [
+    "でんじ",
+    "デンジ"
+   ],
+   [
+    "とう",
+    "トウ"
+   ],
+   [
+    "とうがらし",
+    "トウガラシ"
+   ],
+   [
+    "とうもろこし",
+    "トウモロコシ"
+   ],
+   [
+    "とき",
+    "トキ"
+   ],
+   [
+    "ときめき",
+    "トキメキ"
+   ],
+   [
+    "とこ",
+    "トコ"
+   ],
+   [
+    "とことん",
+    "トコトン"
+   ],
+   [
+    "とち",
+    "トチ"
+   ],
+   [
+    "とび",
+    "トビ"
+   ],
+   [
+    "とびら",
+    "トビラ"
+   ],
+   [
+    "ともだち",
+    "トモダチ"
+   ],
+   [
+    "とら",
+    "トラ"
+   ],
+   [
+    "とりこ",
+    "トリコ"
+   ],
+   [
+    "とろとろ",
+    "トロトロ"
+   ],
+   [
+    "とろみ",
+    "トロミ"
+   ],
+   [
+    "とんかつ",
+    "トンカツ"
+   ],
+   [
+    "とんび",
+    "トンビ"
+   ],
+   [
+    "どき",
+    "ドキ"
+   ],
+   [
+    "どこ",
+    "ドコ"
+   ],
+   [
+    "どしどし",
+    "ドシドシ"
+   ],
+   [
+    "どじょう",
+    "ドジョウ"
+   ],
+   [
+    "どっしり",
+    "ドッシリ"
+   ],
+   [
+    "どぶ",
+    "ドブ"
+   ],
+   [
+    "どんぐり",
+    "ドングリ"
+   ],
+   [
+    "どんどん",
+    "ドンドン"
+   ],
+   [
+    "ない",
+    "ナイ"
+   ],
+   [
+    "ないしょ",
+    "ナイショ"
+   ],
+   [
+    "なかなか",
+    "ナカナカ"
+   ],
+   [
+    "なす",
+    "ナス"
+   ],
+   [
+    "なぜ",
+    "ナゼ"
+   ],
+   [
+    "なぞ",
+    "ナゾ"
+   ],
+   [
+    "なつめ",
+    "ナツメ"
+   ],
+   [
+    "なでしこ",
+    "ナデシコ"
+   ],
+   [
+    "ななめ",
+    "ナナメ"
+   ],
+   [
+    "なに",
+    "ナニ"
+   ],
+   [
+    "なべ",
+    "ナベ"
+   ],
+   [
+    "なま",
+    "ナマ"
+   ],
+   [
+    "なまけもの",
+    "ナマケモノ"
+   ],
+   [
+    "なんぼ",
+    "ナンボ"
+   ],
+   [
+    "におい",
+    "ニオイ"
+   ],
+   [
+    "にく",
+    "ニク"
+   ],
+   [
+    "にし",
+    "ニシ"
+   ],
+   [
+    "にせもの",
+    "ニセモノ"
+   ],
+   [
+    "にっき",
+    "ニッキ"
+   ],
+   [
+    "にっこり",
+    "ニッコリ"
+   ],
+   [
+    "にっぽん",
+    "ニッポン"
+   ],
+   [
+    "にゃんこ",
+    "ニャンコ"
+   ],
+   [
+    "にわか",
+    "ニワカ"
+   ],
+   [
+    "にわとり",
+    "ニワトリ"
+   ],
+   [
+    "にんげん",
+    "ニンゲン"
+   ],
+   [
+    "にんじゃ",
+    "ニンジャ"
+   ],
+   [
+    "にんじん",
+    "ニンジン"
+   ],
+   [
+    "にんにく",
+    "ニンニク"
+   ],
+   [
+    "ぬし",
+    "ヌシ"
+   ],
+   [
+    "ねこ",
+    "ネコ"
+   ],
+   [
+    "のし",
+    "ノシ"
+   ],
+   [
+    "のど",
+    "ノド"
+   ],
+   [
+    "のみ",
+    "ノミ"
+   ],
+   [
+    "はぁ",
+    "ハァ"
+   ],
+   [
+    "はあ",
+    "ハア"
+   ],
+   [
+    "はえ",
+    "ハエ"
+   ],
+   [
+    "はか",
+    "ハカ"
+   ],
+   [
+    "はがき",
+    "ハガキ"
+   ],
+   [
+    "はぎ",
+    "ハギ"
+   ],
+   [
+    "はぎれ",
+    "ハギレ"
+   ],
+   [
+    "はく",
+    "ハク"
+   ],
+   [
+    "はくちょう",
+    "ハクチョウ"
+   ],
+   [
+    "はけ",
+    "ハケ"
+   ],
+   [
+    "はしご",
+    "ハシゴ"
+   ],
+   [
+    "はす",
+    "ハス"
+   ],
+   [
+    "はたち",
+    "ハタチ"
+   ],
+   [
+    "はち",
+    "ハチ"
+   ],
+   [
+    "はちみつ",
+    "ハチミツ"
+   ],
+   [
+    "はっ",
+    "ハッ"
+   ],
+   [
+    "はっか",
+    "ハッカ"
+   ],
+   [
+    "はっきり",
+    "ハッキリ"
+   ],
+   [
+    "はつらつ",
+    "ハツラツ"
+   ],
+   [
+    "はで",
+    "ハデ"
+   ],
+   [
+    "はと",
+    "ハト"
+   ],
+   [
+    "はなび",
+    "ハナビ"
+   ],
+   [
+    "はにわ",
+    "ハニワ"
+   ],
+   [
+    "はね",
+    "ハネ"
+   ],
+   [
+    "はは",
+    "ハハ"
+   ],
+   [
+    "はま",
+    "ハマ"
+   ],
+   [
+    "はみがき",
+    "ハミガキ"
+   ],
+   [
+    "はも",
+    "ハモ"
+   ],
+   [
+    "はや",
+    "ハヤ"
+   ],
+   [
+    "はやて",
+    "ハヤテ"
+   ],
+   [
+    "はやぶさ",
+    "ハヤブサ"
+   ],
+   [
+    "はり",
+    "ハリ"
+   ],
+   [
+    "はんぱ",
+    "ハンパ"
+   ],
+   [
+    "ばいばい",
+    "バイバイ"
+   ],
+   [
+    "ばったり",
+    "バッタリ"
+   ],
+   [
+    "ばつ",
+    "バツ"
+   ],
+   [
+    "ばつぐん",
+    "バツグン"
+   ],
+   [
+    "ばば",
+    "ババ"
+   ],
+   [
+    "ばらつき",
+    "バラツキ"
+   ],
+   [
+    "ばんざい",
+    "バンザイ"
+   ],
+   [
+    "ひいらぎ",
+    "ヒイラギ"
+   ],
+   [
+    "ひえ",
+    "ヒエ"
+   ],
+   [
+    "ひき",
+    "ヒキ"
+   ],
+   [
+    "ひざ",
+    "ヒザ"
+   ],
+   [
+    "ひしひし",
+    "ヒシヒシ"
+   ],
+   [
+    "ひじ",
+    "ヒジ"
+   ],
+   [
+    "ひそひそ",
+    "ヒソヒソ"
+   ],
+   [
+    "ひつじ",
+    "ヒツジ"
+   ],
+   [
+    "ひと",
+    "ヒト"
+   ],
+   [
+    "ひとで",
+    "ヒトデ"
+   ],
+   [
+    "ひどい",
+    "ヒドイ"
+   ],
+   [
+    "ひな",
+    "ヒナ"
+   ],
+   [
+    "ひばり",
+    "ヒバリ"
+   ],
+   [
+    "ひひ",
+    "ヒヒ"
+   ],
+   [
+    "ひび",
+    "ヒビ"
+   ],
+   [
+    "ひま",
+    "ヒマ"
+   ],
+   [
+    "ひまわり",
+    "ヒマワリ"
+   ],
+   [
+    "ひみつ",
+    "ヒミツ"
+   ],
+   [
+    "ひめ",
+    "ヒメ"
+   ],
+   [
+    "ひも",
+    "ヒモ"
+   ],
+   [
+    "ひょう",
+    "ヒョウ"
+   ],
+   [
+    "ひよこ",
+    "ヒヨコ"
+   ],
+   [
+    "ひらひら",
+    "ヒラヒラ"
+   ],
+   [
+    "ひんやり",
+    "ヒンヤリ"
+   ],
+   [
+    "びく",
+    "ビク"
+   ],
+   [
+    "びし",
+    "ビシ"
+   ],
+   [
+    "びっくり",
+    "ビックリ"
+   ],
+   [
+    "びっしり",
+    "ビッシリ"
+   ],
+   [
+    "びわ",
+    "ビワ"
+   ],
+   [
+    "ぴったり",
+    "ピッタリ"
+   ],
+   [
+    "ぴょん",
+    "ピョン"
+   ],
+   [
+    "ぴょんぴょん",
+    "ピョンピョン"
+   ],
+   [
+    "ぴよぴよ",
+    "ピヨピヨ"
+   ],
+   [
+    "ふか",
+    "フカ"
+   ],
+   [
+    "ふさふさ",
+    "フサフサ"
+   ],
+   [
+    "ふた",
+    "フタ"
+   ],
+   [
+    "ふち",
+    "フチ"
+   ],
+   [
+    "ふな",
+    "フナ"
+   ],
+   [
+    "ふにゃふにゃ",
+    "フニャフニャ"
+   ],
+   [
+    "ふね",
+    "フネ"
+   ],
+   [
+    "ふふっ",
+    "フフッ"
+   ],
+   [
+    "ふふふ",
+    "フフフ"
+   ],
+   [
+    "ふらふら",
+    "フラフラ"
+   ],
+   [
+    "ふりがな",
+    "フリガナ"
+   ],
+   [
+    "ふわふわ",
+    "フワフワ"
+   ],
+   [
+    "ふわり",
+    "フワリ"
+   ],
+   [
+    "ふん",
+    "フン"
+   ],
+   [
+    "ふーん",
+    "フーン"
+   ],
+   [
+    "ぶし",
+    "ブシ"
+   ],
+   [
+    "ぶた",
+    "ブタ"
+   ],
+   [
+    "ぶつ",
+    "ブツ"
+   ],
+   [
+    "ぶどう",
+    "ブドウ"
+   ],
+   [
+    "ぶらぶら",
+    "ブラブラ"
+   ],
+   [
+    "ぷかぷか",
+    "プカプカ"
+   ],
+   [
+    "ぷりぷり",
+    "プリプリ"
+   ],
+   [
+    "へた",
+    "ヘタ"
+   ],
+   [
+    "へたくそ",
+    "ヘタクソ"
+   ],
+   [
+    "へん",
+    "ヘン"
+   ],
+   [
+    "へんてこ",
+    "ヘンテコ"
+   ],
+   [
+    "べったり",
+    "ベッタリ"
+   ],
+   [
+    "ほうき",
+    "ホウキ"
+   ],
+   [
+    "ほうれんそう",
+    "ホウレンソウ"
+   ],
+   [
+    "ほくろ",
+    "ホクロ"
+   ],
+   [
+    "ほこ",
+    "ホコ"
+   ],
+   [
+    "ほこり",
+    "ホコリ"
+   ],
+   [
+    "ほし",
+    "ホシ"
+   ],
+   [
+    "ほら",
+    "ホラ"
+   ],
+   [
+    "ほろほろ",
+    "ホロホロ"
+   ],
+   [
+    "ほろり",
+    "ホロリ"
+   ],
+   [
+    "ほんま",
+    "ホンマ"
+   ],
+   [
+    "ほんもの",
+    "ホンモノ"
+   ],
+   [
+    "ぼうず",
+    "ボウズ"
+   ],
+   [
+    "ぼかし",
+    "ボカシ"
+   ],
+   [
+    "ぼちぼち",
+    "ボチボチ"
+   ],
+   [
+    "ぼつ",
+    "ボツ"
+   ],
+   [
+    "ぼる",
+    "ボル"
+   ],
+   [
+    "ぽかぽか",
+    "ポカポカ"
+   ],
+   [
+    "ぽっかり",
+    "ポッカリ"
+   ],
+   [
+    "ぽっこり",
+    "ポッコリ"
+   ],
+   [
+    "まじまじ",
+    "マジマジ"
+   ],
+   [
+    "まじめ",
+    "マジメ"
+   ],
+   [
+    "まずい",
+    "マズイ"
+   ],
+   [
+    "まだ",
+    "マダ"
+   ],
+   [
+    "まだい",
+    "マダイ"
+   ],
+   [
+    "まっか",
+    "マッカ"
+   ],
+   [
+    "まったり",
+    "マッタリ"
+   ],
+   [
+    "まつ",
+    "マツ"
+   ],
+   [
+    "まつたけ",
+    "マツタケ"
+   ],
+   [
+    "まと",
+    "マト"
+   ],
+   [
+    "まとも",
+    "マトモ"
+   ],
+   [
+    "まぬけ",
+    "マヌケ"
+   ],
+   [
+    "まひ",
+    "マヒ"
+   ],
+   [
+    "まめ",
+    "マメ"
+   ],
+   [
+    "まゆ",
+    "マユ"
+   ],
+   [
+    "まりも",
+    "マリモ"
+   ],
+   [
+    "まる",
+    "マル"
+   ],
+   [
+    "まろ",
+    "マロ"
+   ],
+   [
+    "まんが",
+    "マンガ"
+   ],
+   [
+    "み",
+    "ミ"
+   ],
+   [
+    "みかた",
+    "ミカタ"
+   ],
+   [
+    "みかん",
+    "ミカン"
+   ],
+   [
+    "みこと",
+    "ミコト"
+   ],
+   [
+    "みずき",
+    "ミズキ"
+   ],
+   [
+    "みずごけ",
+    "ミズゴケ"
+   ],
+   [
+    "みそ",
+    "ミソ"
+   ],
+   [
+    "みつば",
+    "ミツバ"
+   ],
+   [
+    "みなと",
+    "ミナト"
+   ],
+   [
+    "みょうが",
+    "ミョウガ"
+   ],
+   [
+    "みらい",
+    "ミライ"
+   ],
+   [
+    "むかつく",
+    "ムカツク"
+   ],
+   [
+    "むぎ",
+    "ムギ"
+   ],
+   [
+    "むく",
+    "ムク"
+   ],
+   [
+    "むすこ",
+    "ムスコ"
+   ],
+   [
+    "むすめ",
+    "ムスメ"
+   ],
+   [
+    "むずむず",
+    "ムズムズ"
+   ],
+   [
+    "むだ",
+    "ムダ"
+   ],
+   [
+    "むね",
+    "ムネ"
+   ],
+   [
+    "むむ",
+    "ムム"
+   ],
+   [
+    "むらさき",
+    "ムラサキ"
+   ],
+   [
+    "むらむら",
+    "ムラムラ"
+   ],
+   [
+    "むり",
+    "ムリ"
+   ],
+   [
+    "むれ",
+    "ムレ"
+   ],
+   [
+    "めし",
+    "メシ"
+   ],
+   [
+    "めちゃくちゃ",
+    "メチャクチャ"
+   ],
+   [
+    "めちゃめちゃ",
+    "メチャメチャ"
+   ],
+   [
+    "めっちゃ",
+    "メッチャ"
+   ],
+   [
+    "めど",
+    "メド"
+   ],
+   [
+    "めのう",
+    "メノウ"
+   ],
+   [
+    "めん",
+    "メン"
+   ],
+   [
+    "めんこ",
+    "メンコ"
+   ],
+   [
+    "もぐもぐ",
+    "モグモグ"
+   ],
+   [
+    "もこもこ",
+    "モコモコ"
+   ],
+   [
+    "もぞもぞ",
+    "モゾモゾ"
+   ],
+   [
+    "もたもた",
+    "モタモタ"
+   ],
+   [
+    "もち",
+    "モチ"
+   ],
+   [
+    "もちもち",
+    "モチモチ"
+   ],
+   [
+    "もちろん",
+    "モチロン"
+   ],
+   [
+    "もっさり",
+    "モッサリ"
+   ],
+   [
+    "もつ",
+    "モツ"
+   ],
+   [
+    "ものさし",
+    "モノサシ"
+   ],
+   [
+    "もみ",
+    "モミ"
+   ],
+   [
+    "もみじ",
+    "モミジ"
+   ],
+   [
+    "もも",
+    "モモ"
+   ],
+   [
+    "もやし",
+    "モヤシ"
+   ],
+   [
+    "もり",
+    "モリ"
+   ],
+   [
+    "やかん",
+    "ヤカン"
+   ],
+   [
+    "やぐら",
+    "ヤグラ"
+   ],
+   [
+    "やけど",
+    "ヤケド"
+   ],
+   [
+    "やさい",
+    "ヤサイ"
+   ],
+   [
+    "やじ",
+    "ヤジ"
+   ],
+   [
+    "やなぎ",
+    "ヤナギ"
+   ],
+   [
+    "やに",
+    "ヤニ"
+   ],
+   [
+    "やばい",
+    "ヤバイ"
+   ],
+   [
+    "やま",
+    "ヤマ"
+   ],
+   [
+    "やまざくら",
+    "ヤマザクラ"
+   ],
+   [
+    "やまと",
+    "ヤマト"
+   ],
+   [
+    "やまねこ",
+    "ヤマネコ"
+   ],
+   [
+    "やみ",
+    "ヤミ"
+   ],
+   [
+    "やれやれ",
+    "ヤレヤレ"
+   ],
+   [
+    "やろう",
+    "ヤロウ"
+   ],
+   [
+    "やんちゃ",
+    "ヤンチャ"
+   ],
+   [
+    "ゆず",
+    "ユズ"
+   ],
+   [
+    "ゆめ",
+    "ユメ"
+   ],
+   [
+    "ゆらゆら",
+    "ユラユラ"
+   ],
+   [
+    "ゆり",
+    "ユリ"
+   ],
+   [
+    "よい",
+    "ヨイ"
+   ],
+   [
+    "よいしょ",
+    "ヨイショ"
+   ],
+   [
+    "よこ",
+    "ヨコ"
+   ],
+   [
+    "よごれ",
+    "ヨゴレ"
+   ],
+   [
+    "よし",
+    "ヨシ"
+   ],
+   [
+    "よだれ",
+    "ヨダレ"
+   ],
+   [
+    "よちよち",
+    "ヨチヨチ"
+   ],
+   [
+    "よめ",
+    "ヨメ"
+   ],
+   [
+    "よもぎ",
+    "ヨモギ"
+   ],
+   [
+    "よろい",
+    "ヨロイ"
+   ],
+   [
+    "よろしく",
+    "ヨロシク"
+   ],
+   [
+    "らいちょう",
+    "ライチョウ"
+   ],
+   [
+    "らく",
+    "ラク"
+   ],
+   [
+    "らくがき",
+    "ラクガキ"
+   ],
+   [
+    "らくちん",
+    "ラクチン"
+   ],
+   [
+    "らくらく",
+    "ラクラク"
+   ],
+   [
+    "りく",
+    "リク"
+   ],
+   [
+    "りゅう",
+    "リュウ"
+   ],
+   [
+    "りん",
+    "リン"
+   ],
+   [
+    "りんご",
+    "リンゴ"
+   ],
+   [
+    "りんどう",
+    "リンドウ"
+   ],
+   [
+    "れいし",
+    "レイシ"
+   ],
+   [
+    "れんげ",
+    "レンゲ"
+   ],
+   [
+    "れんこん",
+    "レンコン"
+   ],
+   [
+    "ろ",
+    "ロ"
+   ],
+   [
+    "ろうそく",
+    "ロウソク"
+   ],
+   [
+    "ろうばい",
+    "ロウバイ"
+   ],
+   [
+    "わかめ",
+    "ワカメ"
+   ],
+   [
+    "わがまま",
+    "ワガママ"
+   ],
+   [
+    "わき",
+    "ワキ"
+   ],
+   [
+    "わさび",
+    "ワサビ"
+   ],
+   [
+    "わし",
+    "ワシ"
+   ],
+   [
+    "わたくし",
+    "ワタクシ"
+   ],
+   [
+    "わたし",
+    "ワタシ"
+   ],
+   [
+    "わたり",
+    "ワタリ"
+   ],
+   [
+    "わっ",
+    "ワッ"
+   ],
+   [
+    "わっしょい",
+    "ワッショイ"
+   ],
+   [
+    "わな",
+    "ワナ"
+   ],
+   [
+    "わら",
+    "ワラ"
+   ],
+   [
+    "わる",
+    "ワル"
+   ],
+   [
+    "わんわん",
+    "ワンワン"
+   ]
+  ],
+  "r8_katakana_kept_as_loanword": [
+   [
+    "あい",
+    "アイ"
+   ],
+   [
+    "あじ",
+    "アジ"
+   ],
+   [
+    "あす",
+    "アス"
+   ],
+   [
+    "あっ",
+    "アッ"
+   ],
+   [
+    "あっと",
+    "アット"
+   ],
+   [
+    "あと",
+    "アト"
+   ],
+   [
+    "あな",
+    "アナ"
+   ],
+   [
+    "あにき",
+    "アニキ"
+   ],
+   [
+    "あま",
+    "アマ"
+   ],
+   [
+    "あみ",
+    "アミ"
+   ],
+   [
+    "あみど",
+    "アミド"
+   ],
+   [
+    "あるき",
+    "アルキ"
+   ],
+   [
+    "あわ",
+    "アワ"
+   ],
+   [
+    "いくら",
+    "イクラ"
+   ],
+   [
+    "いこん",
+    "イコン"
+   ],
+   [
+    "いす",
+    "イス"
+   ],
+   [
+    "いそ",
+    "イソ"
+   ],
+   [
+    "いちじく",
+    "イチジク"
+   ],
+   [
+    "いっと",
+    "イット"
+   ],
+   [
+    "いど",
+    "イド"
+   ],
+   [
+    "いふ",
+    "イフ"
+   ],
+   [
+    "いめーじず",
+    "イメージズ"
+   ],
+   [
+    "いや",
+    "イヤ"
+   ],
+   [
+    "いやー",
+    "イヤー"
+   ],
+   [
+    "うい",
+    "ウイ"
+   ],
+   [
+    "うた",
+    "ウタ"
+   ],
+   [
+    "うり",
+    "ウリ"
+   ],
+   [
+    "えいじ",
+    "エイジ"
+   ],
+   [
+    "おっと",
+    "オット"
+   ],
+   [
+    "おれ",
+    "オレ"
+   ],
+   [
+    "おん",
+    "オン"
+   ],
+   [
+    "かいえん",
+    "カイエン"
+   ],
+   [
+    "かき",
+    "カキ"
+   ],
+   [
+    "かさ",
+    "カサ"
+   ],
+   [
+    "かたん",
+    "カタン"
+   ],
+   [
+    "かち",
+    "カチ"
+   ],
+   [
+    "かっぱ",
+    "カッパ"
+   ],
+   [
+    "かつ",
+    "カツ"
+   ],
+   [
+    "かぶ",
+    "カブ"
+   ],
+   [
+    "かぼちゃ",
+    "カボチャ"
+   ],
+   [
+    "かむ",
+    "カム"
+   ],
+   [
+    "かめ",
+    "カメ"
+   ],
+   [
+    "かも",
+    "カモ"
+   ],
+   [
+    "から",
+    "カラ"
+   ],
+   [
+    "からむ",
+    "カラム"
+   ],
+   [
+    "からめる",
+    "カラメル"
+   ],
+   [
+    "かり",
+    "カリ"
+   ],
+   [
+    "かるた",
+    "カルタ"
+   ],
+   [
+    "かん",
+    "カン"
+   ],
+   [
+    "かんぱ",
+    "カンパ"
+   ],
+   [
+    "がい",
+    "ガイ"
+   ],
+   [
+    "がら",
+    "ガラ"
+   ],
+   [
+    "がん",
+    "ガン"
+   ],
+   [
+    "きせる",
+    "キセル"
+   ],
+   [
+    "きっと",
+    "キット"
+   ],
+   [
+    "きり",
+    "キリ"
+   ],
+   [
+    "きろ",
+    "キロ"
+   ],
+   [
+    "ぎょーざ",
+    "ギョーザ"
+   ],
+   [
+    "くおん",
+    "クオン"
+   ],
+   [
+    "くすくす",
+    "クスクス"
+   ],
+   [
+    "くみん",
+    "クミン"
+   ],
+   [
+    "くらい",
+    "クライ"
+   ],
+   [
+    "くらむ",
+    "クラム"
+   ],
+   [
+    "くり",
+    "クリ"
+   ],
+   [
+    "くる",
+    "クル"
+   ],
+   [
+    "くろ",
+    "クロ"
+   ],
+   [
+    "くろう",
+    "クロウ"
+   ],
+   [
+    "くろこ",
+    "クロコ"
+   ],
+   [
+    "ぐり",
+    "グリ"
+   ],
+   [
+    "ぐる",
+    "グル"
+   ],
+   [
+    "ここ",
+    "ココ"
+   ],
+   [
+    "こむ",
+    "コム"
+   ],
+   [
+    "こもん",
+    "コモン"
+   ],
+   [
+    "こら",
+    "コラ"
+   ],
+   [
+    "こる",
+    "コル"
+   ],
+   [
+    "これ",
+    "コレ"
+   ],
+   [
+    "これら",
+    "コレラ"
+   ],
+   [
+    "こん",
+    "コン"
+   ],
+   [
+    "ごじ",
+    "ゴジ"
+   ],
+   [
+    "さい",
+    "サイ"
+   ],
+   [
+    "さいこ",
+    "サイコ"
+   ],
+   [
+    "さっし",
+    "サッシ"
+   ],
+   [
+    "さら",
+    "サラ"
+   ],
+   [
+    "さらさ",
+    "サラサ"
+   ],
+   [
+    "さん",
+    "サン"
+   ],
+   [
+    "さんく",
+    "サンク"
+   ],
+   [
+    "ざん",
+    "ザン"
+   ],
+   [
+    "しあん",
+    "シアン"
+   ],
+   [
+    "しく",
+    "シク"
+   ],
+   [
+    "しま",
+    "シマ"
+   ],
+   [
+    "しゃいん",
+    "シャイン"
+   ],
+   [
+    "しゃどう",
+    "シャドウ"
+   ],
+   [
+    "しゃべる",
+    "シャベル"
+   ],
+   [
+    "しゃむ",
+    "シャム"
+   ],
+   [
+    "しゅ",
+    "シュ"
+   ],
+   [
+    "しゅわ",
+    "シュワ"
+   ],
+   [
+    "しょう",
+    "ショウ"
+   ],
+   [
+    "しんぐ",
+    "シング"
+   ],
+   [
+    "しんしん",
+    "シンシン"
+   ],
+   [
+    "じむ",
+    "ジム"
+   ],
+   [
+    "じょい",
+    "ジョイ"
+   ],
+   [
+    "じょうろ",
+    "ジョウロ"
+   ],
+   [
+    "じん",
+    "ジン"
+   ],
+   [
+    "すむ",
+    "スム"
+   ],
+   [
+    "すらっと",
+    "スラット"
+   ],
+   [
+    "せく",
+    "セク"
+   ],
+   [
+    "せんち",
+    "センチ"
+   ],
+   [
+    "ぜん",
+    "ゼン"
+   ],
+   [
+    "それ",
+    "ソレ"
+   ],
+   [
+    "そん",
+    "ソン"
+   ],
+   [
+    "たい",
+    "タイ"
+   ],
+   [
+    "たれ",
+    "タレ"
+   ],
+   [
+    "たん",
+    "タン"
+   ],
+   [
+    "たんご",
+    "タンゴ"
+   ],
+   [
+    "たんにん",
+    "タンニン"
+   ],
+   [
+    "だいぶ",
+    "ダイブ"
+   ],
+   [
+    "だるま",
+    "ダルマ"
+   ],
+   [
+    "だんな",
+    "ダンナ"
+   ],
+   [
+    "ちぢみ",
+    "チヂミ"
+   ],
+   [
+    "ちゃんと",
+    "チャント"
+   ],
+   [
+    "ちゃんぽん",
+    "チャンポン"
+   ],
+   [
+    "ちょく",
+    "チョク"
+   ],
+   [
+    "ちょっき",
+    "チョッキ"
+   ],
+   [
+    "ちり",
+    "チリ"
+   ],
+   [
+    "つな",
+    "ツナ"
+   ],
+   [
+    "てら",
+    "テラ"
+   ],
+   [
+    "てらす",
+    "テラス"
+   ],
+   [
+    "てん",
+    "テン"
+   ],
+   [
+    "てんぷ",
+    "テンプ"
+   ],
+   [
+    "てんぽ",
+    "テンポ"
+   ],
+   [
+    "でも",
+    "デモ"
+   ],
+   [
+    "とが",
+    "トガ"
+   ],
+   [
+    "とたん",
+    "トタン"
+   ],
+   [
+    "とり",
+    "トリ"
+   ],
+   [
+    "とる",
+    "トル"
+   ],
+   [
+    "とろっと",
+    "トロット"
+   ],
+   [
+    "とろり",
+    "トロリ"
+   ],
+   [
+    "ど",
+    "ド"
+   ],
+   [
+    "どう",
+    "ドウ"
+   ],
+   [
+    "どん",
+    "ドン"
+   ],
+   [
+    "なし",
+    "ナシ"
+   ],
+   [
+    "なむ",
+    "ナム"
+   ],
+   [
+    "なら",
+    "ナラ"
+   ],
+   [
+    "ねる",
+    "ネル"
+   ],
+   [
+    "のう",
+    "ノウ"
+   ],
+   [
+    "のべる",
+    "ノベル"
+   ],
+   [
+    "はい",
+    "ハイ"
+   ],
+   [
+    "はいく",
+    "ハイク"
+   ],
+   [
+    "はいぶ",
+    "ハイブ"
+   ],
+   [
+    "はう",
+    "ハウ"
+   ],
+   [
+    "はっする",
+    "ハッスル"
+   ],
+   [
+    "はにかむ",
+    "ハニカム"
+   ],
+   [
+    "はら",
+    "ハラ"
+   ],
+   [
+    "はる",
+    "ハル"
+   ],
+   [
+    "はれ",
+    "ハレ"
+   ],
+   [
+    "ばい",
+    "バイ"
+   ],
+   [
+    "ばる",
+    "バル"
+   ],
+   [
+    "ばれる",
+    "バレル"
+   ],
+   [
+    "ぱっと",
+    "パット"
+   ],
+   [
+    "ひる",
+    "ヒル"
+   ],
+   [
+    "びん",
+    "ビン"
+   ],
+   [
+    "ふっと",
+    "フット"
+   ],
+   [
+    "ふり",
+    "フリ"
+   ],
+   [
+    "ふるふる",
+    "フルフル"
+   ],
+   [
+    "ふろ",
+    "フロ"
+   ],
+   [
+    "ぶい",
+    "ブイ"
+   ],
+   [
+    "ぷる",
+    "プル"
+   ],
+   [
+    "へり",
+    "ヘリ"
+   ],
+   [
+    "へる",
+    "ヘル"
+   ],
+   [
+    "べっと",
+    "ベット"
+   ],
+   [
+    "ほき",
+    "ホキ"
+   ],
+   [
+    "ほん",
+    "ホン"
+   ],
+   [
+    "ぼく",
+    "ボク"
+   ],
+   [
+    "ぽん",
+    "ポン"
+   ],
+   [
+    "まい",
+    "マイ"
+   ],
+   [
+    "まき",
+    "マキ"
+   ],
+   [
+    "ます",
+    "マス"
+   ],
+   [
+    "また",
+    "マタ"
+   ],
+   [
+    "まんだら",
+    "マンダラ"
+   ],
+   [
+    "まーじゃん",
+    "マージャン"
+   ],
+   [
+    "みお",
+    "ミオ"
+   ],
+   [
+    "みず",
+    "ミズ"
+   ],
+   [
+    "みる",
+    "ミル"
+   ],
+   [
+    "むん",
+    "ムン"
+   ],
+   [
+    "めい",
+    "メイ"
+   ],
+   [
+    "めいる",
+    "メイル"
+   ],
+   [
+    "もる",
+    "モル"
+   ],
+   [
+    "やく",
+    "ヤク"
+   ],
+   [
+    "やむ",
+    "ヤム"
+   ],
+   [
+    "やむちゃ",
+    "ヤムチャ"
+   ],
+   [
+    "よーく",
+    "ヨーク"
+   ],
+   [
+    "らい",
+    "ライ"
+   ],
+   [
+    "らん",
+    "ラン"
+   ],
+   [
+    "りっち",
+    "リッチ"
+   ],
+   [
+    "りねん",
+    "リネン"
+   ],
+   [
+    "りんか",
+    "リンカ"
+   ],
+   [
+    "るり",
+    "ルリ"
+   ],
+   [
+    "れい",
+    "レイ"
+   ],
+   [
+    "れん",
+    "レン"
+   ],
+   [
+    "ろう",
+    "ロウ"
+   ]
+  ]
+ }
+}
