@@ -7,7 +7,7 @@ use std::path::PathBuf;
 use std::sync::Arc;
 
 use meowpuut_core::pairs::{Pairs, END, START};
-use meowpuut_core::{CandidateKind, Lexicon, Session};
+use meowpuut_core::{CandidateKind, CandidateScoreKind, Lexicon, Session};
 
 fn generated(name: &str) -> &'static [u8] {
     let path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../.build/lexicon").join(name);
@@ -129,6 +129,45 @@ fn shipped_pinyin_corrections_keep_tones_and_original_byte_offsets() {
     }
     for k in "qin3chu3".bytes() { assert!(session.key(i32::from(k))); }
     assert!((0..session.candidate_count()).all(|i| session.candidate(i) != "清楚"));
+}
+
+#[test]
+fn initial_confusions_offer_a_common_phrase_without_displacing_the_typed_leader() {
+    let mut lex = Lexicon::from_base_in_place(generated("mimo_base.bin"), true, None).unwrap();
+    let table = Pairs::in_place(generated("mimo_pairs.bin"), &lex.index().word_ids, None).unwrap();
+    lex.set_pairs(table);
+    let mut session = Session::new(Arc::new(lex));
+    let cases = [
+        ("sijian", "時間", "时间"),
+        ("cu'xian4", "出現", "出现"),
+        ("lannv", "男女", "男女"),
+        ("lengliang", "能量", "能量"),
+        ("zhaoshanghao", "早上好", "早上好"),
+        ("woxiangzidao", "我想知道", "我想知道"),
+        ("womeiyousijian", "我沒有時間", "我没有时间"),
+    ];
+    for (keys, hant, hans) in cases {
+        for (simplified, expected) in [(false, hant), (true, hans)] {
+            session.clear();
+            session.set_simplified(simplified);
+            for key in keys.bytes() { assert!(session.key(i32::from(key))); }
+            let index = (0..session.candidate_count().min(3)).find(|&i| session.candidate(i) == expected)
+                .unwrap_or_else(|| panic!("{keys}: missing {expected} in the first three candidates"));
+            let info = session.candidate_info(index).unwrap();
+            assert_eq!(info.kind, CandidateKind::Correction as u32);
+            assert_eq!(info.score_kind, CandidateScoreKind::FuzzyInitial as u32);
+            assert_eq!(info.remaining_offset_bytes, keys.len() as u64);
+            assert!(session.choose(index));
+            assert_eq!(session.committed(), expected);
+            assert!(session.input().is_empty());
+        }
+    }
+
+    for (keys, leader) in [("shijian", "时间"), ("gongzuo", "工作"), ("zhongguo", "中国")] {
+        session.clear();
+        for key in keys.bytes() { assert!(session.key(i32::from(key))); }
+        assert_eq!(session.candidate(0), leader);
+    }
 }
 
 #[test]

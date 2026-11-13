@@ -7,6 +7,7 @@ from pathlib import Path
 from japanese_readings import pinyin_kana
 
 resources = Path(sys.argv[1]) if len(sys.argv) > 1 else Path('.build/lexicon')
+licenses = Path(sys.argv[2]) if len(sys.argv) > 2 else resources / 'Licenses'
 readings = json.loads((resources / 'native-japanese.json').read_text())
 for reading, entries in readings.items():
     pairs = [(item['text'], item['weight']) for item in entries]
@@ -86,7 +87,7 @@ for dest, original in [('mimo-jp-BSD.txt', 'BSD.txt'),
                        ('mimo-jp-SOURCE.json', 'SOURCE.json'),
                        ('mimo-jp-Mozc-BSD.txt', 'MOZC-LICENSE.txt'),
                        ('mimo-jp-Unicode-3.0.txt', 'UNICODE-LICENSE.txt')]:
-    assert (resources / 'Licenses' / dest).read_bytes() == (source / original).read_bytes(), dest
+    assert (licenses / dest).read_bytes() == (source / original).read_bytes(), dest
 
 tsv = [line.split('|') for line in (resources / 'native-japanese.tsv').read_text().splitlines()]
 assert all(len(parts) == 3 for parts in tsv)

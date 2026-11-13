@@ -4,7 +4,7 @@ use std::borrow::Cow;
 use std::collections::HashSet;
 use std::ops::Range;
 
-use super::{signature, NineKeyIndex};
+use super::{matches_breaks, signature, KeyReading, NineKeyIndex};
 use crate::lexicon::Lexicon;
 use crate::merge::whole_word_score;
 use crate::pairs::{Pairs, END, START, STEP};
@@ -32,7 +32,7 @@ impl NineKeyIndex {
     ) {
         out.clear();
         if !keys.is_empty() {
-            let decoder = Decoder { index: self, lexicon, japanese, keys, hans };
+            let decoder = Decoder { index: self, lexicon, japanese, keys: KeyReading::new(keys), hans };
             decoder.decode(left, out);
         }
     }
@@ -42,13 +42,13 @@ struct Decoder<'a> {
     index: &'a NineKeyIndex,
     lexicon: &'a Lexicon,
     japanese: &'a JapaneseTableSoA,
-    keys: &'a [u8],
+    keys: KeyReading<'a>,
     hans: bool,
 }
 
 impl<'a> Decoder<'a> {
     fn decode(&self, left: u32, out: &mut CandidatePoolSoA) {
-        let length = self.keys.len();
+        let length = self.keys.digits.len();
         let longest = self.lexicon.longest.max(20); // Registered Japanese readings are at most 20 keys.
         let mut paths: Vec<_> = (0..=length).map(|_| Paths::default()).collect();
         paths[0].chinese.push(Path { text: String::new(), score: 0.0, last: Some(left) });
@@ -65,7 +65,7 @@ impl<'a> Decoder<'a> {
                 self.advance(start..end, previous, next, &mut words, &mut choices);
             }
         }
-        choices.write(paths.pop().unwrap_or_default(), length, out);
+        choices.write(paths, &self.keys, out);
     }
 
     fn advance(
@@ -76,26 +76,28 @@ impl<'a> Decoder<'a> {
         buffer: &mut SpanWords<'a>,
         choices: &mut Choices<'a>,
     ) {
-        let keys = &self.keys[span.clone()];
+        let keys = &self.keys.digits[span.clone()];
         let hash = signature(keys.iter().copied());
-        let at_end = span.end == self.keys.len();
+        let at_end = span.end == self.keys.digits.len();
         let whole = span.start == 0 && at_end;
+        let consumed = self.keys.consumed(span.end);
+        let breaks = self.keys.internal_breaks(span.start, span.end);
         // A final single key can be an initial while the user is still typing.
-        self.chinese_words(keys, hash, whole, at_end && keys.len() == 1, buffer);
+        self.chinese_words(span.clone(), hash, whole, at_end && keys.len() == 1, buffer);
         let pairs = self.lexicon.pairs();
         for &word in &buffer.words {
             if whole {
-                choices.complete.push(word.choice(span.end, word.kind));
+                choices.complete.push(word.choice(consumed, word.kind));
             } else {
                 if span.start == 0 {
-                    choices.partial.push(word.choice(span.end, CandidateKind::Partial));
+                    choices.partial.push(word.choice(consumed, CandidateKind::Partial));
                 }
                 next.extend(previous, word, pairs, at_end);
             }
         }
         // Require more evidence before treating a substring as Japanese.
         let minimum = if whole { 3 } else { 4 };
-        if keys.len() < minimum {
+        if keys.len() < minimum || !breaks.is_empty() {
             return;
         }
         for row in self.index.japanese_rows(self.japanese, keys, hash) {
@@ -106,20 +108,25 @@ impl<'a> Decoder<'a> {
                 kind: CandidateKind::Japanese,
             };
             if whole {
-                choices.japanese.push(word.choice(span.end, word.kind));
+                choices.japanese.push(word.choice(consumed, word.kind));
             } else {
                 next.extend(previous, word, pairs, at_end);
             }
         }
     }
 
-    fn chinese_words(&self, keys: &[u8], hash: u32, whole: bool, initial: bool, buffer: &mut SpanWords<'a>) {
+    fn chinese_words(&self, span: Range<usize>, hash: u32, whole: bool, initial: bool, buffer: &mut SpanWords<'a>) {
         let lexicon = self.lexicon;
+        let breaks = self.keys.internal_breaks(span.start, span.end);
+        let keys = &self.keys.digits[span.clone()];
         let limit = if whole { WHOLE_WORDS } else { SPAN_WORDS };
         buffer.words.clear();
         buffer.seen.clear();
         for (lo, hi) in self.index.chinese_rows(lexicon, keys, hash) {
-            let rows = (lo..hi).filter(|&row| initial || lexicon.words.is_fully_spelled(row));
+            let rows = (lo..hi).filter(|&row| {
+                (initial || lexicon.words.is_fully_spelled(row))
+                    && (breaks.is_empty() || matches_breaks(lexicon.words.reading(&lexicon.storage, row), span.start, breaks))
+            });
             for row in rows.take(limit) {
                 let spelled = lexicon.words.is_fully_spelled(row);
                 let mut score = if whole {
@@ -242,18 +249,30 @@ struct Choices<'a> {
 }
 
 impl Choices<'_> {
-    fn write(mut self, paths: Paths, length: usize, out: &mut CandidatePoolSoA) {
-        let from_path = |path: Path, kind| Choice {
+    fn write(mut self, mut paths: Vec<Paths>, keys: &KeyReading<'_>, out: &mut CandidatePoolSoA) {
+        let complete = paths.pop().unwrap_or_default();
+        let length = keys.consumed(keys.digits.len());
+        let from_path = |path: Path, consumed, kind| Choice {
             text: path.text.into(),
-            consumed: length,
+            consumed,
             score: path.score,
             kind,
             score_kind: CandidateScoreKind::Path,
         };
-        self.complete.extend(paths.chinese.into_iter().map(|p| from_path(p, CandidateKind::Path)));
+        // Keep the decoded prefix selectable when the next digit starts an
+        // unfinished syllable and leaves no complete Chinese path.
+        if self.complete.is_empty() && complete.chinese.is_empty() {
+            if let Some((consumed, prefix)) = paths.into_iter().enumerate().skip(1).rev()
+                .find(|(_, paths)| !paths.chinese.is_empty())
+            {
+                self.partial.extend(prefix.chinese.into_iter().take(2)
+                    .map(|path| from_path(path, keys.consumed(consumed), CandidateKind::Partial)));
+            }
+        }
+        self.complete.extend(complete.chinese.into_iter().map(|p| from_path(p, length, CandidateKind::Path)));
         self.complete.sort_by(|a, b| b.score.total_cmp(&a.score));
         self.japanese.sort_by(|a, b| b.score.total_cmp(&a.score));
-        self.japanese.extend(paths.mixed.into_iter().map(|p| from_path(p, CandidateKind::Japanese)));
+        self.japanese.extend(complete.mixed.into_iter().map(|p| from_path(p, length, CandidateKind::Japanese)));
         self.partial.sort_by(|a, b| b.consumed.cmp(&a.consumed).then_with(|| b.score.total_cmp(&a.score)));
 
         let mut chinese_text = HashSet::new();

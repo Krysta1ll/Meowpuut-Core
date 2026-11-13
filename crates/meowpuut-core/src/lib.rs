@@ -100,6 +100,8 @@ pub enum CandidateScoreKind {
     Lexicon = 1,
     Path = 2,
     Fallback = 3,
+    /// Syllable-initial correction with supporting dictionary evidence.
+    FuzzyInitial = 4,
 }
 
 /// Candidate metadata matching C `MPNCandidateInfo` bit-for-bit.

@@ -24,7 +24,7 @@
 use std::cmp::Ordering;
 
 use crate::decoder::{decode_into, decode_with_buffers, fallback_into, has_exact_match, unfinished_phrase_into};
-use crate::fallback::{dropped_letter_candidate, nasal_corrections_into};
+use crate::fallback::{dropped_letter_candidate, fuzzy_corrections_into};
 use crate::mixed::unfinished_japanese_prefix_into;
 use crate::reading::{zhuyin_symbol_for_key, CANDIDATE_LIMIT, MAX_INPUT};
 use crate::segments::{
@@ -349,38 +349,10 @@ impl Session {
             std::mem::swap(&mut self.ranked_work, &mut self.reorder_buf);
         }
 
-        nasal_corrections_into(&self.lexicon, &self.input, self.hans, &mut self.scratch, &mut self.reorder_buf);
-        if !self.reorder_buf.is_empty() {
-            // The exact candidates already have their context ranking. Put the
-            // alternatives on the first page without moving a spelled leader.
-            let whole = self.input.len();
-            let spelled = |i: usize| {
-                let kind = self.ranked_work.kind[i];
-                let score_kind = self.ranked_work.score_kind[i];
-                // A path can spell every syllable even when the lexicon
-                // cannot verify a word's tones against its single characters.
-                let unverified = kind == CandidateKind::Unknown as u32
-                    && (score_kind == CandidateScoreKind::Lexicon as u32 || score_kind == CandidateScoreKind::Path as u32);
-                self.ranked_work.consumed[i] == whole
-                    && (kind == CandidateKind::Exact as u32 || kind == CandidateKind::Path as u32 || unverified)
-            };
-            let mut position = if (0..self.ranked_work.len()).any(spelled) { 3.min(self.ranked_work.len()) } else { 0 };
-            let mut inserted = 0;
-            for i in 0..self.reorder_buf.len() {
-                let text = self.reorder_buf.text(i);
-                if let Some(existing) = (0..self.ranked_work.len()).find(|&r| same_selection(&self.ranked_work, r, text, whole)) {
-                    if existing < position || self.ranked_work.kind[existing] != CandidateKind::Correction as u32 { continue; }
-                    remove_item_at(&mut self.ranked_work, existing);
-                }
-                self.ranked_work.insert_at(position, text, whole, self.reorder_buf.kind[i], self.reorder_buf.score_kind[i], self.reorder_buf.score[i]);
-                position += 1;
-                inserted += 1;
-                if inserted == 2 { break; }
-            }
-            self.ranked_work.truncate(CANDIDATE_LIMIT);
-        }
+        self.offer_pinyin_corrections(false);
         crate::row::shape(&self.lexicon, &self.input, self.hans, &mut self.ranked_work, &self.row_work, &mut self.reorder_buf);
         crate::latin::promote(&mut self.ranked_work, self.input.len());
+        self.offer_pinyin_corrections(true);
         let whole = self.input.len();
         if self.lexicon.pinyin && (4..=8).contains(&whole) && !(0..self.ranked_work.len()).any(|i| {
             self.ranked_work.consumed[i] == whole && self.ranked_work.kind[i] == CandidateKind::Exact as u32
@@ -404,5 +376,56 @@ impl Session {
             );
         }
         self.page = 0;
+    }
+
+    fn offer_pinyin_corrections(&mut self, initials: bool) {
+        if initials && self.lexicon.pinyin && !self.ranked_work.is_empty()
+            && self.ranked_work.kind[0] == CandidateKind::Exact as u32
+            && self.ranked_work.score_kind[0] == CandidateScoreKind::Lexicon as u32
+        {
+            let reading = crate::reading::Reading::new(&self.input, true);
+            let (lo, hi) = self.lexicon.range(reading.sounds());
+            if (lo..hi.min(lo + 7)).any(|i| {
+                self.lexicon.words.weight(i) >= 6500
+                    && self.lexicon.words.text(&self.lexicon.storage, i, self.hans) == self.ranked_work.text(0)
+            }) {
+                return;
+            }
+        }
+        fuzzy_corrections_into(&self.lexicon, &self.input, self.hans, &mut self.scratch, &mut self.reorder_buf, initials);
+        if !self.reorder_buf.is_empty() {
+            // The exact candidates already have their context ranking. Put the
+            // alternatives on the first page without moving a spelled leader.
+            let whole = self.input.len();
+            let spelled = |i: usize| {
+                let kind = self.ranked_work.kind[i];
+                let score_kind = self.ranked_work.score_kind[i];
+                // A path can spell every syllable even when the lexicon
+                // cannot verify a word's tones against its single characters.
+                let unverified = kind == CandidateKind::Unknown as u32
+                    && (score_kind == CandidateScoreKind::Lexicon as u32 || score_kind == CandidateScoreKind::Path as u32);
+                self.ranked_work.consumed[i] == whole
+                    && (kind == CandidateKind::Exact as u32 || kind == CandidateKind::Path as u32 || unverified)
+            };
+            let mut position = if initials {
+                // A confident literal or complete spelling keeps its lead.
+                // Put one verified correction near it instead of filling the
+                // row with homophones from the alternative syllable.
+                2.min(self.ranked_work.len())
+            } else if (0..self.ranked_work.len()).any(spelled) { 3.min(self.ranked_work.len()) } else { 0 };
+            let mut inserted = 0;
+            for i in 0..self.reorder_buf.len() {
+                let text = self.reorder_buf.text(i);
+                if let Some(existing) = (0..self.ranked_work.len()).find(|&r| same_selection(&self.ranked_work, r, text, whole)) {
+                    if existing < position || self.ranked_work.kind[existing] != CandidateKind::Correction as u32 { continue; }
+                    remove_item_at(&mut self.ranked_work, existing);
+                }
+                self.ranked_work.insert_at(position, text, whole, self.reorder_buf.kind[i], self.reorder_buf.score_kind[i], self.reorder_buf.score[i]);
+                position += 1;
+                inserted += 1;
+                if inserted == if initials { 1 } else { 2 } { break; }
+            }
+            self.ranked_work.truncate(CANDIDATE_LIMIT);
+        }
     }
 }

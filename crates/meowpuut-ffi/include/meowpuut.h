@@ -54,7 +54,8 @@ void mpn_lexicon_destroy(MPNLexicon *lexicon);
 // Bytes read in place are not counted.
 size_t mpn_lexicon_heap_bytes(const MPNLexicon *lexicon);
 MPNSession *mpn_session_create(const MPNLexicon *lexicon);
-// A Pinyin session whose composition keys are ASCII digits 2–9. NULL for Zhuyin.
+// A Pinyin session whose composition keys are ASCII digits 2–9. An apostrophe
+// after a digit adds a word boundary and is omitted from commits. NULL for Zhuyin.
 MPNSession *mpn_nine_key_session_create(const MPNLexicon *lexicon);
 void mpn_session_destroy(MPNSession *session);
 
@@ -94,7 +95,8 @@ typedef enum {
     MPN_SCORE_NONE = 0,
     MPN_SCORE_LEXICON = 1,
     MPN_SCORE_PATH = 2,
-    MPN_SCORE_FALLBACK = 3
+    MPN_SCORE_FALLBACK = 3,
+    MPN_SCORE_FUZZY_INITIAL = 4
 } MPNCandidateScoreKind;
 typedef struct {
     uint32_t kind;

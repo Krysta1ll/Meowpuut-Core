@@ -42,6 +42,12 @@ fn nine_key_converts_and_commits_only_the_selected_digits() {
     assert!(session.key(0xff08));
     assert_eq!(session.candidate_count(), 0);
 
+    type_keys(&mut session, "64426965");
+    assert_eq!((session.candidate(0), session.candidate_consumed(0)), ("你好我", 7));
+    assert_eq!(session.candidate_info(0).unwrap().kind, CandidateKind::Partial as u32);
+    assert!(session.choose(0));
+    assert_eq!((session.committed(), session.input()), ("你好我", "5"));
+
     type_keys(&mut session, "78744");
     assert_eq!(session.candidate(0), "蘇軾");
     assert_eq!(session.candidate(1), "寿司");
@@ -60,4 +66,45 @@ fn nine_key_converts_and_commits_only_the_selected_digits() {
     assert!(pinyin.key(i32::from(b'n')));
     assert!(pinyin.key(i32::from(b'i')));
     assert_eq!(pinyin.candidate(0), "你");
+}
+
+#[test]
+fn nine_key_word_break_constrains_matches_and_stays_in_preedit() {
+    let lexicon = Arc::new(Lexicon::load(concat!(
+        "MEOWPUUT-PINYIN-1\n",
+        "an\tan1\t安\t安\t5500\n",
+        "jin\tjin1\t今\t今\t5200\n",
+        "jinan\tji3nan2\t濟南\t济南\t13000\n",
+        "jinan\tjin1an1\t今安\t今安\t9000\n",
+    )).unwrap());
+    let mut session = Session::new_nine_key(lexicon).unwrap();
+    let keys = |session: &mut Session, reading: &str| {
+        for key in reading.bytes() {
+            assert!(session.key(i32::from(key)));
+        }
+    };
+    assert!(!session.key(i32::from(b'\'')));
+    keys(&mut session, "54626");
+    assert_eq!(session.candidate(0), "濟南");
+
+    session.clear();
+    keys(&mut session, "546'");
+    assert_eq!((session.candidate(0), session.candidate_consumed(0)), ("今", 4));
+    assert!(!session.key(i32::from(b'\'')));
+    assert!(session.key(0xff08));
+    assert_eq!(session.preedit(), "546");
+    keys(&mut session, "'26");
+    assert_eq!(session.candidate(0), "今安");
+    assert_eq!(session.candidate_info(0).unwrap().kind, CandidateKind::Exact as u32);
+    assert!((0..session.candidate_count()).all(|i| session.candidate(i) != "濟南"));
+    let prefix = (0..session.candidate_count()).find(|&i| session.candidate(i) == "今").unwrap();
+    assert_eq!(session.candidate_consumed(prefix), 4);
+    assert!(session.choose(prefix));
+    assert_eq!((session.committed(), session.input(), session.candidate(0)), ("今", "26", "安"));
+
+    session.clear();
+    keys(&mut session, "999'999");
+    assert_eq!(session.candidate_count(), 0);
+    assert!(session.key(0xff0d));
+    assert_eq!(session.committed(), "999999");
 }

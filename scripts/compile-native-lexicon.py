@@ -29,7 +29,8 @@ def write_zhuyin_initials(db):
     initials = "1qaz2wsxedcrfv5tgbyhn"
     tones = " 6347"
     db.execute("""CREATE TABLE zhuyin_initials(
-        initials TEXT, position INTEGER, hant TEXT, hans TEXT, weight INTEGER,
+        initials TEXT, position INTEGER, hant TEXT, hans_variant TEXT, weight INTEGER,
+        hans TEXT GENERATED ALWAYS AS (coalesce(hans_variant,hant)) VIRTUAL,
         PRIMARY KEY(initials,position)) WITHOUT ROWID""")
 
     def index_rows():
@@ -50,10 +51,43 @@ def write_zhuyin_initials(db):
                 keys = phonetic[0] + "".join(suffix)
                 position = positions[keys]
                 if position < 32:
-                    yield keys, position, hant, hans, weight
+                    yield keys, position, hant, None if hans == hant else hans, weight
                     positions[keys] += 1
 
-    db.executemany("INSERT INTO zhuyin_initials VALUES(?,?,?,?,?)", index_rows())
+    db.executemany("INSERT INTO zhuyin_initials(initials,position,hant,hans_variant,weight) VALUES(?,?,?,?,?)", index_rows())
+
+
+def write_evidence_lexicon(db, words, zhuyin_weight):
+    # Keep the import's duplicate resolution and tie order. Secondary indexes
+    # in the shipped table then need only a small rowid, not the whole key.
+    db.execute("""CREATE TEMP TABLE lexicon_import(
+        reading TEXT, phonetic TEXT, hant TEXT, hans TEXT, weight INTEGER, toned TEXT,
+        PRIMARY KEY(reading,phonetic,hant,hans)) WITHOUT ROWID""")
+
+    def evidence_rows():
+        for hant, hans, code in words:
+            reading = re.sub("[1-5 ]", "", code)
+            phonetic = "".join(encode(sound) for sound in code.split())
+            yield reading, phonetic, hant, hans, zhuyin_weight[(hant, hans, code)], code.replace(" ", "")
+
+    db.executemany("INSERT OR REPLACE INTO lexicon_import VALUES(?,?,?,?,?,?)", evidence_rows())
+    # The untoned keys already live in their indexes. Derive them from the
+    # toned readings so the table does not store a second copy of each key.
+    db.execute("""CREATE TABLE lexicon(
+        reading TEXT GENERATED ALWAYS AS
+            (replace(replace(replace(replace(replace(toned,'1',''),'2',''),'3',''),'4',''),'5','')) VIRTUAL,
+        phonetic TEXT,
+        bare TEXT GENERATED ALWAYS AS
+            (replace(replace(replace(replace(replace(phonetic,' ',''),'6',''),'3',''),'4',''),'7','')) VIRTUAL,
+        hant TEXT, hans_variant TEXT,
+        hans TEXT GENERATED ALWAYS AS (coalesce(hans_variant,hant)) VIRTUAL,
+        weight INTEGER, toned TEXT)""")
+    db.execute("""INSERT INTO lexicon(phonetic,hant,hans_variant,weight,toned)
+        SELECT phonetic,hant,nullif(hans,hant),weight,toned FROM lexicon_import
+        ORDER BY reading,phonetic,hant,hans""")
+    db.execute("DROP TABLE lexicon_import")
+    for column in ("reading", "phonetic", "bare"):
+        db.execute(f"CREATE INDEX lexicon_{column} ON lexicon({column}, weight DESC)")
 
 
 KEYS = dict(zip("bpmfdtnlgkhjqxZCSrzcsiuvaoeEAIOUMNKGR12345",
@@ -551,20 +585,15 @@ def main(destination, converter, *options):
     if database.exists(): database.unlink()
     db = sqlite3.connect(database)
     db.execute("CREATE TABLE words(language TEXT, reading TEXT, word TEXT, weight INTEGER, PRIMARY KEY(language,reading,word)) WITHOUT ROWID")
-    db.execute("CREATE TABLE lexicon(reading TEXT, phonetic TEXT, bare TEXT, hant TEXT, hans TEXT, weight INTEGER, toned TEXT, PRIMARY KEY(reading,phonetic,hant,hans)) WITHOUT ROWID")
+    write_evidence_lexicon(db, words, zhuyin_weight)
     def record(language, reading, word, weight):
         db.execute("INSERT INTO words VALUES(?,?,?,?) ON CONFLICT DO UPDATE SET weight=max(weight,excluded.weight)", (language, reading, word, weight))
-    for (hant, hans, code), weight in words.items():
-        reading = re.sub("[1-5 ]", "", code)
-        phonetic = "".join(encode(sound) for sound in code.split())
-        weight = zhuyin_weight[(hant, hans, code)]
-        db.execute("INSERT OR REPLACE INTO lexicon VALUES(?,?,?,?,?,?,?)", (reading, phonetic, re.sub("[ 6347]", "", phonetic), hant, hans, weight, code.replace(" ", "")))
     for reading, items in japanese.items():
         for item in items: record("ja", reading.replace("'", ""), item["text"], item["weight"])
-    db.execute("CREATE INDEX lexicon_phonetic ON lexicon(phonetic)")
-    db.execute("CREATE INDEX lexicon_bare ON lexicon(bare)")
     write_zhuyin_initials(db)
-    db.commit(); db.close()
+    db.commit()
+    db.execute("VACUUM")
+    db.close()
     print(f"Meowpuut overlay: {authored_count} Chinese rows; {len(japanese)} Japanese readings; total {len(words):,} Chinese readings")
 
 

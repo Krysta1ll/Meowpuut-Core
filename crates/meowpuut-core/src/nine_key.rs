@@ -2,11 +2,61 @@
 
 mod decoder;
 
+use std::borrow::Cow;
+
 use crate::lexicon::Lexicon;
 use crate::pairs::START;
+use crate::reading::is_tone;
 use crate::soa::JapaneseTableSoA;
 
 const DIGITS: &[u8; 26] = b"22233344455566677778889999";
+pub(crate) const SEPARATOR: u8 = b'\'';
+
+struct KeyReading<'a> {
+    digits: Cow<'a, [u8]>,
+    breaks: Vec<usize>,
+}
+
+impl<'a> KeyReading<'a> {
+    fn new(raw: &'a [u8]) -> Self {
+        if !raw.contains(&SEPARATOR) {
+            return Self { digits: raw.into(), breaks: Vec::new() };
+        }
+        let mut digits = Vec::with_capacity(raw.len());
+        let mut breaks = Vec::new();
+        for &key in raw {
+            if key == SEPARATOR { breaks.push(digits.len()); }
+            else { digits.push(key); }
+        }
+        Self { digits: digits.into(), breaks }
+    }
+
+    fn consumed(&self, end: usize) -> usize {
+        end + self.breaks.partition_point(|&b| b <= end)
+    }
+
+    fn internal_breaks(&self, start: usize, end: usize) -> &[usize] {
+        let first = self.breaks.partition_point(|&b| b <= start);
+        let last = self.breaks.partition_point(|&b| b < end);
+        &self.breaks[first..last]
+    }
+}
+
+fn matches_breaks(reading: &str, start: usize, mut breaks: &[usize]) -> bool {
+    if breaks.is_empty() { return true; }
+    let mut position = start;
+    for byte in reading.bytes() {
+        if is_tone(byte, true) {
+            if position == breaks[0] {
+                breaks = &breaks[1..];
+                if breaks.is_empty() { return true; }
+            }
+        } else if byte.is_ascii_lowercase() {
+            position += 1;
+        }
+    }
+    false
+}
 
 fn digit(letter: u8) -> u8 {
     DIGITS[usize::from(letter - b'a')]
@@ -91,11 +141,17 @@ impl NineKeyIndex {
         if lexicon.pairs().is_none() {
             return START;
         }
-        for start in keys.len().saturating_sub(lexicon.longest)..keys.len() {
-            let suffix = &keys[start..];
+        let keys = KeyReading::new(keys);
+        let end = keys.digits.len();
+        for start in end.saturating_sub(lexicon.longest)..end {
+            let suffix = &keys.digits[start..];
             let hash = signature(suffix.iter().copied());
+            let breaks = keys.internal_breaks(start, end);
             for (lo, hi) in self.chinese_rows(lexicon, suffix, hash) {
-                let last = (lo..hi).find(|&row| text.ends_with(lexicon.words.text(&lexicon.storage, row, hans)));
+                let last = (lo..hi).find(|&row| {
+                    text.ends_with(lexicon.words.text(&lexicon.storage, row, hans))
+                        && matches_breaks(lexicon.words.reading(&lexicon.storage, row), start, breaks)
+                });
                 if let Some(row) = last {
                     return lexicon.index.word_ids.ids.get(row);
                 }

@@ -33,7 +33,7 @@ use std::sync::Arc;
 
 use crate::lexicon::Lexicon;
 use crate::mixed::{mixed_pinyin_into, mixed_pinyin_prefix_into};
-use crate::nine_key::NineKeyIndex;
+use crate::nine_key::{NineKeyIndex, SEPARATOR as NINE_KEY_SEPARATOR};
 use crate::reading::{
     is_tone, strict_han_count, zhuyin_symbol_for_key, CANDIDATE_LIMIT, KEYS, MAX_INPUT, PAGE_SIZE,
 };
@@ -293,8 +293,16 @@ impl Session {
             return;
         }
         self.committed.clear();
-        self.committed.push_str(&self.input);
+        self.append_literal_input();
         self.reset();
+    }
+
+    fn append_literal_input(&mut self) {
+        if self.nine_key.is_some() {
+            self.committed.extend(self.input.bytes().filter(|&key| key != NINE_KEY_SEPARATOR).map(char::from));
+        } else {
+            self.committed.push_str(&self.input);
+        }
     }
 
     pub fn choose(&mut self, index: usize) -> bool {
@@ -377,11 +385,18 @@ impl Session {
                 if literal { self.committed.push(' '); }
                 return true;
             }
-            if !(b'2'..=b'9').contains(&ch) {
+            if ch == NINE_KEY_SEPARATOR {
+                if !self.input.as_bytes().last().is_some_and(|b| (b'2'..=b'9').contains(b)) {
+                    return false;
+                }
+                if self.input.len() == MAX_INPUT {
+                    return true;
+                }
+            } else if !(b'2'..=b'9').contains(&ch) {
                 return false;
             }
             if self.input.len() == MAX_INPUT {
-                self.committed.push_str(&self.input);
+                self.append_literal_input();
                 self.reset();
             }
             self.input.push(char::from(ch));
