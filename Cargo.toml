@@ -5,6 +5,7 @@ members = [
     "crates/meowpuut-lexicon",
     "crates/meowpuut-client",
     "crates/meowpuut-ffi",
+    "crates/meowpuut-pets",
 ]
 
 [workspace.package]

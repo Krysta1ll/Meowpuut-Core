@@ -1,0 +1,9 @@
+[package]
+name = "meowpuut-pets"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Device-local pet interaction and affection rules for Meowpuut"
+
+[lints]
+workspace = true

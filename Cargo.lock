@@ -27,3 +27,7 @@ version = "0.8.0"
 dependencies = [
  "meowpuut-core",
 ]
+
+[[package]]
+name = "meowpuut-pets"
+version = "0.8.0"
