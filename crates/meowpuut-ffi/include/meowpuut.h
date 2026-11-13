@@ -54,6 +54,8 @@ void mpn_lexicon_destroy(MPNLexicon *lexicon);
 // Bytes read in place are not counted.
 size_t mpn_lexicon_heap_bytes(const MPNLexicon *lexicon);
 MPNSession *mpn_session_create(const MPNLexicon *lexicon);
+// A Pinyin session whose composition keys are ASCII digits 2–9. NULL for Zhuyin.
+MPNSession *mpn_nine_key_session_create(const MPNLexicon *lexicon);
 void mpn_session_destroy(MPNSession *session);
 
 // Printable ASCII keys and the same X11 editing keys as the Rime adapter.
@@ -85,7 +87,8 @@ typedef enum {
     MPN_CANDIDATE_EXACT = 1,
     MPN_CANDIDATE_PATH = 2,
     MPN_CANDIDATE_PARTIAL = 3,
-    MPN_CANDIDATE_CORRECTION = 4
+    MPN_CANDIDATE_CORRECTION = 4,
+    MPN_CANDIDATE_JAPANESE = 5
 } MPNCandidateKind;
 typedef enum {
     MPN_SCORE_NONE = 0,

@@ -41,6 +41,7 @@ pub mod lexicon;
 pub mod merge;
 pub mod mixed;
 pub mod mixed_prefix;
+mod nine_key;
 pub mod pairs;
 pub mod predict;
 pub mod reading;
@@ -77,6 +78,8 @@ pub enum CandidateKind {
     Path = 2,
     Partial = 3,
     Correction = 4,
+    /// A reviewed Japanese word or a path containing one, in nine-key mode.
+    Japanese = 5,
 }
 
 /// Score provenance category for a generated candidate.

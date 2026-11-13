@@ -32,7 +32,7 @@ use std::sync::Arc;
 
 use meowpuut_core::image::ImageOwner;
 use meowpuut_core::pairs::Pairs;
-use meowpuut_core::Lexicon;
+use meowpuut_core::{Lexicon, Session};
 
 use crate::{arg_str, session_mut, session_ref, MPNLexicon, MPNSession, EMPTY};
 
@@ -244,6 +244,22 @@ pub unsafe extern "C" fn mpn_session_create(lexicon: *const MPNLexicon) -> *mut 
         Some(l) => Box::into_raw(Box::new(MPNSession::new(Arc::clone(&l.value)))),
         None => std::ptr::null_mut(),
     }
+}
+
+/// Creates a nine-key session on a Pinyin lexicon, or returns NULL.
+///
+/// # Safety
+/// `lexicon` must be NULL or a live handle.
+#[no_mangle]
+#[allow(unsafe_code)]
+pub unsafe extern "C" fn mpn_nine_key_session_create(lexicon: *const MPNLexicon) -> *mut MPNSession {
+    // SAFETY: NULL or a live handle per the contract.
+    unsafe { lexicon.as_ref() }
+        .and_then(|l| {
+            Session::new_nine_key(Arc::clone(&l.value))
+                .map(|core| MPNSession::from_session(Arc::clone(&l.value), core))
+        })
+        .map_or(std::ptr::null_mut(), |session| Box::into_raw(Box::new(session)))
 }
 
 /// Destroys a session.

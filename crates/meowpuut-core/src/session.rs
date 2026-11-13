@@ -33,6 +33,7 @@ use std::sync::Arc;
 
 use crate::lexicon::Lexicon;
 use crate::mixed::{mixed_pinyin_into, mixed_pinyin_prefix_into};
+use crate::nine_key::NineKeyIndex;
 use crate::reading::{
     is_tone, strict_han_count, zhuyin_symbol_for_key, CANDIDATE_LIMIT, KEYS, MAX_INPUT, PAGE_SIZE,
 };
@@ -46,6 +47,7 @@ use crate::CandidateInfo;
 #[derive(Debug, Clone)]
 pub struct Session {
     pub(crate) lexicon: Arc<Lexicon>,
+    pub(crate) nine_key: Option<NineKeyIndex>,
     pub(crate) input: String,
     pub(crate) preedit: String,
     pub(crate) committed: String,
@@ -82,6 +84,7 @@ impl Session {
     pub fn new(lexicon: Arc<Lexicon>) -> Self {
         Self {
             lexicon,
+            nine_key: None,
             input: String::with_capacity(MAX_INPUT + 8),
             preedit: String::with_capacity(MAX_INPUT * 3 + 8),
             committed: String::with_capacity(MAX_INPUT * 3 + 8),
@@ -106,6 +109,17 @@ impl Session {
             picked_id: START,
             picked_context: String::with_capacity(256),
         }
+    }
+
+    /// Creates a session taking the telephone keypad digits 2–9 as Pinyin/Romaji.
+    pub fn new_nine_key(lexicon: Arc<Lexicon>) -> Option<Self> {
+        if !lexicon.pinyin {
+            return None;
+        }
+        let index = NineKeyIndex::new(&lexicon);
+        let mut session = Self::new(lexicon);
+        session.nine_key = Some(index);
+        Some(session)
     }
 
     /// Returns a combined capacity signature of internal SoA buffers for zero-allocation testing.
@@ -240,6 +254,9 @@ impl Session {
             return false;
         }
         let is_single_han = strict_han_count(text) == 1;
+        if let Some(index) = &mut self.nine_key {
+            index.add_japanese(reading, self.japanese.len(), weight);
+        }
         self.japanese.push(reading, text, weight, is_single_han);
         true
     }
@@ -287,7 +304,12 @@ impl Session {
         self.tmp_text.clear();
         self.tmp_text.push_str(self.candidates.text(index));
         let consumed = self.candidates.consumed[index];
-        let picked = last_word_id(&self.lexicon, &self.input[..consumed], &self.tmp_text, self.hans);
+        let reading = &self.input[..consumed];
+        let picked = if let Some(index) = &self.nine_key {
+            index.last_word_id(&self.lexicon, reading.as_bytes(), &self.tmp_text, self.hans)
+        } else {
+            last_word_id(&self.lexicon, reading, &self.tmp_text, self.hans)
+        };
         self.tmp_remaining.clear();
         self.tmp_remaining.push_str(&self.input[consumed..]);
         self.lexicon
@@ -348,6 +370,24 @@ impl Session {
             return false;
         }
         let ch = key as u8;
+        if self.nine_key.is_some() {
+            if ch == b' ' && !self.input.is_empty() {
+                let literal = self.candidates.is_empty();
+                self.commit();
+                if literal { self.committed.push(' '); }
+                return true;
+            }
+            if !(b'2'..=b'9').contains(&ch) {
+                return false;
+            }
+            if self.input.len() == MAX_INPUT {
+                self.committed.push_str(&self.input);
+                self.reset();
+            }
+            self.input.push(char::from(ch));
+            self.refresh();
+            return true;
+        }
         if self.lexicon.pinyin {
             if ch == b' ' && self.input.len() == MAX_INPUT {
                 self.committed.push_str(&self.preedit);

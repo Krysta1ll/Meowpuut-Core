@@ -30,7 +30,7 @@ use crate::merge;
 use crate::pairs::{END, START, STEP};
 use crate::reading::{Reading, BEAM, CANDIDATE_LIMIT};
 use crate::workspace::{
-    text_hash, DecodeOutputSoA, DecoderScratchSoA, NasalVariantsStack, PathLatticeSoA, StepPathsSoA, LATTICE_STATES,
+    text_hash, DecodeOutputSoA, DecoderScratchSoA, PathLatticeSoA, StepPathsSoA, LATTICE_STATES,
 };
 use crate::{CandidateKind, CandidateScoreKind};
 
@@ -156,41 +156,6 @@ pub fn decode_with_buffers(
         if !complete_only && input == reading.sounds() {
             merge::push_mixed_whole(lexicon, input, hans, out);
         }
-    }
-
-    if !complete_only && lexicon.pinyin && !out.is_empty() && input == reading.sounds() {
-        let mut insertion = 3.min(out.len());
-        let mut added = 0usize;
-        let variants = NasalVariantsStack::from_sounds(reading.sounds());
-        for v_idx in 0..variants.len() {
-            let (lo, hi) = lexicon.range(variants.get(v_idx));
-            for index in lo..hi {
-                if added >= 2 {
-                    break;
-                }
-                let weight = lexicon.words.weight(index);
-                if weight < 4000 {
-                    break;
-                }
-                let text = lexicon.words.text(&lexicon.storage, index, hans);
-                if !out.contains_text(text) {
-                    out.insert_at(
-                        insertion,
-                        text,
-                        input.len(),
-                        CandidateKind::Correction as u32,
-                        CandidateScoreKind::Lexicon as u32,
-                        if ranked { merge::whole_word_score(lexicon, index) - merge::GUESS_PENALTY - 900.0 / 700.0 } else { f64::from(weight) },
-                    );
-                    insertion += 1;
-                    added += 1;
-                }
-            }
-            if added == 2 {
-                break;
-            }
-        }
-        out.truncate(CANDIDATE_LIMIT);
     }
 
     if out.is_empty() && lexicon.pinyin && !complete_only {

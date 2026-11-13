@@ -1,8 +1,7 @@
-//! Replays the 100-seed simulation through the exported C ABI and compares it
-//! with the golden hashes produced by the original C++ `MeowpuutCore`
-//! (independently re-verified with `scratch/cpp_oracle.cpp`). Proves that
-//! clients switching from C++ to `meowpuut-ffi` see identical behaviour,
-//! including NUL-terminated strings and `MPNCandidateInfo` layout.
+//! Replays the 100-seed simulation through the exported C ABI and compares
+//! results with the core's rankings. Zhuyin keeps the original C++ baseline;
+//! Pinyin includes the current correction rules. Also exercises the ABI's
+//! NUL-terminated strings and `MPNCandidateInfo` layout.
 #![allow(unsafe_code)]
 #![allow(clippy::undocumented_unsafe_blocks, clippy::multiple_unsafe_ops_per_block)]
 
@@ -134,7 +133,7 @@ fn golden() -> Vec<u64> {
 }
 
 #[test]
-fn c_abi_matches_cpp_goldens_for_100_seeds() {
+fn c_abi_matches_core_goldens_for_100_seeds() {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../.build/lexicon");
     let pyd = fs::read(root.join("native-pinyin.tsv")).unwrap();
     let zyd = fs::read(root.join("native-zhuyin.tsv")).unwrap();

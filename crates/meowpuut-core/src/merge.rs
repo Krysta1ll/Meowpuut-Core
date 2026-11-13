@@ -123,7 +123,7 @@ struct Unit {
     full: bool,
 }
 
-fn is_syllable(lexicon: &Lexicon, s: &str) -> bool {
+pub(crate) fn is_syllable(lexicon: &Lexicon, s: &str) -> bool {
     let (lo, hi) = lexicon.range(s);
     (lo..hi).any(|i| {
         let r = lexicon.words.reading(&lexicon.storage, i).as_bytes();

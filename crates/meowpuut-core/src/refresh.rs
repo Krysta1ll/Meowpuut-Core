@@ -24,6 +24,7 @@
 use std::cmp::Ordering;
 
 use crate::decoder::{decode_into, decode_with_buffers, fallback_into, has_exact_match, unfinished_phrase_into};
+use crate::fallback::{dropped_letter_candidate, nasal_corrections_into};
 use crate::mixed::unfinished_japanese_prefix_into;
 use crate::reading::{zhuyin_symbol_for_key, CANDIDATE_LIMIT, MAX_INPUT};
 use crate::segments::{
@@ -120,6 +121,11 @@ impl Session {
             }
         }
 
+        if let Some(index) = &self.nine_key {
+            index.decode(&self.lexicon, &self.japanese, self.input.as_bytes(), self.hans, self.scratch.lattice.left, &mut self.candidates);
+            self.page = 0;
+            return;
+        }
         decode_into(&self.lexicon, &self.input, self.hans, false, true, &mut self.scratch);
         crate::row::prefix_offers(&self.lexicon, &self.input, self.hans, &self.scratch.lattice, &self.scratch.decoded, &mut self.row_work);
         self.ranked_work.clear();
@@ -343,8 +349,50 @@ impl Session {
             std::mem::swap(&mut self.ranked_work, &mut self.reorder_buf);
         }
 
+        nasal_corrections_into(&self.lexicon, &self.input, self.hans, &mut self.scratch, &mut self.reorder_buf);
+        if !self.reorder_buf.is_empty() {
+            // The exact candidates already have their context ranking. Put the
+            // alternatives on the first page without moving a spelled leader.
+            let whole = self.input.len();
+            let spelled = |i: usize| {
+                let kind = self.ranked_work.kind[i];
+                let score_kind = self.ranked_work.score_kind[i];
+                // A path can spell every syllable even when the lexicon
+                // cannot verify a word's tones against its single characters.
+                let unverified = kind == CandidateKind::Unknown as u32
+                    && (score_kind == CandidateScoreKind::Lexicon as u32 || score_kind == CandidateScoreKind::Path as u32);
+                self.ranked_work.consumed[i] == whole
+                    && (kind == CandidateKind::Exact as u32 || kind == CandidateKind::Path as u32 || unverified)
+            };
+            let mut position = if (0..self.ranked_work.len()).any(spelled) { 3.min(self.ranked_work.len()) } else { 0 };
+            let mut inserted = 0;
+            for i in 0..self.reorder_buf.len() {
+                let text = self.reorder_buf.text(i);
+                if let Some(existing) = (0..self.ranked_work.len()).find(|&r| same_selection(&self.ranked_work, r, text, whole)) {
+                    if existing < position || self.ranked_work.kind[existing] != CandidateKind::Correction as u32 { continue; }
+                    remove_item_at(&mut self.ranked_work, existing);
+                }
+                self.ranked_work.insert_at(position, text, whole, self.reorder_buf.kind[i], self.reorder_buf.score_kind[i], self.reorder_buf.score[i]);
+                position += 1;
+                inserted += 1;
+                if inserted == 2 { break; }
+            }
+            self.ranked_work.truncate(CANDIDATE_LIMIT);
+        }
         crate::row::shape(&self.lexicon, &self.input, self.hans, &mut self.ranked_work, &self.row_work, &mut self.reorder_buf);
         crate::latin::promote(&mut self.ranked_work, self.input.len());
+        let whole = self.input.len();
+        if self.lexicon.pinyin && (4..=8).contains(&whole) && !(0..self.ranked_work.len()).any(|i| {
+            self.ranked_work.consumed[i] == whole && self.ranked_work.kind[i] == CandidateKind::Exact as u32
+        }) {
+            if let Some((text, score)) = dropped_letter_candidate(&self.lexicon, &self.input, self.hans) {
+                if !(0..self.ranked_work.len()).any(|i| same_selection(&self.ranked_work, i, text, whole)) {
+                    self.ranked_work.insert_at(3.min(self.ranked_work.len()), text, whole, CandidateKind::Correction as u32,
+                                               CandidateScoreKind::Fallback as u32, score);
+                    self.ranked_work.truncate(CANDIDATE_LIMIT);
+                }
+            }
+        }
         self.candidates.clear();
         for i in 0..self.ranked_work.len() {
             self.candidates.push(

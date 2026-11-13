@@ -10,7 +10,7 @@ import statistics
 from pathlib import Path
 
 root = Path(__file__).resolve().parent.parent
-resources = root / '.build/lexicon'
+resources = Path(sys.argv[1]) if len(sys.argv) > 1 else root / '.build/lexicon'
 if True:
     env = {**os.environ, 'PATH': f"{Path.home() / '.cargo/bin'}:{os.environ.get('PATH', '')}"}
     subprocess.run(['cargo', 'build', '--release', '-p', 'meowpuut-ffi'], cwd=root, env=env, check=True)

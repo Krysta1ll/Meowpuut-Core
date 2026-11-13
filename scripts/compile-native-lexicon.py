@@ -1,6 +1,7 @@
 """Compile the bundled mimo-tc, mimo-sc, and mimo-jp lexicons into portable UTF-8 tables."""
 import collections
 import functools
+import itertools
 import pathlib
 import re
 import sys
@@ -21,6 +22,40 @@ from mimo_names import names
 from mimo_pipeline import clamp_i16_weight, load_mimo_sc_dataset, load_mimo_tc_dataset, numbered_pinyin
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
+
+
+def write_zhuyin_initials(db):
+    """Materialize the same first 32 rows as the former phonetic GLOB query."""
+    initials = "1qaz2wsxedcrfv5tgbyhn"
+    tones = " 6347"
+    db.execute("""CREATE TABLE zhuyin_initials(
+        initials TEXT, position INTEGER, hant TEXT, hans TEXT, weight INTEGER,
+        PRIMARY KEY(initials,position)) WITHOUT ROWID""")
+
+    def index_rows():
+        positions = collections.defaultdict(int)
+        # The previous phonetic index breaks weight ties in phonetic and
+        # primary-key order. Keep that order even when the new table is used.
+        rows = db.execute("""SELECT phonetic,hant,hans,weight FROM lexicon
+            WHERE length(hant) BETWEEN 2 AND 4
+            ORDER BY weight DESC,phonetic,reading,hant,hans""")
+        for phonetic, hant, hans, weight in rows:
+            if not phonetic or phonetic[0] not in initials or phonetic[-1] not in tones:
+                continue
+            # A GLOB * can cross extra syllables. The first initial must be
+            # first, and each later initial must immediately follow a tone.
+            following = [key for tone, key in zip(phonetic, phonetic[1:])
+                         if tone in tones and key in initials]
+            for suffix in set(itertools.combinations(following, len(hant) - 1)):
+                keys = phonetic[0] + "".join(suffix)
+                position = positions[keys]
+                if position < 32:
+                    yield keys, position, hant, hans, weight
+                    positions[keys] += 1
+
+    db.executemany("INSERT INTO zhuyin_initials VALUES(?,?,?,?,?)", index_rows())
+
+
 KEYS = dict(zip("bpmfdtnlgkhjqxZCSrzcsiuvaoeEAIOUMNKGR12345",
                 "1qaz2wsxedcrfv5tgbyhnujm8ik,9ol.0p;/- 6347"))
 FINALS = {
@@ -528,6 +563,7 @@ def main(destination, converter, *options):
         for item in items: record("ja", reading.replace("'", ""), item["text"], item["weight"])
     db.execute("CREATE INDEX lexicon_phonetic ON lexicon(phonetic)")
     db.execute("CREATE INDEX lexicon_bare ON lexicon(bare)")
+    write_zhuyin_initials(db)
     db.commit(); db.close()
     print(f"Meowpuut overlay: {authored_count} Chinese rows; {len(japanese)} Japanese readings; total {len(words):,} Chinese readings")
 

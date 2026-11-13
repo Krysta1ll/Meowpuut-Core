@@ -68,8 +68,12 @@ pub struct MPNSession {
 
 impl MPNSession {
     pub(crate) fn new(lexicon: Arc<Lexicon>) -> Self {
+        Self::from_session(Arc::clone(&lexicon), Session::new(lexicon))
+    }
+
+    pub(crate) fn from_session(lexicon: Arc<Lexicon>, core: Session) -> Self {
         let mut session = Self {
-            core: Session::new(Arc::clone(&lexicon)),
+            core,
             lexicon,
             predictor: Predictor::new(),
             input: CBuf::with_capacity(512),
