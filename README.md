@@ -17,6 +17,6 @@ python3 scripts/check-japanese-lexicon.py
 
 詞庫產物在 `.build/lexicon/`，C 介面在 `crates/meowpuut-ffi/include/meowpuut.h`。客戶端按 Git 提交固定引擎與詞庫，兩者一同更新。
 
-程式依 [MIT](LICENSE) 授權。詞庫的來源及授權分別列在 [THIRD_PARTY.md](THIRD_PARTY.md) 和 `DataSources/` 各目錄。早期 C++ 版保存在 `legacy-cpp` 標籤。
+程式依 [MIT](LICENSE) 授權。詞庫的來源及授權分別列在 [THIRD_PARTY.md](THIRD_PARTY.md) 和 `DataSources/` 各目錄。
 
 [鍵盤設定與支援](docs/IOS_SUPPORT.md) · [iOS 私隱政策](docs/IOS_PRIVACY.md)
