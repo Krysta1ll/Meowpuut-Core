@@ -26,23 +26,28 @@ fn nine_key_converts_and_commits_only_the_selected_digits() {
         for key in keys.bytes() {
             assert!(session.key(i32::from(key)));
         }
-        assert_eq!(session.preedit(), keys);
+        assert_eq!(session.input(), keys);
     };
     type_keys(&mut session, "74");
+    assert_eq!(session.preedit(), "qi");
     assert_eq!(session.candidate(0), "起");
     assert_eq!(session.candidate(1), "皮");
     type_keys(&mut session, "6442696");
+    assert_eq!(session.preedit(), "ni hao wo");
     let prefix = (0..session.candidate_count()).find(|&i| session.candidate(i) == "你好").unwrap();
     assert_eq!(session.candidate_consumed(prefix), 5);
     assert!(session.choose(prefix));
     assert_eq!((session.committed(), session.input()), ("你好", "96"));
     assert_eq!(session.candidate(0), "我");
+    assert_eq!(session.preedit(), "wo");
     assert!(session.key(0xff08));
     assert_eq!(session.input(), "9");
+    assert_eq!(session.preedit(), "9");
     assert!(session.key(0xff08));
     assert_eq!(session.candidate_count(), 0);
 
     type_keys(&mut session, "64426965");
+    assert_eq!(session.preedit(), "ni hao wo 5");
     assert_eq!((session.candidate(0), session.candidate_consumed(0)), ("你好我", 7));
     assert_eq!(session.candidate_info(0).unwrap().kind, CandidateKind::Partial as u32);
     assert!(session.choose(0));
@@ -86,15 +91,18 @@ fn nine_key_word_break_constrains_matches_and_stays_in_preedit() {
     assert!(!session.key(i32::from(b'\'')));
     keys(&mut session, "54626");
     assert_eq!(session.candidate(0), "濟南");
+    assert_eq!(session.preedit(), "ji nan");
 
     session.clear();
     keys(&mut session, "546'");
     assert_eq!((session.candidate(0), session.candidate_consumed(0)), ("今", 4));
+    assert_eq!(session.preedit(), "jin'");
     assert!(!session.key(i32::from(b'\'')));
     assert!(session.key(0xff08));
-    assert_eq!(session.preedit(), "546");
+    assert_eq!(session.preedit(), "jin");
     keys(&mut session, "'26");
     assert_eq!(session.candidate(0), "今安");
+    assert_eq!(session.preedit(), "jin'an");
     assert_eq!(session.candidate_info(0).unwrap().kind, CandidateKind::Exact as u32);
     assert!((0..session.candidate_count()).all(|i| session.candidate(i) != "濟南"));
     let prefix = (0..session.candidate_count()).find(|&i| session.candidate(i) == "今").unwrap();
@@ -105,6 +113,7 @@ fn nine_key_word_break_constrains_matches_and_stays_in_preedit() {
     session.clear();
     keys(&mut session, "999'999");
     assert_eq!(session.candidate_count(), 0);
+    assert_eq!(session.preedit(), "999'999");
     assert!(session.key(0xff0d));
     assert_eq!(session.committed(), "999999");
 }

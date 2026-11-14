@@ -122,7 +122,7 @@ impl Session {
         }
 
         if let Some(index) = &self.nine_key {
-            index.decode(&self.lexicon, &self.japanese, self.input.as_bytes(), self.hans, self.scratch.lattice.left, &mut self.candidates);
+            index.decode(&self.lexicon, &self.japanese, self.input.as_bytes(), self.hans, self.scratch.lattice.left, &mut self.candidates, &mut self.preedit);
             self.page = 0;
             return;
         }
