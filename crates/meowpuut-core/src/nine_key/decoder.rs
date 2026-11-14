@@ -21,6 +21,7 @@ fn word_score(weight: i32) -> f64 {
 }
 
 impl NineKeyIndex {
+    #[allow(clippy::too_many_arguments)]
     pub(crate) fn decode(
         &self,
         lexicon: &Lexicon,
@@ -52,7 +53,7 @@ impl<'a> Decoder<'a> {
         let length = self.keys.digits.len();
         let longest = self.lexicon.longest.max(20); // Registered Japanese readings are at most 20 keys.
         let mut paths: Vec<_> = (0..=length).map(|_| Paths::default()).collect();
-        paths[0].chinese.push(Path { text: String::new(), reading: Some(String::new()), score: 0.0, last: Some(left) });
+        paths[0].chinese.push(Path { text: String::new(), reading: String::new(), score: 0.0, last: Some(left) });
         let mut choices = Choices::default();
         let mut words = SpanWords::default();
         for start in 0..length {
@@ -104,7 +105,7 @@ impl<'a> Decoder<'a> {
         for row in self.index.japanese_rows(self.japanese, keys, hash) {
             let word = Word {
                 text: self.japanese.text(row),
-                reading: Some(self.japanese.reading(row)),
+                reading: self.japanese.reading(row),
                 score: word_score(self.japanese.weight[row]),
                 id: None,
                 kind: CandidateKind::Japanese,
@@ -142,7 +143,7 @@ impl<'a> Decoder<'a> {
                 let id = lexicon.pairs().map_or(START, |_| lexicon.index.word_ids.ids.get(row));
                 buffer.words.push(Word {
                     text: lexicon.words.text(&lexicon.storage, row, self.hans),
-                    reading: spelled.then(|| lexicon.words.reading(&lexicon.storage, row)),
+                    reading: lexicon.words.reading(&lexicon.storage, row),
                     score,
                     id: Some(id),
                     kind: if spelled { CandidateKind::Exact } else { CandidateKind::Correction },
@@ -164,7 +165,7 @@ struct SpanWords<'a> {
 #[derive(Clone, Copy)]
 struct Word<'a> {
     text: &'a str,
-    reading: Option<&'a str>,
+    reading: &'a str,
     score: f64,
     id: Option<u32>,
     kind: CandidateKind,
@@ -174,7 +175,7 @@ impl<'a> Word<'a> {
     fn choice(self, consumed: usize, kind: CandidateKind) -> Choice<'a> {
         Choice {
             text: self.text.into(),
-            reading: self.reading.map(Cow::Borrowed),
+            reading: self.reading.into(),
             consumed,
             score: self.score,
             kind,
@@ -185,7 +186,7 @@ impl<'a> Word<'a> {
 
 struct Path {
     text: String,
-    reading: Option<String>,
+    reading: String,
     score: f64,
     last: Option<u32>,
 }
@@ -235,20 +236,17 @@ fn push_path(output: &mut Vec<Path>, previous: &Path, word: Word<'_>, score: f64
         }
         output.remove(same);
     }
-    let reading = previous.reading.as_ref().zip(word.reading).map(|(previous, word)| {
-        let mut reading = String::with_capacity(previous.len() + word.len() + 1);
-        reading.push_str(previous);
-        if !reading.is_empty() { reading.push(' '); }
-        reading.push_str(word);
-        reading
-    });
+    let mut reading = String::with_capacity(previous.reading.len() + word.reading.len() + 1);
+    reading.push_str(&previous.reading);
+    if !reading.is_empty() { reading.push(' '); }
+    reading.push_str(word.reading);
     output.insert(at, Path { text, reading, score, last: word.id });
     output.truncate(PATHS);
 }
 
 struct Choice<'a> {
     text: Cow<'a, str>,
-    reading: Option<Cow<'a, str>>,
+    reading: Cow<'a, str>,
     consumed: usize,
     score: f64,
     kind: CandidateKind,
@@ -268,7 +266,7 @@ impl Choices<'_> {
         let length = keys.consumed(keys.digits.len());
         let from_path = |path: Path, consumed, kind| Choice {
             text: path.text.into(),
-            reading: path.reading.map(Cow::Owned),
+            reading: path.reading.into(),
             consumed,
             score: path.score,
             kind,
@@ -303,48 +301,54 @@ impl Choices<'_> {
         first.extend(partial.by_ref().take(2));
         let order = first.into_iter().chain(complete).chain(japanese).chain(partial);
         let mut added = HashSet::new();
-        let mut display = None;
-        for choice in order.filter(|c| added.insert((c.text.as_ref(), c.consumed))).take(CANDIDATE_LIMIT) {
-            if display.is_none_or(|best: &Choice<'_>| best.consumed < choice.consumed) && choice.reading.is_some() {
-                display = Some(choice);
+        for (rank, choice) in order.filter(|c| added.insert((c.text.as_ref(), c.consumed))).take(CANDIDATE_LIMIT).enumerate() {
+            // The preedit spells the leading candidate, abbreviated words included.
+            if rank == 0 {
+                show_reading(preedit, &choice.reading, choice.consumed, keys);
             }
             out.push(&choice.text, choice.consumed, choice.kind as u32, choice.score_kind as u32, choice.score);
-        }
-        if let Some((reading, consumed)) = display.and_then(|choice| {
-            choice.reading.as_deref().map(|reading| (reading, choice.consumed))
-        }) {
-            show_reading(preedit, reading, consumed, keys);
         }
     }
 }
 
+/// Replaces the raw keys in `preedit` with `reading` for the first `consumed`
+/// input bytes, keeping the rest as typed. The text is built after the raw
+/// keys and the keys are then dropped, so the session buffer is reused.
 fn show_reading(preedit: &mut String, reading: &str, consumed: usize, keys: &KeyReading<'_>) {
+    let raw = preedit.len();
+    if !push_reading(preedit, reading, consumed, keys) {
+        preedit.truncate(raw);
+        return;
+    }
+    if consumed < raw {
+        if !preedit.ends_with('\'') { preedit.push(' '); }
+        preedit.extend_from_within(consumed..raw);
+    }
+    preedit.drain(..raw);
+}
+
+fn push_reading(out: &mut String, reading: &str, consumed: usize, keys: &KeyReading<'_>) -> bool {
     let mut position = 0;
     let mut boundary = false;
     let mut breaks = keys.breaks.iter().copied().peekable();
-    let mut display = String::with_capacity(preedit.len() + 8);
     for byte in reading.bytes() {
         if byte.is_ascii_lowercase() {
-            if keys.digits.get(position) != Some(&digit(byte)) { return; }
+            if keys.digits.get(position) != Some(&digit(byte)) { return false; }
             if breaks.peek() == Some(&position) {
                 breaks.next();
-                display.push('\'');
+                out.push('\'');
             } else if boundary {
-                display.push(' ');
+                out.push(' ');
             }
             boundary = false;
-            display.push(char::from(byte));
+            out.push(char::from(byte));
             position += 1;
         } else if is_tone(byte, true) || byte == b' ' || byte == b'\'' {
             boundary = true;
         }
     }
     // Never replace digits with a reading that does not match their length.
-    if position == 0 || keys.consumed(position) != consumed { return; }
-    if breaks.peek() == Some(&position) { display.push('\''); }
-    if consumed < preedit.len() {
-        if !display.ends_with('\'') { display.push(' '); }
-        display.push_str(&preedit[consumed..]);
-    }
-    *preedit = display;
+    if position == 0 || keys.consumed(position) != consumed { return false; }
+    if breaks.peek() == Some(&position) { out.push('\''); }
+    true
 }

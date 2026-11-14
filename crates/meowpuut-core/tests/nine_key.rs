@@ -117,3 +117,41 @@ fn nine_key_word_break_constrains_matches_and_stays_in_preedit() {
     assert!(session.key(0xff0d));
     assert_eq!(session.committed(), "999999");
 }
+
+#[test]
+fn nine_key_preedit_spells_the_leading_abbreviated_candidate() {
+    let lexicon = Arc::new(Lexicon::load(concat!(
+        "MEOWPUUT-PINYIN-1\n",
+        "n\tn3\t你\t你\t9000\n",
+        "o\to4\t哦\t哦\t3000\n",
+    )).unwrap());
+    let mut session = Session::new_nine_key(lexicon).unwrap();
+    assert!(session.key(i32::from(b'6')));
+    assert_eq!(session.candidate_info(0).unwrap().kind, CandidateKind::Correction as u32);
+    assert_eq!((session.candidate(0), session.preedit()), ("你", "n"));
+}
+
+#[test]
+fn nine_key_reading_reuses_the_preedit_buffer() {
+    let lexicon = Arc::new(Lexicon::load(concat!(
+        "MEOWPUUT-PINYIN-1\n",
+        "hao\thao3\t好\t好\t4800\n",
+        "ni\tni3\t你\t你\t5000\n",
+        "nihao\tni3hao3\t你好\t你好\t5500\n",
+        "qi\tqi3\t起\t起\t5500\n",
+        "wo\two3\t我\t我\t5600\n",
+    )).unwrap());
+    let mut session = Session::new_nine_key(lexicon).unwrap();
+    let typed = |session: &mut Session, keys: &str| {
+        session.clear();
+        for key in keys.bytes() {
+            assert!(session.key(i32::from(key)));
+        }
+    };
+    typed(&mut session, "64426965");
+    assert_eq!(session.preedit(), "ni hao wo 5");
+    let warm = session.capacity_signature();
+    typed(&mut session, "74");
+    assert_eq!(session.preedit(), "qi");
+    assert_eq!(session.capacity_signature(), warm, "showing a shorter reading shrank the buffers");
+}
