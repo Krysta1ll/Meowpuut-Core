@@ -1,22 +1,33 @@
 # Independently authored vocabulary and overrides. Columns: traditional|simplified|pinyin|editorial priority.
 # Priorities are design choices, not measured corpus frequencies. No imported dictionary rows.
+# A row directly followed by the line `#outranks-ok` is a reviewed choice to rank above a heavier word of the same
+# bare reading (tones ignored), as the everyday word; scripts/check-lexicon.py fails any other such row.
 你好|你好|ni3 hao3|10000
 妳好|妳好|ni3 hao3|1000
 你|你|ni3|9000
+#outranks-ok
 妳|妳|ni3|1000
 擬|拟|ni3|300
 泥|泥|ni2|500
 好|好|hao3|9000
+#outranks-ok
 號|号|hao4|6500
+#outranks-ok
 我|我|wo3|10000
+#outranks-ok
 # Reviewed common single-character homophones; weights are editorial priors.
 幫|帮|bang1|8200
+#outranks-ok
 棒|棒|bang4|7300
+#outranks-ok
 綁|绑|bang3|6800
+#outranks-ok
 榜|榜|bang3|6600
+#outranks-ok
 邦|邦|bang1|6000
 浜|浜|bang1|2200
 行|行|hang2|6800
+#outranks-ok
 航|航|hang2|5800
 絎|绗|hang2|1600
 紝|紝|ren4|1600
@@ -25,15 +36,24 @@
 我們|我们|wo3 men5|10000
 你們|你们|ni3 men5|8000
 他們|他们|ta1 men5|8000
+#outranks-ok
 他|他|ta1|7000
+#outranks-ok
 她|她|ta1|6000
+#outranks-ok
 它|它|ta1|5000
 的|的|de5|10000
+#outranks-ok
 了|了|le5|10000
+#outranks-ok
 是|是|shi4|10000
+#outranks-ok
 事|事|shi4|8000
+#outranks-ok
 市|市|shi4|7000
+#outranks-ok
 式|式|shi4|6000
+#outranks-ok
 試|试|shi4|5000
 世|世|shi4|4000
 視|视|shi4|3000
@@ -43,10 +63,13 @@
 適|适|shi4|1500
 釋|释|shi4|1200
 時|时|shi2|9000
+#outranks-ok
 十|十|shi2|6000
+#outranks-ok
 食|食|shi2|5000
 實|实|shi2|4000
 識|识|shi2|3000
+#outranks-ok
 使|使|shi3|3000
 史|史|shi3|2000
 始|始|shi3|1500
@@ -55,7 +78,9 @@
 失|失|shi1|3000
 濕|湿|shi1|1000
 蘇軾|苏轼|su1 shi4|10000
+#outranks-ok
 素食|素食|su4 shi2|8000
+#outranks-ok
 速食|速食|su4 shi2|5000
 俗世|俗世|su2 shi4|2000
 俗事|俗事|su2 shi4|1000
@@ -66,19 +91,27 @@
 中國|中国|zhong1 guo2|10000
 中文|中文|zhong1 wen2|9000
 中|中|zhong1|9000
+#outranks-ok
 重|重|zhong4|7000
+#outranks-ok
 種|种|zhong4|4000
+#outranks-ok
 眾|众|zhong4|3000
 重要|重要|zhong4 yao4|7000
 重新|重新|chong2 xin1|6000
 臺灣|台湾|tai2 wan1|8000
+#outranks-ok
 台灣|台湾|tai2 wan1|7000
+#outranks-ok
 香港|香港|xiang1 gang3|8000
 北京|北京|bei3 jing1|8000
+#outranks-ok
 背景|背景|bei4 jing3|7000
 背影|背影|bei4 ying3|3000
 西安|西安|xi1 an1|7000
+#outranks-ok
 先|先|xian1|8000
+#outranks-ok
 日本|日本|ri4 ben3|8000
 日語|日语|ri4 yu3|8000
 日文|日文|ri4 wen2|8000
@@ -91,6 +124,7 @@
 引擎|引擎|yin3 qing2|6000
 自研|自研|zi4 yan2|6000
 程式|程式|cheng2 shi4|6000
+#outranks-ok
 程序|程序|cheng2 xu4|6000
 軟體|软体|ruan3 ti3|6000
 軟件|软件|ruan3 jian4|6000
@@ -100,6 +134,7 @@
 問題|问题|wen4 ti2|9000
 可以|可以|ke3 yi3|10000
 不行|不行|bu4 xing2|6000
+#outranks-ok
 不會|不会|bu4 hui4|6000
 不要|不要|bu2 yao4|7000
 不要|不要|bu4 yao4|7000
@@ -118,11 +153,14 @@
 明天|明天|ming2 tian1|8000
 昨天|昨天|zuo2 tian1|7000
 時間|时间|shi2 jian1|8000
+#outranks-ok
 什麼|什么|shen2 me5|9000
+#outranks-ok
 為什麼|为什么|wei4 shen2 me5|8000
 怎麼|怎么|zen3 me5|8000
 這個|这个|zhe4 ge5|9000
 那個|那个|na4 ge5|8000
+#outranks-ok
 這樣|这样|zhe4 yang4|8000
 一個|一个|yi2 ge5|8000
 一個|一个|yi1 ge5|8000
@@ -149,6 +187,7 @@
 孩子|孩子|hai2 zi5|7000
 名字|名字|ming2 zi5|7000
 老師|老师|lao3 shi1|7000
+#outranks-ok
 學生|学生|xue2 sheng1|7000
 學校|学校|xue2 xiao4|7000
 學習|学习|xue2 xi2|7000
@@ -157,10 +196,13 @@
 生活|生活|sheng1 huo2|7000
 休息|休息|xiu1 xi2|7000
 睡覺|睡觉|shui4 jiao4|7000
+#outranks-ok
 吃飯|吃饭|chi1 fan4|8000
 喝水|喝水|he1 shui3|7000
 茶|茶|cha2|7000
+#outranks-ok
 水|水|shui3|7000
+#outranks-ok
 水果|水果|shui3 guo3|6000
 蘋果|苹果|ping2 guo3|6000
 米飯|米饭|mi3 fan4|5000
@@ -176,8 +218,10 @@
 我們今天去看電影|我们今天去看电影|wo3 men5 jin1 tian1 qu4 kan4 dian4 ying3|7000
 我想喝咖啡|我想喝咖啡|wo3 xiang3 he1 ka1 fei1|6000
 書|书|shu1|6000
+#outranks-ok
 電腦|电脑|dian4 nao3|7000
 手機|手机|shou3 ji1|7000
+#outranks-ok
 鍵盤|键盘|jian4 pan2|7000
 滑鼠|滑鼠|hua2 shu3|6000
 鼠標|鼠标|shu3 biao1|6000
@@ -189,10 +233,13 @@
 液態玻璃|液态玻璃|ye4 tai4 bo1 li2|6000
 透明|透明|tou4 ming2|6000
 設計|设计|she4 ji4|6000
+#outranks-ok
 風格|风格|feng1 ge2|6000
 小貓|小猫|xiao3 mao1|7000
 貓|猫|mao1|6000
+#outranks-ok
 狗|狗|gou3|6000
+#outranks-ok
 米米莫|米米莫|mi3 mi3 mo4|8000
 莫莫|莫莫|mo4 mo4|8000
 記憶|记忆|ji4 yi4|6000
@@ -233,17 +280,23 @@
 班味|班味|ban1 wei4|5000
 充電寶|充电宝|chong1 dian4 bao3|6000
 權利|权利|quan2 li4|6000
+#outranks-ok
 權力|权力|quan2 li4|5500
 全力|全力|quan2 li4|4000
 行使權利|行使权利|xing2 shi3 quan2 li4|6000
-中央權力|中央权力|zhong1 yang1 quan2 li4|6000
-權力過大|权力过大|quan2 li4 guo4 da4|6000
+全力以赴|全力以赴|quan2 li4 yi3 fu4|6000
+電力過大|电力过大|dian4 li4 guo4 da4|6000
 事蹟|事迹|shi4 ji1|6000
+#outranks-ok
 事蹟|事迹|shi4 ji4|5000
+#outranks-ok
 世紀|世纪|shi4 ji4|7000
+#outranks-ok
 實際|实际|shi2 ji4|7000
+#outranks-ok
 紀錄|记录|ji4 lu4|6000
 記錄|记录|ji4 lu4|6500
+#outranks-ok
 打破紀錄|打破记录|da3 po4 ji4 lu4|6500
 安全|安全|an1 quan2|6000
 方便|方便|fang1 bian4|6000
@@ -281,6 +334,7 @@
 鬆弛感|松弛感|song1 chi2 gan3|7500
 情緒價值|情绪价值|qing2 xu4 jia4 zhi2|7500
 搭子|搭子|da1 zi5|7000
+#outranks-ok
 上頭|上头|shang4 tou2|7500
 下頭|下头|xia4 tou2|7000
 離譜|离谱|li2 pu3|8000
@@ -300,6 +354,7 @@
 爆改|爆改|bao4 gai3|7000
 顯眼包|显眼包|xian3 yan3 bao1|7000
 真香|真香|zhen1 xiang1|7500
+#outranks-ok
 好耶|好耶|hao3 ye2|7500
 開心|开心|kai1 xin1|9000
 難過|难过|nan2 guo4|8500
@@ -307,8 +362,10 @@
 謝謝|谢谢|xie4 xie5|9500
 晚安|晚安|wan3 an1|9000
 加油|加油|jia1 you2|9000
+#outranks-ok
 喜歡|喜欢|xi3 huan1|9000
 抱抱|抱抱|bao4 bao4|8000
+#outranks-ok
 可愛|可爱|ke3 ai4|8500
 咖啡|咖啡|ka1 fei1|8500
 貓咪|猫咪|mao1 mi1|8500
@@ -321,10 +378,13 @@
 嗷嗚|嗷呜|ao2 wu1|7000
 真的|真的|zhen1 de5|9000
 確實|确实|que4 shi2|8500
+#outranks-ok
 沒錯|没错|mei2 cuo4|8500
 理解|理解|li3 jie3|8500
 收到|收到|shou1 dao4|8500
+#outranks-ok
 支持|支持|zhi1 chi2|8500
+#outranks-ok
 辛苦|辛苦|xin1 ku3|8500
 恭喜|恭喜|gong1 xi3|8500
 生日快樂|生日快乐|sheng1 ri4 kuai4 le4|8500
@@ -342,10 +402,12 @@
 永遠的神|永远的神|yong3 yuan3 de5 shen2|7000
 絕了|绝了|jue2 le5|7500
 喵|喵|miao1|7000
+#outranks-ok
 喵撲|喵扑|miao1 pu1|9000
 # Everyday digital, mobile, transport & AI vocabulary.
 截圖|截图|jie2 tu2|6800
 錄影|录影|lu4 ying3|6500
+#outranks-ok
 轉帳|转账|zhuan3 zhang4|6800
 帳號|账号|zhang4 hao4|7200
 密碼|密码|mi4 ma3|7200
@@ -377,13 +439,17 @@
 貼文|贴文|tie1 wen2|6400
 限時動態|限时动态|xian4 shi2 dong4 tai4|6500
 置頂|置顶|zhi4 ding3|6400
+#outranks-ok
 私訊|私讯|si1 xun4|6500
 私信|私信|si1 xin4|6500
 通知|通知|tong1 zhi1|7200
+#outranks-ok
 訊息|讯息|xun4 xi2|7200
 消息|消息|xiao1 xi5|7500
 連結|连结|lian2 jie2|6800
+#outranks-ok
 鏈接|链接|lian4 jie1|6800
+#outranks-ok
 人工智能|人工智能|ren2 gong1 zhi4 neng2|7500
 人工智慧|人工智慧|ren2 gong1 zhi4 hui4|7500
 大模型|大模型|da4 mo2 xing2|7200
@@ -397,3 +463,135 @@
 快捷鍵|快捷键|kuai4 jie2 jian4|6800
 深色模式|深色模式|shen1 se4 mo2 shi4|6600
 觸覺回饋|触觉回馈|chu4 jue2 hui2 kui4|6400
+# 2026-11-14: everyday words, phrases and idioms that are missing or ranked too low (chat, food, shopping, transport, study, work, feelings, weather, health).
+已讀|已读|yi3 du2|7000
+未讀|未读|wei4 du2|4600
+撤回|撤回|che4 hui2|6800
+語音通話|语音通话|yu3 yin1 tong1 hua4|6600
+視訊通話|视讯通话|shi4 xun4 tong1 hua4|5800
+視頻通話|视频通话|shi4 pin2 tong1 hua4|6400
+群聊|群聊|qun2 liao2|6200
+加好友|加好友|jia1 hao3 you3|6200
+按讚|按赞|an4 zan4|6600
+點讚|点赞|dian3 zan4|6600
+下線|下线|xia4 xian4|5600
+離線|离线|li2 xian4|6000
+掉線|掉线|diao4 xian4|6000
+網速|网速|wang3 su4|6000
+重新開機|重新开机|chong2 xin1 kai1 ji1|5800
+收款|收款|shou1 kuan3|6200
+發紅包|发红包|fa1 hong2 bao1|6600
+搶紅包|抢红包|qiang3 hong2 bao1|6400
+優惠券|优惠券|you1 hui4 quan4|6800
+免運費|免运费|mian3 yun4 fei4|6600
+收件人|收件人|shou1 jian4 ren2|6400
+宅配|宅配|zhai2 pei4|5600
+超商取貨|超商取货|chao1 shang1 qu3 huo4|6200
+取件|取件|qu3 jian4|6000
+配送|配送|pei4 song4|6200
+加入購物車|加入购物车|jia1 ru4 gou4 wu4 che1|6200
+限時|限时|xian4 shi2|6100
+#outranks-ok
+秒殺|秒杀|miao3 sha1|6200
+團購|团购|tuan2 gou4|6400
+跟團|跟团|gen1 tuan2|5400
+轉車|转车|zhuan3 che1|6000
+加油站|加油站|jia1 you2 zhan4|6200
+微辣|微辣|wei1 la4|4800
+小辣|小辣|xiao3 la4|5400
+大辣|大辣|da4 la4|5600
+不要香菜|不要香菜|bu2 yao4 xiang1 cai4|5400
+不要香菜|不要香菜|bu4 yao4 xiang1 cai4|5400
+補眠|补眠|bu3 mian2|5600
+睡過頭|睡过头|shui4 guo4 tou2|6600
+早退|早退|zao3 tui4|6000
+簡報|简报|jian3 bao4|6200
+投影片|投影片|tou2 ying3 pian4|5800
+幻燈片|幻灯片|huan4 deng1 pian4|5600
+期中考|期中考|qi1 zhong1 kao3|6000
+期末考|期末考|qi1 mo4 kao3|6000
+學分|学分|xue2 fen1|5800
+蹺課|翘课|qiao1 ke4|5200
+及格|及格|ji2 ge2|5000
+滿分|满分|man3 fen1|6000
+下屬|下属|xia4 shu3|5600
+無言|无言|wu2 yan2|5600
+心累|心累|xin1 lei4|5800
+壓力大|压力大|ya1 li4 da4|6400
+節哀|节哀|jie2 ai1|5000
+待會|待会|dai4 hui4|7200
+幫我|帮我|bang1 wo3|7000
+請幫我|请帮我|qing3 bang1 wo3|6000
+老是|老是|lao3 shi4|6700
+午安|午安|wu3 an1|5800
+下班了|下班了|xia4 ban1 le5|6400
+吃飯了嗎|吃饭了吗|chi1 fan4 le5 ma5|6600
+在嗎|在吗|zai4 ma5|7200
+有空嗎|有空吗|you3 kong4 ma5|6800
+到哪裡|到哪里|dao4 na3 li3|6400
+最近好嗎|最近好吗|zui4 jin4 hao3 ma5|6400
+新年快樂|新年快乐|xin1 nian2 kuai4 le4|7000
+聖誕快樂|圣诞快乐|sheng4 dan4 kuai4 le4|6400
+恭喜發財|恭喜发财|gong1 xi3 fa1 cai2|6400
+萬事如意|万事如意|wan4 shi4 ru2 yi4|6000
+心想事成|心想事成|xin1 xiang3 shi4 cheng2|6000
+一帆風順|一帆风顺|yi1 fan1 feng1 shun4|5600
+一見鍾情|一见钟情|yi2 jian4 zhong1 qing2|5800
+一見鍾情|一见钟情|yi1 jian4 zhong1 qing2|5800
+自由自在|自由自在|zi4 you2 zi4 zai4|5600
+半信半疑|半信半疑|ban4 xin4 ban4 yi2|5600
+無可奈何|无可奈何|wu2 ke3 nai4 he2|5400
+迫不及待|迫不及待|po4 bu4 ji2 dai4|5600
+理所當然|理所当然|li3 suo3 dang1 ran2|5600
+樂在其中|乐在其中|le4 zai4 qi2 zhong1|5200
+將心比心|将心比心|jiang1 xin1 bi3 xin1|5000
+不知所措|不知所措|bu4 zhi1 suo3 cuo4|5200
+有備無患|有备无患|you3 bei4 wu2 huan4|5000
+一步登天|一步登天|yi2 bu4 deng1 tian1|4600
+一步登天|一步登天|yi1 bu4 deng1 tian1|4600
+天長地久|天长地久|tian1 chang2 di4 jiu3|4800
+海闊天空|海阔天空|hai3 kuo4 tian1 kong1|5000
+百發百中|百发百中|bai3 fa1 bai3 zhong4|5000
+不由自主|不由自主|bu4 you2 zi4 zhu3|5000
+有求必應|有求必应|you3 qiu2 bi4 ying4|4800
+一見如故|一见如故|yi2 jian4 ru2 gu4|4800
+一見如故|一见如故|yi1 jian4 ru2 gu4|4800
+萬無一失|万无一失|wan4 wu2 yi1 shi1|4800
+雷陣雨|雷阵雨|lei2 zhen4 yu3|5400
+冷颼颼|冷飕飕|leng3 sou1 sou1|5000
+悶熱|闷热|men4 re4|5600
+紫外線|紫外线|zi3 wai4 xian4|5000
+空氣品質|空气品质|kong1 qi4 pin3 zhi4|5200
+空氣質量|空气质量|kong1 qi4 zhi4 liang4|5600
+煤氣|煤气|mei2 qi4|5200
+取款機|取款机|qu3 kuan3 ji1|3000
+垃圾分類|垃圾分类|la1 ji1 fen1 lei4|5600
+洗臉|洗脸|xi3 lian3|6000
+吹頭髮|吹头发|chui1 tou2 fa4|5400
+美甲|美甲|mei3 jia3|6000
+護膚|护肤|hu4 fu1|5800
+面膜|面膜|mian4 mo2|6000
+卸妝|卸妆|xie4 zhuang1|5000
+粉底|粉底|fen3 di3|5600
+睫毛膏|睫毛膏|jie2 mao2 gao1|5000
+乳液|乳液|ru3 ye4|5200
+敏感肌|敏感肌|min3 gan3 ji1|5200
+痘痘|痘痘|dou4 dou4|5600
+流鼻水|流鼻水|liu2 bi2 shui3|5000
+藥房|药房|yao4 fang2|5800
+掛急診|挂急诊|gua4 ji2 zhen3|4800
+急診|急诊|ji2 zhen3|5600
+預習|预习|yu4 xi2|5600
+背書|背书|bei4 shu1|5200
+考卷|考卷|kao3 juan4|4800
+解題|解题|jie3 ti2|5400
+生字|生字|sheng1 zi4|5000
+# Common everyday words the merged lists do not have (shopping, parcels, home, food, rest).
+網購|网购|wang3 gou4|6400
+寄丟|寄丢|ji4 diu1|5000
+管理室|管理室|guan3 li3 shi4|5200
+遛彎|遛弯|liu4 wan1|5000
+遛彎兒|遛弯儿|liu4 wan1 er5|4600
+黃燜雞|黄焖鸡|huang2 men4 ji1|5200
+黃燜雞米飯|黄焖鸡米饭|huang2 men4 ji1 mi3 fan4|5000
+補覺|补觉|bu3 jiao4|5200

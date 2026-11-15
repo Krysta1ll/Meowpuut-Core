@@ -46,8 +46,8 @@ fn shipped_base_in_place_equals_copy() {
     let v2: &'static [u8] = Box::leak(v2.into_boxed_slice());
 
     let inputs = [
-        (true, "nihao"), (true, "zhongguoren"), (true, "woxiangqu"), (true, "shi"), (true, "zhonghuarenmingongheguo"),
-        (true, "xian"), (true, "nhao"), (true, "zg"), (true, "jintiantianqihenhao"), (true, "lvse"),
+        (true, "nihao"), (true, "xuexiaoshitang"), (true, "woxiangqu"), (true, "shi"), (true, "woxiangquyigefujindekafeiguan"),
+        (true, "xian"), (true, "nhao"), (true, "py"), (true, "jintiantianqihenhao"), (true, "lvse"),
         (false, "su3cl3"), (false, "5j/ cj86"), (false, "ji3"), (false, "1j4ji3"), (false, "z/6"),
     ];
     for pinyin in [true, false] {

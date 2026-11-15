@@ -30,11 +30,17 @@
 //! ```
 
 pub mod api;
+pub mod english;
 pub mod japanese;
+pub mod pets;
+#[cfg(feature = "skin")]
+pub mod skin;
 pub mod text;
 
 pub use api::*;
+pub use english::*;
 pub use japanese::*;
+pub use pets::*;
 
 use std::ffi::{c_char, CStr};
 use std::panic::{catch_unwind, AssertUnwindSafe};
@@ -57,6 +63,8 @@ pub struct MPNSession {
     pub(crate) lexicon: Arc<Lexicon>,
     pub(crate) predictor: Predictor,
     pub(crate) input: CBuf,
+    pub(crate) input_text: CBuf,
+    pub(crate) input_text_work: String,
     pub(crate) preedit: CBuf,
     pub(crate) committed: CBuf,
     pub(crate) context: CBuf,
@@ -77,6 +85,8 @@ impl MPNSession {
             lexicon,
             predictor: Predictor::new(),
             input: CBuf::with_capacity(512),
+            input_text: CBuf::with_capacity(1024),
+            input_text_work: String::with_capacity(1024),
             preedit: CBuf::with_capacity(1024),
             committed: CBuf::with_capacity(1024),
             context: CBuf::with_capacity(128),
@@ -92,6 +102,8 @@ impl MPNSession {
     /// Refreshes every C mirror after a mutation (allocation-free once warm).
     pub(crate) fn sync(&mut self) {
         self.input.set(self.core.input());
+        self.core.input_text_into(&mut self.input_text_work);
+        self.input_text.set(&self.input_text_work);
         self.preedit.set(self.core.preedit());
         self.committed.set(self.core.committed());
         self.context.set(self.core.segment_context());

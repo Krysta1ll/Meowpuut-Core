@@ -1,4 +1,9 @@
 //! Telephone keypad lookup over the Pinyin buckets and reviewed Japanese readings.
+//!
+//! Besides spelled readings, the keys can be the initials of a word (99 for
+//! x4z4, 現在) and the letters of an English word of the Latin list (65 for
+//! OK). Both come from rows of the Pinyin lexicon: the initials-only
+//! abbreviation rows and the upper-case Latin rows (see latin.rs).
 
 mod decoder;
 
@@ -11,6 +16,12 @@ use crate::soa::JapaneseTableSoA;
 
 const DIGITS: &[u8; 26] = b"22233344455566677778889999";
 pub(crate) const SEPARATOR: u8 = b'\'';
+/// Most initials typed for one abbreviated word (xzsj, 心臟衰竭).
+pub(crate) const INITIALS: usize = 6;
+/// Lightest abbreviation row indexed (an eighth of 4000); lighter ones are mostly names.
+pub(crate) const INITIALS_WEIGHT: i32 = 500;
+/// Rows read to find an abbreviated word by its text.
+const INITIALS_ROWS: usize = 128;
 
 struct KeyReading<'a> {
     digits: Cow<'a, [u8]>,
@@ -59,7 +70,13 @@ fn matches_breaks(reading: &str, start: usize, mut breaks: &[usize]) -> bool {
 }
 
 fn digit(letter: u8) -> u8 {
-    DIGITS[usize::from(letter - b'a')]
+    DIGITS[usize::from(letter.to_ascii_lowercase() - b'a')]
+}
+
+/// True for a reading of one letter per syllable (x4z4), `syllables` long.
+pub(crate) fn is_initials(reading: &str, syllables: usize) -> bool {
+    let r = reading.as_bytes();
+    r.len() == 2 * syllables && r.as_chunks::<2>().0.iter().all(|&[letter, tone]| letter.is_ascii_lowercase() && is_tone(tone, true))
 }
 
 fn signature(digits: impl Iterator<Item = u8>) -> u32 {
@@ -89,24 +106,44 @@ fn lookup(index: &[u64], hash: u32) -> impl Iterator<Item = usize> + '_ {
 #[derive(Debug, Clone)]
 pub(crate) struct NineKeyIndex {
     chinese: Vec<u64>,
+    /// Initials-only abbreviation rows (x4z4), heaviest first for each signature.
+    initials: Vec<u64>,
+    /// Buckets of English words (IPHONE), by the digits of their letters.
+    latin: Vec<u64>,
     japanese: Vec<u64>,
 }
 
 impl NineKeyIndex {
     pub(crate) fn new(lexicon: &Lexicon) -> Self {
         let mut chinese = Vec::with_capacity(lexicon.buckets.len());
+        let mut initials = Vec::new();
+        let mut latin = Vec::new();
         for row in 0..lexicon.buckets.len() {
             let reading = lexicon.buckets.key(&lexicon.storage, row);
             let (lo, hi) = lexicon.buckets.range(row);
-            if reading.bytes().all(|b| b.is_ascii_lowercase())
-                && (reading.len() == 1 || (lo..hi).any(|i| lexicon.words.is_fully_spelled(i)))
-            {
-                chinese.push(entry(reading, row));
+            if reading.bytes().all(|b| b.is_ascii_lowercase()) {
+                if reading.len() == 1 || (lo..hi).any(|i| lexicon.words.is_fully_spelled(i)) {
+                    chinese.push(entry(reading, row));
+                }
+                if (2..=INITIALS).contains(&reading.len()) {
+                    initials.extend((lo..hi)
+                        .filter(|&i| lexicon.words.weight(i) >= INITIALS_WEIGHT
+                            && !lexicon.words.is_no_suggest(i)
+                            && is_initials(lexicon.words.reading(&lexicon.storage, i), reading.len()))
+                        .map(|i| entry(reading, i)));
+                }
+            } else if lexicon.pinyin && reading.len() >= 2 && reading.bytes().all(|b| b.is_ascii_uppercase()) {
+                latin.push(entry(reading, row));
             }
         }
-        chinese.sort_unstable();
-        chinese.shrink_to_fit();
-        Self { chinese, japanese: Vec::new() }
+        for index in [&mut chinese, &mut latin] {
+            index.sort_unstable();
+            index.shrink_to_fit();
+        }
+        // Grouped by signature like the others, so `lookup` finds them, but heaviest first.
+        initials.sort_unstable_by_key(|&e| (e >> 32, std::cmp::Reverse(lexicon.words.weight(e as u32 as usize)), e));
+        initials.shrink_to_fit();
+        Self { chinese, initials, latin, japanese: Vec::new() }
     }
 
     pub(crate) fn add_japanese(&mut self, reading: &str, row: usize, weight: i32) {
@@ -124,6 +161,25 @@ impl NineKeyIndex {
         hash: u32,
     ) -> impl Iterator<Item = (usize, usize)> + 'a {
         lookup(&self.chinese, hash)
+            .filter(move |&row| matches(lexicon.buckets.key(&lexicon.storage, row), keys))
+            .map(|row| lexicon.buckets.range(row))
+    }
+
+    /// Initials-only abbreviation rows (x4z4) whose initials read as `keys`,
+    /// heaviest first; never a `FLAG_NO_SUGGEST` word.
+    pub(crate) fn initials_rows<'a>(&'a self, lexicon: &'a Lexicon, keys: &'a [u8]) -> impl Iterator<Item = usize> + 'a {
+        lookup(&self.initials, signature(keys.iter().copied())).filter(move |&row| {
+            if lexicon.words.is_no_suggest(row) {
+                return false;
+            }
+            let reading = lexicon.words.reading(&lexicon.storage, row);
+            reading.len() == 2 * keys.len() && reading.bytes().step_by(2).map(digit).eq(keys.iter().copied())
+        })
+    }
+
+    /// Row ranges of the English words spelled by `keys`.
+    fn latin_rows<'a>(&'a self, lexicon: &'a Lexicon, keys: &'a [u8]) -> impl Iterator<Item = (usize, usize)> + 'a {
+        lookup(&self.latin, signature(keys.iter().copied()))
             .filter(move |&row| matches(lexicon.buckets.key(&lexicon.storage, row), keys))
             .map(|row| lexicon.buckets.range(row))
     }
@@ -152,6 +208,13 @@ impl NineKeyIndex {
                     text.ends_with(lexicon.words.text(&lexicon.storage, row, hans))
                         && matches_breaks(lexicon.words.reading(&lexicon.storage, row), start, breaks)
                 });
+                if let Some(row) = last {
+                    return lexicon.index.word_ids.ids.get(row);
+                }
+            }
+            if suffix.len() <= INITIALS && breaks.is_empty() {
+                let last = self.initials_rows(lexicon, suffix).take(INITIALS_ROWS)
+                    .find(|&row| text.ends_with(lexicon.words.text(&lexicon.storage, row, hans)));
                 if let Some(row) = last {
                     return lexicon.index.word_ids.ids.get(row);
                 }

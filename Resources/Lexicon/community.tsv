@@ -1,5 +1,7 @@
 # Community, creative work, and everyday conversational vocabulary.
 # Columns: traditional|simplified|pinyin|editorial priority.
+# A row directly followed by the line `#outranks-ok` is a reviewed choice to rank above a heavier word of the same
+# bare reading (tones ignored), as the everyday word; scripts/check-lexicon.py fails any other such row.
 二次元|二次元|er4 ci4 yuan2|7600
 三次元|三次元|san1 ci4 yuan2|7200
 同人女|同人女|tong2 ren2 nv3|6600
@@ -123,7 +125,8 @@
 一部作品|一部作品|yi2 bu4 zuo4 pin3|7800
 一步一步|一步一步|yi2 bu4 yi2 bu4|8500
 # 「新包」保留較低的獨立權重，購物語境另以相鄰詞加分。
-新包|新包|xin1 bao1|3000
+# 權重在「心包」（3244）之下、「新報」（3050）之上：拼音索引讓審訂詞留在原本比它重的同音詞之下，3000 會把它壓到第 8 位。
+新包|新包|xin1 bao1|3100
 # Community discussion and collecting; editorial priorities, not frequency counts.
 拼單|拼单|pin1 dan1|6100
 拆盒|拆盒|chai1 he2|5900
@@ -175,8 +178,96 @@
 國中|国中|guo2 zhong1|6500
 國小|国小|guo2 xiao3|6500
 台中|台中|tai2 zhong1|6800
+#outranks-ok
 台北|台北|tai2 bei3|7200
 台南|台南|tai2 nan2|6800
+#outranks-ok
 高雄|高雄|gao1 xiong2|6800
 公園|公园|gong1 yuan2|7200
 散步|散步|san4 bu4|7200
+# 2026-11-14: internet, gaming, fandom, shopping, device and app vocabulary as typed in chat today (Taiwan and mainland forms as separate rows).
+上分|上分|shang4 fen1|5600
+掉分|掉分|diao4 fen1|5400
+開黑|开黑|kai1 hei1|5800
+排位|排位|pai2 wei4|5600
+單排|单排|dan1 pai2|5400
+雙排|双排|shuang1 pai2|5200
+開麥|开麦|kai1 mai4|5000
+閉麥|闭麦|bi4 mai4|5000
+大佬|大佬|da4 lao3|6200
+氪金|氪金|ke4 jin1|5400
+爆肝|爆肝|bao4 gan1|5200
+歐皇|欧皇|ou1 huang2|4800
+非酋|非酋|fei1 qiu2|4800
+抽卡|抽卡|chou1 ka3|5400
+出裝|出装|chu1 zhuang1|4800
+開箱|开箱|kai1 xiang1|5600
+手辦|手办|shou3 ban4|5600
+盲盒|盲盒|mang2 he2|5200
+預購|预购|yu4 gou4|5800
+現貨|现货|xian4 huo4|5600
+代購|代购|dai4 gou4|5400
+海外代購|海外代购|hai3 wai4 dai4 gou4|5000
+梗圖|梗图|geng3 tu2|5200
+短片|短片|duan3 pian4|5600
+縮圖|缩图|suo1 tu2|5000
+自拍|自拍|zi4 pai1|6000
+美顏|美颜|mei3 yan2|5400
+濾鏡|滤镜|lv4 jing4|5400
+限動|限动|xian4 dong4|4800
+轉貼|转贴|zhuan3 tie1|4600
+轉發|转发|zhuan3 fa1|6400
+滑動|滑动|hua2 dong4|5600
+刷新|刷新|shua1 xin1|6000
+回覆|回复|hui2 fu4|6400
+#outranks-ok
+秒回|秒回|miao3 hui2|5400
+冷場|冷场|leng3 chang3|5200
+接話|接话|jie1 hua4|5000
+聊天室|聊天室|liao2 tian1 shi4|5400
+開小號|开小号|kai1 xiao3 hao4|4800
+大號|大号|da4 hao4|5000
+洗版|洗版|xi3 ban3|4600
+刷屏|刷屏|shua1 ping2|5400
+狂刷|狂刷|kuang2 shua1|4800
+送禮|送礼|song4 li3|5200
+續費|续费|xu4 fei4|5000
+降級|降级|jiang4 ji2|5000
+大碼|大码|da4 ma3|5400
+小碼|小码|xiao3 ma3|3300
+好評|好评|hao3 ping2|6800
+差評|差评|cha4 ping2|6400
+買家|买家|mai3 jia1|5200
+下架|下架|xia4 jia4|5000
+上架|上架|shang4 jia4|5000
+印表機|打印机|yin4 biao3 ji1|5000
+列印|列印|lie4 yin4|5400
+沒電|没电|mei2 dian4|6200
+待機|待机|dai4 ji1|5000
+充飽|充饱|chong1 bao3|4600
+充電線|充电线|chong1 dian4 xian4|5200
+程式碼|程式码|cheng2 shi4 ma3|5400
+書籤|书签|shu1 qian1|4800
+歷史紀錄|历史纪录|li4 shi3 ji4 lu4|5000
+關鍵字|关键字|guan1 jian4 zi4|5400
+應用程式|应用程式|ying4 yong4 cheng2 shi4|5000
+帳戶|账户|zhang4 hu4|6000
+個人資料|个人资料|ge4 ren2 zi1 liao4|5400
+暱稱|昵称|ni4 cheng1|5800
+動圖|动图|dong4 tu2|4000
+截圖工具|截图工具|jie2 tu2 gong1 ju4|4400
+語音訊息|语音讯息|yu3 yin1 xun4 xi1|4800
+傳訊息|传讯息|chuan2 xun4 xi1|4600
+閃退|闪退|shan3 tui4|5600
+死機|死机|si3 ji1|4800
+卡頓|卡顿|ka3 dun4|5400
+斷線|断线|duan4 xian4|5000
+無線網路|无线网络|wu2 xian4 wang3 luo4|5200
+網紅|网红|wang3 hong2|6400
+爆紅|爆红|bao4 hong2|5600
+爆款|爆款|bao4 kuan3|5000
+跟風|跟风|gen1 feng1|5400
+看完了|看完了|kan4 wan2 le5|5800
+連載|连载|lian2 zai3|5400
+完結|完结|wan2 jie2|5600
+更新了|更新了|geng1 xin1 le5|5000

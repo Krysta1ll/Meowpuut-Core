@@ -1,0 +1,118 @@
+{
+  "name": "mimo-english",
+  "description": "English words (spelling, key, weighted count, flags) and counts of which word follows which, made by scripts/mimo_english.py. The word list is limited to the American spellings of SCOWL/ESDB (size 70 or smaller) plus the words of DataSources/mimo-latin and Resources/Lexicon/latin.tsv. A sentence with a word of the [en] section of Resources/Lexicon/blocked-terms.txt (sensitive or abusive terms) or a word SCOWL marks offensive-1, offensive-2 or vulgar-1 is not counted; the words themselves stay in the list with the flag nosuggest.",
+  "license": "The list and the counts are the project's own work; the sources are SCOWL/ESDB (MIT-like, Copyright 2000-2026 Kevin Atkinson; see SCOWL-Copyright.txt), Tatoeba (CC-BY-2.0-FR, some sentences CC0-1.0) and the Mozilla Common Voice sentence collector (CC0-1.0). No share-alike source.",
+  "attribution": "SCOWL/ESDB, Copyright 2000-2026 by Kevin Atkinson, and the sources named in its Copyright file (12Dicts and ENABLE, by Alan Beale and others; the UK Advanced Cryptics Dictionary, Copyright (c) J Ross Beresford 1993-1999; WordNet 1.6, Copyright 1997 by Princeton University; VarCon, by Kevin Kuenning); Tatoeba (https://tatoeba.org) and its contributors; Mozilla Common Voice sentence-collector contributors.",
+  "sources": {
+    "scowl-pre": {
+      "url": "https://raw.githubusercontent.com/en-wl/wordlist/1e5b7d3a72f47a71da5d28686c1dd4b397178485/data/scowl-pre.txt",
+      "sha256": "a5fe3f11682a6ab9d31f2ea2a185833b1a01be7af83409c671bd0756a870f6c7",
+      "cache": "scowl-pre.txt",
+      "kind": "scowl",
+      "version": "en-wl/wordlist branch v2, git commit 1e5b7d3a72f47a71da5d28686c1dd4b397178485 (2026-06-24); the file is read by scripts/mimo_english.py, the SCOWL tools are not run",
+      "license": "SCOWL-MIT-like",
+      "license_file": "SCOWL-Copyright.txt"
+    },
+    "scowl-exclude": {
+      "url": "https://raw.githubusercontent.com/en-wl/wordlist/1e5b7d3a72f47a71da5d28686c1dd4b397178485/data/exclude",
+      "sha256": "d71ca3aa449def075ce9fb7776f6f7847a25985ff325bae3c9e6837a058c6b82",
+      "cache": "scowl-exclude",
+      "kind": "scowl",
+      "version": "git commit 1e5b7d3a72f47a71da5d28686c1dd4b397178485",
+      "license": "SCOWL-MIT-like",
+      "license_file": "SCOWL-Copyright.txt"
+    },
+    "scowl-variants": {
+      "url": "https://raw.githubusercontent.com/en-wl/wordlist/1e5b7d3a72f47a71da5d28686c1dd4b397178485/data/variants",
+      "sha256": "eb2dbdfc5b7d4ec75b89bb3573c7be88c0632276059ec66d44864ffb6626dcc9",
+      "cache": "scowl-variants",
+      "kind": "scowl",
+      "version": "git commit 1e5b7d3a72f47a71da5d28686c1dd4b397178485",
+      "license": "SCOWL-MIT-like",
+      "license_file": "SCOWL-Copyright.txt"
+    },
+    "tatoeba": {
+      "url": "https://downloads.tatoeba.org/exports/per_language/eng/eng_sentences_detailed.tsv.bz2",
+      "sha256": "f3a08a0af8deef3f50777cf0ccd7666f39e619f70fadae4327b7c29119468313",
+      "cache": "tatoeba-eng_sentences_detailed.tsv.bz2",
+      "kind": "tatoeba",
+      "group": "spoken",
+      "version": "weekly export downloaded 2026-11-14 (listed 14-Nov-2026 07:46, 34,995,780 bytes); the file at the URL changes every week",
+      "license": "CC-BY-2.0-FR",
+      "license_file": "../mimo-pairs/CC-BY-2.0-FR.html",
+      "license_note": "https://tatoeba.org/en/terms_of_use section 6.2 (checked 2026-11-14): the default licence of sentences is CC BY 2.0 FR, a contributor may choose CC0; Creative Commons ND and SA conditions are named only for audio. The per-language file lists id, language, text, user and dates, no licence column; the CC0 sentences are a subset (per_language/eng/eng_sentences_CC0.tsv.bz2) and are counted under the same attribution."
+    },
+    "commonvoice-en": {
+      "url": "https://raw.githubusercontent.com/common-voice/common-voice/bc5d2c4cc31f2fd853f7ef0026581fe50c67779b/server/data/en/sentence-collector.txt",
+      "sha256": "31ac8e200449ebd7aee4a8c6bd16d4dafd076cf11f7c3efe1035f0283712d136",
+      "cache": "commonvoice-en-sentence-collector.txt",
+      "kind": "lines",
+      "group": "spoken",
+      "version": "git commit bc5d2c4cc31f2fd853f7ef0026581fe50c67779b (the commit DataSources/mimo-pairs uses), 61,513 lines",
+      "license": "CC0-1.0",
+      "license_file": "CommonVoice-en-CC0-1.0.txt",
+      "license_note": "server/data/en/LICENSE of the same commit (sha256 bf474cdfd02e162603358e4e3615182018cad27593d2bf5e75ca13e4a5a6af0c) is CC0 1.0 Universal; DataSources/mimo-pairs/commonvoice-README.md: sentence-collector submissions are CC0. wiki.en.txt (sentences taken from Wikipedia, CC BY-SA) is not used."
+    }
+  },
+  "not_used": "Wikipedia and its sister projects (CC BY-SA), Common Voice wiki.en.txt, Google Books Ngram, any share-alike, non-commercial or no-derivatives text, news and government text, and web crawls whose publishers do not own the text. SCOWL sizes above 70 (the UKACD terms apply to lists larger than 80).",
+  "license_files": {
+    "SCOWL-Copyright.txt": "71bffd4b74ad47fff01c8b3c666e77da92737854e568850d8728024e0a53f304",
+    "CommonVoice-en-CC0-1.0.txt": "bf474cdfd02e162603358e4e3615182018cad27593d2bf5e75ca13e4a5a6af0c"
+  },
+  "counts": {
+    "rows": 58273,
+    "limit": 60000,
+    "min_weighted_count": 20,
+    "scowl_size": 70,
+    "scowl_us_forms": 171829,
+    "scowl_british_only_removed": 60,
+    "rows_below_limit_dropped": 0,
+    "mimo_latin_words_below_min_dropped": 125,
+    "spellings_shown_in_lower_case": 38,
+    "sentences_counted": {
+      "other": 62606,
+      "tatoeba": 2099259
+    },
+    "sentences_with_blocked_word_left_out": {
+      "commonvoice-en": 32,
+      "tatoeba": 4320
+    },
+    "blocked_words": {
+      "project_list": 123,
+      "added_from_scowl_usage_notes": 35
+    },
+    "blocked_rows_kept_as_typed_only": 185,
+    "name_cap": {
+      "tatoeba_count_of_rank": 2000,
+      "cap": 572,
+      "names_capped": 92,
+      "top": [
+        "Tom",
+        "Mary",
+        "Sami",
+        "Ziri",
+        "Yanni",
+        "Rima",
+        "Boston",
+        "Tom's",
+        "Layla",
+        "Australia"
+      ]
+    },
+    "pairs": {
+      "min_uses": 2,
+      "candidates": 566987,
+      "target": 900000,
+      "kept": 566375
+    },
+    "spoken_weight": 10,
+    "relisted": {
+      "words_on_the_list": 178,
+      "pairs_left_out": 133
+    }
+  },
+  "files": {
+    "english.tsv.xz": "fb928f22fe29a8992012c3b4bcad560155b45c70d20c03ad8d32ba0d2dab189d",
+    "pairs.tsv.xz": "7347f16ca0c26f66f0ac04d777b017064f2687cddc86eea7af1c21b0e42a639d"
+  }
+}

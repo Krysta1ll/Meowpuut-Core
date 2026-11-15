@@ -15,6 +15,12 @@ The result is {"zh": {word: [[emoji], [kaomoji]]}, "ja": {...}}: hand-written
 emoji first, then CLDR's, three at most; then up to six kaomoji, the ones
 listed for the word itself before the ones of its group.
 
+Never volunteered (Resources/Lexicon/blocked-terms.txt through scripts/blocked_terms.py): a
+Chinese word with a [zh] term (checked in Simplified), a Japanese word with a [ja] term and a word
+of [emoji-key] get no entry at all. Flags (regional indicator pairs), crossed flags, the hammer and
+sickle and the peace symbol are never offered (BANNED; a hand-written row with one is an error),
+and the symbols of a religion are not offered for words that name its people (PEOPLE_SYMBOLS).
+
   python3 scripts/build-emoji-associations.py
       check the hand-written files and rebuild associations.json
   python3 scripts/build-emoji-associations.py --cldr zh.xml zh_Hant.xml
@@ -23,8 +29,10 @@ listed for the word itself before the ones of its group.
       first rebuild cldr-emoji-ja.tsv
   (put the sha256 the script prints in DataSources/cldr-emoji/SOURCE.json)
 """
-import collections, hashlib, json, re, sys, unicodedata
+import collections, functools, hashlib, json, re, sys, unicodedata
 from pathlib import Path
+
+from blocked_terms import emoji_key, ja_hit, zh_hit
 
 ROOT = Path(__file__).resolve().parent.parent
 EMOJI = ROOT / "Resources/Lexicon/emoji.tsv"
@@ -38,6 +46,45 @@ CLDR_PER_WORD = 2
 EMOJI_PER_WORD = 3
 KAOMOJI_PER_WORD = 6
 KAOMOJI_LENGTH = 24
+# Emoji never offered: crossed flags, hammer and sickle, peace symbol (regional indicators: banned()).
+BANNED = {"\U0001F38C", "\u262D", "\u262E"}
+# Symbols of a religion, kept on the symbol's own name (十字架, 六芒星) and on buildings, left out for
+# words that name the people of a religion.
+PEOPLE_SYMBOLS = {
+    "zh": {word: {"\u262A", "\u2721", "\u2626", "\u271D", "\u2638"} for word in
+           "穆斯林 伊斯兰 伊斯蘭 伊斯兰教 伊斯蘭教 犹太 猶太 犹太教 猶太教 基督 基督教 天主教 东正教 東正教 斋戒月 齋戒月".split()},
+    "ja": {word: {"\u262A", "\u2721", "\u2626", "\u271D", "\u2638"} for word in
+           "ムスリム むすりむ イスラム教 ユダヤ教 キリスト教 ユダヤ人 ラマダン".split()},
+}
+# A word that keeps its other emoji but not this one (自由 is not the Statue of Liberty).
+NOT_FOR = {"zh": {"自由": {"\U0001F5FD"}}, "ja": {}}
+
+
+def banned(symbol):
+    """Whether an emoji is never offered: a flag (regional indicators) or one of BANNED."""
+    plain = symbol.replace("\uFE0F", "")
+    return plain in BANNED or any(0x1F1E6 <= ord(ch) <= 0x1F1FF for ch in plain)
+
+
+@functools.lru_cache(maxsize=None)
+def simplified_characters():
+    """Traditional character -> Simplified, from the single characters of mimo-tc."""
+    from mimo_pipeline import load_mimo_tc_dataset
+    table = {}
+    for hant, hans, _code, _weight in load_mimo_tc_dataset()["entries"]:
+        if len(hant) == 1 and len(hans) == 1 and hant != hans:
+            table.setdefault(hant, hans)
+    return table
+
+
+def never_offered(lang, word):
+    """Whether a word gets no emoji association (the never-volunteer list)."""
+    if emoji_key(word):
+        return True
+    if lang == "ja":
+        return ja_hit(word)
+    table = simplified_characters()
+    return zh_hit(word) or zh_hit("".join(table.get(ch, ch) for ch in word))
 
 
 def is_han(ch):
@@ -137,6 +184,8 @@ def read_emoji(problems):
         for symbol in symbols:
             if not any(ord(ch) >= 0x2190 for ch in symbol) or any(ch.isalnum() and ord(ch) < 0x2190 for ch in symbol):
                 problems.append(f"{where}: {symbol} is not an emoji")
+            if banned(symbol):
+                problems.append(f"{where}: {symbol} is never offered (a flag or a banned symbol)")
         for item in fields[0].split():
             lang, word = language(item)
             if word in table[lang]:
@@ -220,20 +269,25 @@ def main():
     for lang, cldr in (("zh", read_table(TABLE)), ("ja", read_table(TABLE_JA))):
         entries = {}
         for word in list(hand[lang]) + list(kaomoji[lang]) + list(cldr):
-            if word in entries:
+            if word in entries or never_offered(lang, word):
                 continue
             # ☕ and ☕️ are one emoji, with and without the presentation selector.
             symbols, seen = [], set()
+            left_out = PEOPLE_SYMBOLS[lang].get(word, set()) | NOT_FOR[lang].get(word, set())
             for symbol in hand[lang].get(word, []) + cldr.get(word, []):
+                if banned(symbol) or symbol.replace("\uFE0F", "") in left_out:
+                    continue
                 if symbol.replace("\uFE0F", "") not in seen:
                     seen.add(symbol.replace("\uFE0F", ""))
                     symbols.append(symbol)
-            entries[word] = [symbols[:EMOJI_PER_WORD if word in hand[lang] else CLDR_PER_WORD], kaomoji[lang].get(word, [])]
+            entry = [symbols[:EMOJI_PER_WORD if word in hand[lang] else CLDR_PER_WORD], kaomoji[lang].get(word, [])]
+            if entry[0] or entry[1]:
+                entries[word] = entry
         if lang == "ja":
             # A word in one kana also answers for the other (ねこ, ネコ).
             for word, entry in list(entries.items()):
                 other = other_kana(word)
-                if other and other not in entries:
+                if other and other not in entries and not never_offered(lang, other):
                     entries[other] = entry
         result[lang] = entries
     # One word a line, so a change shows as that line.

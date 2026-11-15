@@ -1,0 +1,196 @@
+{
+  "format": "meowpuut-pets-moments-1",
+  "about": [
+    "Golden vectors for the pet moment director (crates/meowpuut-pets/src/moments.rs).",
+    "Loaded by crates/meowpuut-pets/tests/golden_moments.rs; the Swift and Kotlin tests load the same file through mp_pets_*.",
+    "Each case starts from a fresh state (mp_pets_from_bytes(NULL, 0)) and runs its steps in order on one handle.",
+    "at = [mono_ms, local day index, local minute of the day] (MPPetsClock).",
+    "decide: appear | commit | idle | tap | hold | seat | drop | disappear (pet for the touches, graphemes for commit).",
+    "ambience: fields that differ from ambience_default (MPPetsAmbience; flags named as below).",
+    "expect: null for no plan, otherwise every MPPetsPlan field. Tokens count from 1 per handle.",
+    "resolve: a token, with outcome completed | interrupted | cancelled; reward is the who bits (1 Mimimo, 2 Momo).",
+    "check: values of the persisted state after the step (spontaneous today, plays and pets per cat [mimimo, momo], graphemes, greeted)."
+  ],
+  "state_bytes": 2884,
+  "delta_bytes": 84,
+  "ambience_default": {
+    "composing": false, "quiet_ms": 4294967295, "lifted": false, "dismissing": false,
+    "assistive": false, "lightweight": false, "reduce_motion": false, "reduce_transparency": false,
+    "glass_seat": true, "edges": true, "festival": false, "cats": 3, "mode": "full"
+  },
+  "cases": [
+    {
+      "name": "greeting once per local day; a day index going back is the same day",
+      "steps": [
+        {"at": [1000, 20406, 720], "decide": "appear", "seed": 0,
+         "expect": {"token": 1, "moment": "hello", "who": 3, "style": "motion", "ripple": "none", "duration_ms": 900, "delay_ms": 0}},
+        {"at": [2000, 20406, 721], "decide": "disappear", "expect": null},
+        {"at": [5000, 20406, 722], "decide": "appear", "seed": 2,
+         "expect": {"token": 2, "moment": "peekaboo", "who": 1, "style": "motion", "ripple": "soft", "duration_ms": 280, "delay_ms": 7865}},
+        {"at": [5500, 20406, 722], "decide": "disappear", "expect": null},
+        {"at": [6000, 20405, 722], "decide": "appear", "seed": 29,
+         "expect": {"token": 3, "moment": "peekaboo", "who": 2, "style": "motion", "ripple": "soft", "duration_ms": 280, "delay_ms": 5746}},
+        {"check": {"spontaneous": 2, "greeted": true}},
+        {"at": [7000, 20407, 10], "decide": "appear", "seed": 0, "ambience": {"reduce_motion": true},
+         "expect": {"token": 4, "moment": "hello", "who": 3, "style": "fade", "ripple": "none", "duration_ms": 900, "delay_ms": 0}},
+        {"check": {"spontaneous": 0, "greeted": true}}
+      ]
+    },
+    {
+      "name": "spontaneous moments are suppressed while busy, assisted, lightweight or quiet",
+      "steps": [
+        {"at": [1000, 20406, 720], "decide": "appear", "seed": 0,
+         "expect": {"token": 1, "moment": "hello", "who": 3, "style": "motion", "ripple": "none", "duration_ms": 900, "delay_ms": 0}},
+        {"at": [3000, 20406, 720], "decide": "appear", "seed": 2, "ambience": {"composing": true}, "expect": null},
+        {"at": [3001, 20406, 720], "decide": "appear", "seed": 2, "ambience": {"quiet_ms": 599}, "expect": null},
+        {"at": [3002, 20406, 720], "decide": "appear", "seed": 2, "ambience": {"lifted": true}, "expect": null},
+        {"at": [3003, 20406, 720], "decide": "appear", "seed": 2, "ambience": {"dismissing": true}, "expect": null},
+        {"at": [3004, 20406, 720], "decide": "appear", "seed": 2, "ambience": {"assistive": true}, "expect": null},
+        {"at": [3005, 20406, 720], "decide": "appear", "seed": 2, "ambience": {"lightweight": true}, "expect": null},
+        {"at": [3006, 20406, 720], "decide": "appear", "seed": 2, "ambience": {"mode": "quiet"}, "expect": null},
+        {"at": [3007, 20406, 720], "decide": "appear", "seed": 2, "ambience": {"mode": "off"}, "expect": null},
+        {"at": [3008, 20406, 720], "decide": "appear", "seed": 1, "expect": null},
+        {"check": {"spontaneous": 0}},
+        {"at": [3009, 20406, 720], "decide": "appear", "seed": 2, "ambience": {"quiet_ms": 600},
+         "expect": {"token": 2, "moment": "peekaboo", "who": 1, "style": "motion", "ripple": "soft", "duration_ms": 280, "delay_ms": 7865}}
+      ]
+    },
+    {
+      "name": "token bucket of 2 refilling every 120 s, and 3 a day",
+      "steps": [
+        {"at": [1000, 20406, 720], "decide": "appear", "seed": 0,
+         "expect": {"token": 1, "moment": "hello", "who": 3, "style": "motion", "ripple": "none", "duration_ms": 900, "delay_ms": 0}},
+        {"at": [3000, 20406, 720], "decide": "appear", "seed": 2,
+         "expect": {"token": 2, "moment": "peekaboo", "who": 1, "style": "motion", "ripple": "soft", "duration_ms": 280, "delay_ms": 7865}},
+        {"at": [4000, 20406, 720], "decide": "appear", "seed": 18,
+         "expect": {"token": 3, "moment": "peekaboo", "who": 1, "style": "motion", "ripple": "soft", "duration_ms": 280, "delay_ms": 3296}},
+        {"at": [5000, 20406, 720], "decide": "appear", "seed": 29, "expect": null},
+        {"at": [122999, 20406, 720], "decide": "appear", "seed": 29, "expect": null},
+        {"at": [123000, 20406, 722], "decide": "appear", "seed": 29,
+         "expect": {"token": 4, "moment": "peekaboo", "who": 2, "style": "motion", "ripple": "soft", "duration_ms": 280, "delay_ms": 5746}},
+        {"check": {"spontaneous": 3}},
+        {"at": [900000, 20406, 735], "decide": "appear", "seed": 30, "expect": null}
+      ]
+    },
+    {
+      "name": "peekaboo falls back to a fade or an opaque line",
+      "steps": [
+        {"at": [1000, 20406, 720], "decide": "appear", "seed": 0,
+         "expect": {"token": 1, "moment": "hello", "who": 3, "style": "motion", "ripple": "none", "duration_ms": 900, "delay_ms": 0}},
+        {"at": [3000, 20406, 720], "decide": "appear", "seed": 2, "ambience": {"reduce_motion": true},
+         "expect": {"token": 2, "moment": "peekaboo", "who": 1, "style": "fade", "ripple": "none", "duration_ms": 250, "delay_ms": 7865}},
+        {"at": [4000, 20406, 720], "decide": "appear", "seed": 18, "ambience": {"reduce_transparency": true},
+         "expect": {"token": 3, "moment": "peekaboo", "who": 1, "style": "motion", "ripple": "line", "duration_ms": 280, "delay_ms": 3296}},
+        {"at": [123000, 20406, 722], "decide": "appear", "seed": 29, "ambience": {"glass_seat": false},
+         "expect": {"token": 4, "moment": "peekaboo", "who": 2, "style": "fade", "ripple": "none", "duration_ms": 250, "delay_ms": 5746}}
+      ]
+    },
+    {
+      "name": "a hiding cat can be found; the finder earns a play",
+      "steps": [
+        {"at": [1000, 20406, 720], "decide": "appear", "seed": 0,
+         "expect": {"token": 1, "moment": "hello", "who": 3, "style": "motion", "ripple": "none", "duration_ms": 900, "delay_ms": 0}},
+        {"at": [2000, 20406, 720], "decide": "seat", "pet": "momo", "expect": null},
+        {"at": [3000, 20406, 720], "decide": "appear", "seed": 29,
+         "expect": {"token": 2, "moment": "peekaboo", "who": 2, "style": "motion", "ripple": "soft", "duration_ms": 280, "delay_ms": 5746}},
+        {"at": [4000, 20406, 720], "decide": "seat", "pet": "mimimo",
+         "expect": {"token": 3, "moment": "found", "who": 2, "style": "motion", "ripple": "none", "duration_ms": 350, "delay_ms": 0}},
+        {"at": [4400, 20406, 720], "resolve": 3, "outcome": "completed", "reward": 2},
+        {"at": [4500, 20406, 720], "resolve": 2, "outcome": "completed", "reward": 0},
+        {"check": {"plays": [0, 1]}}
+      ]
+    },
+    {
+      "name": "purr answers every hold; rewards once per cat per 8 s",
+      "steps": [
+        {"at": [10000, 20406, 720], "decide": "hold", "pet": "momo",
+         "expect": {"token": 1, "moment": "purr", "who": 2, "style": "motion", "ripple": "none", "duration_ms": 4000, "delay_ms": 0}},
+        {"at": [11000, 20406, 720], "resolve": 1, "outcome": "completed", "reward": 2},
+        {"at": [15000, 20406, 720], "decide": "hold", "pet": "momo", "ambience": {"reduce_motion": true},
+         "expect": {"token": 2, "moment": "purr", "who": 2, "style": "fade", "ripple": "none", "duration_ms": 4000, "delay_ms": 0}},
+        {"at": [16000, 20406, 720], "resolve": 2, "outcome": "completed", "reward": 0},
+        {"at": [17000, 20406, 720], "decide": "hold", "pet": "mimimo",
+         "expect": {"token": 3, "moment": "purr", "who": 1, "style": "motion", "ripple": "none", "duration_ms": 4000, "delay_ms": 0}},
+        {"at": [18000, 20406, 720], "resolve": 3, "outcome": "completed", "reward": 1},
+        {"at": [19000, 20406, 720], "decide": "hold", "pet": "momo",
+         "expect": {"token": 4, "moment": "purr", "who": 2, "style": "motion", "ripple": "none", "duration_ms": 4000, "delay_ms": 0}},
+        {"at": [19000, 20406, 720], "resolve": 4, "outcome": "completed", "reward": 2},
+        {"at": [19100, 20406, 720], "resolve": 4, "outcome": "completed", "reward": 0},
+        {"at": [40000, 20406, 720], "decide": "hold", "pet": "momo",
+         "expect": {"token": 5, "moment": "purr", "who": 2, "style": "motion", "ripple": "none", "duration_ms": 4000, "delay_ms": 0}},
+        {"at": [41000, 20406, 720], "resolve": 5, "outcome": "interrupted", "reward": 0},
+        {"at": [42000, 20406, 720], "decide": "hold", "pet": "momo", "ambience": {"lifted": true}, "expect": null},
+        {"check": {"plays": [1, 2], "pets": [0, 0]}}
+      ]
+    },
+    {
+      "name": "duet when both cats are touched within 60 s",
+      "steps": [
+        {"at": [10000, 20406, 720], "decide": "tap", "pet": "momo", "expect": null},
+        {"at": [70001, 20406, 720], "decide": "tap", "pet": "mimimo", "expect": null},
+        {"at": [71000, 20406, 720], "decide": "tap", "pet": "momo",
+         "expect": {"token": 1, "moment": "duet", "who": 3, "style": "motion", "ripple": "none", "duration_ms": 600, "delay_ms": 0}},
+        {"at": [71600, 20406, 720], "resolve": 1, "outcome": "completed", "reward": 3},
+        {"at": [72000, 20406, 720], "decide": "hold", "pet": "mimimo",
+         "expect": {"token": 2, "moment": "purr", "who": 1, "style": "motion", "ripple": "none", "duration_ms": 4000, "delay_ms": 0}},
+        {"at": [73000, 20406, 720], "decide": "tap", "pet": "momo",
+         "expect": {"token": 3, "moment": "duet", "who": 3, "style": "fade", "ripple": "none", "duration_ms": 600, "delay_ms": 0}, "ambience": {"reduce_motion": true}},
+        {"at": [74000, 20406, 720], "decide": "tap", "pet": "mimimo", "expect": null},
+        {"at": [74100, 20406, 720], "decide": "tap", "pet": "momo", "expect": null},
+        {"check": {"plays": [1, 1], "pets": [2, 4]}}
+      ]
+    },
+    {
+      "name": "doze after 25 s without keys, 12 s late at night",
+      "steps": [
+        {"at": [30000, 20406, 720], "decide": "idle", "ambience": {"quiet_ms": 24999}, "expect": null},
+        {"at": [31000, 20406, 720], "decide": "idle", "ambience": {"quiet_ms": 25000},
+         "expect": {"token": 1, "moment": "doze", "who": 3, "style": "motion", "ripple": "none", "duration_ms": 0, "delay_ms": 0}},
+        {"at": [32000, 20406, 720], "decide": "idle", "ambience": {"quiet_ms": 26000}, "expect": null},
+        {"at": [33000, 20406, 720], "resolve": 1, "outcome": "completed", "reward": 0},
+        {"at": [50000, 20406, 1410], "decide": "idle", "ambience": {"quiet_ms": 12000, "reduce_motion": true},
+         "expect": {"token": 2, "moment": "doze", "who": 3, "style": "fade", "ripple": "none", "duration_ms": 0, "delay_ms": 0}}
+      ]
+    },
+    {
+      "name": "off mode plans nothing but still counts pets",
+      "steps": [
+        {"at": [1000, 20406, 720], "decide": "appear", "seed": 2, "ambience": {"mode": "off"}, "expect": null},
+        {"at": [2000, 20406, 720], "decide": "hold", "pet": "momo", "ambience": {"mode": "off"}, "expect": null},
+        {"at": [3000, 20406, 720], "decide": "tap", "pet": "momo", "ambience": {"mode": "off"}, "expect": null},
+        {"at": [3100, 20406, 720], "decide": "tap", "pet": "mimimo", "ambience": {"mode": "off"}, "expect": null},
+        {"at": [60000, 20406, 720], "decide": "idle", "ambience": {"mode": "off", "quiet_ms": 60000}, "expect": null},
+        {"check": {"pets": [1, 1], "greeted": false}}
+      ]
+    },
+    {
+      "name": "flow after 8 commits within 30 s",
+      "steps": [
+        {"at": [10000, 20406, 720], "decide": "commit", "graphemes": 2, "ambience": {"quiet_ms": 0}, "expect": null},
+        {"at": [14000, 20406, 720], "decide": "commit", "graphemes": 2, "ambience": {"quiet_ms": 0}, "expect": null},
+        {"at": [18000, 20406, 720], "decide": "commit", "graphemes": 2, "ambience": {"quiet_ms": 0}, "expect": null},
+        {"at": [22000, 20406, 720], "decide": "commit", "graphemes": 2, "ambience": {"quiet_ms": 0}, "expect": null},
+        {"at": [26000, 20406, 720], "decide": "commit", "graphemes": 2, "ambience": {"quiet_ms": 0}, "expect": null},
+        {"at": [30000, 20406, 720], "decide": "commit", "graphemes": 2, "ambience": {"quiet_ms": 0}, "expect": null},
+        {"at": [34000, 20406, 720], "decide": "commit", "graphemes": 2, "ambience": {"quiet_ms": 0}, "expect": null},
+        {"at": [38000, 20406, 720], "decide": "commit", "graphemes": 2, "ambience": {"quiet_ms": 0},
+         "expect": {"token": 1, "moment": "flow", "who": 3, "style": "motion", "ripple": "none", "duration_ms": 3000, "delay_ms": 0}},
+        {"at": [39000, 20406, 720], "decide": "commit", "graphemes": 2, "ambience": {"quiet_ms": 0}, "expect": null},
+        {"check": {"graphemes": 18}}
+      ]
+    },
+    {
+      "name": "a clock that runs backwards is doubt",
+      "steps": [
+        {"at": [1000, 20406, 720], "decide": "appear", "seed": 0,
+         "expect": {"token": 1, "moment": "hello", "who": 3, "style": "motion", "ripple": "none", "duration_ms": 900, "delay_ms": 0}},
+        {"at": [50000, 20406, 720], "decide": "commit", "graphemes": 1, "expect": null},
+        {"at": [40000, 20406, 720], "decide": "appear", "seed": 2, "expect": null},
+        {"at": [50001, 20406, 720], "decide": "appear", "seed": 2,
+         "expect": {"token": 2, "moment": "peekaboo", "who": 1, "style": "motion", "ripple": "soft", "duration_ms": 280, "delay_ms": 7865}},
+        {"at": [60000, 0, 720], "decide": "appear", "seed": 18, "expect": null},
+        {"at": [60001, 20406, 1440], "decide": "appear", "seed": 18, "expect": null}
+      ]
+    }
+  ]
+}

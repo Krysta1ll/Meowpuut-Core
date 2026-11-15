@@ -1,6 +1,18 @@
 #![forbid(unsafe_code)]
 //! Device-local, platform-neutral pet rules. Clients supply grapheme counts
 //! and completed gestures, then decide when to persist the numeric snapshot.
+//!
+//! - [`Snapshot`]: lifetime counters and the level rule (unchanged since 0.8).
+//! - [`moments::Director`]: decides the small moments (greeting, purr,
+//!   peekaboo, doze, duet, flow) from a clock and a seed passed in.
+//! - [`book::PawBook`]: one mark per local day, the last 400 days.
+//! - [`codec`]: the persisted state, its versioned binary form, `Delta` and `merge`.
+//!
+//! Nothing here reads a clock, a random source or a file.
+
+pub mod book;
+pub mod codec;
+pub mod moments;
 
 const GRAPHEMES_PER_LEVEL: u64 = 200;
 const CONTACTS_PER_LEVEL: u64 = 3;
@@ -28,12 +40,18 @@ pub enum Event {
     CommittedGraphemes(u64),
     Petted(Pet),
     DropAccepted(Pet),
+    /// A shared moment (purr, found, duet) that earned a reward. Counted in
+    /// [`Contacts::plays`]; it does not change the level.
+    Played(Pet),
 }
 
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
 pub struct Contacts {
     pub pets: u64,
     pub falls: u64,
+    /// Rewarded moments. Not part of the level formula, so a snapshot
+    /// imported from the old counters (plays = 0) keeps exactly its level.
+    pub plays: u64,
 }
 
 impl Contacts {
@@ -59,7 +77,7 @@ impl Snapshot {
         }
     }
 
-    fn contacts_mut(&mut self, pet: Pet) -> &mut Contacts {
+    pub(crate) fn contacts_mut(&mut self, pet: Pet) -> &mut Contacts {
         match pet {
             Pet::Mimimo => &mut self.mimimo,
             Pet::Momo => &mut self.momo,
@@ -81,6 +99,10 @@ impl Snapshot {
             Event::DropAccepted(pet) => {
                 let contacts = self.contacts_mut(pet);
                 contacts.falls = contacts.falls.saturating_add(1);
+            }
+            Event::Played(pet) => {
+                let contacts = self.contacts_mut(pet);
+                contacts.plays = contacts.plays.saturating_add(1);
             }
         }
         let changed = |pet, was| {
@@ -132,7 +154,7 @@ mod tests {
     fn legacy_totals_keep_their_level_and_cats_grow_independently() {
         let mut state = Snapshot {
             committed_graphemes: 199,
-            mimimo: Contacts { pets: 1, falls: 1 },
+            mimimo: Contacts { pets: 1, falls: 1, plays: 0 },
             ..Snapshot::default()
         };
         assert_eq!(
@@ -151,14 +173,14 @@ mod tests {
             LevelChanges { mimimo: Some(2), momo: Some(1) }
         );
         assert_eq!(state.apply(Event::DropAccepted(Pet::Momo)), LevelChanges::default());
-        assert_eq!(state.contacts(Pet::Momo), Contacts { pets: 0, falls: 1 });
+        assert_eq!(state.contacts(Pet::Momo), Contacts { pets: 0, falls: 1, plays: 0 });
     }
 
     #[test]
     fn progress_caps_and_counters_saturate_even_for_imported_totals() {
         let mut state = Snapshot {
             committed_graphemes: u64::MAX - 1,
-            momo: Contacts { pets: u64::MAX, falls: u64::MAX },
+            momo: Contacts { pets: u64::MAX, falls: u64::MAX, plays: 0 },
             ..Snapshot::default()
         };
         assert_eq!(state.apply(Event::CommittedGraphemes(3)), LevelChanges::default());
@@ -166,5 +188,37 @@ mod tests {
         assert_eq!(state.committed_graphemes, u64::MAX);
         assert_eq!(state.momo.pets, u64::MAX);
         assert_eq!(state.progress(Pet::Momo), Progress { level: MAX_LEVEL, next: None });
+    }
+
+    /// The old level rule, written out independently of `progress`.
+    fn legacy_level(graphemes: u64, pets: u64, falls: u64) -> u8 {
+        (graphemes / 200 + pets.saturating_add(falls) / 3).min(100) as u8
+    }
+
+    #[test]
+    fn plays_never_change_the_level_and_legacy_imports_keep_theirs() {
+        let mut seed = 0x5eed_u64;
+        for _ in 0..2000 {
+            let mut next = || {
+                seed = seed.wrapping_add(0x9E37_79B9_7F4A_7C15);
+                let mut z = seed;
+                z = (z ^ (z >> 30)).wrapping_mul(0xBF58_476D_1CE4_E5B9);
+                z = (z ^ (z >> 27)).wrapping_mul(0x94D0_49BB_1331_11EB);
+                (z ^ (z >> 31)) % 50_000
+            };
+            let (g, p, f) = (next(), next() % 400, next() % 400);
+            let legacy = Snapshot { committed_graphemes: g, mimimo: Contacts { pets: p, falls: f, plays: 0 }, ..Snapshot::default() };
+            assert_eq!(legacy.progress(Pet::Mimimo).level, legacy_level(g, p, f));
+            let mut played = legacy;
+            for _ in 0..(next() % 50) {
+                assert_eq!(played.apply(Event::Played(Pet::Mimimo)), LevelChanges::default());
+            }
+            assert_eq!(played.progress(Pet::Mimimo), legacy.progress(Pet::Mimimo));
+            // The persisted form carries the old counters unchanged.
+            let state = codec::PetState::from_snapshot(legacy);
+            let back = codec::PetState::from_bytes(&state.to_bytes()).unwrap();
+            assert_eq!(back.snapshot, legacy);
+            assert_eq!(back.snapshot.progress(Pet::Momo).level, legacy_level(g, 0, 0));
+        }
     }
 }

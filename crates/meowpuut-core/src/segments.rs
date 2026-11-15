@@ -36,6 +36,21 @@ use crate::{CandidateKind, CandidateScoreKind};
 
 /// Leading segments checked against the continuation (with a pair table).
 const SCORED: usize = 8;
+/// Lightest continuation word counted as evidence for a leading segment.
+const EVIDENCE_FLOOR: i32 = 4000;
+/// Share of a reading's score deficit to the decoder's best reading that the
+/// extra weight of its continuation word (in nats) must cover to move it first.
+const RESEGMENT_COST: f64 = 0.3;
+/// The same share for a reading whose last word is shorter than the last word
+/// of the decoder's best reading, which it splits.
+const RESEGMENT_SPLIT_COST: f64 = 0.6;
+/// When the decoder's best reading has no continuation word: the weight its
+/// rivals' continuation words are measured from (冷门配 of 配对 moves before
+/// 冷门陪), and the shares of the score deficit they must cover (帮我达因 of
+/// 因子 stays behind 帮我打印).
+const UNSUPPORTED_BASE: i32 = 3400;
+const UNSUPPORTED_COST: f64 = 1.0;
+const UNSUPPORTED_SPLIT_COST: f64 = 1.2;
 
 const PINYIN_ONSET_INITIALS: [&str; 22] = [
     "b", "p", "f", "d", "t", "l", "g", "k", "h", "j", "q", "x", "zh", "ch", "sh", "r", "z", "c",
@@ -138,24 +153,36 @@ pub fn predictive_segments_at_into(
                 for i in lo..hi.min(lo + 5) {
                     let weight = lexicon.words.weight(i);
                     let wr = lexicon.words.reading(&lexicon.storage, i);
-                    if weight < 4000 || !continuation.matches(wr.as_bytes(), 0, continuation.len()) {
+                    // A completion: never evidence from a never-volunteer word.
+                    if weight < EVIDENCE_FLOOR || lexicon.words.is_no_suggest(i) || !continuation.matches(wr.as_bytes(), 0, continuation.len()) {
                         continue;
                     }
-                    let wr_bytes = wr.as_bytes();
-                    let mut first_tone = 0usize;
-                    while first_tone < wr_bytes.len() && !is_tone(wr_bytes[first_tone], lexicon.pinyin) {
-                        first_tone += 1;
+                    // The leading syllables of the word that the completed
+                    // keys spell: the last one (配 of 配对), or more, which
+                    // the reading must end with (计算 of 计算机, 来得 of 来得及).
+                    let mut sounds = 0usize;
+                    let mut syllables = 0usize;
+                    let mut lead_syllables = 0usize;
+                    for &b in wr.as_bytes() {
+                        if is_tone(b, lexicon.pinyin) {
+                            syllables += 1;
+                            if sounds == completed.len() {
+                                lead_syllables = syllables;
+                                break;
+                            }
+                        } else {
+                            sounds += 1;
+                            if sounds > completed.len() {
+                                break;
+                            }
+                        }
                     }
-                    if first_tone != completed.len() {
+                    if lead_syllables == 0 {
                         continue;
                     }
                     let text = lexicon.words.text(&lexicon.storage, i, hans);
-                    let t_bytes = text.as_bytes();
-                    let mut first_end = 1usize;
-                    while first_end < t_bytes.len() && (t_bytes[first_end] & 0xc0) == 0x80 {
-                        first_end += 1;
-                    }
-                    if first_end < t_bytes.len() {
+                    let first_end = text.char_indices().nth(lead_syllables).map_or(text.len(), |(at, _)| at);
+                    if first_end < text.len() {
                         let first_char = &text[..first_end];
                         for s_idx in 0..scored_len {
                             if scratch.aux_decoded.text(scored_indices[s_idx]).ends_with(first_char) {
@@ -174,13 +201,60 @@ pub fn predictive_segments_at_into(
         return;
     }
 
+    // A continuation word moves the reading it extends before the decoder's
+    // best reading of the keys before the initial only when its weight over
+    // that reading's own evidence pays for part of the score it gives up
+    // (帮我打印 for bangwodayinz stays before 帮我达因 of 因子; 明天早上八 of
+    // 八点 moves before 明天早上把). Readings that cannot move keep the
+    // decoder's order after those that can, which are ordered by evidence.
+    let ranked = lexicon.pairs().is_some();
+    let nats = |i: usize| {
+        let score = scratch.aux_decoded.score[i];
+        // Without a pair table whole words carry their weight, not nats.
+        if !ranked && scratch.aux_decoded.score_kind[i] == CandidateScoreKind::Lexicon as u32 { score / 700.0 - 19.0 } else { score }
+    };
+    let top_nats = nats(scored_indices[0]);
+    let top_last = last_word_chars(lexicon, &input[..count], scratch.aux_decoded.text(scored_indices[0]), hans);
+    // Whether reading `s` gains, by its continuation word's weight over the
+    // best reading's evidence (both at least `base`), the share `cost` of the
+    // score it gives up; `split_cost` for one that splits the last word of
+    // the best reading (这分 against 这份 for ...zhefenw, 洗手简 against 洗手间).
+    let pays = |s: usize, base: i32, cost: f64, split_cost: f64| {
+        let gain = f64::from(scored_evidence[s].max(base) - scored_evidence[0].max(base)) / 700.0;
+        let share = if last_word_chars(lexicon, &input[..count], scratch.aux_decoded.text(scored_indices[s]), hans) < top_last {
+            split_cost
+        } else {
+            cost
+        };
+        gain >= share * (top_nats - nats(scored_indices[s]))
+    };
+    let mut promoted = [false; SCORED];
+    for s in 1..scored_len {
+        if scored_evidence[s] == 0 {
+            continue;
+        }
+        let resegments = pays(s, EVIDENCE_FLOOR, RESEGMENT_COST, RESEGMENT_SPLIT_COST);
+        // Against a best reading with no continuation word, a light one may
+        // instead pay the whole deficit from `UNSUPPORTED_BASE` (冷门配 of
+        // 配对 before 冷门陪). Without a pair table that is the only test:
+        // the share above would move readings that the characters' weights
+        // put far behind (会意 before 会议 for huiyij, 镜身 before 精神).
+        promoted[s] = if scored_evidence[0] == 0 {
+            pays(s, UNSUPPORTED_BASE, UNSUPPORTED_COST, UNSUPPORTED_SPLIT_COST) || ranked && resegments
+        } else {
+            resegments
+        };
+    }
+    promoted[0] = true;
     let mut perm: [usize; SCORED] = std::array::from_fn(|i| i);
     perm[..scored_len].sort_by(|&a, &b| {
-        if scored_evidence[a] == scored_evidence[b] {
-            scored_order[a].cmp(&scored_order[b])
-        } else {
-            scored_evidence[b].cmp(&scored_evidence[a])
-        }
+        promoted[b].cmp(&promoted[a]).then_with(|| {
+            if promoted[a] && scored_evidence[a] != scored_evidence[b] {
+                scored_evidence[b].cmp(&scored_evidence[a])
+            } else {
+                scored_order[a].cmp(&scored_order[b])
+            }
+        })
     });
 
     for &p in &perm[..scored_len] {
@@ -192,6 +266,23 @@ pub fn predictive_segments_at_into(
             0.0,
         );
     }
+}
+
+/// Characters of the longest lexicon word that ends `text` and spells the end
+/// of the keys `input` (1 when only a single character does).
+fn last_word_chars(lexicon: &Lexicon, input: &str, text: &str, hans: bool) -> usize {
+    let reading = Reading::new(input, lexicon.pinyin);
+    let length = reading.len();
+    for start in length.saturating_sub(lexicon.longest)..length {
+        let (lo, hi) = lexicon.range(&reading.sounds()[start..]);
+        for index in lo..hi {
+            let word = lexicon.words.text(&lexicon.storage, index, hans);
+            if !word.is_empty() && text.ends_with(word) && reading.matches(lexicon.words.reading(&lexicon.storage, index).as_bytes(), start, length) {
+                return utf8_char_count(word);
+            }
+        }
+    }
+    1
 }
 
 /// Checks predictive segments across tail lengths `1..=3`.

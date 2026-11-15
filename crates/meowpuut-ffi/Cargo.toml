@@ -8,8 +8,22 @@ description = "C ABI for the Meowpuut engine (the only crate permitted to contai
 [lib]
 crate-type = ["staticlib", "cdylib", "rlib"]
 
+[features]
+# Custom skins (`mps_*`, include/meowpuut.h under MEOWPUUT_SKIN). For the
+# Android app and settings only; never for a keyboard extension.
+skin = ["dep:meowpuut-skin"]
+# Debug/Lab builds: also trust the published test root and `test-` kids.
+# A release build must not enable it (it fails to compile when the
+# environment variable MEOWPUUT_RELEASE_BUILD is set).
+skin-test-keys = ["skin", "meowpuut-skin/test-keys"]
+
 [dependencies]
 meowpuut-core = { path = "../meowpuut-core" }
+meowpuut-pets = { path = "../meowpuut-pets" }
+meowpuut-skin = { path = "../meowpuut-skin", optional = true }
+
+[dev-dependencies]
+serde_json = { version = "=1.0.154", default-features = false, features = ["std"] }
 
 # Not `workspace = true`: this crate is the single audited exception to the
 # workspace-wide `unsafe_code = "forbid"`. Unsafe is denied by default and only

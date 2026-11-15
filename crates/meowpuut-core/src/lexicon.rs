@@ -22,6 +22,12 @@
 //! assert!(lex.join_bonus("你", "好", false) > 2.0);
 //! assert_eq!(lex.traditionalize("你好", false), "你好");
 //! ```
+//!
+//! A word row may end with a sixth field `n`: the word is on the
+//! never-volunteer list (`FLAG_NO_SUGGEST`) and is offered only for its own
+//! full spelling; `w`: the same, and it is on the list only as a whole word
+//! (`FLAG_NO_SUGGEST_WHOLE`: inside another text it is not looked for);
+//! `k`: an everyday word that holds a listed word (`FLAG_LISTED_KEEP`).
 
 use std::collections::HashMap;
 
@@ -29,11 +35,11 @@ use crate::context_index::{phrase_hash, PhraseIndex};
 use crate::image::{ImageOwner, Text, U32Col};
 use crate::pairs::Pairs;
 use crate::reading::{
-    han_characters_stack, is_fully_spelled_reading, is_tone, strict_han_count, KEYS, MAX_INPUT,
+    han_characters_stack, is_fully_spelled_reading, is_tone, strict_han_count, Reading, KEYS, MAX_INPUT,
 };
 use crate::soa::{
-    BucketTableSoA, ContextTableSoA, WordTableSoA, FLAG_FULLY_SPELLED, FLAG_SINGLE_HAN_HANS,
-    FLAG_SINGLE_HAN_HANT, FLAG_VERIFIED_SPELLING,
+    BucketTableSoA, ContextTableSoA, WordTableSoA, FLAG_FULLY_SPELLED, FLAG_LISTED_KEEP, FLAG_NO_SUGGEST, FLAG_NO_SUGGEST_WHOLE,
+    FLAG_SINGLE_HAN_HANS, FLAG_SINGLE_HAN_HANT, FLAG_VERIFIED_SPELLING,
 };
 
 /// Immutable dictionary stored in Structure-of-Arrays (SoA) layout.
@@ -51,8 +57,84 @@ pub struct Lexicon {
     pub pinyin: bool,
     /// Word-pair table; without it the decoder ranks as before it existed.
     pairs: Option<Pairs>,
+    /// English lexicon (`mimo_en.bin`); the second tier of English inside
+    /// pinyin and nine-key typing. Without it both behave as before.
+    english: Option<crate::english::English>,
+    /// Which Zhuyin syllables have rows, by first symbol (abbrev.rs); all
+    /// zero for Pinyin. Built once at load.
+    pub(crate) zhuyin_syllables: crate::abbrev::SyllableTable,
+    /// Texts of the `FLAG_NO_SUGGEST` rows (both scripts) and their rows.
+    no_suggest: NoSuggest,
     /// Keeps in-place bytes alive; `None` when everything is owned.
     owner: Option<ImageOwner>,
+}
+
+/// The words of the never-volunteer list in a lexicon: the hash of each text
+/// (Traditional and Simplified) of a `FLAG_NO_SUGGEST` row with the row,
+/// sorted. Built at load from the flag column (a few thousand rows, 16 bytes
+/// each); not counted in `Lexicon::heap_bytes`, which is the size of the
+/// tables (0 when they are read in place).
+#[derive(Debug, Clone, Default)]
+pub struct NoSuggest {
+    rows: Vec<(u64, u32)>,
+    /// Longest text, in characters.
+    longest: usize,
+    /// The same for the `FLAG_LISTED_KEEP` rows.
+    keep: Vec<(u64, u32)>,
+    keep_longest: usize,
+}
+
+impl NoSuggest {
+    fn build(storage: &str, words: &WordTableSoA) -> Self {
+        let (mut rows, mut keep) = (Vec::new(), Vec::new());
+        let (mut longest, mut keep_longest) = (0, 0);
+        for i in 0..words.len() {
+            let (list, most) = if words.is_no_suggest(i) {
+                (&mut rows, &mut longest)
+            } else if words.is_listed_keep(i) {
+                (&mut keep, &mut keep_longest)
+            } else {
+                continue;
+            };
+            let (hant, hans) = (words.text(storage, i, false), words.text(storage, i, true));
+            *most = (*most).max(hant.chars().count()).max(hans.chars().count());
+            list.push((phrase_hash(hant.as_bytes()), i as u32));
+            if hans != hant {
+                list.push((phrase_hash(hans.as_bytes()), i as u32));
+            }
+        }
+        for list in [&mut rows, &mut keep] {
+            list.sort_unstable();
+            list.dedup();
+            list.shrink_to_fit();
+        }
+        Self { rows, longest, keep, keep_longest }
+    }
+
+    /// Rows whose hash is that of `text` (the caller compares the text).
+    fn candidates(&self, text: &str) -> impl Iterator<Item = u32> + '_ {
+        Self::lookup(&self.rows, text)
+    }
+
+    /// `FLAG_LISTED_KEEP` rows whose hash is that of `text`.
+    fn keep_candidates(&self, text: &str) -> impl Iterator<Item = u32> + '_ {
+        Self::lookup(&self.keep, text)
+    }
+
+    fn lookup<'a>(list: &'a [(u64, u32)], text: &str) -> impl Iterator<Item = u32> + 'a {
+        let h = phrase_hash(text.as_bytes());
+        list[list.partition_point(|&(k, _)| k < h)..].iter().take_while(move |&&(k, _)| k == h).map(|&(_, r)| r)
+    }
+
+    /// Heap bytes held.
+    pub fn heap_bytes(&self) -> usize {
+        (self.rows.capacity() + self.keep.capacity()) * std::mem::size_of::<(u64, u32)>()
+    }
+
+    /// Whether the lexicon has no `FLAG_NO_SUGGEST` row.
+    pub fn is_empty(&self) -> bool {
+        self.rows.is_empty()
+    }
 }
 
 /// Single-character conversion table: a character's UTF-8 bytes packed
@@ -331,6 +413,14 @@ impl Lexicon {
                 reading_context = true;
                 continue;
             }
+            // A sixth field: `n` never volunteered, `w` the same but only as a whole word,
+            // `k` an everyday word that holds a listed word.
+            let (line, no_suggest) = match (line.strip_suffix("\tn"), line.strip_suffix("\tw"), line.strip_suffix("\tk")) {
+                (Some(rest), _, _) if !reading_context => (rest, FLAG_NO_SUGGEST),
+                (_, Some(rest), _) if !reading_context => (rest, FLAG_NO_SUGGEST | FLAG_NO_SUGGEST_WHOLE),
+                (_, _, Some(rest)) if !reading_context => (rest, FLAG_LISTED_KEEP),
+                _ => (line, 0),
+            };
             let first_tab = line.find('\t')?;
             if first_tab == 0 { return None; }
             let bare = &line[..first_tab];
@@ -409,6 +499,7 @@ impl Lexicon {
             if is_fully_spelled_reading(reading) { flags |= FLAG_FULLY_SPELLED; }
             if hant.len() <= 4 && strict_han_count(hant) == 1 { flags |= FLAG_SINGLE_HAN_HANT; }
             if hans.len() <= 4 && strict_han_count(hans) == 1 { flags |= FLAG_SINGLE_HAN_HANS; }
+            flags |= no_suggest;
             words.push(r_off, first_sep as u16, t_off, hant.len() as u16, s_off, hans.len() as u16, weight, flags);
             last_weight = weight;
         }
@@ -433,12 +524,26 @@ impl Lexicon {
     ) -> Option<Self> {
         if words.is_empty() { return None; }
         let index = index.unwrap_or_else(|| LexiconIndex::build(&storage, &words, &buckets, &context));
-        Some(Self { storage, words, buckets, context, index, longest, pinyin, pairs: None, owner })
+        let no_suggest = NoSuggest::build(&storage, &words);
+        let mut lex = Self { storage, words, buckets, context, index, longest, pinyin, pairs: None, english: None, zhuyin_syllables: [0; 37], no_suggest, owner };
+        lex.zhuyin_syllables = crate::abbrev::syllable_table(&lex);
+        Some(lex)
     }
 
     /// Uses `pairs` for ranking (see `crate::pairs`).
     pub fn set_pairs(&mut self, pairs: Pairs) {
         self.pairs = Some(pairs);
+    }
+
+    /// Uses `english` for English words inside pinyin and nine-key typing (see `crate::english`).
+    pub fn set_english(&mut self, english: crate::english::English) {
+        self.english = Some(english);
+    }
+
+    /// The English lexicon, if one is attached.
+    #[inline]
+    pub fn english(&self) -> Option<&crate::english::English> {
+        self.english.as_ref()
     }
 
     /// The word-pair table, if one is attached.
@@ -533,10 +638,249 @@ impl Lexicon {
             + self.context.heap_bytes()
             + self.index.heap_bytes()
             + self.pairs.as_ref().map_or(0, Pairs::heap_bytes)
+            + self.english.as_ref().map_or(0, crate::english::English::heap_bytes)
+    }
+
+    /// The never-volunteer index (built at load; its heap is not in `heap_bytes`).
+    pub fn no_suggest(&self) -> &NoSuggest {
+        &self.no_suggest
+    }
+
+    /// The `FLAG_NO_SUGGEST` rows whose text (either script) is `text`.
+    pub fn no_suggest_rows<'a>(&'a self, text: &'a str) -> impl Iterator<Item = u32> + 'a {
+        self.no_suggest.candidates(text).filter(move |&r| {
+            self.words.text(&self.storage, r as usize, false) == text || self.words.text(&self.storage, r as usize, true) == text
+        })
+    }
+
+    /// Whether `text` is a word of the never-volunteer list (`FLAG_NO_SUGGEST`), in either script.
+    pub fn is_no_suggest_text(&self, text: &str) -> bool {
+        self.no_suggest_rows(text).next().is_some()
+    }
+
+    /// Whether `text` is an everyday word that holds a listed word (`FLAG_LISTED_KEEP`), in either script.
+    pub fn is_listed_keep_text(&self, text: &str) -> bool {
+        self.no_suggest.keep_candidates(text).any(|r| {
+            self.words.text(&self.storage, r as usize, false) == text || self.words.text(&self.storage, r as usize, true) == text
+        })
+    }
+
+    /// Whether `text` is or holds a word of the never-volunteer list (one that
+    /// counts inside other text; not inside an everyday word that holds it).
+    pub fn holds_no_suggest(&self, text: &str) -> bool {
+        self.is_no_suggest_text(text) || self.mentions_no_suggest(text)
+    }
+
+    /// Whether `input` (Pinyin letters or Zhuyin keys, tones and apostrophes
+    /// allowed) is the full spelling of a `FLAG_NO_SUGGEST` row with text `text`:
+    /// every letter (every Zhuyin symbol) of the row and no other, the tones
+    /// that are typed matching. Zhuyin typed with the tone of the last syllable
+    /// only (ㄓㄨㄥㄍㄨㄥˋ for 中共) is a full spelling, as it is for every other
+    /// word, unless the same symbols also read as fewer syllables (ㄕㄨㄟˇ is 水
+    /// as well as ㄕㄨㄟˇ for 市委): then every syllable but the last needs its tone.
+    pub fn spells_no_suggest(&self, input: &str, text: &str) -> bool {
+        let reading = Reading::new(input, self.pinyin);
+        self.no_suggest_rows(text).any(|row| {
+            let wr = self.words.reading(&self.storage, row as usize).as_bytes();
+            let mut letters = wr.iter().filter(|&&b| !is_tone(b, self.pinyin));
+            let toned = self.pinyin || {
+                let (mut sounds, mut ends) = (0usize, true);
+                for (i, &b) in wr.iter().enumerate() {
+                    if !is_tone(b, false) {
+                        sounds += 1;
+                    } else if i + 1 < wr.len() {
+                        ends &= reading.boundaries.get(sounds).is_some_and(|&t| t != 0);
+                    }
+                }
+                ends || !self.reads_as_fewer_syllables(reading.sounds(), wr)
+            };
+            reading.sounds_bytes().iter().all(|b| letters.next() == Some(b))
+                && letters.next().is_none()
+                && toned
+                && self.is_spelled_row(row as usize)
+                && reading.matches(wr, 0, reading.len())
+        })
+    }
+
+    /// Whether a row read by the Zhuyin symbols `sounds` has fewer syllables
+    /// (tones) than the reading `than`.
+    fn reads_as_fewer_syllables(&self, sounds: &str, than: &[u8]) -> bool {
+        let syllables = |r: &[u8]| r.iter().filter(|&&b| is_tone(b, false)).count();
+        let n = syllables(than);
+        let (lo, hi) = self.range(sounds);
+        (lo..hi).any(|i| syllables(self.words.reading(&self.storage, i).as_bytes()) < n)
+    }
+
+    /// Whether row `row` spells its word in full: every Zhuyin row, a Pinyin
+    /// row of whole syllables (not an initials row such as k1f1g3).
+    fn is_spelled_row(&self, row: usize) -> bool {
+        !self.pinyin || self.words.is_fully_spelled(row)
+    }
+
+    /// Letters of row `row`'s reading (tones left out) into `out`; their count.
+    fn row_letters(&self, row: usize, out: &mut [u8; MAX_INPUT]) -> usize {
+        let mut n = 0;
+        for &b in self.words.reading(&self.storage, row).as_bytes() {
+            if !is_tone(b, self.pinyin) && n < out.len() {
+                out[n] = b;
+                n += 1;
+            }
+        }
+        n
+    }
+
+    /// Whether some `FLAG_NO_SUGGEST` row with text `text` that counts inside
+    /// other text (not `FLAG_NO_SUGGEST_WHOLE`) has letters for which
+    /// `typed` holds (`None`: no such row).
+    fn inside_spelled(&self, text: &str, typed: &impl Fn(&[u8]) -> bool) -> Option<bool> {
+        let mut any = false;
+        let mut letters = [0u8; MAX_INPUT];
+        for row in self.no_suggest_rows(text) {
+            if self.words.is_no_suggest_whole(row as usize) || !self.is_spelled_row(row as usize) {
+                continue;
+            }
+            any = true;
+            let n = self.row_letters(row as usize, &mut letters);
+            if n > 0 && typed(&letters[..n]) {
+                return Some(true);
+            }
+        }
+        any.then_some(false)
+    }
+
+    /// Whether offering `text` for `input` would volunteer a word of the
+    /// never-volunteer list: `text` is such a word and `input` is not its
+    /// full spelling, or `text` holds one (two characters or more, not a
+    /// whole-word-only one) whose letters the input does not have (a word
+    /// typed by its initials or with a typo inside a longer reading).
+    pub fn volunteers(&self, input: &str, text: &str) -> bool {
+        if self.no_suggest.rows.is_empty() {
+            return false;
+        }
+        if self.is_no_suggest_text(text) {
+            return !self.spells_no_suggest(input, text);
+        }
+        let reading = Reading::new(input, self.pinyin);
+        let sounds = reading.sounds_bytes();
+        self.volunteers_by(text, |_| false, |letters| sounds.windows(letters.len()).any(|w| w == letters))
+    }
+
+    /// `volunteers` for keys of another kind (nine-key digits): `whole`
+    /// says whether the keys are the full spelling of a row with these
+    /// letters (its reading without tones), `inside` whether they contain it.
+    pub fn volunteers_by(&self, text: &str, whole: impl Fn(&[u8]) -> bool, inside: impl Fn(&[u8]) -> bool) -> bool {
+        if self.no_suggest.rows.is_empty() {
+            return false;
+        }
+        if self.is_no_suggest_text(text) {
+            let mut letters = [0u8; MAX_INPUT];
+            return !self.no_suggest_rows(text).any(|row| {
+                let n = self.row_letters(row as usize, &mut letters);
+                self.is_spelled_row(row as usize) && whole(&letters[..n])
+            });
+        }
+        self.each_part(text, |part| self.inside_spelled(part, &inside) == Some(false))
+    }
+
+    /// Whether `text` holds a word of the never-volunteer list of two
+    /// characters or more that counts inside other text (for corrections,
+    /// which are never the typed spelling).
+    pub fn mentions_no_suggest(&self, text: &str) -> bool {
+        !self.no_suggest.rows.is_empty() && self.each_part(text, |part| self.inside_spelled(part, &|_| false).is_some())
+    }
+
+    /// Whether `right` (a next word) after `left` (the text before it) makes
+    /// a word of the never-volunteer list: `right` is one, or a part of
+    /// `left` and `right` together that starts in `left` (a first character
+    /// and the rest of the word) is one
+    /// that counts inside other text.
+    pub fn completes_no_suggest(&self, left: &str, right: &str) -> bool {
+        if self.no_suggest.rows.is_empty() || right.is_empty() {
+            return false;
+        }
+        if self.is_no_suggest_text(right) {
+            return true;
+        }
+        let mut joined = [0u8; 64];
+        let (l, r) = (left.as_bytes(), right.as_bytes());
+        let l = &l[l.len().saturating_sub(16)..];
+        if l.len() + r.len() > joined.len() {
+            return false;
+        }
+        joined[..l.len()].copy_from_slice(l);
+        joined[l.len()..l.len() + r.len()].copy_from_slice(r);
+        let Ok(text) = std::str::from_utf8(&joined[..l.len() + r.len()]) else { return false };
+        let boundary = l.len();
+        let longest = self.no_suggest.longest.max(2);
+        let mut starts = [0usize; 65];
+        let mut n = 0;
+        for (i, _) in text.char_indices() {
+            starts[n] = i;
+            n += 1;
+        }
+        starts[n] = text.len();
+        let starts = &starts[..=n];
+        for a in 0..starts.len() - 1 {
+            if starts[a] >= boundary {
+                break;
+            }
+            for b in a + 2..starts.len().min(a + longest + 1) {
+                if starts[b] <= boundary {
+                    continue;
+                }
+                if self.inside_spelled(&text[starts[a]..starts[b]], &|_| false).is_some() {
+                    return true;
+                }
+            }
+        }
+        false
+    }
+
+    /// Whether `test` holds for some part of `text` of two characters or more
+    /// (at most the longest never-volunteer word; the first 64 characters).
+    /// A part inside an everyday word that holds a listed word (`FLAG_LISTED_KEEP`:
+    /// 印度支那, 總統套房) is not tested.
+    fn each_part(&self, text: &str, mut test: impl FnMut(&str) -> bool) -> bool {
+        let mut starts = [0usize; 65];
+        let mut n = 0;
+        let mut end = text.len();
+        for (i, _) in text.char_indices() {
+            if n == 64 {
+                end = i;
+                break;
+            }
+            starts[n] = i;
+            n += 1;
+        }
+        starts[n] = end;
+        // kept[a]: the end (in characters) of the longest everyday word that starts at a.
+        let mut kept = [0usize; 64];
+        if !self.no_suggest.keep.is_empty() {
+            let keep_longest = self.no_suggest.keep_longest;
+            for a in 0..n {
+                for b in (a + 3..=n.min(a + keep_longest)).rev() {
+                    if self.is_listed_keep_text(&text[starts[a]..starts[b]]) {
+                        kept[a] = b;
+                        break;
+                    }
+                }
+            }
+        }
+        let inside_kept = |a: usize, b: usize| (a.saturating_sub(self.no_suggest.keep_longest)..=a).any(|k| kept[k] >= b);
+        let longest = self.no_suggest.longest.max(2);
+        for a in 0..n {
+            for b in a + 2..=n.min(a + longest) {
+                if !(self.no_suggest.keep_longest > 0 && inside_kept(a, b)) && test(&text[starts[a]..starts[b]]) {
+                    return true;
+                }
+            }
+        }
+        false
     }
 
     /// Words with a short text whose reading starts with `first_byte`,
     /// heaviest first (at most 64; none for non-ASCII bytes).
+    /// `FLAG_NO_SUGGEST` words are left out: a first letter is never their spelling.
     pub fn initials(&self, first_byte: u8) -> impl Iterator<Item = usize> + '_ {
         let (starts, words) = self.index.initials.columns();
         let (lo, hi) = if first_byte < 128 {
@@ -544,7 +888,7 @@ impl Lexicon {
         } else {
             (0, 0)
         };
-        (lo..hi).map(move |k| words.get(k) as usize)
+        (lo..hi).map(move |k| words.get(k) as usize).filter(move |&w| !self.words.is_no_suggest(w))
     }
 
     /// Frequency of an exact context phrase, via the O(1) hashed index.

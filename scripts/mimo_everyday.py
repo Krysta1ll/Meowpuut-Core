@@ -97,7 +97,7 @@ def more(raw_dir: str):
         seen = set(f.read().splitlines())
     manifest = json.loads((OUT / "SOURCE.json").read_text())
     batch = {"written": "2026-11-12, by language-model runs for this project; the writers were given a topic, a "
-                        "register and content limits (no politics, nothing aimed at a group of people, no "
+                        "register and content limits (no sensitive or abusive topics, nothing aimed at a group of people, no "
                         "real persons, works or brands) and were not shown the benchmark or the held-out sets"}
     for kind in ("chat", "written", "mixed"):
         files, kept, dropped, per_region = clean(Path(raw_dir) / kind, seen)

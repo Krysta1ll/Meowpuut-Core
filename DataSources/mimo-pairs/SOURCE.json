@@ -1,6 +1,6 @@
 {
   "name": "mimo-pairs",
-  "description": "Counts of which word follows which, made by scripts/mimo_pairs.py from the texts below; packed into mimo_pairs.bin at build time. A sentence with a term of Resources/Lexicon/blocked-terms.txt (politics, words that put down a group of people, abuse) is not counted.",
+  "description": "Counts of which word follows which, made by scripts/mimo_pairs.py from the texts below; packed into mimo_pairs.bin at build time. A sentence with a term of Resources/Lexicon/blocked-terms.txt (sensitive or abusive terms) is not counted.",
   "license": "The counts are the project's own work; the texts they were counted in are CC-BY-2.0-FR (Tatoeba), CC0-1.0 (Common Voice), Apache-2.0 (CrossWOZ, KdConv), CC-BY-4.0 (MASSIVE) and the project's own sentences. No share-alike source.",
   "attribution": "Tatoeba (https://tatoeba.org) and its contributors; Mozilla Common Voice sentence-collector contributors; CrossWOZ and KdConv (Tsinghua University CoAI group); MASSIVE (Amazon.com, Inc. or its affiliates). Sentences written for this project (DataSources/mimo-everyday).",
   "sources": {

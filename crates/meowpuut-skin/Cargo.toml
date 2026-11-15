@@ -1,0 +1,30 @@
+[package]
+name = "meowpuut-skin"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Signed, per-recipient encrypted custom skins: verification, decryption, validation, install-time rewriting and load-time checks (no signing or encrypting side)"
+
+[features]
+# Trusts the published test root (kid `test-root-1`) and accepts `test-` kids.
+# Debug and Lab builds only: a build with this feature fails when the
+# environment variable MEOWPUUT_RELEASE_BUILD is set.
+test-keys = []
+
+# The workspace's first external dependencies, limited to this crate. Versions
+# are pinned exactly; Cargo.lock is committed. Licences: THIRD_PARTY.md.
+[dependencies]
+ed25519-dalek = { version = "=3.0.0", default-features = false, features = ["fast", "zeroize"] }
+x25519-dalek = { version = "=3.0.0", default-features = false, features = ["precomputed-tables", "static_secrets", "zeroize"] }
+chacha20poly1305 = { version = "=0.11.0", default-features = false, features = ["alloc", "zeroize"] }
+hkdf = { version = "=0.13.0", default-features = false }
+sha2 = { version = "=0.11.1", default-features = false }
+zeroize = { version = "=1.9.1", default-features = false, features = ["alloc"] }
+getrandom = { version = "=0.4.3", default-features = false }
+serde_json = { version = "=1.0.154", default-features = false, features = ["std"] }
+# The re-encoded PNG bytes are signed (header `files`), so the encoder must not
+# change under a signed skin: regenerate Tests/skin-vectors when this moves.
+png = { version = "=0.18.1", default-features = false }
+
+[lints]
+workspace = true

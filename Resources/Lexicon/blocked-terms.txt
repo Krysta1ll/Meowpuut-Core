@@ -1,22 +1,86 @@
-# Terms the counted text must not contain (Simplified characters; the text is converted before the check).
-# A sentence with one of these is left out of the word-pair, phrase and word counts, and no phrase with one
-# is added, so the keyboard never offers them as a phrase or as the next word. The words themselves stay in
-# the lexicon: a person can still type them.
-# Three groups: politics and public conflict; words that put down a group of people; abuse, sex, drugs, self-harm.
+# Contested or offensive terms. A sentence with one of them is left out of the word-pair, phrase and word
+# counts. A word that contains one is never volunteered: no next-word association, initials key, completion,
+# typo or fuzzy-sound fix, or emoji association offers it, and its weight stays below the everyday words that
+# share its reading. Typed in full it is still there. Read by scripts/blocked_terms.py.
+#
+# Sections:
+#   [zh]        Simplified; text is converted to Simplified before the check. A term matches anywhere in a word;
+#               a term written =term matches only the whole word.
+#   [zh-keep]   everyday words that contain a [zh] term and are not marked (whole words).
+#   [zh-drop]   a lexicon word that contains one of these (and is not the term itself) is left out of the
+#               lexicon; * stands for any characters.
+#   [ja]        Japanese surface forms; kanji terms match anywhere, katakana-only terms only as the whole word.
+#   [en]        English, lower case, whole words; a hyphen and a trailing 's are dropped before the check
+#               (half-breed, whore's), and a word that is a listed word plus -s, -ic, -ist(s), -ism(s) or -ite(s)
+#               is hit too. left_right is a word pair: the right word is never offered after the left one. scripts/mimo_english.py also adds the words SCOWL marks offensive-1,
+#               offensive-2 or vulgar-1.
+#   [emoji-key] words (zh or ja, whole words) that get no emoji association.
 
-# politics and public conflict
-政治 政府 政党 政权 政客 政变 总统 总理 首相 主席 总书记 书记 议员 立委 立法院 国会 议会 选举 大选 竞选 候选人 选票 公投
-执政 在野 共产 国民党 民进党 民众党 共和党 民主党 自民党 纳粹 法西斯 独裁 极权 专制 民主 自由派 保守派 左派 右派 左翼 右翼
+[zh]
+# group 1
+政治 政府 政党 政权 政客 政变 总统 总理 首相 主席 总书记 书记 议员 立委 立法院 国会 议会 选举 大选 竞选 候选人 选票
+公投 执政 在野 共产 国民党 民进党 民众党 共和党 民主党 自民党 纳粹 法西斯 独裁 极权 专制 民主 自由派 保守派 左派 右派 左翼 右翼
 革命 起义 抗议 示威 暴动 镇压 戒严 战争 内战 侵略 殖民 军队 军事 导弹 核武 恐怖分子 恐怖主义 恐袭 难民 制裁 主权 领土
 台独 港独 藏独 疆独 两岸 统战 一国两制 九二共识 文革 文化大革命 六四 天安门 法轮功 外交 间谍 特务 叛国 汉奸 卖国 反共 亲中 亲美
-小粉红 五毛党 公知 习近平 毛泽东 邓小平 江泽民 胡锦涛 蒋介石 蒋经国 李登辉 陈水扁 马英九 蔡英文 赖清德 柯文哲 韩国瑜
-特朗普 川普 拜登 奥巴马 欧巴马 普京 普丁 希特勒 斯大林 史达林 金正恩 泽连斯基
+小粉红 五毛党 公知 习近平 毛泽东 邓小平 江泽民 胡锦涛 蒋介石 蒋经国 李登辉 陈水扁 马英九 蔡英文 赖清德 柯文哲 韩国瑜 特朗普 川普 拜登 奥巴马 欧巴马
+普京 普丁 希特勒 斯大林 史达林 金正恩 泽连斯基 中共 共匪 解放军 =国军 国台办 国务院 中南海 中央军委 政治局 省委 市委 =人大 全国人大 人大代表 人大常委
+省人大 市人大 政协 两会 党代会 中华民国 中华人民共和国 台湾省 台湾问题 一个中国 两国论 武统 反分裂 台海 白宫 克里姆林 周恩来 刘少奇 林彪 华国锋 胡耀邦 赵紫阳
+朱镕基 温家宝 李克强 薄熙来 刘晓波 王丹 黄之锋 黎智英 达赖 孙中山 袁世凯 张学良 苏贞昌 朱立伦 侯友宜 =连战 宋楚瑜 安倍 岸田 金日成 金正日 墨索里尼
+列宁 卡斯特罗 萨达姆 内塔尼亚胡 马克龙 =默克尔 克林顿 里根 尼克松 二二八 白色恐怖 美丽岛事件 太阳花运动 太阳花学运 反送中 占领中环 雨伞运动 =民运 民运人士 海外民运
+八九民运 =学运 学运领袖 学潮 =屠城 红卫兵 大跃进 国安法 颜色革命 钓鱼岛 =钓鱼台 钓鱼台列岛 尖阁 竹岛 独岛 九段线 南京大屠杀 慰安妇 =靖国 靖国神社 抗日 抗战
+日军 侵华 皇军 抗美援朝 台湾独立 西藏独立 俄乌 以巴冲突 哈马斯 加沙 加萨 塔利班 伊斯兰国 基地组织 宣战 开战 核弹 原子弹 军演 =游行 游行示威 集会游行
+罢工 维权 上访 暴乱 =骚乱 动乱 翻墙 人权 =异议 异议人士 共产主义 社会主义 资本主义 帝国主义 民族主义 军国主义 马克思主义 列宁主义 爱国主义 毛泽东思想 法轮 暴政
+统一战线 国防军 国防部 军区 党中央 人民代表 爱国运动 爱国人士 人民武装
 
-# putting down a group of people
-支那 鬼子 小日本 倭寇 棒子 阿三 黑鬼 尼哥 白皮猪 鬼佬 蝗虫 台巴子 呆湾 阿陆仔 大陆狗 强国人 番仔 外劳 乡巴佬 土包子 穷鬼
-娘炮 娘娘腔 基佬 人妖 婊 荡妇 骚货 贱人 贱货 母狗 女拳 直男癌 肥猪 死胖子 丑八怪 矮冬瓜 秃驴 老不死 智障 弱智 脑残 白痴 低能
+# group 2
+支那 鬼子 小日本 倭寇 棒子 阿三 黑鬼 尼哥 白皮猪 鬼佬 台巴子 呆湾 阿陆仔 大陆狗 强国人 番仔 外劳 乡巴佬 土包子 穷鬼 娘炮
+娘娘腔 基佬 人妖 婊 荡妇 骚货 贱人 贱货 母狗 女拳 直男癌 肥猪 死胖子 丑八怪 矮冬瓜 秃驴 老不死 智障 弱智 脑残 白痴 低能
 残废 瘸子 异教徒 邪教 圣战 种族 歧视 屠杀 灭绝 地域黑
 
-# abuse, sex, drugs, self-harm
-傻逼 傻屄 煞笔 他妈的 操你 草泥马 干你娘 去死 废物 人渣 畜生 杂种 强奸 轮奸 性侵 猥亵 色情 卖淫 嫖 妓女 毒品 吸毒 贩毒 大麻 冰毒
-海洛因 自杀 自残 赌博 赌场
+# group 3
+傻逼 傻屄 煞笔 他妈的 操你 草泥马 干你娘 去死 废物 人渣 畜生 杂种 强奸 轮奸 性侵 猥亵 色情 卖淫 嫖 妓女 毒品 吸毒
+贩毒 大麻 冰毒 海洛因 自杀 自残 赌博 赌场
+
+[zh-keep]
+自主权 业主权益 低能量 君主权 内外交困 一九六四年 六四四 六四式 大麻哈鱼 大麻子 灭绝师太 主席台 全民运动 新文学运动 文学运动 木马屠城 稳坐钓鱼台 连战皆捷 默克尔细胞 冠军队 亚军队 固体废物
+废物利用 废物袋 废物箱 棒子面粥 玉米棒子 大麻里 审议会 评议会 新闻评议会 评议员 阿尼哥
+低能耗 高分低能 去死皮 全国会计 濒临灭绝 生态灭绝 浦江两岸 潮平两岸阔 棒子面 鬼子姜 大麻袋 印度支那 密支那
+对外劳务 翻墙而过 白首相知 一六四四 一六四八年 杂种优势 棋圣战 对抗战 喀喇沁左翼 科尔沁左翼 安倍川车站 岸田国士 王丹凤
+总统套房 危险废物
+
+[zh-drop]
+暴政 大法好 中共*省委 中共*市委
+
+[ja]
+安倍晋三 岸田文雄 習近平 毛沢東 プーチン バイデン 靖国 尖閣 竹島 慰安婦 南京大虐殺 天安門事件 法輪功 共産党 ナチス 大統領選 デモ隊
+
+[en]
+# group 1
+trump biden obama putin xi jinping zelensky netanyahu hitler stalin lenin mussolini mao nazi nazis fascist fascism
+communist communism zionist zionism isis taliban hamas terrorist terrorism tiananmen falun dalai
+nazism jihadist zedong xiaoping zemin jintao kaishek ingwen kuomintang enlai yatsen shikai shinzo kishida zelenskyy
+ilsung jongil jongun castro hussein clinton merkel macron reagan nixon thatcher blair
+# word pairs (left_right): neither word is listed; the right word is never offered after the left one
+kim_jong kim_jung kim_il ho_chi chi_minh jong_un jong_il jung_il il_sung chinese_government communist_party
+
+# group 2
+nigger niggers nigga niggas chink chinks gook gooks spic spics wetback wetbacks kike kikes coon coons darkie darkies
+jap japs paki pakis raghead ragheads towelhead towelheads beaner beaners squaw halfbreed faggot faggots fag fags dyke
+dykes tranny trannies shemale retard retards retarded spaz spastic wop wops kraut krauts gypsy gypsies
+
+# group 3
+fuck fucks fucked fucker fuckers fucking fuckhead motherfucker motherfuckers motherfucking shit shits shitty shithead
+shitheads bullshit horseshit asshole assholes arsehole arseholes dumbass bitch bitches bastard bastards cunt cunts
+twat twats douchebag douchebags scumbag scumbags prick pricks wanker wankers dickhead dickheads cocksucker cocksuckers
+
+# group 4
+porn porno pornography pussy pussies cock cocks dildo dildos blowjob blowjobs handjob handjobs jerkoff cumshot orgasm
+orgasms slut sluts whore whores horny masturbate masturbation
+
+# group 5
+cocaine heroin methamphetamine meth suicide suicidal selfharm
+
+[emoji-key]
+中国 中國 同志 投票 投票箱 票箱 选票 選票 标语 標語 标语牌 標語牌 盟友 纪念日 紀念日 升旗 团结 團結 军人 軍人 军用 軍用
+陆军 陸軍 军警 軍警 军功章 軍功章 军事奖章 軍事獎章 士兵 战士 戰士 部队 部隊 战死 戰死 交叉旗 对叉 對叉 半程 祝日 祝日の旗 日の丸
+交差した旗 転法輪 法輪 抗議 デモ でも プラカード 異議 軍隊 戦争 兵士 ミリタリー 選挙 投票箱

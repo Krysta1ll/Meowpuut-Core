@@ -35,7 +35,7 @@ use crate::lexicon::Lexicon;
 use crate::mixed::{mixed_pinyin_into, mixed_pinyin_prefix_into};
 use crate::nine_key::{NineKeyIndex, SEPARATOR as NINE_KEY_SEPARATOR};
 use crate::reading::{
-    is_tone, strict_han_count, zhuyin_symbol_for_key, CANDIDATE_LIMIT, KEYS, MAX_INPUT, PAGE_SIZE,
+    is_tone, strict_han_count, zhuyin_symbol_for_key, zhuyin_text_into, CANDIDATE_LIMIT, KEYS, MAX_INPUT, PAGE_SIZE,
 };
 use crate::soa::{CandidatePoolSoA, JapaneseTableSoA};
 use crate::decoder::last_word_id;
@@ -157,6 +157,19 @@ impl Session {
     #[inline]
     pub fn preedit(&self) -> &str {
         &self.preedit
+    }
+
+    /// Writes the uncommitted input as the user would write it: Zhuyin as
+    /// Bopomofo with tone marks but no ˉ (`su3cl3` to ㄋㄧˇㄏㄠˇ), Pinyin and
+    /// nine-key as the keys typed. Replaces `out`; allocation-free once `out`
+    /// holds `MAX_INPUT * 3` bytes.
+    pub fn input_text_into(&self, out: &mut String) {
+        out.clear();
+        if self.lexicon.pinyin || self.nine_key.is_some() {
+            out.push_str(&self.input);
+        } else {
+            zhuyin_text_into(self.input.as_bytes(), out);
+        }
     }
 
     #[inline]

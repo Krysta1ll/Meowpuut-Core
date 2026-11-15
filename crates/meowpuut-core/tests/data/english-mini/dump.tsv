@@ -1,0 +1,1508 @@
+n	300	2492	176	332
+row	0	a	a	10901
+next	2	141,84,134,262,161,137,145,22
+pair	2	0	0
+pair	2	1	-131
+pair	2	0	0
+row	1	able	able	8513
+next	3	247,52,145,10,112,72,37,169
+pair	3	0	-265
+pair	3	1	-78
+pair	3	121	-265
+row	2	about	about	9457
+next	4	229,227,117,240,276,247,101,95
+pair	4	0	-5
+pair	4	1	134
+pair	4	240	40
+row	3	after	after	8550
+next	5	229,0,5,203,101,227,92,106
+pair	5	0	-20
+pair	5	1	71
+pair	5	59	-20
+row	4	again	again	8645
+next	6	10,251,112,248,109,162,247,106
+pair	6	0	-101
+pair	6	1	273
+pair	6	178	-110
+row	5	all	all	9442
+next	7	229,169,49,227,181,240,101,196
+pair	7	0	0
+pair	7	1	160
+pair	7	297	-31
+row	6	already	already	8393
+next	8	250,26,125,126,57,129,124,91
+pair	8	0	0
+pair	8	1	179
+pair	8	116	0
+row	7	always	always	8709
+next	9	26,23,264,91,52,86,0,210
+pair	9	0	0
+pair	9	1	27
+pair	9	235	0
+row	8	am	am	8545
+next	10	106,166,0,83,262,229,112,222
+pair	10	0	-3
+pair	10	1	173
+pair	10	54	-212
+row	9	an	an	9349
+next	11	173,108,0,65,5,176,114,1
+pair	11	0	0
+pair	11	1	-201
+pair	11	173	0
+row	10	and	and	10490
+next	12	106,229,0,101,92,297,117,235
+pair	12	0	0
+pair	12	1	-175
+pair	12	292	-135
+row	11	any	any	8822
+next	13	151,169,178,108,150,245,94,269
+pair	13	0	-10
+pair	13	1	38
+pair	13	111	-10
+row	12	anything	anything	8669
+next	14	
+pair	14	0	0
+pair	14	1	0
+pair	14	230	0
+row	13	are	are	9957
+next	15	
+pair	15	0	0
+pair	15	1	0
+pair	15	49	0
+row	14	arent	aren't	8282
+next	16	
+pair	16	0	0
+pair	16	1	0
+pair	16	168	0
+row	15	around	around	8309
+next	17	
+pair	17	0	0
+pair	17	1	0
+pair	17	287	0
+row	16	as	as	9587
+next	18	
+pair	18	0	0
+pair	18	1	0
+pair	18	106	0
+row	17	ask	ask	8250
+next	19	
+pair	19	0	0
+pair	19	1	0
+pair	19	225	0
+row	18	asked	asked	8622
+next	20	
+pair	20	0	0
+pair	20	1	0
+pair	20	44	0
+row	19	at	at	9735
+next	21	
+pair	21	0	0
+pair	21	1	0
+pair	21	163	0
+row	20	away	away	8460
+next	22	
+pair	22	0	0
+pair	22	1	0
+pair	22	282	0
+row	21	back	back	8938
+next	23	
+pair	23	0	0
+pair	23	1	0
+pair	23	101	0
+row	22	bad	bad	8146
+next	24	
+pair	24	0	0
+pair	24	1	0
+pair	24	220	0
+row	23	be	be	10054
+next	25	
+pair	25	0	0
+pair	25	1	0
+pair	25	39	0
+row	24	beautiful	beautiful	7963
+next	26	
+pair	26	0	0
+pair	26	1	0
+pair	26	158	0
+row	25	because	because	8370
+next	27	
+pair	27	0	0
+pair	27	1	0
+pair	27	277	0
+row	26	been	been	9250
+next	28	
+pair	28	0	0
+pair	28	1	0
+pair	28	96	0
+row	27	before	before	8615
+next	29	
+pair	29	0	0
+pair	29	1	0
+pair	29	215	0
+row	28	being	being	8347
+next	30	
+pair	30	0	0
+pair	30	1	0
+pair	30	34	0
+row	29	believe	believe	8273
+next	31	
+pair	31	0	0
+pair	31	1	0
+pair	31	153	0
+row	30	best	best	8192
+next	32	
+pair	32	0	0
+pair	32	1	0
+pair	32	272	0
+row	31	better	better	8583
+next	33	
+pair	33	0	0
+pair	33	1	0
+pair	33	91	0
+row	32	book	book	8311
+next	34	
+pair	34	0	0
+pair	34	1	0
+pair	34	210	0
+row	33	both	both	8319
+next	35	
+pair	35	0	0
+pair	35	1	0
+pair	35	29	0
+row	34	busy	busy	7939
+next	36	
+pair	36	0	0
+pair	36	1	0
+pair	36	148	0
+row	35	but	but	9264
+next	37	
+pair	37	0	0
+pair	37	1	0
+pair	37	267	0
+row	36	buy	buy	8432
+next	38	
+pair	38	0	0
+pair	38	1	0
+pair	38	86	0
+row	37	by	by	9398
+next	39	
+pair	39	0	0
+pair	39	1	0
+pair	39	205	0
+row	38	call	call	8181
+next	40	
+pair	40	0	0
+pair	40	1	0
+pair	40	24	0
+row	39	came	came	8435
+next	41	
+pair	41	0	0
+pair	41	1	0
+pair	41	143	0
+row	40	can	can	9539
+next	42	
+pair	42	0	0
+pair	42	1	0
+pair	42	262	0
+row	41	cant	can't	9012
+next	43	
+pair	43	0	0
+pair	43	1	0
+pair	43	81	0
+row	42	car	car	8614
+next	44	
+pair	44	0	0
+pair	44	1	0
+pair	44	200	0
+row	43	children	children	8309
+next	45	
+pair	45	0	0
+pair	45	1	0
+pair	45	19	0
+row	44	cold	cold	7888
+next	46	
+pair	46	0	0
+pair	46	1	0
+pair	46	138	0
+row	45	come	come	8861
+next	47	
+pair	47	0	0
+pair	47	1	0
+pair	47	257	0
+row	46	could	could	9072
+next	48	
+pair	48	0	0
+pair	48	1	0
+pair	48	76	0
+row	47	couldnt	couldn't	8377
+next	49	
+pair	49	0	0
+pair	49	1	0
+pair	49	195	0
+row	48	country	country	7956
+next	50	
+pair	50	0	0
+pair	50	1	0
+pair	50	14	0
+row	49	day	day	8761
+next	51	
+pair	51	0	0
+pair	51	1	0
+pair	51	133	0
+row	50	did	did	9511
+next	52	
+pair	52	0	0
+pair	52	1	0
+pair	52	252	0
+row	51	didnt	didn't	9698
+next	53	
+pair	53	0	0
+pair	53	1	0
+pair	53	71	0
+row	52	do	do	10367
+next	54	
+pair	54	0	0
+pair	54	1	0
+pair	54	190	0
+row	53	does	does	8768
+next	55	
+pair	55	0	0
+pair	55	1	0
+pair	55	9	0
+row	54	doesnt	doesn't	9145
+next	56	
+pair	56	0	0
+pair	56	1	0
+pair	56	128	0
+row	55	dog	dog	8277
+next	57	
+pair	57	0	0
+pair	57	1	0
+pair	57	247	0
+row	56	doing	doing	8989
+next	58	
+pair	58	0	0
+pair	58	1	0
+pair	58	66	0
+row	57	done	done	8612
+next	59	
+pair	59	0	0
+pair	59	1	0
+pair	59	185	0
+row	58	dont	don't	9862
+next	60	
+pair	60	0	0
+pair	60	1	0
+pair	60	4	0
+row	59	door	door	8227
+next	61	
+pair	61	0	0
+pair	61	1	0
+pair	61	123	0
+row	60	down	down	8580
+next	62	
+pair	62	0	0
+pair	62	1	0
+pair	62	242	0
+row	61	each	each	8152
+next	63	
+pair	63	0	0
+pair	63	1	0
+pair	63	61	0
+row	62	eat	eat	8493
+next	64	
+pair	64	0	0
+pair	64	1	0
+pair	64	180	0
+row	63	else	else	8034
+next	65	
+pair	65	0	0
+pair	65	1	0
+pair	65	299	0
+row	64	enough	enough	8212
+next	66	
+pair	66	0	0
+pair	66	1	0
+pair	66	118	0
+row	65	even	even	8447
+next	67	
+pair	67	0	0
+pair	67	1	0
+pair	67	237	0
+row	66	ever	ever	8458
+next	68	
+pair	68	0	0
+pair	68	1	0
+pair	68	56	0
+row	67	every	every	8489
+next	69	
+pair	69	0	0
+pair	69	1	0
+pair	69	175	0
+row	68	everyone	everyone	8300
+next	70	
+pair	70	0	0
+pair	70	1	0
+pair	70	294	0
+row	69	everything	everything	8541
+next	71	
+pair	71	0	0
+pair	71	1	0
+pair	71	113	0
+row	70	father	father	8186
+next	72	
+pair	72	0	0
+pair	72	1	0
+pair	72	232	0
+row	71	feel	feel	8290
+next	73	
+pair	73	0	0
+pair	73	1	0
+pair	73	51	0
+row	72	find	find	8502
+next	74	
+pair	74	0	0
+pair	74	1	0
+pair	74	170	0
+row	73	first	first	8549
+next	75	
+pair	75	0	0
+pair	75	1	0
+pair	75	289	0
+row	74	for	for	10105
+next	76	
+pair	76	0	0
+pair	76	1	0
+pair	76	108	0
+row	75	found	found	8398
+next	77	
+pair	77	0	0
+pair	77	1	0
+pair	77	227	0
+row	76	french	French	8677
+next	78	115,247,10,16,286,112,74,19
+pair	78	0	-24
+pair	78	1	250
+pair	78	46	-24
+row	77	friends	friends	8302
+next	79	
+pair	79	0	0
+pair	79	1	0
+pair	79	165	0
+row	78	from	from	9424
+next	80	
+pair	80	0	0
+pair	80	1	0
+pair	80	284	0
+row	79	gave	gave	8264
+next	81	
+pair	81	0	0
+pair	81	1	0
+pair	81	103	0
+row	80	get	get	9276
+next	82	
+pair	82	0	0
+pair	82	1	0
+pair	82	222	0
+row	81	give	give	8474
+next	83	
+pair	83	0	0
+pair	83	1	0
+pair	83	41	0
+row	82	go	go	9399
+next	84	
+pair	84	0	0
+pair	84	1	0
+pair	84	160	0
+row	83	going	going	9390
+next	85	
+pair	85	0	0
+pair	85	1	0
+pair	85	279	0
+row	84	good	good	9085
+next	86	
+pair	86	0	0
+pair	86	1	0
+pair	86	98	0
+row	85	got	got	9052
+next	87	
+pair	87	0	0
+pair	87	1	0
+pair	87	217	0
+row	86	had	had	9481
+next	88	
+pair	88	0	0
+pair	88	1	0
+pair	88	36	0
+row	87	happened	happened	8205
+next	89	
+pair	89	0	0
+pair	89	1	0
+pair	89	155	0
+row	88	happy	happy	8246
+next	90	
+pair	90	0	0
+pair	90	1	0
+pair	90	274	0
+row	89	hard	hard	8219
+next	91	
+pair	91	0	0
+pair	91	1	0
+pair	91	93	0
+row	90	has	has	9661
+next	92	
+pair	92	0	0
+pair	92	1	0
+pair	92	212	0
+row	91	have	have	10055
+next	93	
+pair	93	0	0
+pair	93	1	0
+pair	93	31	0
+row	92	he	he	10464
+next	94	
+pair	94	0	0
+pair	94	1	0
+pair	94	150	0
+row	93	heard	heard	8295
+next	95	
+pair	95	0	0
+pair	95	1	0
+pair	95	269	0
+row	94	help	help	9017
+next	96	
+pair	96	0	0
+pair	96	1	0
+pair	96	88	0
+row	95	her	her	9739
+next	97	
+pair	97	0	0
+pair	97	1	0
+pair	97	207	0
+row	96	here	here	9258
+next	98	
+pair	98	0	0
+pair	98	1	0
+pair	98	26	0
+row	97	hes	he's	8934
+next	99	
+pair	99	0	0
+pair	99	1	0
+pair	99	145	0
+row	98	high	high	7840
+next	100	
+pair	100	0	0
+pair	100	1	0
+pair	100	264	0
+row	99	him	him	9522
+next	101	
+pair	101	0	0
+pair	101	1	0
+pair	101	83	0
+row	100	himself	himself	8438
+next	102	
+pair	102	0	0
+pair	102	1	0
+pair	102	202	0
+row	101	his	his	9999
+next	103	
+pair	103	0	0
+pair	103	1	0
+pair	103	21	0
+row	102	home	home	8815
+next	104	
+pair	104	0	0
+pair	104	1	0
+pair	104	140	0
+row	103	hope	hope	8298
+next	105	
+pair	105	0	0
+pair	105	1	0
+pair	105	259	0
+row	104	house	house	8689
+next	106	
+pair	106	0	0
+pair	106	1	0
+pair	106	78	0
+row	105	how	how	9425
+next	107	
+pair	107	0	0
+pair	107	1	0
+pair	107	197	0
+row	106	i	I	11016
+next	108	58,239,125,266,91,51,263,242
+pair	108	0	-2
+pair	108	1	-42
+pair	108	16	-29
+row	107	id	I'd	8498
+next	109	133,23,160,52,31,142,91,26
+pair	109	0	-66
+pair	109	1	-66
+pair	109	135	215
+row	108	idea	idea	8035
+next	110	
+pair	110	0	0
+pair	110	1	0
+pair	110	254	0
+row	109	if	if	9372
+next	111	
+pair	111	0	0
+pair	111	1	0
+pair	111	73	0
+row	110	ill	I'll	8861
+next	112	23,52,82,160,91,80,223,225
+pair	112	0	-56
+pair	112	1	-56
+pair	112	192	-56
+row	111	im	I'm	9626
+next	113	166,83,222,0,214,229,219,262
+pair	113	0	-16
+pair	113	1	-206
+pair	113	11	21
+row	112	in	in	10526
+next	114	
+pair	114	0	0
+pair	114	1	0
+pair	114	130	0
+row	113	into	into	8832
+next	115	
+pair	115	0	0
+pair	115	1	0
+pair	115	249	0
+row	114	iphone	iPhone	5174
+next	116	
+pair	116	0	0
+pair	116	1	0
+pair	116	68	0
+row	115	is	is	10683
+next	117	
+pair	117	0	0
+pair	117	1	0
+pair	117	187	0
+row	116	isnt	isn't	9209
+next	118	
+pair	118	0	0
+pair	118	1	0
+pair	118	6	0
+row	117	it	it	10163
+next	119	
+pair	119	0	0
+pair	119	1	0
+pair	119	125	0
+row	118	its	it's	9294
+next	120	
+pair	120	0	0
+pair	120	1	0
+pair	120	244	0
+row	119	its	its	8236
+next	121	
+pair	121	0	0
+pair	121	1	0
+pair	121	63	0
+row	120	ive	I've	8838
+next	122	26,160,85,66,6,7,86,122
+pair	122	0	-59
+pair	122	1	-59
+pair	122	182	-59
+row	121	job	job	8276
+next	123	
+pair	123	0	0
+pair	123	1	0
+pair	123	301	0
+row	122	just	just	9143
+next	124	
+pair	124	0	0
+pair	124	1	0
+pair	124	120	0
+row	123	keep	keep	8164
+next	125	
+pair	125	0	0
+pair	125	1	0
+pair	125	239	0
+row	124	knew	knew	8681
+next	126	
+pair	126	0	0
+pair	126	1	0
+pair	126	58	0
+row	125	know	know	9752
+next	127	
+pair	127	0	0
+pair	127	1	0
+pair	127	177	0
+row	126	knows	knows	8472
+next	128	
+pair	128	0	0
+pair	128	1	0
+pair	128	296	0
+row	127	last	last	8701
+next	129	
+pair	129	0	0
+pair	129	1	0
+pair	129	115	0
+row	128	leave	leave	8446
+next	130	
+pair	130	0	0
+pair	130	1	0
+pair	130	234	0
+row	129	left	left	8562
+next	131	
+pair	131	0	0
+pair	131	1	0
+pair	131	53	0
+row	130	let	let	8623
+next	132	
+pair	132	0	0
+pair	132	1	0
+pair	132	172	0
+row	131	lets	let's	8349
+next	133	
+pair	133	0	0
+pair	133	1	0
+pair	133	291	0
+row	132	life	life	8639
+next	134	
+pair	134	0	0
+pair	134	1	0
+pair	134	110	0
+row	133	like	like	9611
+next	135	
+pair	135	0	0
+pair	135	1	0
+pair	135	229	0
+row	134	little	little	8491
+next	136	
+pair	136	0	0
+pair	136	1	0
+pair	136	48	0
+row	135	live	live	8369
+next	137	
+pair	137	0	0
+pair	137	1	0
+pair	137	167	0
+row	136	london	London	6480
+next	138	115,247,10,74,207,92,112,266
+pair	138	0	-58
+pair	138	1	247
+pair	138	286	-58
+row	137	long	long	8611
+next	139	
+pair	139	0	0
+pair	139	1	0
+pair	139	105	0
+row	138	look	look	8496
+next	140	
+pair	140	0	0
+pair	140	1	0
+pair	140	224	0
+row	139	looked	looked	8237
+next	141	
+pair	141	0	0
+pair	141	1	0
+pair	141	43	0
+row	140	looking	looking	8172
+next	142	
+pair	142	0	0
+pair	142	1	0
+pair	142	162	0
+row	141	lot	lot	8701
+next	143	
+pair	143	0	0
+pair	143	1	0
+pair	143	281	0
+row	142	love	love	8584
+next	144	
+pair	144	0	0
+pair	144	1	0
+pair	144	100	0
+row	143	made	made	8686
+next	145	
+pair	145	0	0
+pair	145	1	0
+pair	145	219	0
+row	144	make	make	8760
+next	146	
+pair	146	0	0
+pair	146	1	0
+pair	146	38	0
+row	145	man	man	8477
+next	147	
+pair	147	0	0
+pair	147	1	0
+pair	147	157	0
+row	146	many	many	8760
+next	148	
+pair	148	0	0
+pair	148	1	0
+pair	148	276	0
+row	147	may	may	8381
+next	149	
+pair	149	0	0
+pair	149	1	0
+pair	149	95	0
+row	148	me	me	10022
+next	150	
+pair	150	0	0
+pair	150	1	0
+pair	150	214	0
+row	149	might	might	8466
+next	151	
+pair	151	0	0
+pair	151	1	0
+pair	151	33	0
+row	150	money	money	8645
+next	152	
+pair	152	0	0
+pair	152	1	0
+pair	152	152	0
+row	151	more	more	9072
+next	153	
+pair	153	0	0
+pair	153	1	0
+pair	153	271	0
+row	152	most	most	8306
+next	154	
+pair	154	0	0
+pair	154	1	0
+pair	154	90	0
+row	153	much	much	8906
+next	155	
+pair	155	0	0
+pair	155	1	0
+pair	155	209	0
+row	154	must	must	8383
+next	156	
+pair	156	0	0
+pair	156	1	0
+pair	156	28	0
+row	155	my	my	9880
+next	157	
+pair	157	0	0
+pair	157	1	0
+pair	157	147	0
+row	156	name	name	8155
+next	158	
+pair	158	0	0
+pair	158	1	0
+pair	158	266	0
+row	157	nasa	NASA	5510
+next	159	90,115,202,10,229,270
+pair	159	0	-17
+pair	159	1	142
+pair	159	85	-17
+row	158	need	need	9081
+next	160	
+pair	160	0	0
+pair	160	1	0
+pair	160	204	0
+row	159	needs	needs	8367
+next	161	
+pair	161	0	0
+pair	161	1	0
+pair	161	23	0
+row	160	never	never	9101
+next	162	
+pair	162	0	0
+pair	162	1	0
+pair	162	142	0
+row	161	new	new	8682
+next	163	
+pair	163	0	0
+pair	163	1	0
+pair	163	261	0
+row	162	next	next	8455
+next	164	
+pair	164	0	0
+pair	164	1	0
+pair	164	80	0
+row	163	nice	nice	7826
+next	165	
+pair	165	0	0
+pair	165	1	0
+pair	165	199	0
+row	164	night	night	8399
+next	166	
+pair	166	0	0
+pair	166	1	0
+pair	166	18	0
+row	165	no	no	9200
+next	167	
+pair	167	0	0
+pair	167	1	0
+pair	167	137	0
+row	166	not	not	9811
+next	168	
+pair	168	0	0
+pair	168	1	0
+pair	168	256	0
+row	167	nothing	nothing	8321
+next	169	
+pair	169	0	0
+pair	169	1	0
+pair	169	75	0
+row	168	now	now	9006
+next	170	
+pair	170	0	0
+pair	170	1	0
+pair	170	194	0
+row	169	of	of	10525
+next	171	
+pair	171	0	0
+pair	171	1	0
+pair	171	13	0
+row	170	off	off	8625
+next	172	
+pair	172	0	0
+pair	172	1	0
+pair	172	132	0
+row	171	often	often	8252
+next	173	
+pair	173	0	0
+pair	173	1	0
+pair	173	251	0
+row	172	ok	OK	7483
+next	174	109,247,286,168,74,110,106,131
+pair	174	0	-125
+pair	174	1	251
+pair	174	70	-125
+row	173	old	old	8442
+next	175	
+pair	175	0	0
+pair	175	1	0
+pair	175	189	0
+row	174	on	on	9931
+next	176	
+pair	176	0	0
+pair	176	1	0
+pair	176	8	0
+row	175	one	one	9382
+next	177	
+pair	177	0	0
+pair	177	1	0
+pair	177	127	0
+row	176	only	only	8878
+next	178	
+pair	178	0	0
+pair	178	1	0
+pair	178	246	0
+row	177	or	or	8845
+next	179	
+pair	179	0	0
+pair	179	1	0
+pair	179	65	0
+row	178	other	other	8609
+next	180	
+pair	180	0	0
+pair	180	1	0
+pair	180	184	0
+row	179	our	our	8900
+next	181	
+pair	181	0	0
+pair	181	1	0
+pair	181	1	0
+row	180	out	out	9349
+next	182	
+pair	182	0	0
+pair	182	1	0
+pair	182	122	0
+row	181	over	over	8654
+next	183	
+pair	183	0	0
+pair	183	1	0
+pair	183	241	0
+row	182	own	own	8209
+next	184	
+pair	184	0	0
+pair	184	1	0
+pair	184	60	0
+row	183	party	party	8099
+next	185	
+pair	185	0	0
+pair	185	1	0
+pair	185	179	0
+row	184	pay	pay	7815
+next	186	
+pair	186	0	0
+pair	186	1	0
+pair	186	298	0
+row	185	people	people	8979
+next	187	
+pair	187	0	0
+pair	187	1	0
+pair	187	117	0
+row	186	person	person	8174
+next	188	
+pair	188	0	0
+pair	188	1	0
+pair	188	236	0
+row	187	place	place	8141
+next	189	
+pair	189	0	0
+pair	189	1	0
+pair	189	55	0
+row	188	plan	plan	7987
+next	190	
+pair	190	0	0
+pair	190	1	0
+pair	190	174	0
+row	189	please	please	8569
+next	191	
+pair	191	0	0
+pair	191	1	0
+pair	191	293	0
+row	190	porno	porno	332
+next	192	
+pair	192	0	0
+pair	192	1	0
+pair	192	112	0
+row	191	probably	probably	8267
+next	193	
+pair	193	0	0
+pair	193	1	0
+pair	193	231	0
+row	192	problem	problem	8089
+next	194	
+pair	194	0	0
+pair	194	1	0
+pair	194	50	0
+row	193	put	put	8466
+next	195	
+pair	195	0	0
+pair	195	1	0
+pair	195	169	0
+row	194	read	read	8197
+next	196	
+pair	196	0	0
+pair	196	1	0
+pair	196	288	0
+row	195	really	really	9092
+next	197	
+pair	197	0	0
+pair	197	1	0
+pair	197	107	0
+row	196	right	right	8701
+next	198	
+pair	198	0	0
+pair	198	1	0
+pair	198	226	0
+row	197	room	room	8492
+next	199	
+pair	199	0	0
+pair	199	1	0
+pair	199	45	0
+row	198	said	said	9713
+next	200	
+pair	200	0	0
+pair	200	1	0
+pair	200	164	0
+row	199	same	same	8259
+next	201	
+pair	201	0	0
+pair	201	1	0
+pair	201	283	0
+row	200	saw	saw	8474
+next	202	
+pair	202	0	0
+pair	202	1	0
+pair	202	102	0
+row	201	say	say	8810
+next	203	
+pair	203	0	0
+pair	203	1	0
+pair	203	221	0
+row	202	says	says	8438
+next	204	
+pair	204	0	0
+pair	204	1	0
+pair	204	40	0
+row	203	school	school	8588
+next	205	
+pair	205	0	0
+pair	205	1	0
+pair	205	159	0
+row	204	see	see	8955
+next	206	
+pair	206	0	0
+pair	206	1	0
+pair	206	278	0
+row	205	she	she	10009
+next	207	
+pair	207	0	0
+pair	207	1	0
+pair	207	97	0
+row	206	shes	she's	8493
+next	208	
+pair	208	0	0
+pair	208	1	0
+pair	208	216	0
+row	207	should	should	9087
+next	209	
+pair	209	0	0
+pair	209	1	0
+pair	209	35	0
+row	208	sleep	sleep	7866
+next	210	
+pair	210	0	0
+pair	210	1	0
+pair	210	154	0
+row	209	small	small	7821
+next	211	
+pair	211	0	0
+pair	211	1	0
+pair	211	273	0
+row	210	so	so	9166
+next	212	
+pair	212	0	0
+pair	212	1	0
+pair	212	92	0
+row	211	some	some	8984
+next	213	
+pair	213	0	0
+pair	213	1	0
+pair	213	211	0
+row	212	something	something	8778
+next	214	
+pair	214	0	0
+pair	214	1	0
+pair	214	30	0
+row	213	soon	soon	8183
+next	215	
+pair	215	0	0
+pair	215	1	0
+pair	215	149	0
+row	214	sorry	sorry	7805
+next	216	
+pair	216	0	0
+pair	216	1	0
+pair	216	268	0
+row	215	speak	speak	8421
+next	217	
+pair	217	0	0
+pair	217	1	0
+pair	217	87	0
+row	216	squaw	squaw	332
+next	218	
+pair	218	0	0
+pair	218	1	0
+pair	218	206	0
+row	217	started	started	8312
+next	219	
+pair	219	0	0
+pair	219	1	0
+pair	219	25	0
+row	218	stay	stay	8398
+next	220	
+pair	220	0	0
+pair	220	1	0
+pair	220	144	0
+row	219	still	still	8901
+next	221	
+pair	221	0	0
+pair	221	1	0
+pair	221	263	0
+row	220	stop	stop	8222
+next	222	
+pair	222	0	0
+pair	222	1	0
+pair	222	82	0
+row	221	study	study	7852
+next	223	
+pair	223	0	0
+pair	223	1	0
+pair	223	201	0
+row	222	sure	sure	8554
+next	224	
+pair	224	0	0
+pair	224	1	0
+pair	224	20	0
+row	223	take	take	8824
+next	225	
+pair	225	0	0
+pair	225	1	0
+pair	225	139	0
+row	224	talk	talk	8453
+next	226	
+pair	226	0	0
+pair	226	1	0
+pair	226	258	0
+row	225	tell	tell	8993
+next	227	
+pair	227	0	0
+pair	227	1	0
+pair	227	77	0
+row	226	than	than	9009
+next	228	
+pair	228	0	0
+pair	228	1	0
+pair	228	196	0
+row	227	that	that	10828
+next	229	
+pair	229	0	0
+pair	229	1	0
+pair	229	15	0
+row	228	thats	that's	8671
+next	230	
+pair	230	0	0
+pair	230	1	0
+pair	230	134	0
+row	229	the	the	11278
+next	231	
+pair	231	0	0
+pair	231	1	0
+pair	231	253	0
+row	230	their	their	8988
+next	232	
+pair	232	0	0
+pair	232	1	0
+pair	232	72	0
+row	231	them	them	8997
+next	233	
+pair	233	0	0
+pair	233	1	0
+pair	233	191	0
+row	232	there	there	9424
+next	234	
+pair	234	0	0
+pair	234	1	0
+pair	234	10	0
+row	233	theres	there's	8359
+next	235	
+pair	235	0	0
+pair	235	1	0
+pair	235	129	0
+row	234	these	these	8431
+next	236	
+pair	236	0	0
+pair	236	1	0
+pair	236	248	0
+row	235	they	they	9852
+next	237	
+pair	237	0	0
+pair	237	1	0
+pair	237	67	0
+row	236	theyre	they're	8244
+next	238	
+pair	238	0	0
+pair	238	1	0
+pair	238	186	0
+row	237	thing	thing	8217
+next	239	
+pair	239	0	0
+pair	239	1	0
+pair	239	5	0
+row	238	things	things	8489
+next	240	
+pair	240	0	0
+pair	240	1	0
+pair	240	124	0
+row	239	think	think	9617
+next	241	
+pair	241	0	0
+pair	241	1	0
+pair	241	243	0
+row	240	this	this	10008
+next	242	
+pair	242	0	0
+pair	242	1	0
+pair	242	62	0
+row	241	those	those	8217
+next	243	
+pair	243	0	0
+pair	243	1	0
+pair	243	181	0
+row	242	thought	thought	9077
+next	244	
+pair	244	0	0
+pair	244	1	0
+pair	244	300	0
+row	243	three	three	8620
+next	245	
+pair	245	0	0
+pair	245	1	0
+pair	245	119	0
+row	244	through	through	8176
+next	246	
+pair	246	0	0
+pair	246	1	0
+pair	246	238	0
+row	245	time	time	9341
+next	247	
+pair	247	0	0
+pair	247	1	0
+pair	247	57	0
+row	246	tired	tired	7871
+next	248	
+pair	248	0	0
+pair	248	1	0
+pair	248	176	0
+row	247	to	to	11229
+next	249	
+pair	249	0	0
+pair	249	1	0
+pair	249	295	0
+row	248	today	today	8747
+next	250	
+pair	250	0	0
+pair	250	1	0
+pair	250	114	0
+row	249	together	together	8177
+next	251	
+pair	251	0	0
+pair	251	1	0
+pair	251	233	0
+row	250	told	told	9289
+next	252	
+pair	252	0	0
+pair	252	1	0
+pair	252	52	0
+row	251	tomorrow	tomorrow	8416
+next	253	
+pair	253	0	0
+pair	253	1	0
+pair	253	171	0
+row	252	too	too	8844
+next	254	
+pair	254	0	0
+pair	254	1	0
+pair	254	290	0
+row	253	took	took	8444
+next	255	
+pair	255	0	0
+pair	255	1	0
+pair	255	109	0
+row	254	tried	tried	8249
+next	256	
+pair	256	0	0
+pair	256	1	0
+pair	256	228	0
+row	255	true	true	7821
+next	257	
+pair	257	0	0
+pair	257	1	0
+pair	257	47	0
+row	256	try	try	8209
+next	258	
+pair	258	0	0
+pair	258	1	0
+pair	258	166	0
+row	257	two	two	8512
+next	259	
+pair	259	0	0
+pair	259	1	0
+pair	259	285	0
+row	258	understand	understand	8193
+next	260	
+pair	260	0	0
+pair	260	1	0
+pair	260	104	0
+row	259	up	up	9315
+next	261	
+pair	261	0	0
+pair	261	1	0
+pair	261	223	0
+row	260	us	us	9121
+next	262	
+pair	262	0	0
+pair	262	1	0
+pair	262	42	0
+row	261	used	used	8480
+next	263	
+pair	263	0	0
+pair	263	1	0
+pair	263	161	0
+row	262	very	very	9315
+next	264	
+pair	264	0	0
+pair	264	1	0
+pair	264	280	0
+row	263	want	want	9498
+next	265	
+pair	265	0	0
+pair	265	1	0
+pair	265	99	0
+row	264	wanted	wanted	8837
+next	266	
+pair	266	0	0
+pair	266	1	0
+pair	266	218	0
+row	265	wants	wants	8459
+next	267	
+pair	267	0	0
+pair	267	1	0
+pair	267	37	0
+row	266	was	was	10419
+next	268	
+pair	268	0	0
+pair	268	1	0
+pair	268	156	0
+row	267	wasnt	wasn't	8804
+next	269	
+pair	269	0	0
+pair	269	1	0
+pair	269	275	0
+row	268	water	water	8229
+next	270	
+pair	270	0	0
+pair	270	1	0
+pair	270	94	0
+row	269	way	way	8730
+next	271	
+pair	271	0	0
+pair	271	1	0
+pair	271	213	0
+row	270	we	we	9872
+next	272	
+pair	272	0	0
+pair	272	1	0
+pair	272	32	0
+row	271	week	week	8146
+next	273	
+pair	273	0	0
+pair	273	1	0
+pair	273	151	0
+row	272	well	well	8639
+next	274	
+pair	274	0	0
+pair	274	1	0
+pair	274	270	0
+row	273	went	went	8754
+next	275	
+pair	275	0	0
+pair	275	1	0
+pair	275	89	0
+row	274	were	were	9398
+next	276	
+pair	276	0	0
+pair	276	1	0
+pair	276	208	0
+row	275	were	we're	8485
+next	277	
+pair	277	0	0
+pair	277	1	0
+pair	277	27	0
+row	276	what	what	9836
+next	278	
+pair	278	0	0
+pair	278	1	0
+pair	278	146	0
+row	277	whats	what's	8313
+next	279	
+pair	279	0	0
+pair	279	1	0
+pair	279	265	0
+row	278	when	when	9253
+next	280	
+pair	280	0	0
+pair	280	1	0
+pair	280	84	0
+row	279	where	where	8852
+next	281	
+pair	281	0	0
+pair	281	1	0
+pair	281	203	0
+row	280	which	which	8388
+next	282	
+pair	282	0	0
+pair	282	1	0
+pair	282	22	0
+row	281	while	while	8149
+next	283	
+pair	283	0	0
+pair	283	1	0
+pair	283	141	0
+row	282	who	who	9209
+next	284	
+pair	284	0	0
+pair	284	1	0
+pair	284	260	0
+row	283	why	why	9199
+next	285	
+pair	285	0	0
+pair	285	1	0
+pair	285	79	0
+row	284	wifi	Wi-Fi	5362
+next	286	112,115
+pair	286	0	-5
+pair	286	1	147
+pair	286	198	-5
+row	285	will	will	9479
+next	287	
+pair	287	0	0
+pair	287	1	0
+pair	287	17	0
+row	286	with	with	9936
+next	288	
+pair	288	0	0
+pair	288	1	0
+pair	288	136	0
+row	287	without	without	8322
+next	289	
+pair	289	0	0
+pair	289	1	0
+pair	289	255	0
+row	288	wont	won't	8733
+next	290	
+pair	290	0	0
+pair	290	1	0
+pair	290	74	0
+row	289	work	work	8755
+next	291	
+pair	291	0	0
+pair	291	1	0
+pair	291	193	0
+row	290	world	world	8272
+next	292	
+pair	292	0	0
+pair	292	1	0
+pair	292	12	0
+row	291	would	would	9279
+next	293	
+pair	293	0	0
+pair	293	1	0
+pair	293	131	0
+row	292	wouldnt	wouldn't	8409
+next	294	
+pair	294	0	0
+pair	294	1	0
+pair	294	250	0
+row	293	year	year	8239
+next	295	
+pair	295	0	0
+pair	295	1	0
+pair	295	69	0
+row	294	years	years	8492
+next	296	
+pair	296	0	0
+pair	296	1	0
+pair	296	188	0
+row	295	yesterday	yesterday	8171
+next	297	
+pair	297	0	0
+pair	297	1	0
+pair	297	7	0
+row	296	yet	yet	8262
+next	298	
+pair	298	0	0
+pair	298	1	0
+pair	298	126	0
+row	297	you	you	10785
+next	299	
+pair	299	0	0
+pair	299	1	0
+pair	299	245	0
+row	298	your	your	9592
+next	300	
+pair	300	0	0
+pair	300	1	0
+pair	300	64	0
+row	299	youre	you're	8910
+next	301	
+pair	301	0	0
+pair	301	1	0
+pair	301	183	0
+next	0	106,229,92,205,297,270,111,235
+t9	65	172,173
+t9	474663	114
+t9	4663	84,102
+t9	843	229,230,231,232,234,233,235,236
+t9	3668	58,64
+t9	2	0,21,22,1,38,40,39,41,2,42,23,25,24,26,27,28,29,30,3,31

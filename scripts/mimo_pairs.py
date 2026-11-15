@@ -66,6 +66,8 @@ from collections import Counter
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
+import blocked_terms as blocked_terms_list
+
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "DataSources/mimo-pairs"
 COUNTS_FILE = DATA / "counts.txt.xz"
@@ -387,12 +389,9 @@ def merge_runs(runs):
     return codes, counts
 
 
-@functools.lru_cache(maxsize=None)
 def blocked_terms():
-    """Pattern of Resources/Lexicon/blocked-terms.txt: politics, words that put down a group, abuse."""
-    text = (ROOT / "Resources/Lexicon/blocked-terms.txt").read_text(encoding="utf-8")
-    terms = [term for line in text.splitlines() if not line.startswith("#") for term in line.split()]
-    return re.compile("|".join(sorted(map(re.escape, terms), key=len, reverse=True)))
+    """Pattern of the [zh] terms of Resources/Lexicon/blocked-terms.txt (contested or abusive terms)."""
+    return blocked_terms_list.counted()
 
 
 def clauses(name: str, lex: Lexicon, exclude: list[str], stats: Counter):
@@ -620,7 +619,7 @@ def relevant_pairs(codes, weighted, uni, context, lex, top):
 
 # --- packing (build time) -------------------------------------------------
 
-def write_pair_table(output_dir: Path, pinyin_rows, zhuyin_rows, counts_file: Path = COUNTS_FILE) -> dict:
+def write_pair_table(output_dir: Path, pinyin_rows, zhuyin_rows, counts_file: Path = COUNTS_FILE, no_suggest=frozenset()) -> dict:
     """Packs the counts for the lexicon just compiled into output_dir/mimo_pairs.bin.
 
     Layout (little-endian, read in place by crates/meowpuut-core/src/pairs.rs):
@@ -630,7 +629,9 @@ def write_pair_table(output_dir: Path, pinyin_rows, zhuyin_rows, counts_file: Pa
       backoff n x i16: 0.8 * log alpha(g), the score of a pair that is not stored
       padding to 4 bytes
       pairs   p x u32: (right id << 12) | 12-bit signed score, sorted by right id per left word
-    Words the lexicon no longer has are dropped with their pairs.
+    Words the lexicon no longer has are dropped with their pairs, and so is a pair whose second word
+    is in `no_suggest` (Simplified texts of the never-volunteer words): the counts left such sentences
+    out, and this keeps a word added to the list since the counts were made out of them too.
     """
     if counts_file == COUNTS_FILE and sha256(counts_file) != json.loads((DATA / "SOURCE.json").read_text())["files"]["counts.txt.xz"]:
         raise ValueError("DataSources/mimo-pairs/counts.txt.xz changed; make it with scripts/mimo_pairs.py snapshot")
@@ -651,6 +652,8 @@ def write_pair_table(output_dir: Path, pinyin_rows, zhuyin_rows, counts_file: Pa
                     continue
                 for item in fields[2:]:
                     word, c = item.rsplit(" ", 1)
+                    if word in no_suggest:
+                        continue
                     w = marker_or_id(lex, word)
                     if w is not None:
                         pairs[(g << 20) | w] = int(c)
@@ -738,6 +741,27 @@ def counted_words(counts_file: Path = COUNTS_FILE) -> dict:
             if fields[0] == "U":
                 counts[fields[1]] = (int(fields[2]) - SPOKEN_WEIGHT * int(fields[4]), int(fields[4]))
     return counts
+
+
+def split_counts(texts: set, counts_file: Path = COUNTS_FILE) -> dict:
+    """Text -> how often it was counted as two words next to each other (the P rows; spoken text
+    x10 as there), summed over the ways to split it. Only for the texts given. The snapshot keeps
+    the pairs that tell most, so a split it left out counts nothing."""
+    found = Counter()
+    prefixes = {text[:i] for text in texts for i in range(1, len(text))}
+    with lzma.open(counts_file, "rt", encoding="utf-8") as f:
+        for line in f:
+            if not line.startswith("P"):
+                continue
+            fields = line.rstrip("\n").split("\t")
+            left = fields[1]
+            if left not in prefixes:
+                continue
+            for item in fields[2:]:
+                right, _, count = item.rpartition(" ")
+                if left + right in texts:
+                    found[left + right] += int(count)
+    return dict(found)
 
 
 def word_counts() -> dict:

@@ -24,6 +24,18 @@ pub const FLAG_FULLY_SPELLED: u8 = 1 << 0;
 pub const FLAG_SINGLE_HAN_HANT: u8 = 1 << 1;
 pub const FLAG_SINGLE_HAN_HANS: u8 = 1 << 2;
 pub const FLAG_VERIFIED_SPELLING: u8 = 1 << 3;
+/// A word of the never-volunteer list (`Resources/Lexicon/blocked-terms.txt`):
+/// offered only when the input is its own full spelling, never as a
+/// completion, abbreviation, correction or prediction.
+pub const FLAG_NO_SUGGEST: u8 = 1 << 4;
+/// With `FLAG_NO_SUGGEST`: the word is on the list only as a whole word
+/// (a longer word that holds it is not on the list), so it is not looked
+/// for inside other text.
+pub const FLAG_NO_SUGGEST_WHOLE: u8 = 1 << 5;
+/// An everyday word that holds a word of the never-volunteer list
+/// (`[zh-keep]` of the list: 印度支那, 總統套房): the listed word inside it
+/// is not looked for, so it is offered like any other word.
+pub const FLAG_LISTED_KEEP: u8 = 1 << 6;
 
 /// Cache-friendly Structure-of-Arrays (SoA) dictionary word table.
 ///
@@ -156,6 +168,24 @@ impl WordTableSoA {
     #[inline]
     pub fn is_verified_spelling(&self, idx: usize) -> bool {
         (self.flags.get(idx) & FLAG_VERIFIED_SPELLING) != 0
+    }
+
+    /// Whether word `idx` is on the list only as a whole word (`FLAG_NO_SUGGEST_WHOLE`).
+    #[inline]
+    pub fn is_no_suggest_whole(&self, idx: usize) -> bool {
+        (self.flags.get(idx) & FLAG_NO_SUGGEST_WHOLE) != 0
+    }
+
+    /// Whether word `idx` is an everyday word that holds a listed word (`FLAG_LISTED_KEEP`).
+    #[inline]
+    pub fn is_listed_keep(&self, idx: usize) -> bool {
+        (self.flags.get(idx) & FLAG_LISTED_KEEP) != 0
+    }
+
+    /// Whether word `idx` is offered only for its own full spelling (`FLAG_NO_SUGGEST`).
+    #[inline]
+    pub fn is_no_suggest(&self, idx: usize) -> bool {
+        (self.flags.get(idx) & FLAG_NO_SUGGEST) != 0
     }
 }
 

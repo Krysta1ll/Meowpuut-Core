@@ -1,0 +1,694 @@
+{
+  "about": "Bundled skin packages (.mpskinb) and installed seals. Test keys only; see crates/meowpuut-skin/SEAL.md. Paths are relative to this folder. expect: 0 = accepted, otherwise meowpuut_skin::Code (MPS_E_*).",
+  "client": "ios/1.2",
+  "constants": {
+    "bundledDomain": "6d656f77707575742d736b696e2d62756e646c65642f763100",
+    "bundledMagic": "4d50534b424e0001",
+    "certDomain": "6d656f77707575742d636572742f763200",
+    "ell": "edd3f55c1a631258d69cf7a2def9de1400000000000000000000000000000010",
+    "maxCert": 1024,
+    "maxHeader": 8192,
+    "maxSeal": 9358,
+    "recipientDomain": "6d656f77707575742d736b696e2f763200",
+    "recipientMagic": "4d50534b494e0002",
+    "smallOrderEncodings": [
+      "0000000000000000000000000000000000000000000000000000000000000000",
+      "0000000000000000000000000000000000000000000000000000000000000080",
+      "0100000000000000000000000000000000000000000000000000000000000000",
+      "0100000000000000000000000000000000000000000000000000000000000080",
+      "ecffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f",
+      "ecffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "edffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f",
+      "edffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "eeffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f",
+      "eeffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "26e8958fc2b227b045c3f489f2ef98f0d5dfac05d3c63339b13802886d53fc05",
+      "26e8958fc2b227b045c3f489f2ef98f0d5dfac05d3c63339b13802886d53fc85",
+      "c7176a703d4dd84fba3c0b760d10670f2a2053fa2c39ccc64ec7fd7792ac037a",
+      "c7176a703d4dd84fba3c0b760d10670f2a2053fa2c39ccc64ec7fd7792ac03fa"
+    ]
+  },
+  "installed": {
+    "files": [
+      {
+        "len": 464,
+        "n": "frame.png",
+        "sha256": "fd40cce658749b369697f4919a69424f262796c498cc7972f2b8748d7ffa422a"
+      },
+      {
+        "len": 4454,
+        "n": "key-1.wav",
+        "sha256": "09f9e73a2a5e794b111dbb43149642a9eeb0bbf1d4a4065e5bbbc3e662879a95"
+      },
+      {
+        "len": 1457,
+        "n": "manifest.json",
+        "sha256": "844d12913c3f8fe0e0972e50d7d5a070349613b7d412136aa2a0a4253e0db109"
+      },
+      {
+        "len": 397,
+        "n": "mimimo_peek.png",
+        "sha256": "f1f0f786b27af9f807bee79b28511cdc3bea5ed9a4075e1386e79deb780b8c67"
+      },
+      {
+        "len": 363,
+        "n": "momo_hold.png",
+        "sha256": "0b85203bfd3afcf9bfebfdfdbb2a9164339824c23f5d70b7a1d84386900f6a59"
+      },
+      {
+        "len": 8864,
+        "n": "return-1.wav",
+        "sha256": "5b6f34f55ad63662b8eb182438af74872f1b765ca2e4a301548ca60124b297b9"
+      },
+      {
+        "len": 373,
+        "n": "right.png",
+        "sha256": "d604b53efb7bf77672c4594914ca9fa5d77b7462c6271ae72ab6a1ccbcfc08c5"
+      },
+      {
+        "len": 5336,
+        "n": "space-1.wav",
+        "sha256": "ea0bb0328dab95f4ec0e49f351b88de9029657096430aac23e5932de2b5a67b2"
+      }
+    ],
+    "folder": "installed/sakura_tea/3",
+    "kind": "bundled",
+    "seal": {
+      "cert": {
+        "issued": 1763078400,
+        "kid": "test-2026-skin",
+        "pub": "eEdEho1qvIyV/npQ9QG3ZZ6FpcQ4eYW5FLg/NQMwDbY=",
+        "root": "test-root-1",
+        "uses": [
+          "code",
+          "skin"
+        ]
+      },
+      "certLength": 141,
+      "certOffset": 1122,
+      "certSignatureOffset": 1263,
+      "file": "installed/sakura_tea/3/seal.bin",
+      "header": {
+        "created": 1763078400,
+        "files": [
+          {
+            "len": 464,
+            "n": "frame.png",
+            "sha256": "fd40cce658749b369697f4919a69424f262796c498cc7972f2b8748d7ffa422a"
+          },
+          {
+            "len": 4454,
+            "n": "key-1.wav",
+            "sha256": "09f9e73a2a5e794b111dbb43149642a9eeb0bbf1d4a4065e5bbbc3e662879a95"
+          },
+          {
+            "len": 1457,
+            "n": "manifest.json",
+            "sha256": "844d12913c3f8fe0e0972e50d7d5a070349613b7d412136aa2a0a4253e0db109"
+          },
+          {
+            "len": 397,
+            "n": "mimimo_peek.png",
+            "sha256": "f1f0f786b27af9f807bee79b28511cdc3bea5ed9a4075e1386e79deb780b8c67"
+          },
+          {
+            "len": 363,
+            "n": "momo_hold.png",
+            "sha256": "0b85203bfd3afcf9bfebfdfdbb2a9164339824c23f5d70b7a1d84386900f6a59"
+          },
+          {
+            "len": 8864,
+            "n": "return-1.wav",
+            "sha256": "5b6f34f55ad63662b8eb182438af74872f1b765ca2e4a301548ca60124b297b9"
+          },
+          {
+            "len": 373,
+            "n": "right.png",
+            "sha256": "d604b53efb7bf77672c4594914ca9fa5d77b7462c6271ae72ab6a1ccbcfc08c5"
+          },
+          {
+            "len": 5336,
+            "n": "space-1.wav",
+            "sha256": "ea0bb0328dab95f4ec0e49f351b88de9029657096430aac23e5932de2b5a67b2"
+          }
+        ],
+        "format": 1,
+        "id": "sakura_tea",
+        "kid": "test-2026-skin",
+        "kind": "bundled",
+        "minClient": {
+          "android": "1.2",
+          "ios": "1.2"
+        },
+        "payloadLen": 22042,
+        "payloadSha256": "7980d8d0399a35524ff5e0d81c6154858adc8dac3c1e0e5418acdfa3ec454c81",
+        "rev": 3
+      },
+      "headerLength": 1108,
+      "headerOffset": 12,
+      "length": 1391,
+      "signatureOffset": 1327,
+      "signedMessageSha256": "78dec4013a8fc88245a8a9fb23a2dd1c8beda58b04dda34dc868ae263571a8e5"
+    },
+    "skin": "sakura_tea@3",
+    "skinsDir": "installed"
+  },
+  "keys": {
+    "root": {
+      "kid": "test-root-1",
+      "public": "bXb82R1G9B5Gc81BQQpl45c0SN1fxT+bEucLb0Pbbbs=",
+      "seed": "SHA-256(\"meowpuut-skin test key test-root-1\")"
+    },
+    "subkey": {
+      "cert": "{\"issued\":1763078400,\"kid\":\"test-2026-skin\",\"pub\":\"eEdEho1qvIyV/npQ9QG3ZZ6FpcQ4eYW5FLg/NQMwDbY=\",\"root\":\"test-root-1\",\"uses\":[\"code\",\"skin\"]}",
+      "certSignature": "VRmQ+bNy8LLthdmc/RZK3khWcjqXffNa0HWbxsq7cJUMAnGI9H8R5+gOnMvHpxUvJOOMvyPoGPeOETlwEo7UDA==",
+      "kid": "test-2026-skin",
+      "public": "eEdEho1qvIyV/npQ9QG3ZZ6FpcQ4eYW5FLg/NQMwDbY=",
+      "seed": "SHA-256(\"meowpuut-skin test key test-2026-skin\")"
+    }
+  },
+  "loadCaseRules": "Copy the folder `installed` to a fresh skins directory, apply `ops` in order (paths relative to that directory; `from` relative to this folder), then verify `skin` (default sakura_tea@3) with the state (default empty) under the policy (test: test-root-1 trusted and test- kids accepted; release: no root trusted, test- kids refused). Ops: flip (XOR 0x01 at offset), truncate (to length), write (hex bytes; append when `append`), delete, move (rename to `to`), symlink (create a symbolic link at path pointing to target), copy (replace path with a vector file).",
+  "loadCases": [
+    {
+      "expect": 0,
+      "name": "valid",
+      "ops": [],
+      "policy": "test"
+    },
+    {
+      "expect": 6,
+      "name": "release build",
+      "ops": [],
+      "policy": "release"
+    },
+    {
+      "expect": 24,
+      "name": "image byte changed",
+      "ops": [
+        {
+          "offset": 100,
+          "op": "flip",
+          "path": "sakura_tea/3/frame.png"
+        }
+      ],
+      "policy": "test"
+    },
+    {
+      "expect": 24,
+      "name": "manifest truncated",
+      "ops": [
+        {
+          "length": 100,
+          "op": "truncate",
+          "path": "sakura_tea/3/manifest.json"
+        }
+      ],
+      "policy": "test"
+    },
+    {
+      "expect": 24,
+      "name": "sound extended",
+      "ops": [
+        {
+          "append": true,
+          "hex": "00",
+          "op": "write",
+          "path": "sakura_tea/3/key-1.wav"
+        }
+      ],
+      "policy": "test"
+    },
+    {
+      "expect": 24,
+      "name": "extra file",
+      "ops": [
+        {
+          "hex": "78",
+          "op": "write",
+          "path": "sakura_tea/3/extra.png"
+        }
+      ],
+      "policy": "test"
+    },
+    {
+      "expect": 24,
+      "name": "planted binding.bin",
+      "ops": [
+        {
+          "hex": "7b7d",
+          "op": "write",
+          "path": "sakura_tea/3/binding.bin"
+        }
+      ],
+      "policy": "test"
+    },
+    {
+      "expect": 24,
+      "name": "missing sound",
+      "ops": [
+        {
+          "op": "delete",
+          "path": "sakura_tea/3/key-1.wav"
+        }
+      ],
+      "policy": "test"
+    },
+    {
+      "expect": 24,
+      "name": "missing seal",
+      "ops": [
+        {
+          "op": "delete",
+          "path": "sakura_tea/3/seal.bin"
+        }
+      ],
+      "policy": "test"
+    },
+    {
+      "expect": 24,
+      "name": "image replaced by a symbolic link",
+      "ops": [
+        {
+          "op": "move",
+          "path": "sakura_tea/3/frame.png",
+          "to": "sakura_tea/frame-real.png"
+        },
+        {
+          "op": "symlink",
+          "path": "sakura_tea/3/frame.png",
+          "target": "../frame-real.png"
+        }
+      ],
+      "policy": "test"
+    },
+    {
+      "expect": 24,
+      "name": "folder moved to another revision",
+      "ops": [
+        {
+          "op": "move",
+          "path": "sakura_tea/3",
+          "to": "sakura_tea/4"
+        }
+      ],
+      "policy": "test",
+      "skin": "sakura_tea@4"
+    },
+    {
+      "expect": 24,
+      "name": "seal of rev 4 in the rev 3 folder",
+      "ops": [
+        {
+          "from": "seals/rev4.seal.bin",
+          "op": "copy",
+          "path": "sakura_tea/3/seal.bin"
+        }
+      ],
+      "policy": "test"
+    },
+    {
+      "expect": 8,
+      "name": "seal header changed after signing",
+      "ops": [
+        {
+          "from": "seals/tampered-header.seal.bin",
+          "op": "copy",
+          "path": "sakura_tea/3/seal.bin"
+        }
+      ],
+      "policy": "test"
+    },
+    {
+      "expect": 8,
+      "name": "seal with non-canonical S",
+      "ops": [
+        {
+          "from": "seals/noncanonical-s.seal.bin",
+          "op": "copy",
+          "path": "sakura_tea/3/seal.bin"
+        }
+      ],
+      "policy": "test"
+    },
+    {
+      "expect": 8,
+      "name": "seal with small-order R",
+      "ops": [
+        {
+          "from": "seals/small-order-r.seal.bin",
+          "op": "copy",
+          "path": "sakura_tea/3/seal.bin"
+        }
+      ],
+      "policy": "test"
+    },
+    {
+      "expect": 8,
+      "name": "seal signed under the recipient domain",
+      "ops": [
+        {
+          "from": "seals/wrong-domain.seal.bin",
+          "op": "copy",
+          "path": "sakura_tea/3/seal.bin"
+        }
+      ],
+      "policy": "test"
+    },
+    {
+      "expect": 8,
+      "name": "recipient seal relabeled as bundled",
+      "ops": [
+        {
+          "from": "seals/relabeled-recipient.seal.bin",
+          "op": "copy",
+          "path": "sakura_tea/3/seal.bin"
+        }
+      ],
+      "policy": "test"
+    },
+    {
+      "expect": 5,
+      "name": "seal from a subkey without the skin use",
+      "ops": [
+        {
+          "from": "seals/code-only-subkey.seal.bin",
+          "op": "copy",
+          "path": "sakura_tea/3/seal.bin"
+        }
+      ],
+      "policy": "test"
+    },
+    {
+      "expect": 2,
+      "name": "seal with a trailing byte",
+      "ops": [
+        {
+          "from": "seals/trailing-byte.seal.bin",
+          "op": "copy",
+          "path": "sakura_tea/3/seal.bin"
+        }
+      ],
+      "policy": "test"
+    },
+    {
+      "expect": 2,
+      "name": "seal with an unknown magic",
+      "ops": [
+        {
+          "from": "seals/unknown-magic.seal.bin",
+          "op": "copy",
+          "path": "sakura_tea/3/seal.bin"
+        }
+      ],
+      "policy": "test"
+    },
+    {
+      "expect": 7,
+      "name": "revoked subkey",
+      "ops": [],
+      "policy": "test",
+      "state": {
+        "highest": {},
+        "revoked": {
+          "kid": [
+            "test-2026-skin"
+          ],
+          "serial": [],
+          "skin": []
+        },
+        "seq": 0,
+        "v": 1
+      }
+    },
+    {
+      "expect": 7,
+      "name": "revoked root",
+      "ops": [],
+      "policy": "test",
+      "state": {
+        "highest": {},
+        "revoked": {
+          "kid": [
+            "test-root-1"
+          ],
+          "serial": [],
+          "skin": []
+        },
+        "seq": 0,
+        "v": 1
+      }
+    },
+    {
+      "expect": 7,
+      "name": "revoked skin revision",
+      "ops": [],
+      "policy": "test",
+      "state": {
+        "highest": {},
+        "revoked": {
+          "kid": [],
+          "serial": [],
+          "skin": [
+            "sakura_tea@3"
+          ]
+        },
+        "seq": 0,
+        "v": 1
+      }
+    },
+    {
+      "expect": 7,
+      "name": "revoked serial",
+      "ops": [],
+      "policy": "test",
+      "state": {
+        "highest": {},
+        "revoked": {
+          "kid": [],
+          "serial": [
+            "b0b0b0b0c0ffee01"
+          ],
+          "skin": []
+        },
+        "seq": 0,
+        "v": 1
+      }
+    },
+    {
+      "expect": 18,
+      "name": "older than the highest revision seen",
+      "ops": [],
+      "policy": "test",
+      "state": {
+        "highest": {
+          "sakura_tea": 4
+        },
+        "revoked": {
+          "kid": [],
+          "serial": [],
+          "skin": []
+        },
+        "seq": 0,
+        "v": 1
+      }
+    },
+    {
+      "expect": 23,
+      "name": "not installed",
+      "ops": [],
+      "policy": "test",
+      "skin": "sakura_tea@9"
+    },
+    {
+      "expect": 26,
+      "name": "malformed customSkin",
+      "ops": [],
+      "policy": "test",
+      "skin": "sakura_tea@03"
+    }
+  ],
+  "packageFiles": [
+    {
+      "file": "packages/tampered-header.mpskinb",
+      "what": "header \"rev\":3 changed to \"rev\":4 after signing"
+    },
+    {
+      "file": "packages/noncanonical-s.mpskinb",
+      "what": "signature S replaced by S + ℓ"
+    },
+    {
+      "file": "packages/small-order-r.mpskinb",
+      "what": "R = identity (01 00…00), S = k·a: a lax verifier accepts it, verify_strict refuses"
+    },
+    {
+      "file": "packages/wrong-domain.mpskinb",
+      "what": "bundled header signed under the recipient domain \"meowpuut-skin/v2\\0\""
+    },
+    {
+      "file": "packages/relabeled-recipient.mpskinb",
+      "what": "the recipient vector ../sakura_tea-3.mpskin with the bundled magic"
+    },
+    {
+      "file": "packages/code-only-subkey.mpskinb",
+      "what": "certificate with uses [\"code\"]"
+    },
+    {
+      "file": "packages/payload-flipped.mpskinb",
+      "what": "last payload byte changed"
+    },
+    {
+      "file": "packages/sakura_tea-4.mpskinb",
+      "what": "the same skin at rev 4 (valid)"
+    },
+    {
+      "file": "packages/macos-only.mpskinb",
+      "what": "minClient names only macos"
+    }
+  ],
+  "packages": [
+    {
+      "expect": 0,
+      "file": "sakura_tea-3.mpskinb",
+      "name": "valid",
+      "policy": "test"
+    },
+    {
+      "expect": 6,
+      "file": "sakura_tea-3.mpskinb",
+      "name": "release build",
+      "policy": "release"
+    },
+    {
+      "expect": 32,
+      "file": "../sakura_tea-3.mpskin",
+      "name": "a recipient package",
+      "policy": "test"
+    },
+    {
+      "expect": 8,
+      "file": "packages/tampered-header.mpskinb",
+      "name": "header changed after signing",
+      "policy": "test"
+    },
+    {
+      "expect": 8,
+      "file": "packages/noncanonical-s.mpskinb",
+      "name": "non-canonical S",
+      "policy": "test"
+    },
+    {
+      "expect": 8,
+      "file": "packages/small-order-r.mpskinb",
+      "name": "small-order R",
+      "policy": "test"
+    },
+    {
+      "expect": 8,
+      "file": "packages/wrong-domain.mpskinb",
+      "name": "signed under the recipient domain",
+      "policy": "test"
+    },
+    {
+      "expect": 8,
+      "file": "packages/relabeled-recipient.mpskinb",
+      "name": "recipient package relabeled as bundled",
+      "policy": "test"
+    },
+    {
+      "expect": 5,
+      "file": "packages/code-only-subkey.mpskinb",
+      "name": "subkey without the skin use",
+      "policy": "test"
+    },
+    {
+      "expect": 9,
+      "file": "packages/payload-flipped.mpskinb",
+      "name": "payload changed",
+      "policy": "test"
+    },
+    {
+      "expect": 7,
+      "file": "sakura_tea-3.mpskinb",
+      "name": "revoked subkey",
+      "policy": "test",
+      "state": {
+        "highest": {},
+        "revoked": {
+          "kid": [
+            "test-2026-skin"
+          ],
+          "serial": [],
+          "skin": []
+        },
+        "seq": 0,
+        "v": 1
+      }
+    },
+    {
+      "expect": 7,
+      "file": "sakura_tea-3.mpskinb",
+      "name": "revoked skin revision",
+      "policy": "test",
+      "state": {
+        "highest": {},
+        "revoked": {
+          "kid": [],
+          "serial": [],
+          "skin": [
+            "sakura_tea@3"
+          ]
+        },
+        "seq": 0,
+        "v": 1
+      }
+    },
+    {
+      "expect": 7,
+      "file": "sakura_tea-3.mpskinb",
+      "name": "revoked serial",
+      "policy": "test",
+      "state": {
+        "highest": {},
+        "revoked": {
+          "kid": [],
+          "serial": [
+            "b0b0b0b0c0ffee01"
+          ],
+          "skin": []
+        },
+        "seq": 0,
+        "v": 1
+      }
+    },
+    {
+      "expect": 18,
+      "file": "sakura_tea-3.mpskinb",
+      "name": "downgrade",
+      "policy": "test",
+      "state": {
+        "highest": {
+          "sakura_tea": 4
+        },
+        "revoked": {
+          "kid": [],
+          "serial": [],
+          "skin": []
+        },
+        "seq": 0,
+        "v": 1
+      }
+    },
+    {
+      "expect": 20,
+      "file": "packages/macos-only.mpskinb",
+      "name": "not made for this platform",
+      "policy": "test"
+    },
+    {
+      "expect": 0,
+      "file": "packages/sakura_tea-4.mpskinb",
+      "name": "next revision",
+      "policy": "test"
+    }
+  ]
+}

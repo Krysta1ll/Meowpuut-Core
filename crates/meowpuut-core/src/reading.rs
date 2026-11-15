@@ -5,7 +5,7 @@
 //! # Examples
 //!
 //! ```
-//! use meowpuut_core::reading::{Reading, han_characters_stack, is_tone, zhuyin_symbol_for_key};
+//! use meowpuut_core::reading::{Reading, han_characters_stack, is_tone, zhuyin_symbol_for_key, zhuyin_text_into};
 //!
 //! let reading = Reading::new("ni3hao3", true);
 //! assert_eq!(reading.sounds(), "nihao");
@@ -16,6 +16,10 @@
 //! assert!(is_tone(b'3', true));
 //! assert!(is_tone(b' ', false));
 //! assert_eq!(zhuyin_symbol_for_key(b's'), Some("ㄋ"));
+//!
+//! let mut text = String::new();
+//! zhuyin_text_into(b"su3cl3", &mut text);
+//! assert_eq!(text, "ㄋㄧˇㄏㄠˇ");
 //!
 //! let han = han_characters_stack("你好世界").expect("all Han");
 //! assert_eq!(han.len(), 4);
@@ -50,6 +54,19 @@ pub fn is_tone(key: u8, pinyin: bool) -> bool {
 #[inline]
 pub fn zhuyin_symbol_for_key(key: u8) -> Option<&'static str> {
     KEYS.iter().position(|&k| k == key).map(|idx| SYMBOLS[idx])
+}
+
+/// Appends Zhuyin keys as a person would write them: Bopomofo with the
+/// ˊ ˇ ˋ ˙ tone marks, but no first-tone ˉ (space) and no `'` separator.
+pub fn zhuyin_text_into(keys: &[u8], out: &mut String) {
+    for &key in keys {
+        if key == b' ' || key == b'\'' {
+            continue;
+        }
+        if let Some(sym) = zhuyin_symbol_for_key(key) {
+            out.push_str(sym);
+        }
+    }
 }
 
 /// Counts UTF-8 codepoints by counting leading bytes (`(b & 0xc0) != 0x80`).

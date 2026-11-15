@@ -18,54 +18,54 @@ fn splitmix64(state: &mut u64) -> u64 {
 }
 
 const PINYIN_POOL: [&str; 50] = [
-    "nihao", "woxihuanni", "jintiantianqihenhao", "zhongguoren", "xiansheng",
+    "nihao", "woxihuanni", "jintiantianqihenhao", "xuexiaoshitang", "xiansheng",
     "pengyou", "shijieheping", "woxihuannidenekohenkeai", "nihaoshijie",
     "womenshihaopengyou", "zhuyinshurufa", "diannao", "chengxuyuan", "kaixin",
     "xiexieni", "mingtianjian", "bukeqi", "duibuqi", "meiguanxi", "zaoshanghao",
-    "wanan", "woaini", "taibei", "dongjing", "watashixihuanneko", "sakurahenmei",
+    "wanan", "woaini", "kafeiguan", "shuiguo", "watashixihuanneko", "sakurahenmei",
     "ni3hao3", "xian'an", "zhong1wen2", "ying1wen2", "ri4wen2", "fa3wen2",
     "nihaom", "woxihuanb", "womens", "jintianw", "pengyoum", "xianshengd",
-    "nh", "wxhn", "jttqhh", "zgr", "xs", "py", "sjhp",
+    "nh", "wxhn", "jttqhh", "xxst", "xs", "py", "sjhp",
     "nihaonihao", "nihaoa", "shurufaceshi", "zheshiyigeceshi", "qingwen",
 ];
 
 const ZHUYIN_POOL: [&str; 19] = [
-    "su3cl3", "ji3vu3c0u3", "rupwu0wu0fu4cpcl3", "5j/eji6bp6", "v0g/ ",
+    "su3cl3", "ji3vu3c0u3", "rupwu0wu0fu4cpcl3", "vm,6vul4", "v0g/ ",
     "q/7u.6", "g4r,4ck6qu/6", "su3cl3g4r,4", "ji3mp3g4cl3q/7u.6",
     "1j6e06", "vm,4vm,4su3", "au/6wu0ru04", "1j4d4f3", "ao6ej0uv7",
-    "su3cl3a87", "5j/eji6", "t/6vu4m06", "d9vup ", "2u04sao3",
+    "su3cl3a87", "2u04u/3", "t/6vu4m06", "d9vup ", "2u04sao3",
 ];
 
 const CONTEXT_POOL: [&str; 10] = [
-    "你", "我", "我們", "今天", "喜歡", "中國", "台灣", "世界", "朋友", "",
+    "你", "我", "我們", "今天", "喜歡", "學校", "電影", "世界", "朋友", "",
 ];
 
 const GOLDEN_100_SEEDS: [u64; 100] = [
-    0x38b636155f16b2b0, 0x887275dd90ac4068, 0x65d3ba85fb08d91f, 0xd547eedb594cec1e,
-    0xe65b62617a82a55a, 0x3ee16dcdd19c66a8, 0x8c175530428ee1df, 0xe85401222b296676,
-    0x8231690d09345b6e, 0x1a18b00b530e709b, 0x1c105e2cf332b002, 0x544017f374505a3f,
-    0xf764d3879934d25f, 0xda7319c174affcdb, 0x1b4aa00ed21e186a, 0x1e468554884d7404,
-    0x519efac699f0a83c, 0xedaadbf434934337, 0xafca846072a5d411, 0xb26c960419733843,
-    0x939ce59673749909, 0x8f6986c853947055, 0x501e78f446aa7288, 0xb06f83de64dc3f3c,
-    0xd07edd1602d8e882, 0x0b9779e06b53d7b8, 0xa5abf1ebc862d483, 0xafbe855ddac764c9,
-    0xb0d884afb9cd0fad, 0xa5ce35e48441f829, 0x8237fe6747e592d7, 0xc54036445e40b229,
-    0x6c0d252b3d671984, 0x14251378b8b98f53, 0xae519ab1da7e5e62, 0x6307cc2bbc2b594b,
-    0xbc20937f84344acf, 0x8e4a942d83e35522, 0x6606a3494fd083e3, 0x8c03d33e515ce078,
-    0xb447aba04bf133a8, 0x0704a85d79df38c0, 0x5108ef5739d57433, 0x7fac119d1df981e7,
-    0xd26cabcf170b812d, 0x4bbcbfebb6205b26, 0x684934bfde670d3e, 0x03c67096ea0ee52c,
-    0x4d4518ea07bf4d8c, 0x811ef5028d5aec00, 0xd2cc38922261f31f, 0xe96bab46a4b33f24,
-    0xce7793d665f9016f, 0xa802bb45f65c60f4, 0x9b1312d3f2c5ec63, 0x7a90c8277ea9d72a,
-    0xe844289981b3d724, 0xa4598eab229b8bef, 0x435e9f5ec7ea83d2, 0xcf0f4480565b43db,
-    0x7c5f7f159019ce02, 0x4997cb55c58879a6, 0xd8e457ceab64329f, 0x870182d0fa116c37,
-    0x73d100296fedbc82, 0xb0f69a9799f5ef5b, 0xe8b3f2116e7e1814, 0x6158cba65690c624,
-    0x15e0ea50659a6cf1, 0x6be59e526cd309e8, 0x16c959cfe51e3b20, 0xe1a0893cbe1c90d0,
-    0xe8679c522518aa4d, 0xfea5525570d7f793, 0x7bf44e180f9162a1, 0x1f00bae43f69fd1b,
-    0xc7de21659f1f8f66, 0x9996a9ee99d6432e, 0x23043fa2fab6a801, 0x99dcd53244619f89,
-    0x010d3028a435dc9f, 0xe3e7af497b211aa7, 0x155df585af6b3a51, 0x7e2cf59c13ad66d7,
-    0x733e2fa2ce9ab2ad, 0xb02f9a52c73a970a, 0x892b3ce132d454fb, 0x86c407dd309a682c,
-    0x4c188deaf6e45063, 0x2eab57e33d3cbf69, 0xe2eabe5614200986, 0xb4a84dfb314d1581,
-    0xe45a68fa526dce94, 0x43701dc676bc87fa, 0x16b6394cc71c75fa, 0x0c11c73eb960f044,
-    0xf3bc245dc3a7a530, 0x8f158071914199fd, 0xfb23c9e7daa4d661, 0x69c6df161afdf48e,
+    0xc061344db935d70a, 0x1862cf597f9424ed, 0xe68af99d5f0632f3, 0xefd56d00edd2c843,
+    0xc013dc417ead5064, 0x1f8549a89825ff0a, 0x985439c52b4f29dc, 0xacedca344a7f1e9b,
+    0xc293306ad8fa5a63, 0x0b0834c7f7633406, 0xd24e4ba2dec2c2f2, 0x2593dc5925d76c0a,
+    0xd94d0287cdc1d0c0, 0xff5ffb71adbc9e38, 0xc570b5d559ebfa99, 0x9833a6a65d36e884,
+    0xa36f81882f25602f, 0xb759eedb8b114777, 0x434a9765e6e39cdc, 0x95da5504bdcd73f5,
+    0xfa1165cb3651aaee, 0x6fab06a28543f54f, 0xdf2f17975e04cbad, 0x90af6b4e1dd98243,
+    0x554091923d2db868, 0x811fd50d4c22ccac, 0xc92b3e5dc0cc7907, 0xd67595f0c78a2adc,
+    0xe803129be8f56bbd, 0x4d17e6d8974539b6, 0x728aeb4255d718f2, 0xdf55fc02fadee6fb,
+    0x804696586b307c2d, 0xd6d0b61d35cf3a8f, 0xf695651546e664ad, 0x6733e61c1876521b,
+    0xee670cfb22231fa2, 0x98aee0f1cf93d635, 0x8d917804e6fa06e0, 0x190231b252d11bbd,
+    0x79322bd2374087bb, 0x25648216dc2eb2fb, 0x270e17f300a4bad3, 0xd3cefdefc2aaacf4,
+    0xe74149effc53e36b, 0x9c20fa511786bbdb, 0x3cc52d7180a6c8b9, 0x6fda6bc67f142bba,
+    0x3ab02ef2f1254481, 0x535148b2cb32dfc3, 0x52ce9bf3612f0481, 0x314c84d57c1cabbe,
+    0xd23818b4d35a1807, 0x1b35cd44494cce47, 0x9be3894d091d7a7d, 0xd9f75af5616fdf15,
+    0x187d777c8e94d1a5, 0x90f1edce7afb87fa, 0x564e0ad33e0a9b38, 0xc4ec729db196a960,
+    0xaab17e62346ff70a, 0xf488bfe453e3de32, 0xdd78dd077709b4f7, 0x23d4f4990a45aeb7,
+    0x6f124163247c533c, 0x80f9a35ce68db024, 0x9f569a596b0a14fb, 0x7a3c927038f04452,
+    0x42646db1effc9757, 0x8093f205287fb113, 0x53f6ddf4b0e838b8, 0x31e9eafafcb191dd,
+    0x804fc7a32729a50f, 0x5f7ea2982442beab, 0xe66a4bd6a76e0524, 0x21ea254353e871a7,
+    0x4dcc4abe01e6d035, 0xa4ca473d18391cfb, 0xa3f367f1112fa61f, 0xd36e89380b132a5b,
+    0x1ec20b86967118a5, 0x45bb6dad7ce9d065, 0x6e0e2bb8a76edd68, 0xc88f2b821a9be10d,
+    0x489fc75d95972cfc, 0xaebb663c1c18acf5, 0xcb3bb7a9e571603c, 0x4d860ea3b7139b58,
+    0xc45f8fd45dcb929a, 0xe17b604e788d1dfa, 0xedbe67eeac34b0f2, 0xcdf2feee520bec9d,
+    0x4bb154cdb9c9e4ef, 0xbf9f95c0b46ae82b, 0x1aa03ca719b18b4f, 0xeee981fe401cc8e2,
+    0x75c20d04dee7f560, 0x9dd59cfe62c40838, 0x41033f7d6557efac, 0x3f4364bfed7b3fd6,
 ];
 
 fn repo_root() -> PathBuf {
@@ -208,6 +208,10 @@ fn parity_100_random_seeds_zero_diff_and_zero_hot_allocs() {
     let mut zy_reused = Session::new(Arc::clone(&zy_lex));
     let mut zy_bin_session = Session::new(Arc::clone(&zy_base_lex));
 
+    // MEOWPUUT_PARITY_PRINT=1 prints the table for GOLDEN_100_SEEDS instead of
+    // comparing with it (after an intended lexicon or ranking change).
+    let print = std::env::var_os("MEOWPUUT_PARITY_PRINT").is_some();
+    let mut printed = Vec::with_capacity(GOLDEN_100_SEEDS.len());
     for (seed, &expected_hash) in GOLDEN_100_SEEDS.iter().enumerate() {
         let is_pinyin = seed % 2 == 0;
         let (actual_hash, bin_hash) = if is_pinyin {
@@ -228,10 +232,22 @@ fn parity_100_random_seeds_zero_diff_and_zero_hot_allocs() {
             actual_hash, bin_hash,
             "Binary vs TSV mismatch at seed {seed}: tsv={actual_hash:016x}, bin={bin_hash:016x}"
         );
+        if print {
+            printed.push(actual_hash);
+            continue;
+        }
         assert_eq!(
             actual_hash, expected_hash,
             "Mismatch at seed {seed}: actual={actual_hash:016x}, expected={expected_hash:016x}"
         );
+    }
+    if print {
+        println!("GOLDEN_100_SEEDS_BEGIN");
+        for row in printed.chunks(4) {
+            let cells: Vec<String> = row.iter().map(|h| format!("0x{h:016x}")).collect();
+            println!("    {},", cells.join(", "));
+        }
+        println!("GOLDEN_100_SEEDS_END");
     }
 
     // Verify zero heap allocations across hot simulation loops once warmed up:

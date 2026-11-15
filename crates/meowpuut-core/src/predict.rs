@@ -5,8 +5,12 @@
 //! The lexicon's context table is an n-gram model: traditional-script phrases
 //! with corpus frequencies, sorted by bytes. Given the committed text, the
 //! trailing 1–3 Han characters are traditionalized and every context phrase
-//! that extends them is a continuation. Longer matched context ranks higher.
-//! Output follows the requested script. No heap allocation once the output
+//! that extends them is a continuation. Longer matched context ranks higher,
+//! shorter continuations rank above longer ones of the same strength, and at
+//! most two leading suggestions share a first character, so 好 好嗎 好呀 好啊
+//! do not fill the bar. A tail that is itself a word with continuations ends there: its later
+//! characters are not read again as the start of a new word (晚安 never offers
+//! 裝 or 排 from 安裝, 安排; 對不起 never offers 眼 from 不起眼). Output follows the requested script. No heap allocation once the output
 //! buffers have been reserved.
 //!
 //! # Examples
@@ -16,14 +20,14 @@
 //!
 //! let tsv = concat!(
 //!     "MEOWPUUT-PINYIN-1\n",
-//!     "guo\tguo2\t國\t国\t5000\n",
+//!     "dian\tdian4\t電\t电\t5000\n",
 //!     "men\tmen5\t們\t们\t5000\n",
 //!     "wo\two3\t我\t我\t5000\n",
 //!     "# context\n",
-//!     "中國人\t5400\n",
 //!     "我們\t9000\n",
 //!     "我是\t6000\n",
 //!     "我的\t7000\n",
+//!     "電影院\t5400\n",
 //! );
 //! let lex = Lexicon::load(tsv).unwrap();
 //! let (mut raw, mut out) = (DecodeOutputSoA::with_capacity(64), DecodeOutputSoA::with_capacity(16));
@@ -31,8 +35,8 @@
 //! assert_eq!((out.text(0), out.text(1), out.text(2)), ("們", "的", "是"));
 //! lex.predict_into("我", true, 8, &mut raw, &mut out);
 //! assert_eq!(out.text(0), "们");
-//! lex.predict_into("中国", true, 8, &mut raw, &mut out);
-//! assert_eq!(out.text(0), "人");
+//! lex.predict_into("电影", true, 8, &mut raw, &mut out);
+//! assert_eq!(out.text(0), "院");
 //! lex.predict_into("hello", false, 8, &mut raw, &mut out);
 //! assert!(out.is_empty());
 //!
@@ -46,8 +50,13 @@ use crate::lexicon::Lexicon;
 use crate::reading::is_han_scalar;
 use crate::workspace::DecodeOutputSoA;
 
-/// Maximum continuation length in bytes (3 CJK characters).
-const MAX_REMAINDER: usize = 12;
+/// Maximum continuation length in characters.
+const MAX_REMAINDER_CHARS: usize = 3;
+/// Score taken off per continuation character after the first: a short,
+/// common next word beats a long fragment of a title or saying.
+const LENGTH_PENALTY: f64 = 1200.0;
+/// Leading suggestions allowed to share one first character.
+const SAME_HEAD_LIMIT: usize = 2;
 /// Upper bound on context rows scanned per prefix (bounds worst-case latency).
 const SCAN_LIMIT: usize = 4096;
 /// Candidates collected before ranking.
@@ -124,10 +133,17 @@ impl Lexicon {
             char_ends[i] = tail_len;
         }
         // Longest context first: k = number of trailing characters matched.
+        let mut inside_word = false;
         for k in (1..=count).rev() {
             let begin = if k == count { 0 } else { char_ends[count - k - 1] };
             let prefix = &tail[begin..tail_len];
             let mut row = self.lower_bound_context(prefix);
+            // A longer tail that is a whole word (an exact context row) already
+            // gave continuations; this shorter one starts inside that word.
+            if inside_word && !raw.is_empty() {
+                break;
+            }
+            inside_word = row < self.context.len() && self.context.phrase(&self.storage, row).as_bytes() == prefix;
             let mut scanned = 0usize;
             while row < self.context.len() && scanned < SCAN_LIMIT && raw.len() < RAW_LIMIT {
                 let phrase = self.context.phrase(&self.storage, row).as_bytes();
@@ -142,9 +158,26 @@ impl Lexicon {
                 // Skip a fallback that just re-forms the word already typed
                 // (e.g. 謝 + 謝 after 謝謝).
                 let echoes = k < count && tail[..tail_len].ends_with(phrase);
-                if !rest.is_empty() && rest.len() <= MAX_REMAINDER && freq >= floor && !echoes {
+                if !rest.is_empty() && freq >= floor && !echoes {
                     if let Ok(text) = std::str::from_utf8(rest) {
-                        let score = f64::from(freq) + CONTEXT_STEP * (k - 1) as f64;
+                        // Never a word of the never-volunteer list, nor the rest of one
+                        // begun by the text before it (its first character): the build leaves out the
+                        // context rows with one, but a shorter context can still end it.
+                        if self.completes_no_suggest(std::str::from_utf8(&tail[..tail_len]).unwrap_or(""), text)
+                            || std::str::from_utf8(phrase).is_ok_and(|p| self.is_no_suggest_text(p))
+                        {
+                            row += 1;
+                            scanned += 1;
+                            continue;
+                        }
+                        let chars = text.chars().count();
+                        if chars > MAX_REMAINDER_CHARS {
+                            row += 1;
+                            scanned += 1;
+                            continue;
+                        }
+                        let score = f64::from(freq) + CONTEXT_STEP * (k - 1) as f64
+                            - LENGTH_PENALTY * (chars - 1) as f64;
                         match (0..raw.len()).find(|&i| raw.text(i) == text) {
                             Some(i) => raw.score[i] = raw.score[i].max(score),
                             None => raw.push(text, k, 0, 0, score),
@@ -163,7 +196,24 @@ impl Lexicon {
         order[..n].sort_by(|&a, &b| {
             raw.score[b].total_cmp(&raw.score[a]).then_with(|| raw.text(a).cmp(raw.text(b)))
         });
-        for &i in order.iter().take(n.min(limit)) {
+        // Spread first characters: past SAME_HEAD_LIMIT, a suggestion waits
+        // behind every other one (stable, so ranks within each group hold).
+        let mut spread = [0usize; RAW_LIMIT];
+        let mut deferred = [0usize; RAW_LIMIT];
+        let (mut kept, mut waiting) = (0usize, 0usize);
+        for (pos, &i) in order[..n].iter().enumerate() {
+            let head = raw.text(i).chars().next();
+            let same = order[..pos].iter().filter(|&&j| raw.text(j).chars().next() == head).count();
+            if same < SAME_HEAD_LIMIT {
+                spread[kept] = i;
+                kept += 1;
+            } else {
+                deferred[waiting] = i;
+                waiting += 1;
+            }
+        }
+        spread[kept..n].copy_from_slice(&deferred[..waiting]);
+        for &i in spread.iter().take(n.min(limit)) {
             let start = out.arena.len();
             for (ci, ch) in raw.text(i).char_indices() {
                 let src = &raw.text(i)[ci..ci + ch.len_utf8()];
@@ -222,5 +272,45 @@ impl Predictor {
     /// Capacity signature for zero-allocation tests.
     pub fn capacity_signature(&self) -> usize {
         self.raw.arena.capacity() + self.out.arena.capacity() + self.raw.score.capacity() + self.out.score.capacity()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Predictor;
+    use crate::Lexicon;
+
+    fn lexicon(context: &str) -> Lexicon {
+        let mut rows: Vec<&str> = context.lines().collect();
+        rows.sort_unstable();
+        let tsv = format!("MEOWPUUT-PINYIN-1\nwo\two3\t我\t我\t5000\n# context\n{}\n", rows.join("\n"));
+        Lexicon::load(&tsv).unwrap()
+    }
+
+    fn predict(lex: &Lexicon, context: &str) -> Vec<String> {
+        let mut predictor = Predictor::new();
+        let n = predictor.predict(lex, context, false, 8);
+        (0..n).map(|i| predictor.text(i).to_owned()).collect()
+    }
+
+    #[test]
+    fn a_whole_word_tail_is_not_reread_as_a_word_start() {
+        let lex = lexicon("安排\t9000\n安裝\t9000\n晚安\t8000\n晚安好夢\t6000\n");
+        assert_eq!(predict(&lex, "晚安"), ["好夢"]);
+        // Without continuations of its own, the shorter tail is still read.
+        let lex = lexicon("什麼\t9000\n什麼時候\t8000\n為什麼\t8000\n");
+        assert_eq!(predict(&lex, "為什麼"), ["時候"]);
+    }
+
+    #[test]
+    fn shorter_continuations_rank_first_and_long_ones_are_dropped() {
+        let lex = lexicon("我們\t9000\n我們的\t6000\n我們的日子\t6500\n我們曾是戰士\t9000\n");
+        assert_eq!(predict(&lex, "我們"), ["的", "的日子"]);
+    }
+
+    #[test]
+    fn at_most_two_leading_suggestions_share_a_first_character() {
+        let lex = lexicon("你好\t9000\n你好嗎\t8900\n你好呀\t8800\n你好啊\t8700\n你們\t5000\n");
+        assert_eq!(predict(&lex, "你"), ["好", "好嗎", "們", "好呀", "好啊"]);
     }
 }

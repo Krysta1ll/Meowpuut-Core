@@ -1,0 +1,163 @@
+{
+  "cases": [
+    {
+      "expect": 0,
+      "file": "sakura_tea-3.mpskin",
+      "installed": [
+        {
+          "len": 464,
+          "n": "frame.png",
+          "sha256": "fd40cce658749b369697f4919a69424f262796c498cc7972f2b8748d7ffa422a"
+        },
+        {
+          "len": 4454,
+          "n": "key-1.wav",
+          "sha256": "09f9e73a2a5e794b111dbb43149642a9eeb0bbf1d4a4065e5bbbc3e662879a95"
+        },
+        {
+          "len": 1457,
+          "n": "manifest.json",
+          "sha256": "f3f9fe3f0258112b7c1f07d7ec760fe6d1e3c69bfb1a0c8cc66f0e0a7a31d0c6"
+        },
+        {
+          "len": 397,
+          "n": "mimimo_peek.png",
+          "sha256": "f1f0f786b27af9f807bee79b28511cdc3bea5ed9a4075e1386e79deb780b8c67"
+        },
+        {
+          "len": 363,
+          "n": "momo_hold.png",
+          "sha256": "0b85203bfd3afcf9bfebfdfdbb2a9164339824c23f5d70b7a1d84386900f6a59"
+        },
+        {
+          "len": 8864,
+          "n": "return-1.wav",
+          "sha256": "5b6f34f55ad63662b8eb182438af74872f1b765ca2e4a301548ca60124b297b9"
+        },
+        {
+          "len": 373,
+          "n": "right.png",
+          "sha256": "d604b53efb7bf77672c4594914ca9fa5d77b7462c6271ae72ab6a1ccbcfc08c5"
+        },
+        {
+          "len": 5336,
+          "n": "space-1.wav",
+          "sha256": "ea0bb0328dab95f4ec0e49f351b88de9029657096430aac23e5932de2b5a67b2"
+        }
+      ],
+      "name": "valid",
+      "policy": "test",
+      "request": "a"
+    },
+    {
+      "expect": 10,
+      "file": "sakura_tea-3.mpskin",
+      "name": "another device",
+      "policy": "test",
+      "request": "b"
+    },
+    {
+      "expect": 6,
+      "file": "sakura_tea-3.mpskin",
+      "name": "release build",
+      "policy": "release",
+      "request": "a"
+    },
+    {
+      "expect": 8,
+      "file": "tampered-header.mpskin",
+      "name": "header changed after signing",
+      "policy": "test",
+      "request": "a"
+    },
+    {
+      "expect": 8,
+      "file": "noncanonical-s.mpskin",
+      "name": "non-canonical S",
+      "policy": "test",
+      "request": "a"
+    },
+    {
+      "expect": 11,
+      "file": "small-order-eph.mpskin",
+      "name": "small-order ephemeral key",
+      "policy": "test",
+      "request": "a"
+    },
+    {
+      "expect": 5,
+      "file": "code-only-subkey.mpskin",
+      "name": "subkey without the skin use",
+      "policy": "test",
+      "request": "a"
+    },
+    {
+      "expect": 7,
+      "file": "sakura_tea-3.mpskin",
+      "name": "revoked subkey",
+      "policy": "test",
+      "request": "a",
+      "revocations": [
+        "revoke-kid.mprevoke"
+      ]
+    },
+    {
+      "expect": 18,
+      "file": "sakura_tea-3.mpskin",
+      "name": "downgrade",
+      "policy": "test",
+      "request": "a",
+      "state": {
+        "highest": {
+          "sakura_tea": 4
+        },
+        "revoked": {
+          "kid": [],
+          "serial": [],
+          "skin": []
+        },
+        "seq": 0,
+        "v": 1
+      }
+    },
+    {
+      "expect": 28,
+      "name": "revocation signed by a subkey",
+      "policy": "test",
+      "revocationFile": "revoke-by-subkey.mprevoke"
+    },
+    {
+      "expect": 6,
+      "name": "revocation in a release build",
+      "policy": "release",
+      "revocationFile": "revoke-kid.mprevoke"
+    }
+  ],
+  "client": "android/1.2",
+  "keys": {
+    "request-a": {
+      "public": "KuhNPLivKiqmWJ5oR4F7Nw/BkuudkHy7rjpBsVb1LUs=",
+      "redemptionId": "MPR2-04NE-GK9W-Q2QJ-MAN6-B2F6-GHW1-FCVG-ZGCJ-XEES-0Z5V-NRX4-3CAP-YMPM-PAJ6",
+      "secret": "3a1HL2fISuUoJsRhMfA4IMqTsYOEyh7OFanlX0v8S5Y=",
+      "seed": "SHA-256(\"meowpuut-skin test key request a\")"
+    },
+    "request-b": {
+      "public": "o8I+fSFV2ZOA8OspiWQafIa1jR2qJyLzj/ZwAbwavnI=",
+      "redemptionId": "MPR2-06HW-4FKX-45AX-K4W0-Y3NJ-K2B4-39Y8-DDCD-3PN2-E8QK-HZV7-00DW-3AZ7-4G9E",
+      "secret": "KZeaUJHfRD4UeX8FKBeYP9mxmYxUGZKz/kV0OAOedW8=",
+      "seed": "SHA-256(\"meowpuut-skin test key request b\")"
+    },
+    "root": {
+      "kid": "test-root-1",
+      "public": "bXb82R1G9B5Gc81BQQpl45c0SN1fxT+bEucLb0Pbbbs=",
+      "seed": "SHA-256(\"meowpuut-skin test key test-root-1\")"
+    },
+    "subkey": {
+      "cert": "{\"issued\":1763078400,\"kid\":\"test-2026-skin\",\"pub\":\"eEdEho1qvIyV/npQ9QG3ZZ6FpcQ4eYW5FLg/NQMwDbY=\",\"root\":\"test-root-1\",\"uses\":[\"code\",\"skin\"]}",
+      "certSignature": "VRmQ+bNy8LLthdmc/RZK3khWcjqXffNa0HWbxsq7cJUMAnGI9H8R5+gOnMvHpxUvJOOMvyPoGPeOETlwEo7UDA==",
+      "kid": "test-2026-skin",
+      "public": "eEdEho1qvIyV/npQ9QG3ZZ6FpcQ4eYW5FLg/NQMwDbY=",
+      "seed": "SHA-256(\"meowpuut-skin test key test-2026-skin\")"
+    }
+  }
+}

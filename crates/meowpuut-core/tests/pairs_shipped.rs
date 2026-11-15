@@ -98,13 +98,13 @@ fn shipped_pinyin_corrections_keep_tones_and_original_byte_offsets() {
         ("fanfa", "方法", "方法"), ("fangqie", "番茄", "番茄"),
         ("penyou", "朋友", "朋友"), ("zhengde", "真的", "真的"),
         ("jingzhang", "緊張", "紧张"), ("qinchu", "清楚", "清楚"),
-        ("tian'ang'men", "天安門", "天安门"), ("qin1chu3", "清楚", "清楚"),
+        ("dian'yin", "電影", "电影"), ("qin1chu3", "清楚", "清楚"),
         ("jingtianwoqukandianying", "今天我去看電影", "今天我去看电影"),
         ("mingtianyaogenpenyoujianmian", "明天要跟朋友見面", "明天要跟朋友见面"),
         ("woxihuanfangdian", "我喜歡飯店", "我喜欢饭店"),
         ("wodexingwen", "我的新聞", "我的新闻"),
         ("gognzuo", "工作", "工作"), ("gonggzuo", "工作", "工作"),
-        ("gogzuo", "工作", "工作"), ("zhogguo", "中國", "中国"),
+        ("gogzuo", "工作", "工作"), ("xuexaio", "學校", "学校"),
         ("xihun", "喜歡", "喜欢"),
     ];
     for (keys, hant, hans) in cases {
@@ -163,7 +163,7 @@ fn initial_confusions_offer_a_common_phrase_without_displacing_the_typed_leader(
         }
     }
 
-    for (keys, leader) in [("shijian", "时间"), ("gongzuo", "工作"), ("zhongguo", "中国")] {
+    for (keys, leader) in [("shijian", "时间"), ("gongzuo", "工作"), ("pengyou", "朋友")] {
         session.clear();
         for key in keys.bytes() { assert!(session.key(i32::from(key))); }
         assert_eq!(session.candidate(0), leader);
@@ -231,5 +231,48 @@ fn unverified_complete_paths_stay_ahead_of_nasal_guesses() {
             assert_eq!(info.kind, CandidateKind::Unknown as u32);
             assert_eq!(info.consumed_bytes, keys.len() as u64);
         }
+    }
+}
+
+/// One wrong, extra, missing or swapped key in a word or a sentence, or a
+/// final typed the other way over a weak reading, gives the fixed reading
+/// first; readings spelled as typed and letters still being typed keep
+/// their leader, and the search does not grow the session's buffers.
+#[test]
+fn shipped_typo_fixes_lead_only_over_weak_readings() {
+    let mut lex = Lexicon::from_base_in_place(generated("mimo_base.bin"), true, None).unwrap();
+    let table = Pairs::in_place(generated("mimo_pairs.bin"), &lex.index().word_ids, None).unwrap();
+    lex.set_pairs(table);
+    let mut session = Session::new(Arc::new(lex));
+    session.set_simplified(true);
+    let typed = |session: &mut Session, keys: &str| {
+        session.clear();
+        for key in keys.bytes() { assert!(session.key(i32::from(key))); }
+    };
+    let fixed = [
+        ("haioyou", "还有"), ("gongtonfg", "共同"), ("jicfhang", "机场"), ("shuruyfa", "输入法"),
+        ("qidawi", "期待"), ("woxianzaikeyiuuijiama", "我现在可以回家吗"), ("xihuang", "喜欢"),
+        ("taiyan", "太阳"),
+    ];
+    for (keys, expected) in fixed {
+        typed(&mut session, keys);
+        assert_eq!(session.candidate(0), expected, "{keys}");
+        let info = session.candidate_info(0).unwrap();
+        assert_eq!(info.kind, CandidateKind::Correction as u32, "{keys}");
+        assert_eq!(info.consumed_bytes, keys.len() as u64);
+    }
+    for (keys, leader) in [("nishi", "你是"), ("nihaoa", "你好啊"), ("haiyou", "还有"), ("zhiji", "之际"), ("xianzai", "现在")] {
+        typed(&mut session, keys);
+        assert_eq!(session.candidate(0), leader, "{keys}");
+    }
+    // Still typing 餐厅: the last letters are not fixed into 餐饮 first.
+    typed(&mut session, "cantin");
+    assert_ne!(session.candidate(0), "餐饮");
+    assert!((0..5).any(|i| session.candidate(i) == "餐厅"));
+    for keys in ["woxianzaikeyiuuijiama", "gongtonfg", "haioyou"] {
+        typed(&mut session, keys);
+        let warm = session.capacity_signature();
+        typed(&mut session, keys);
+        assert_eq!(session.capacity_signature(), warm, "{keys} grew the buffers");
     }
 }

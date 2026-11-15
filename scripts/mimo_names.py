@@ -34,7 +34,7 @@ ENDPOINT = "https://query.wikidata.org/sparql"
 # Field -> [(how an item belongs, Wikidata class, fewest Wikipedia editions)].
 # "is": instance of the class; "kind": the class or one of its subclasses; "is kind": instance of
 # the class or of a subclass. No class of people (real persons are not collected), none of
-# politics, war or religion.
+# sensitive topics.
 GROUPS = {
     "anime": [("is", c, 2) for c in "Q63952888 Q21198342 Q20650540 Q1107 Q747381 Q104213567 Q8274".split()],
     "characters": [("is", c, 2) for c in "Q15711870 Q80447738 Q87576284 Q1569167 Q15773347 Q95074".split()],
@@ -125,7 +125,7 @@ def build(converter: str):
     for label in labels:
         hans = simplified[label]
         hant = label if hans != label else traditional[label]
-        if not blocked.search(hans):
+        if not blocked.search(hans) and not blocked.search(hant):
             rows[(hant, hans)] = max(rows.get((hant, hans), 0), editions[label])
     DATA.mkdir(parents=True, exist_ok=True)
     with open(DATA / "names.tsv", "w", encoding="utf-8") as f:

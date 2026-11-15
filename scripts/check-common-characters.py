@@ -28,6 +28,11 @@ cases = [
     ('qing2', ('情', '情'), ('殑', '殑')),
     ('hao4', ('號', '号'), ('灝', '灏')),
 ]
+# Traditional spellings mimo-sc lists next to their Simplified text (臺 next to 台) are folded into
+# that text: Traditional sessions keep them as forms of it, Simplified sessions do not show them.
+# A character that is also Simplified (跤, though the converter writes 交) is not folded.
+traditional_forms = [('tai2', '臺'), ('ban3', '闆'), ('biao3', '錶'), ('tai2', '颱'), ('xian2', '鹹'), ('jian3', '簡')]
+simplified_kept = [('jiao1', '跤'), ('shuai1 jiao1', '摔跤')]
 if True:
     env = {**os.environ, 'PATH': f"{Path.home() / '.cargo/bin'}:{os.environ.get('PATH', '')}"}
     subprocess.run(['cargo', 'build', '--release', '-p', 'meowpuut-ffi'], cwd=ROOT, env=env, check=True)
@@ -80,6 +85,20 @@ if True:
                                 for char in (('棒', '棒'), ('綁', '绑'), ('榜', '榜')):
                                     assert char[simplified] in result[:7], (mode, keys, result[:7])
                         checks += 1
+            def typed(reading, simplified):
+                core.mpn_set_simplified(session, simplified)
+                core.mpn_clear(session)
+                keys = reading.replace(' ', '') if mode == 'pinyin' else ''.join(compiler.encode(s) for s in reading.split())
+                for key in keys:
+                    assert core.mpn_key(session, ord(key)), (mode, reading, keys)
+                return [core.mpn_candidate(session, i).decode('utf-8') for i in range(core.mpn_candidate_count(session))]
+            for reading, form in traditional_forms:
+                assert form in typed(reading, 0)[:15], (mode, reading, form, typed(reading, 0)[:15])
+                assert form not in typed(reading, 1), (mode, reading, form, 'shown in a Simplified session')
+                checks += 2
+            for reading, word in simplified_kept:
+                assert word in typed(reading, 1)[:7], (mode, reading, word, typed(reading, 1)[:7])
+                checks += 1
         finally:
             core.mpn_session_destroy(session)
             core.mpn_lexicon_destroy(lexicon)

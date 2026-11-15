@@ -17,6 +17,7 @@
 //! assert_eq!(variants.get(0), "wan");
 //! ```
 
+use crate::fallback::SpanCosts;
 use crate::pairs::Pairs;
 use crate::reading::{CANDIDATE_LIMIT, MAX_INPUT};
 
@@ -109,6 +110,9 @@ pub struct PathLatticeSoA {
     /// Word id before the input: `pairs::START`, or the last word the person picked.
     pub left: u32,
     pub pair_cache: PairCache,
+    /// Set while decoding letters that are not the typed ones (a correction):
+    /// `FLAG_NO_SUGGEST` words are left out of the paths.
+    pub skip_no_suggest: bool,
 }
 
 impl PathLatticeSoA {
@@ -130,6 +134,7 @@ impl PathLatticeSoA {
             text: String::with_capacity(MAX_INPUT * 4),
             left: crate::pairs::START,
             pair_cache: PairCache::new(),
+            skip_no_suggest: false,
         }
     }
 
@@ -417,6 +422,8 @@ pub struct DecoderScratchSoA {
     pub fallback_out: DecodeOutputSoA,
     pub fallback_order: Vec<usize>,
     pub trad_scratch: String,
+    /// Span word costs kept between keys for the key-edit search (fallback.rs).
+    pub(crate) span_costs: Box<SpanCosts>,
 }
 
 impl DecoderScratchSoA {
@@ -430,6 +437,7 @@ impl DecoderScratchSoA {
             fallback_out: DecodeOutputSoA::with_capacity(256),
             fallback_order: Vec::with_capacity(8192),
             trad_scratch: String::with_capacity(256),
+            span_costs: Box::default(),
         }
     }
 

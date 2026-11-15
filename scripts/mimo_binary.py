@@ -22,6 +22,9 @@ FLAG_FULLY_SPELLED = 1 << 0
 FLAG_SINGLE_HAN_HANT = 1 << 1
 FLAG_SINGLE_HAN_HANS = 1 << 2
 FLAG_VERIFIED_SPELLING = 1 << 3
+FLAG_NO_SUGGEST = 1 << 4  # never volunteered (Resources/Lexicon/blocked-terms.txt); soa::FLAG_NO_SUGGEST
+FLAG_NO_SUGGEST_WHOLE = 1 << 5  # ... only as a whole word (=term), not inside another text; soa::FLAG_NO_SUGGEST_WHOLE
+FLAG_LISTED_KEEP = 1 << 6  # an everyday word that holds a listed term ([zh-keep]); soa::FLAG_LISTED_KEEP
 
 _VOWELS = set(b"aeiouv")
 _SYLLABLE_RE = re.compile(r"[^1-5]+[1-5]")
@@ -57,8 +60,13 @@ def compile_mimo_bin(
     pinyin: bool,
     sorted_entries: list[tuple[tuple[str, str, str, str], int]],
     sorted_context: list[tuple[str, int]],
+    no_suggest: frozenset = frozenset(),
+    whole_only: frozenset = frozenset(),
+    kept: frozenset = frozenset(),
 ) -> bytes:
-    """Serialize sorted lexicon rows and context phrases into a MIMO-BIN-1 image."""
+    """Serialize sorted lexicon rows and context phrases into a MIMO-BIN-1 image.
+    A row whose (hant, hans) is in `no_suggest` gets FLAG_NO_SUGGEST, and FLAG_NO_SUGGEST_WHOLE too
+    when it is in `whole_only`; one in `kept` gets FLAG_LISTED_KEEP."""
     storage_parts: list[bytes] = []
     storage_len = 0
     offsets: dict[bytes, int] = {}
@@ -140,6 +148,12 @@ def compile_mimo_bin(
             f |= FLAG_SINGLE_HAN_HANT
         if _is_single_han(hans, s_len):
             f |= FLAG_SINGLE_HAN_HANS
+        if (hant, hans) in no_suggest:
+            f |= FLAG_NO_SUGGEST
+            if (hant, hans) in whole_only:
+                f |= FLAG_NO_SUGGEST_WHOLE
+        elif (hant, hans) in kept:
+            f |= FLAG_LISTED_KEEP
         if not pinyin:
             f |= FLAG_VERIFIED_SPELLING
         else:
@@ -431,10 +445,14 @@ def write_mimo_binaries(
     pinyin_entries: list[tuple[tuple[str, str, str, str], int]],
     zhuyin_entries: list[tuple[tuple[str, str, str, str], int]],
     sorted_context: list[tuple[str, int]],
+    no_suggest: frozenset = frozenset(),
+    whole_only: frozenset = frozenset(),
+    kept: frozenset = frozenset(),
 ) -> dict[str, int]:
-    """Write the unified mimo_base.bin (MIMO-BASE-1 version 2) binary lexicon container."""
-    py_bin = compile_mimo_bin(True, pinyin_entries, sorted_context)
-    zy_bin = compile_mimo_bin(False, zhuyin_entries, sorted_context)
+    """Write the unified mimo_base.bin (MIMO-BASE-1 version 2) binary lexicon container.
+    `no_suggest`: (hant, hans) of the rows that get FLAG_NO_SUGGEST."""
+    py_bin = compile_mimo_bin(True, pinyin_entries, sorted_context, no_suggest, whole_only, kept)
+    zy_bin = compile_mimo_bin(False, zhuyin_entries, sorted_context, no_suggest, whole_only, kept)
     base_bin = pack_mimo_base(py_bin, zy_bin)
     for redundant in ("native-pinyin.bin", "native-zhuyin.bin"):
         p = output_dir / redundant

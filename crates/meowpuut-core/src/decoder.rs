@@ -24,6 +24,7 @@
 //! ```
 
 pub use crate::fallback::{fallback_into, has_exact_match, unfinished_phrase_into};
+use crate::abbrev;
 use crate::latin;
 use crate::lexicon::Lexicon;
 use crate::merge;
@@ -145,6 +146,19 @@ pub fn decode_with_buffers(
         }
     }
 
+    // Zhuyin words typed with first symbols (ㄋㄏ, ㄨㄛˇㄒㄏ) after the words
+    // typed in full; with a pair table they are sorted with the paths below.
+    let mut whole_spans = abbrev::ZhuyinSpans::default();
+    let mut zhuyin_spans = abbrev::ZhuyinSpans::default();
+    let mut abbrev_budget = abbrev::SCAN_BUDGET;
+    let zhuyin_abbreviated = !complete_only && !open_end && abbrev::abbreviated(lexicon, &reading);
+    if zhuyin_abbreviated {
+        abbrev::zhuyin_from(lexicon, &reading, 0, &mut abbrev_budget, &mut whole_spans);
+        if !ranked {
+            merge::push_abbreviated_whole(lexicon, whole_spans.words(length), input.len(), hans, false, out);
+        }
+    }
+
     // English for the whole input keeps its fixed place (latin.rs), ahead of the
     // part of the list that is sorted by score.
     latin::whole_into(lexicon, &reading, input.len(), hans, out);
@@ -156,9 +170,16 @@ pub fn decode_with_buffers(
         if !complete_only && input == reading.sounds() {
             merge::push_mixed_whole(lexicon, input, hans, out);
         }
+        if zhuyin_abbreviated {
+            merge::push_abbreviated_whole(lexicon, whole_spans.words(length), input.len(), hans, true, out);
+        }
     }
 
+    // One-edit guesses for the whole input, listed before the paths without
+    // a pair table (with one they are sorted with them by `guess_score`).
+    let mut guesses = 0..0;
     if out.is_empty() && lexicon.pinyin && !complete_only {
+        guesses.start = out.len();
         fallback_into(lexicon, input, hans, false, fb_raw, fb_order, fb_out);
         for i in 0..fb_out.len() {
             let text = fb_out.text(i);
@@ -172,6 +193,7 @@ pub fn decode_with_buffers(
                 );
             }
         }
+        guesses.end = out.len();
     }
 
     lattice.reset(length);
@@ -188,9 +210,27 @@ pub fn decode_with_buffers(
         reading.matches(lexicon.words.reading(&lexicon.storage, index).as_bytes(), start, end)
     };
 
+    // An English word that ends the input (bug, zhegebug, html) keeps its
+    // letters: a bare initial in it is not read as a character (不乾 for bug).
+    // Only a word that starts the input or starts with a consonant counts;
+    // the id of nid is the end of ni.
+    let latin_tail = if lexicon.pinyin && !complete_only {
+        let sounds = reading.sounds_bytes();
+        (length.saturating_sub(latin::LONGEST)..length)
+            .find(|&s| (s == 0 || !b"aeiouv".contains(&sounds[s])) && latin::span(lexicon, sounds, s, length).is_some())
+    } else {
+        None
+    };
     let mut mixed_buf = [0u32; merge::MIXED_ROWS];
     for start in (0..length).rev() {
         step_paths.clear();
+        if zhuyin_abbreviated {
+            if start == 0 {
+                zhuyin_spans = whole_spans;
+            } else {
+                abbrev::zhuyin_from(lexicon, &reading, start, &mut abbrev_budget, &mut zhuyin_spans);
+            }
+        }
         let max_end = length.min(start + lexicon.longest);
         for end in (start + 1)..=max_end {
             let suffix_count = lattice.count_at(end);
@@ -198,8 +238,23 @@ pub fn decode_with_buffers(
                 continue;
             }
             let (lo, hi) = lexicon.range(&sounds_str[start..end]);
-            // Full syllables mixed with initials at the end of the input (wobuzd).
-            let mixed = if pairs.is_some() && !complete_only && end == length && start > 0 && reading.boundary_count[end] == reading.boundary_count[start] {
+            // Words typed with initials that no lexicon row spells: Zhuyin first
+            // symbols (ㄋㄏ), a bare Pinyin initial at the end of the input (the d
+            // of wod) or among other initials (the q of jtqkdy; after a syllable a
+            // lone consonant is more often English, bug or mail), and full
+            // syllables mixed with initials at the end of the input (wobuzd).
+            let mixed = if complete_only {
+                0
+            } else if !lexicon.pinyin {
+                let rows = zhuyin_spans.rows(end);
+                mixed_buf[..rows.len()].copy_from_slice(rows);
+                rows.len()
+            } else if abbrev::pinyin_initial(reading.sounds_bytes(), start, end)
+                && (end == length || abbrev::after_initial(reading.sounds_bytes(), start))
+                && latin_tail.is_none_or(|s| s > start)
+            {
+                abbrev::pinyin_initial_rows(lexicon, &reading.sounds_bytes()[start..end], reading.boundaries[end], &mut mixed_buf)
+            } else if pairs.is_some() && end == length && start > 0 && reading.boundary_count[end] == reading.boundary_count[start] {
                 merge::mixed_rows(lexicon, &sounds_str[start..end], &mut mixed_buf)
             } else {
                 0
@@ -211,22 +266,37 @@ pub fn decode_with_buffers(
                 && lexicon.pinyin
                 && end != length
                 && (lo..hi).any(|i| lexicon.words.is_fully_spelled(i) && matches(i, start, end));
+            // Where the span can only be initials (no spelled word reads it, and
+            // it is not the end of a syllable before it), an abbreviation row is
+            // scored as its word less the mixed penalty (merge::abbreviation_score).
+            let abbreviation_only = lexicon.pinyin
+                && lo < hi
+                && abbrev::pinyin_initials(reading.sounds_bytes(), start, end)
+                && !(lo..hi).any(|i| lexicon.words.is_fully_spelled(i) && matches(i, start, end));
             let mut taken = [0usize; PAIR_SPAN_WORDS];
             let mut used = 0usize;
             for index in (lo..hi).chain(mixed_buf[..mixed].iter().map(|&r| r as usize)) {
+                if lattice.skip_no_suggest && lexicon.words.is_no_suggest(index) {
+                    continue;
+                }
                 let is_mixed = index < lo || index >= hi;
                 let word_spelled = lexicon.words.is_fully_spelled(index) && !is_mixed;
                 if (complete_only || skip_short) && !word_spelled {
                     continue;
                 }
-                if !matches(index, start, end) {
+                // Abbreviated rows were matched syllable by syllable, tones included.
+                if !is_mixed && !matches(index, start, end) {
                     continue;
                 }
                 let word_text = lexicon.words.text(&lexicon.storage, index, hans);
                 if pairs.is_some() && taken[..used].iter().any(|&t| lexicon.words.text(&lexicon.storage, t, hans) == word_text) {
                     continue;
                 }
-                let score = f64::from(lexicon.words.weight(index)) / 700.0 - 19.0 - if is_mixed { merge::MIXED_PENALTY } else { 0.0 };
+                let score = if abbreviation_only && !is_mixed {
+                    merge::abbreviation_score(lexicon.words.weight(index))
+                } else {
+                    f64::from(lexicon.words.weight(index)) / 700.0 - 19.0 - if is_mixed { merge::MIXED_PENALTY } else { 0.0 }
+                };
                 let verified = verified_word(index);
                 let traditional = lexicon.words.text(&lexicon.storage, index, false);
                 let (hash, pow) = text_hash(word_text);
@@ -265,7 +335,7 @@ pub fn decode_with_buffers(
                         pow,
                         word_text.len(),
                         total,
-                        lattice.spelled[s_slot] && (!lexicon.pinyin || word_spelled),
+                        lattice.spelled[s_slot] && (word_spelled || !lexicon.pinyin && !is_mixed),
                         lattice.verified[s_slot] && verified,
                     );
                 }
@@ -331,6 +401,31 @@ pub fn decode_with_buffers(
     }
     if let Some(from) = sort_from {
         merge::sort_from(out, from);
+    } else if !guesses.is_empty() {
+        // Without a pair table a spelled path that reads better than the best
+        // guess, scored as the pair table would score it, comes before the
+        // guesses (woxiawu: 我下午, not 我下去 for woxiaqu), unless that guess
+        // only goes on from the letters typed (doujian: 豆浆 being typed).
+        let best_guess = merge::guess_score(out.score[guesses.start]);
+        let completion = completes(lexicon, reading.sounds(), out.text(guesses.start), hans);
+        if let Some(i) = (guesses.end..out.len()).find(|&i| !completion && out.kind[i] == CandidateKind::Path as u32) {
+            if out.score[i] > best_guess {
+                let text = out.text(i).to_owned();
+                let (kind, score) = (out.kind[i], out.score[i]);
+                out.remove_at(i);
+                out.insert_at(guesses.start, &text, input.len(), kind, CandidateScoreKind::Path as u32, score);
+            }
+        }
+    }
+    if lattice.skip_no_suggest {
+        let mut i = 0;
+        while i < out.len() {
+            if lexicon.is_no_suggest_text(out.text(i)) {
+                out.remove_at(i);
+            } else {
+                i += 1;
+            }
+        }
     }
 }
 
@@ -365,6 +460,17 @@ fn rank_next(lexicon: &Lexicon, lattice: &PathLatticeSoA, hans: bool, step_paths
         rest.sort_unstable_by(cmp);
         order.len()
     }
+}
+
+/// Whether a lexicon word whose bare reading goes on from `sounds` reads `text`.
+fn completes(lexicon: &Lexicon, sounds: &str, text: &str, hans: bool) -> bool {
+    (lexicon.lower_bound_bucket(sounds)..lexicon.buckets.len())
+        .take(64)
+        .take_while(|&bucket| lexicon.buckets.key(&lexicon.storage, bucket).starts_with(sounds))
+        .any(|bucket| {
+            let (lo, hi) = lexicon.buckets.range(bucket);
+            (lo..hi).any(|i| lexicon.words.text(&lexicon.storage, i, hans) == text)
+        })
 }
 
 /// Word id of the last word of `text`, picked for the keys `input`: the

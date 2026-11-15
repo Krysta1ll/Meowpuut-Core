@@ -112,6 +112,17 @@ pub fn sort_from(out: &mut DecodeOutputSoA, from: usize) {
 /// Nats taken off a word typed as full syllables mixed with initials
 /// (zenmb for 怎麼辦), on top of its full-reading weight.
 pub const MIXED_PENALTY: f64 = 3.0;
+/// Lattice word cost of a Pinyin abbreviation row (zmb for 怎麼辦) of weight
+/// `weight`. The row holds an eighth of its word's weight (abbreviations() in
+/// scripts/compile-native-lexicon.py), which as a cost takes 7/8 of the
+/// word's log weight off: 12 nats from a common word, 3 from a rare one, so
+/// rare long words won abbreviated sentences (具體情況電影 for jtqkdy). Read
+/// as its word's weight less `MIXED_PENALTY`, like a word typed as full
+/// syllables mixed with initials. The 8 must change with that script.
+pub fn abbreviation_score(weight: i32) -> f64 {
+    f64::from(weight) * 8.0 / 700.0 - 19.0 - MIXED_PENALTY
+}
+
 /// Rows kept per mixed span.
 pub const MIXED_ROWS: usize = 8;
 
@@ -180,7 +191,8 @@ pub fn mixed_rows(lexicon: &Lexicon, span: &str, rows: &mut [u32; MIXED_ROWS]) -
                 continue;
             }
             for index in lo..hi {
-                if !lexicon.words.is_fully_spelled(index) {
+                // Initials are never the full spelling of a never-volunteer word.
+                if !lexicon.words.is_fully_spelled(index) || lexicon.words.is_no_suggest(index) {
                     continue;
                 }
                 let w = i32::from(lexicon.words.weight(index));
@@ -261,6 +273,23 @@ pub fn push_mixed_whole(lexicon: &Lexicon, input: &str, hans: bool, out: &mut De
         let text = lexicon.words.text(&lexicon.storage, index, hans);
         if !out.contains_text(text) && out.len() < CANDIDATE_LIMIT {
             out.push(text, input.len(), CandidateKind::Correction as u32, CandidateScoreKind::Lexicon as u32, whole_word_score(lexicon, index) - MIXED_PENALTY);
+        }
+    }
+}
+
+/// Pushes the Zhuyin words the whole input spells with first symbols
+/// (`rows`, from abbrev.rs), scored as one-word paths less `MIXED_PENALTY`
+/// when `ranked`, else by their weight.
+pub fn push_abbreviated_whole(lexicon: &Lexicon, rows: &[u32], consumed: usize, hans: bool, ranked: bool, out: &mut DecodeOutputSoA) {
+    for &row in rows {
+        let index = row as usize;
+        if lexicon.words.is_no_suggest(index) {
+            continue;
+        }
+        let text = lexicon.words.text(&lexicon.storage, index, hans);
+        if !out.contains_text(text) && out.len() < CANDIDATE_LIMIT {
+            let score = if ranked { whole_word_score(lexicon, index) - MIXED_PENALTY } else { f64::from(lexicon.words.weight(index)) };
+            out.push(text, consumed, CandidateKind::Correction as u32, CandidateScoreKind::Lexicon as u32, score);
         }
     }
 }

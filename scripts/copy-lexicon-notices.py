@@ -29,6 +29,9 @@ NOTICES = {
     'mimo-pairs-Tatoeba-CC-BY-2.0-FR.html': 'DataSources/mimo-pairs/CC-BY-2.0-FR.html',
     'mimo-pairs-CommonVoice-CC0-1.0.txt': 'DataSources/mimo-pairs/CC0-1.0.txt',
     'mimo-latin-SOURCE.json': 'DataSources/mimo-latin/SOURCE.json',
+    'mimo-english-SOURCE.json': 'DataSources/mimo-english/SOURCE.json',
+    'mimo-english-SCOWL-Copyright.txt': 'DataSources/mimo-english/SCOWL-Copyright.txt',
+    'mimo-english-CommonVoice-en-CC0-1.0.txt': 'DataSources/mimo-english/CommonVoice-en-CC0-1.0.txt',
 }
 
 if __name__ == "__main__":

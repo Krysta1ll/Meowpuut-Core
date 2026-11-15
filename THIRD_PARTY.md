@@ -49,8 +49,8 @@
   - **CrossWOZ**（`thu-coai/CrossWOZ`，commit `df82c9f`，**Apache-2.0**）：訂房、餐廳、景點、交通的任務對話。
   - **KdConv**（`thu-coai/KdConv`，commit `653db76`，**Apache-2.0**）：電影、音樂、旅遊的對話。
   - **MASSIVE** 1.1 的 zh-TW 與 zh-CN（Amazon，**CC BY 4.0**）：語音助理指令。
-- 不用的來源：維基百科與其姊妹計畫（CC BY-SA）、任何相同方式分享／非商業／禁止改作的文字、新聞與政府文字、網頁爬取而發佈者不擁有內容的語料。
-- 內容篩選：含 `Resources/Lexicon/blocked-terms.txt` 所列詞語（政治與公共衝突、貶低某一群人的說法、辱罵、色情、毒品、自傷）的句子整句不計入，短語也不收含這些詞的。這些詞仍在詞庫裡，使用者自己要打仍然打得出來，只是不會出現在短語和聯想詞裡。
+- 不用的來源：維基百科與其姊妹計畫（CC BY-SA）、任何相同方式分享／非商業／禁止改作的文字、新聞與官方文件、網頁爬取而發佈者不擁有內容的語料。
+- 內容篩選：含 `Resources/Lexicon/blocked-terms.txt` 所列爭議性或冒犯性用語的句子整句不計入，短語也不收含這些詞的。含這些詞的詞，鍵盤不主動提供：不出現在聯想詞、簡拼、補完、打錯字和模糊音修正、emoji 聯想裡，同音時排在日常詞之後；完整拼出時仍打得出來（`scripts/check-no-volunteer.py` 檢查）。
 - 測試與保留句不計入：評測集的 Tatoeba 句子編號、保留集句子，以及含有其中任一 5 字以上文字的子句。
 - 隨附授權聲明：`Licenses/mimo-pairs-SOURCE.json`、`Licenses/mimo-pairs-Tatoeba-CC-BY-2.0-FR.html`、`Licenses/mimo-pairs-CommonVoice-CC0-1.0.txt`、`Licenses/mimo-pairs-Apache-2.0.txt`、`Licenses/mimo-pairs-CC-BY-4.0.txt`。
 
@@ -64,9 +64,20 @@
 - 清單：`DataSources/mimo-phrases/phrases.tsv`（約 430 個），由 `scripts/mimo_phrases.py` 從第 5 節的口語文字找出常單獨成句的詞組（辛苦了、知道了、真的嗎）。來源與授權同第 5 節，見 `DataSources/mimo-phrases/SOURCE.json`。
 - 隨附授權聲明：`Licenses/mimo-phrases-SOURCE.json`。
 
+## 5c. mimo-english 英文詞庫
+
+- 詞表與詞對：`DataSources/mimo-english/english.tsv.xz`、`pairs.tsv.xz`，由 `scripts/mimo_english.py` 做出：詞（拼法、鍵、加權次數、旗標）限於 **SCOWL/ESDB**（Kevin Atkinson，`en-wl/wordlist` v2 分支，commit `1e5b7d3a72f47a71da5d28686c1dd4b397178485`，美式拼法、等級 70 以下，只讀 `data/scowl-pre.txt`、`data/exclude`、`data/variants`，不執行該專案的程式）加上 mimo-latin 與 `Resources/Lexicon/latin.tsv` 的詞；次數與詞對數自 **Tatoeba** 英文句子（`https://downloads.tatoeba.org/exports/per_language/eng/eng_sentences_detailed.tsv.bz2`，2026-11-14 的每週匯出，sha256 `f3a08a0af8deef3f50777cf0ccd7666f39e619f70fadae4327b7c29119468313`，預設授權 **CC BY 2.0 FR**，部分句子 CC0；授權依 `https://tatoeba.org/en/terms_of_use` 第 6.2 節核對）與 **Mozilla Common Voice** 英文 `server/data/en/sentence-collector.txt`（commit `bc5d2c4cc31f2fd853f7ef0026581fe50c67779b`，sha256 `31ac8e200449ebd7aee4a8c6bd16d4dafd076cf11f7c3efe1035f0283712d136`，**CC0 1.0**，同 commit 的 `server/data/en/LICENSE` 為 CC0 1.0 Universal）數出，口語句子 ×10。含 `Resources/Lexicon/blocked-terms.txt` 的 [en] 節（本專案自寫）所列詞或 SCOWL 標為 offensive-1、offensive-2、vulgar-1 之詞的句子不計入；Tatoeba 中的人名次數設上限。不用 Common Voice 的 `wiki.en.txt`（句子取自維基百科，CC BY-SA）與 SCOWL 等級 80 以上。見 `DataSources/mimo-english/SOURCE.json`。
+- SCOWL 的版權聲明（必須隨附）：
+
+  > Copyright 2000-2026 by Kevin Atkinson. Permission to use, copy, modify, distribute, and sell any part of the English Speller Database (ESDB, previously known as SCOWLv2), or word lists created from it, is hereby granted without fee, provided that the above copyright notice appears in all copies and that both the above copyright notice and this notice appear in supporting documentation. Kevin Atkinson makes no representations about the suitability of this database for any purpose. It is provided "as is" without express or implied warranty. ESDB is derived from many sources, most of which are in the Public Domain. Data from the Corpus of Contemporary American English (COCA) was also used. The primary source of words for ESDB comes from 12dicts and ENABLE2K. Both are in the Public Domain, but Alan Beale deserves special credit as he is the author of 12dicts and a major contributor to ENABLE2K.
+
+  Copyright 檔全文（含 UKACD 的 J Ross Beresford 聲明：若隨附於軟體，聲明須「prominently displayed」並逐字附上；WordNet 1.6 的 Princeton 聲明；澳洲英語的 Benjamin Titze 聲明）在 `DataSources/mimo-english/SCOWL-Copyright.txt`。本專案只用美式、等級 70 以下的詞，Copyright 檔寫明 UKACD 聲明適用於大於 80 的詞表，澳洲聲明適用於 `D`／`AU` 拼法；為保險起見，App 的「授權」頁仍須顯示 SCOWL 聲明（UKACD 的顯著標示）。
+- 署名：SCOWL/ESDB © Kevin Atkinson and contributors；Tatoeba (https://tatoeba.org) and its contributors；Mozilla Common Voice sentence-collector contributors。
+- 隨附授權聲明：`Licenses/mimo-english-SOURCE.json`、`Licenses/mimo-english-SCOWL-Copyright.txt`、`Licenses/mimo-english-CommonVoice-en-CC0-1.0.txt`；Tatoeba 的 CC BY 2.0 FR 沿用 `Licenses/mimo-pairs-Tatoeba-CC-BY-2.0-FR.html`。
+
 ## 6. mimo-names 作品、角色、地名等名稱（CC0）
 
-- 清單：`DataSources/mimo-names/names.tsv`（約 5.8 萬個），由 `scripts/mimo_names.py` 向 Wikidata 查詢各類別有中文名稱的項目：動畫、漫畫、輕小說、遊戲與其角色、影視、書籍、疾病與藥品、食物、資訊科技、企業與品牌、車款、地名與車站、天文、樂器、運動、學科、職業等。不取真人，也不取政治、戰爭、宗教的類別。查詢的類別、門檻與回應情形記在 `DataSources/mimo-names/SOURCE.json`。
+- 清單：`DataSources/mimo-names/names.tsv`（約 5.8 萬個），由 `scripts/mimo_names.py` 向 Wikidata 查詢各類別有中文名稱的項目：動畫、漫畫、輕小說、遊戲與其角色、影視、書籍、疾病與藥品、食物、資訊科技、企業與品牌、車款、地名與車站、天文、樂器、運動、學科、職業等。不取真人，也不取爭議性主題的類別。查詢的類別、門檻與回應情形記在 `DataSources/mimo-names/SOURCE.json`。
 - 授權：**Wikidata** 的資料以 **CC0 1.0** 釋出。
 - 隨附聲明：`Licenses/mimo-names-SOURCE.json`。
 
@@ -77,7 +88,73 @@
 ## 8. mimo-everyday 本專案自寫的句子（本專案所有）
 
 - `DataSources/mimo-everyday`：`everyday.txt.xz`（2026-11-11，96,627 句日常聊天）、`chat-2.txt.xz`（45,606 句聊天、情境用語與問答）、`written-2.txt.xz`（54,676 句敘述、說明、故事與例句）、`mixed-2.txt.xz`（9,436 句中文夾英文）。後三份寫於 2026-11-12。
-- 全部由語言模型為本專案寫成，每位寫手拿到主題、語體與內容限制（不寫政治、不針對任何群體、不寫真人與作品品牌名稱），沒有看過評測集與保留集。台灣用語（繁體）與大陸用語（簡體）都有。主題、行數與檢查碼見該目錄的 `SOURCE.json`。
+- 全部由語言模型為本專案寫成，每位寫手拿到主題、語體與內容限制（不寫爭議性內容、不針對任何群體、不寫真人與作品品牌名稱），沒有看過評測集與保留集。台灣用語（繁體）與大陸用語（簡體）都有。主題、行數與檢查碼見該目錄的 `SOURCE.json`。
+## 9. 客製化皮膚 `crates/meowpuut-skin` 的 Rust 相依（BSD-3-Clause、MIT、Apache-2.0 等）
+
+只有 `meowpuut-skin`（以及開了 `skin` 功能的 `meowpuut-ffi`，只給 Android 主程式與輸入法）用到外部 crate；引擎 crate 的相依圖不變，鍵盤擴充不編進這些。版本以 `=` 鎖定，實際解析結果記在 `Cargo.lock`。`png`／`flate2`／`miniz_oxide` 的版本決定安裝時重新編碼的 PNG 位元組（簽章蓋到這些位元組），升級時要重新產生 `Tests/skin-vectors`。
+
+| crate | 版本 | 授權 | 用途 |
+| --- | --- | --- | --- |
+| ed25519-dalek | 3.0.0 | BSD-3-Clause | Ed25519 驗章（`verify_strict`） |
+| x25519-dalek | 3.0.0 | BSD-3-Clause | X25519 索取金鑰 |
+| curve25519-dalek | 5.0.0 | BSD-3-Clause | 上兩者的曲線運算 |
+| subtle | 2.6.1 | BSD-3-Clause | 常數時間比較（經 dalek 與 AEAD） |
+| chacha20poly1305 | 0.11.0 | Apache-2.0 OR MIT | XChaCha20-Poly1305 |
+| chacha20 0.10.2、poly1305 0.9.1、aead 0.6.1、cipher 0.5.2、universal-hash 0.6.1、inout 0.2.6 | | MIT OR Apache-2.0 | AEAD 組件 |
+| hkdf 0.13.0、hmac 0.13.0、sha2 0.11.1、digest 0.11.3、block-buffer 0.12.1、crypto-common 0.2.2 | | MIT OR Apache-2.0 | HKDF-SHA256、SHA-256 |
+| ed25519 3.0.0、signature 3.0.0 | | Apache-2.0 OR MIT | 簽章型別 |
+| hybrid-array 0.4.15、typenum 1.20.1、cpufeatures 0.3.1、ctutils 0.4.8、cmov 0.5.4 | | MIT OR Apache-2.0 | 密碼學 crate 的基礎型別 |
+| zeroize | 1.9.1 | Apache-2.0 OR MIT | 用完清除金鑰 |
+| getrandom 0.4.3、rand_core 0.10.1、libc 0.2.191、cfg-if 1.0.5 | | MIT OR Apache-2.0 | 系統亂數（索取金鑰、暫存資料夾名稱） |
+| serde_json 1.0.154、serde_core 1.0.229、itoa 1.0.19 | | MIT OR Apache-2.0 | JSON |
+| zmij | 1.0.23 | MIT | serde_json 的浮點數輸出 |
+| memchr | 2.8.3 | Unlicense OR MIT | serde_json |
+| png 0.18.1、flate2 1.1.11、fdeflate 0.3.7、crc32fast 1.5.5、bitflags 2.13.2 | | MIT OR Apache-2.0 | PNG 解碼與重新編碼 |
+| miniz_oxide 0.8.9／0.9.1 | | MIT OR Zlib OR Apache-2.0 | deflate |
+| adler2 | 2.0.1 | 0BSD OR MIT OR Apache-2.0 | deflate 檢查碼 |
+| simd-adler32 | 0.3.10 | MIT | PNG 檢查碼 |
+
+多重授權的 crate 一律選 MIT。App 的授權頁（Android「關於」）要列出上表並附下列 BSD-3-Clause 聲明：BSD-3-Clause 第 2 條要求二進位散布時重現版權聲明、條件與免責聲明。
+
+```text
+ed25519-dalek:    Copyright (c) 2017-2019 isis agora lovecruft. All rights reserved.
+x25519-dalek:     Copyright (c) 2017-2021 isis agora lovecruft. All rights reserved.
+                  Copyright (c) 2019-2021 DebugSteven. All rights reserved.
+curve25519-dalek: Copyright (c) 2016-2021 isis agora lovecruft. All rights reserved.
+                  Copyright (c) 2016-2021 Henry de Valence. All rights reserved.
+subtle:           Copyright (c) 2016-2017 Isis Agora Lovecruft, Henry de Valence. All rights reserved.
+                  Copyright (c) 2016-2024 Isis Agora Lovecruft. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+1. Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+contributors may be used to endorse or promote products derived from
+this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+```
+
+測試用金鑰與測試向量（`Tests/skin-vectors/`）由本專案產生，依本倉庫授權；其中的圖與聲音是測試程式畫出、合成的幾何圖形與正弦音，不是角色素材。
+
 ## 引擎與整體授權說明
 
 - 解碼核心（Rust，`#![forbid(unsafe_code)]`）、唯讀二進位格式 `mimo_base.bin`（`MIMO-BASE-1` / `MIMO-BIN-1`）與選詞記錄（`mimo_user_wal.log` + `mimo_user.db`）由本專案寫成，執行時不依賴第三方引擎。

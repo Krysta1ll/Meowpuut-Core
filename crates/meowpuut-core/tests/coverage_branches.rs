@@ -60,12 +60,12 @@ const SAMPLE_PINYIN_TSV: &str = concat!(
     "wo\two3\t我\t我\t5600\n",
     "women\two3men5\t我們\t我们\t5500\n",
     "woxihuan\two3xi3huan1\t我喜歡\t我喜欢\t5600\n",
+    "xiaoyuan\txiao4yuan2\t校園\t校园\t5000\n",
     "xihuan\txi3huan1\t喜歡\t喜欢\t5500\n",
     "xin\txin1\t心\t心\t5000\n",
     "xing\txing1\t星\t星\t5000\n",
+    "xuexiao\txue2xiao4\t學校\t学校\t5500\n",
     "zhong\tzhong1\t中\t中\t5300\n",
-    "zhongguo\tzhong1guo2\t中國\t中国\t5500\n",
-    "zhongguoren\tzhong1guo2ren2\t中國人\t中国人\t5600\n",
     "# context\n",
     "今天天氣\t800\n",
     "你好\t600\n",
@@ -219,7 +219,7 @@ fn test_fallback_variants_and_segments() {
     decode_into(&lex, "xin", false, false, true, &mut scratch);
     assert!(!scratch.decoded.is_empty());
 
-    predictive_segments_into(&lex, "zhongguor", false, &mut scratch, &mut out);
+    predictive_segments_into(&lex, "xuexiaoy", false, &mut scratch, &mut out);
     assert!(!out.is_empty());
 
     pinyin_segments_into(&lex, "nihaoshijie", false, &mut scratch, &mut out);

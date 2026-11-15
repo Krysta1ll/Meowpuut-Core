@@ -10,16 +10,20 @@
   "counts": {
     "writer_files": 288,
     "lines_read": 106073,
-    "lines_kept": 96627,
+    "lines_kept": 96619,
     "kept_taiwan": 59991,
     "kept_mainland": 36636,
     "dropped": {
       "exact duplicate": 9422,
       "no Han character or broken": 24
+    },
+    "removed_after_review": {
+      "lines": 8,
+      "reason": "contested topics, removed on 2026-11-15 (Resources/Lexicon/blocked-terms.txt)"
     }
   },
   "files": {
-    "everyday.txt.xz": "be5cf088bd6aabf6df0fc61eb4de67d41fd7bb3727a7f432342592ba6cf4819c",
+    "everyday.txt.xz": "8b6c86c1864b5e0cc9e8f534dd01e7ec8363af296d302e69f5b05e5f947232dc",
     "chat-2.txt.xz": "45dedd87f2aa8e2b084b6e4a569f7601c0ae98b8d35f55faba3852d82ced5ce6",
     "written-2.txt.xz": "fbf902dfa2f10111dd7f97320ad9d7c32975b3d0aef8a6b77a16eb36370496d4",
     "mixed-2.txt.xz": "8ca6a7a236e1583dcc96d6bf81cd94158c26e03d7b26602af109158446da30ba"

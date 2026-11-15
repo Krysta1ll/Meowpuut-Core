@@ -1,0 +1,401 @@
+# Held-out sentences written on 2026-11-14 for scripts/eval-ranking.py; not used for any lexicon count. script, sentence, pinyin.
+t	我今天中午想吃牛肉麵	wo jin tian zhong wu xiang chi niu rou mian
+t	你要不要一起去吃晚餐	ni yao bu yao yi qi qu chi wan can
+t	這家便當店的排骨很好吃	zhe jia bian dang dian de pai gu hen hao chi
+t	幫我點一杯半糖少冰的紅茶	bang wo dian yi bei ban tang shao bing de hong cha
+t	外送大概還要二十分鐘才會到	wai song da gai hai yao er shi fen zhong cai hui dao
+t	我已經吃飽了你們慢慢吃	wo yi jing chi bao le ni men man man chi
+t	老闆這個可以外帶嗎	lao ban zhe ge ke yi wai dai ma
+t	晚上要不要去夜市逛逛	wan shang yao bu yao qu ye shi guang guang
+t	我突然好想喝珍珠奶茶	wo tu ran hao xiang he zhen zhu nai cha
+t	這碗湯有點太鹹了	zhe wan tang you dian tai xian le
+t	早餐店的蛋餅賣完了	zao can dian de dan bing mai wan le
+t	你吃過飯了沒	ni chi guo fan le mei
+t	今天的午餐我請客	jin tian de wu can wo qing ke
+t	幫我加一顆滷蛋謝謝	bang wo jia yi ke lu dan xie xie
+t	我不太敢吃辣的東西	wo bu tai gan chi la de dong xi
+t	冰箱裡還有一些水果	bing xiang li hai you yi xie shui guo
+t	等一下要去超商拿包裹	deng yi xia yao qu chao shang na bao guo
+t	我的包裹好像寄丟了	wo de bao guo hao xiang ji diu le
+t	這件衣服有其他顏色嗎	zhe jian yi fu you qi ta yan se ma
+t	網購的東西明天才會送到	wang gou de dong xi ming tian cai hui song dao
+t	這雙鞋子穿起來剛剛好	zhe shuang xie zi chuan qi lai gang gang hao
+t	結帳的時候可以刷卡嗎	jie zhang de shi hou ke yi shua ka ma
+t	我想把這件外套退貨	wo xiang ba zhe jian wai tao tui huo
+t	週年慶的時候再買比較划算	zhou nian qing de shi hou zai mai bi jiao hua suan
+t	店員說這個已經沒有庫存了	dian yuan shuo zhe ge yi jing mei you ku cun le
+t	運費要另外算嗎	yun fei yao ling wai suan ma
+t	我今天騎機車去上班	wo jin tian qi ji che qu shang ban
+t	捷運站離我家走路五分鐘	jie yun zhan li wo jia zou lu wu fen zhong
+t	公車又誤點了好煩喔	gong che you wu dian le hao fan o
+t	我現在在路上快到了	wo xian zai zai lu shang kuai dao le
+t	前面塞車塞得很嚴重	qian mian sai che sai de hen yan zhong
+t	你下一站就要下車了	ni xia yi zhan jiu yao xia che le
+t	我們約在車站門口見面	wo men yue zai che zhan men kou jian mian
+t	高鐵票我已經訂好了	gao tie piao wo yi jing ding hao le
+t	今天搭計程車回家比較快	jin tian da ji cheng che hui jia bi jiao kuai
+t	出門記得帶安全帽	chu men ji de dai an quan mao
+t	明天早上八點要考試	ming tian zao shang ba dian yao kao shi
+t	老師說作業下禮拜再交	lao shi shuo zuo ye xia li bai zai jiao
+t	圖書館今天幾點關門	tu shu guan jin tian ji dian guan men
+t	這一題我真的看不懂	zhe yi ti wo zhen de kan bu dong
+t	你可以借我筆記嗎	ni ke yi jie wo bi ji ma
+t	期末考終於考完了	qi mo kao zhong yu kao wan le
+t	我們小組明天要討論	wo men xiao zu ming tian yao tao lun
+t	他上課的時候一直在睡覺	ta shang ke de shi hou yi zhi zai shui jiao
+t	我明天要請假一天	wo ming tian yao qing jia yi tian
+t	主管叫我重新做一份簡報	zhu guan jiao wo chong xin zuo yi fen jian bao
+t	這個案子下週一要交	zhe ge an zi xia zhou yi yao jiao
+t	會議改到下午三點	hui yi gai dao xia wu san dian
+t	我今天又要加班了	wo jin tian you yao jia ban le
+t	老闆說年底會發獎金	lao ban shuo nian di hui fa jiang jin
+t	同事幫我帶了一杯咖啡	tong shi bang wo dai le yi bei ka fei
+t	這份文件請你幫我看一下	zhe fen wen jian qing ni bang wo kan yi xia
+t	我剛剛把檔案寄給你了	wo gang gang ba dang an ji gei ni le
+t	下班之後要不要去吃東西	xia ban zhi hou yao bu yao qu chi dong xi
+t	我覺得有點頭痛	wo jue de you dian tou tong
+t	喉嚨好痛好像感冒了	hou long hao tong hao xiang gan mao le
+t	你要多喝水早點休息	ni yao duo he shui zao dian xiu xi
+t	我明天要去看醫生	wo ming tian yao qu kan yi sheng
+t	這個藥要飯後吃	zhe ge yao yao fan hou chi
+t	她昨天發燒請了病假	ta zuo tian fa shao qing le bing jia
+t	最近睡不好一直很累	zui jin shui bu hao yi zhi hen lei
+t	運動完肚子好餓	yun dong wan du zi hao e
+t	我的腳扭到了走路會痛	wo de jiao niu dao le zou lu hui tong
+t	今天好熱我快融化了	jin tian hao re wo kuai rong hua le
+t	外面下大雨記得帶傘	wai mian xia da yu ji de dai san
+t	颱風好像要來了	tai feng hao xiang yao lai le
+t	明天會變冷要多穿一點	ming tian hui bian leng yao duo chuan yi dian
+t	今天天氣很好適合出去走走	jin tian tian qi hen hao shi he chu qu zou zou
+t	早上起來才發現在下雨	zao shang qi lai cai fa xian zai xia yu
+t	這幾天好潮濕衣服都乾不了	zhe ji tian hao chao shi yi fu dou gan bu liao
+t	我媽叫我回家吃飯	wo ma jiao wo hui jia chi fan
+t	週末要回老家看阿嬤	zhou mo yao hui lao jia kan a ma
+t	我弟弟今年考上大學了	wo di di jin nian kao shang da xue le
+t	我們家的貓很愛睡覺	wo men jia de mao hen ai shui jiao
+t	牠一直在咬沙發	ta yi zhi zai yao sha fa
+t	我爸在客廳看電視	wo ba zai ke ting kan dian shi
+t	他是我國中同學	ta shi wo guo zhong tong xue
+t	好久不見最近好嗎	hao jiu bu jian zui jin hao ma
+t	我們找一天出來聚聚吧	wo men zhao yi tian chu lai ju ju ba
+t	生日快樂祝你天天開心	sheng ri kuai le zhu ni tian tian kai xin
+t	我現在有點難過	wo xian zai you dian nan guo
+t	真的好累喔好想睡覺	zhen de hao lei o hao xiang shui jiao
+t	聽到這個消息我好開心	ting dao zhe ge xiao xi wo hao kai xin
+t	你不要生氣啦	ni bu yao sheng qi la
+t	我好緊張怎麼辦	wo hao jin zhang zen me ban
+t	我的手機沒電了	wo de shou ji mei dian le
+t	我等一下打電話給你	wo deng yi xia da dian hua gei ni
+t	這個軟體要怎麼更新	zhe ge ruan ti yao zen me geng xin
+t	網路好慢影片一直轉圈圈	wang lu hao man ying pian yi zhi zhuan quan quan
+t	我把密碼忘記了	wo ba mi ma wang ji le
+t	手機螢幕摔破了	shou ji ying mu shuai po le
+t	你可以把照片傳給我嗎	ni ke yi ba zhao pian chuan gei wo ma
+t	我已讀了只是還沒回	wo yi du le zhi shi hai mei hui
+t	充電線借我一下	chong dian xian jie wo yi xia
+t	晚上要不要一起打遊戲	wan shang yao bu yao yi qi da you xi
+t	這一關好難我打不過去	zhe yi guan hao nan wo da bu guo qu
+t	我昨天看動畫看到半夜	wo zuo tian kan dong hua kan dao ban ye
+t	這部動畫的主角好帥	zhe bu dong hua de zhu jiao hao shuai
+t	他抽卡又抽到重複的	ta chou ka you chou dao chong fu de
+t	新的角色什麼時候出來	xin de jiao se shen me shi hou chu lai
+t	暑假想去國外玩	shu jia xiang qu guo wai wan
+t	飯店的房間好乾淨	fan dian de fang jian hao gan jing
+t	我已經把行李收好了	wo yi jing ba xing li shou hao le
+t	機票是早上七點的	ji piao shi zao shang qi dian de
+t	這裡的風景好漂亮	zhe li de feng jing hao piao liang
+t	我們去海邊看夕陽吧	wo men qu hai bian kan xi yang ba
+t	護照記得帶著	hu zhao ji de dai zhe
+t	這個月的錢快不夠用了	zhe ge yue de qian kuai bu gou yong le
+t	我先幫你付我們再算	wo xian bang ni fu wo men zai suan
+t	可以轉帳給我嗎	ke yi zhuan zhang gei wo ma
+t	這個價格有點太貴了	zhe ge jia ge you dian tai gui le
+t	我想存錢買新電腦	wo xiang cun qian mai xin dian nao
+t	薪水下禮拜才會入帳	xin shui xia li bai cai hui ru zhang
+t	我們幾點出發	wo men ji dian chu fa
+t	下週末你有什麼計畫	xia zhou mo ni you shen me ji hua
+t	我晚一點再跟你說	wo wan yi dian zai gen ni shuo
+t	今天先這樣吧	jin tian xian zhe yang ba
+t	我大概十分鐘後到	wo da gai shi fen zhong hou dao
+t	等我一下我馬上下去	deng wo yi xia wo ma shang xia qu
+t	麻煩你幫我開一下門	ma fan ni bang wo kai yi xia men
+t	可以小聲一點嗎	ke yi xiao sheng yi dian ma
+t	請幫我拿一下那個盒子	qing bang wo na yi xia na ge he zi
+t	你可以教我怎麼用嗎	ni ke yi jiao wo zen me yong ma
+t	謝謝你幫我這麼多	xie xie ni bang wo zhe me duo
+t	真的很感謝你	zhen de hen gan xie ni
+t	謝啦下次換我請	xie la xia ci huan wo qing
+t	不好意思讓你久等了	bu hao yi si rang ni jiu deng le
+t	對不起我遲到了	dui bu qi wo chi dao le
+t	抱歉我剛剛沒看到訊息	bao qian wo gang gang mei kan dao xun xi
+t	是我不好你不要難過	shi wo bu hao ni bu yao nan guo
+t	你現在在幹嘛	ni xian zai zai gan ma
+t	這個要怎麼弄	zhe ge yao zen me nong
+t	你覺得哪一個比較好	ni jue de na yi ge bi jiao hao
+t	為什麼他還沒來	wei shen me ta hai mei lai
+t	好啊沒問題	hao a mei wen ti
+t	可以啊沒差	ke yi a mei cha
+t	那就這樣決定了	na jiu zhe yang jue ding le
+t	我在家裡等你	wo zai jia li deng ni
+t	你再說一次好不好	ni zai shuo yi ci hao bu hao
+t	他跑得很快	ta pao de hen kuai
+t	她開心地笑了	ta kai xin de xiao le
+t	這是我做的蛋糕	zhe shi wo zuo de dan gao
+t	他寫的作文得獎了	ta xie de zuo wen de jiang le
+t	你得早點出門才來得及	ni dei zao dian chu men cai lai de ji
+t	我覺得他說得對	wo jue de ta shuo de dui
+t	她把頭髮剪短了	ta ba tou fa jian duan le
+t	它的電池用很久了	ta de dian chi yong hen jiu le
+t	他們還在路上	ta men hai zai lu shang
+t	我把錢還給你了	wo ba qian huan gei ni le
+t	銀行幾點開門	yin hang ji dian kai men
+t	我們一起走路去吧	wo men yi qi zou lu qu ba
+t	這隻小狗長得好可愛	zhe zhi xiao gou zhang de hao ke ai
+t	她的頭髮留長了	ta de tou fa liu chang le
+t	重要的事情說三次	zhong yao de shi qing shuo san ci
+t	重新開機就好了	chong xin kai ji jiu hao le
+t	這首歌的音樂好好聽	zhe shou ge de yin yue hao hao ting
+t	大家都到了嗎	da jia dou dao le ma
+t	我比較喜歡住在都市	wo bi jiao xi huan zhu zai du shi
+t	這家店的東西很便宜	zhe jia dian de dong xi hen pian yi
+t	方便的話幫我拿一下	fang bian de hua bang wo na yi xia
+t	我睡著了沒聽到電話	wo shui zhao le mei ting dao dian hua
+t	我上課上到快要睡著了	wo shang ke shang dao kuai yao shui zhao le
+t	他好像還在生氣	ta hao xiang hai zai sheng qi
+t	你再等我五分鐘	ni zai deng wo wu fen zhong
+t	我現在在開會	wo xian zai zai kai hui
+t	晚餐要吃什麼好呢	wan can yao chi shen me hao ne
+t	這杯飲料太甜了	zhe bei yin liao tai tian le
+t	我想吃滷肉飯配貢丸湯	wo xiang chi lu rou fan pei gong wan tang
+t	請問這邊有空位嗎	qing wen zhe bian you kong wei ma
+t	要內用還是外帶	yao nei yong hai shi wai dai
+t	包裹已經放在管理室了	bao guo yi jing fang zai guan li shi le
+t	我在網路上買了一台吹風機	wo zai wang lu shang mai le yi tai chui feng ji
+t	這個尺寸太小了穿不下	zhe ge chi cun tai xiao le chuan bu xia
+t	明天要早起去搭火車	ming tian yao zao qi qu da huo che
+t	我錯過末班車了	wo cuo guo mo ban che le
+t	補習班今天停課	bu xi ban jin tian ting ke
+t	報告的資料我找好了	bao gao de zi liao wo zhao hao le
+t	我明天要面試好緊張	wo ming tian yao mian shi hao jin zhang
+t	今天終於可以準時下班	jin tian zhong yu ke yi zhun shi xia ban
+t	牙齒好痛要去看牙醫	ya chi hao tong yao qu kan ya yi
+t	晚上冷氣不要開太冷	wan shang leng qi bu yao kai tai leng
+t	今天紫外線很強要擦防曬	jin tian zi wai xian hen qiang yao ca fang shai
+t	我姊姊下個月要結婚了	wo jie jie xia ge yue yao jie hun le
+t	阿公最近身體還不錯	a gong zui jin shen ti hai bu cuo
+t	我們全家去露營	wo men quan jia qu lu ying
+t	好無聊喔有沒有人要聊天	hao wu liao o you mei you ren yao liao tian
+t	這首歌讓我想起以前	zhe shou ge rang wo xiang qi yi qian
+t	手機一直跳出廣告好煩	shou ji yi zhi tiao chu guang gao hao fan
+t	我換了新手機還不太會用	wo huan le xin shou ji hai bu tai hui yong
+t	今天晚上一起組隊吧	jin tian wan shang yi qi zu dui ba
+t	這個角色的技能好強	zhe ge jiao se de ji neng hao qiang
+t	我們下次去山上泡溫泉	wo men xia ci qu shan shang pao wen quan
+t	我想在海邊住一晚	wo xiang zai hai bian zhu yi wan
+t	這個月花太多錢了	zhe ge yue hua tai duo qian le
+t	午餐錢我先幫你出	wu can qian wo xian bang ni chu
+t	下禮拜三是我的生日	xia li bai san shi wo de sheng ri
+t	明天要記得提醒我	ming tian yao ji de ti xing wo
+t	你可以幫我買一份早餐嗎	ni ke yi bang wo mai yi fen zao can ma
+t	謝謝你的禮物我很喜歡	xie xie ni de li wu wo hen xi huan
+t	抱歉今天沒辦法去了	bao qian jin tian mei ban fa qu le
+t	那我們改天再約	na wo men gai tian zai yue
+t	你到家了跟我說一聲	ni dao jia le gen wo shuo yi sheng
+t	要不要幫你留一份	yao bu yao bang ni liu yi fen
+t	我們再去逛一下書店	wo men zai qu guang yi xia shu dian
+t	這間餐廳要先訂位	zhe jian can ting yao xian ding wei
+t	他做事情很認真	ta zuo shi qing hen ren zhen
+t	我昨天做了一個好奇怪的夢	wo zuo tian zuo le yi ge hao qi guai de meng
+t	這件事情你做得很好	zhe jian shi qing ni zuo de hen hao
+t	她已經在門口等你了	ta yi jing zai men kou deng ni le
+t	你先去吃我再過去	ni xian qu chi wo zai guo qu
+t	樓下的早餐店今天沒開	lou xia de zao can dian jin tian mei kai
+t	我的鍵盤有一顆按鍵壞掉了	wo de jian pan you yi ke an jian huai diao le
+t	你週六晚上要不要來我家煮火鍋	ni zhou liu wan shang yao bu yao lai wo jia zhu huo guo
+t	這個便當的青菜有點少	zhe ge bian dang de qing cai you dian shao
+t	我剛剛在捷運上睡過站了	wo gang gang zai jie yun shang shui guo zhan le
+t	外面風好大雨傘被吹壞了	wai mian feng hao da yu san bei chui huai le
+t	這款遊戲的新活動明天開始	zhe kuan you xi de xin huo dong ming tian kai shi
+t	我先去洗澡等一下再回你	wo xian qu xi zao deng yi xia zai hui ni
+t	你明天早上可以叫我起床嗎	ni ming tian zao shang ke yi jiao wo qi chuang ma
+t	這次旅行的照片我整理好了	zhe ci lv xing de zhao pian wo zheng li hao le
+s	我中午点了个外卖	wo zhong wu dian le ge wai mai
+s	外卖小哥说马上就到	wai mai xiao ge shuo ma shang jiu dao
+s	今天食堂的菜还不错	jin tian shi tang de cai hai bu cuo
+s	晚上一起去吃火锅吧	wan shang yi qi qu chi huo guo ba
+s	这家店的饺子特别好吃	zhe jia dian de jiao zi te bie hao chi
+s	给我来一碗牛肉拉面	gei wo lai yi wan niu rou la mian
+s	少放点辣椒谢谢	shao fang dian la jiao xie xie
+s	你吃早饭了没	ni chi zao fan le mei
+s	这个菜有点咸了	zhe ge cai you dian xian le
+s	我的快递到了没	wo de kuai di dao le mei
+s	快递放在驿站了	kuai di fang zai yi zhan le
+s	这件衣服有没有大一号的	zhe jian yi fu you mei you da yi hao de
+s	双十一买了好多东西	shuang shi yi mai le hao duo dong xi
+s	这个可以七天无理由退货吗	zhe ge ke yi qi tian wu li you tui huo ma
+s	我在网上买了个充电宝	wo zai wang shang mai le ge chong dian bao
+s	帮我拿一下快递呗	bang wo na yi xia kuai di bei
+s	这个价格挺划算的	zhe ge jia ge ting hua suan de
+s	收到货记得给个好评	shou dao huo ji de gei ge hao ping
+s	我坐地铁去上班	wo zuo di tie qu shang ban
+s	早高峰地铁太挤了	zao gao feng di tie tai ji le
+s	我打个车过去	wo da ge che guo qu
+s	路上堵车可能要晚到	lu shang du che ke neng yao wan dao
+s	公交车来了快走	gong jiao che lai le kuai zou
+s	我还有两站就到了	wo hai you liang zhan jiu dao le
+s	高铁票抢到了没	gao tie piao qiang dao le mei
+s	骑共享单车去吧	qi gong xiang dan che qu ba
+s	明天要上网课	ming tian yao shang wang ke
+s	老师让我们周五交论文	lao shi rang wo men zhou wu jiao lun wen
+s	我在图书馆占了个座	wo zai tu shu guan zhan le ge zuo
+s	这道题我怎么也做不出来	zhe dao ti wo zen me ye zuo bu chu lai
+s	考研的事你想好了吗	kao yan de shi ni xiang hao le ma
+s	今天又要加班到很晚	jin tian you yao jia ban dao hen wan
+s	领导让我改一下方案	ling dao rang wo gai yi xia fang an
+s	这个项目下个月要上线	zhe ge xiang mu xia ge yue yao shang xian
+s	开会的时候别玩手机	kai hui de shi hou bie wan shou ji
+s	我把表格发到群里了	wo ba biao ge fa dao qun li le
+s	明天要去出差	ming tian yao qu chu chai
+s	我请了两天年假	wo qing le liang tian nian jia
+s	我好像有点发烧	wo hao xiang you dian fa shao
+s	嗓子疼得说不出话	sang zi teng de shuo bu chu hua
+s	我去医院挂个号	wo qu yi yuan gua ge hao
+s	最近老是失眠	zui jin lao shi shi mian
+s	记得按时吃药	ji de an shi chi yao
+s	跑完步腿好酸	pao wan bu tui hao suan
+s	今天降温了多穿点	jin tian jiang wen le duo chuan dian
+s	外面下雪了好漂亮	wai mian xia xue le hao piao liang
+s	空气不好出门戴口罩	kong qi bu hao chu men dai kou zhao
+s	这天气热得受不了	zhe tian qi re de shou bu liao
+s	我妈让我早点回家	wo ma rang wo zao dian hui jia
+s	过年回老家吗	guo nian hui lao jia ma
+s	我爸又在阳台上浇花	wo ba you zai yang tai shang jiao hua
+s	我奶奶包的饺子最好吃	wo nai nai bao de jiao zi zui hao chi
+s	我表妹今年上初中了	wo biao mei jin nian shang chu zhong le
+s	我们家的狗特别黏人	wo men jia de gou te bie nian ren
+s	它每天都要出去遛弯	ta mei tian dou yao chu qu liu wan
+s	周末一起去爬山吧	zhou mo yi qi qu pa shan ba
+s	好久没见了改天聚聚	hao jiu mei jian le gai tian ju ju
+s	今天心情特别好	jin tian xin qing te bie hao
+s	烦死了什么都不顺	fan si le shen me dou bu shun
+s	别难过了一切都会好的	bie nan guo le yi qie dou hui hao de
+s	我给你发个红包	wo gei ni fa ge hong bao
+s	你扫我一下加个好友	ni sao wo yi xia jia ge hao you
+s	这个应用老是闪退	zhe ge ying yong lao shi shan tui
+s	信号不好听不清楚	xin hao bu hao ting bu qing chu
+s	你把链接发我一下	ni ba lian jie fa wo yi xia
+s	我的流量用完了	wo de liu liang yong wan le
+s	刚才视频卡住了	gang cai shi pin ka zhu le
+s	晚上一起开黑吗	wan shang yi qi kai hei ma
+s	这把游戏输了好气	zhe ba you xi shu le hao qi
+s	我最近在追一部新番	wo zui jin zai zhui yi bu xin fan
+s	这个角色太可爱了	zhe ge jue se tai ke ai le
+s	他抽卡又歪了	ta chou ka you wai le
+s	我们组队打副本吧	wo men zu dui da fu ben ba
+s	五一想去海边玩	wu yi xiang qu hai bian wan
+s	酒店订好了吗	jiu dian ding hao le ma
+s	我的行李箱太重了	wo de xing li xiang tai zhong le
+s	这里的小吃好多啊	zhe li de xiao chi hao duo a
+s	记得带上身份证	ji de dai shang shen fen zheng
+s	你先帮我垫一下钱	ni xian bang wo dian yi xia qian
+s	我转给你了查收一下	wo zhuan gei ni le cha shou yi xia
+s	这个月又要还信用卡了	zhe ge yue you yao huan xin yong ka le
+s	我在存钱准备买车	wo zai cun qian zhun bei mai che
+s	东西太贵了买不起	dong xi tai gui le mai bu qi
+s	能便宜一点吗	neng pian yi yi dian ma
+s	现在几点了啊	xian zai ji dian le a
+s	你明天有时间吗	ni ming tian you shi jian ma
+s	我们几点集合	wo men ji dian ji he
+s	我晚点再联系你	wo wan dian zai lian xi ni
+s	我十分钟后到	wo shi fen zhong hou dao
+s	等我一下马上下楼	deng wo yi xia ma shang xia lou
+s	麻烦帮我关一下灯	ma fan bang wo guan yi xia deng
+s	你能小声点吗	ni neng xiao sheng dian ma
+s	帮我递一下那个杯子	bang wo di yi xia na ge bei zi
+s	你教教我怎么弄	ni jiao jiao wo zen me nong
+s	谢谢你帮了我这么多	xie xie ni bang le wo zhe me duo
+s	谢啦下回我请你	xie la xia hui wo qing ni
+s	不好意思久等了	bu hao yi si jiu deng le
+s	对不起我来晚了	dui bu qi wo lai wan le
+s	抱歉刚才没看到消息	bao qian gang cai mei kan dao xiao xi
+s	是我的错你别生气	shi wo de cuo ni bie sheng qi
+s	这个怎么用啊	zhe ge zen me yong a
+s	你觉得哪个好看	ni jue de na ge hao kan
+s	他怎么还没来	ta zen me hai mei lai
+s	洗手间在哪儿	xi shou jian zai na er
+s	行啊没问题	xing a mei wen ti
+s	没事儿别担心	mei shi er bie dan xin
+s	不用了谢谢你	bu yong le xie xie ni
+s	真的假的啊	zhen de jia de a
+s	那就这么定了	na jiu zhe me ding le
+s	他跑得特别快	ta pao de te bie kuai
+s	她高兴地跳了起来	ta gao xing de tiao le qi lai
+s	这是我自己做的饭	zhe shi wo zi ji zuo de fan
+s	我觉得你说得对	wo jue de ni shuo de dui
+s	她把头发染成了红色	ta ba tou fa ran cheng le hong se
+s	它的屏幕碎了	ta de ping mu sui le
+s	他们都去吃饭了	ta men dou qu chi fan le
+s	我先去银行取钱	wo xian qu yin hang qu qian
+s	这孩子长得真快	zhe hai zi zhang de zhen kuai
+s	这条路好长啊	zhe tiao lu hao chang a
+s	这件事很重要别忘了	zhe jian shi hen zhong yao bie wang le
+s	我重新下载了一遍	wo chong xin xia zai le yi bian
+s	我喜欢听音乐	wo xi huan ting yin yue
+s	大家都到齐了吗	da jia dou dao qi le ma
+s	我喜欢大都市的生活	wo xi huan da du shi de sheng huo
+s	你方便接电话吗	ni fang bian jie dian hua ma
+s	我看着就饿了	wo kan zhe jiu e le
+s	我昨晚很早就睡着了	wo zuo wan hen zao jiu shui zhao le
+s	你再等我一会儿	ni zai deng wo yi hui er
+s	我正在开会	wo zheng zai kai hui
+s	奶茶要少糖去冰	nai cha yao shao tang qu bing
+s	这个快递怎么还没发货	zhe ge kuai di zen me hai mei fa huo
+s	我把东西寄回去了	wo ba dong xi ji hui qu le
+s	坐过站了好尴尬	zuo guo zhan le hao gan ga
+s	下雨天路很滑慢点开	xia yu tian lu hen hua man dian kai
+s	今天的课好难听不懂	jin tian de ke hao nan ting bu dong
+s	写简历写得头都大了	xie jian li xie de tou dou da le
+s	明天面试有点慌	ming tian mian shi you dian huang
+s	牙疼得睡不着	ya teng de shui bu zhao
+s	这两天风好大	zhe liang tian feng hao da
+s	我姐下个月结婚	wo jie xia ge yue jie hun
+s	我家猫又把杯子打碎了	wo jia mao you ba bei zi da sui le
+s	我想出去走走散散心	wo xiang chu qu zou zou san san xin
+s	刷了一晚上短视频	shua le yi wan shang duan shi pin
+s	这个关卡我卡了好几天	zhe ge guan qia wo ka le hao ji tian
+s	我们去南方过冬吧	wo men qu nan fang guo dong ba
+s	车票买好了到时候见	che piao mai hao le dao shi hou jian
+s	这顿饭我来付	zhe dun fan wo lai fu
+s	下个月的计划你定了吗	xia ge yue de ji hua ni ding le ma
+s	记得提醒我交电费	ji de ti xing wo jiao dian fei
+s	帮我看一下这个句子对不对	bang wo kan yi xia zhe ge ju zi dui bu dui
+s	谢谢你送的礼物	xie xie ni song de li wu
+s	抱歉今天去不了了	bao qian jin tian qu bu liao le
+s	那我们改天再约吧	na wo men gai tian zai yue ba
+s	我今天中午吃的是黄焖鸡米饭	wo jin tian zhong wu chi de shi huang men ji mi fan
+s	快递柜的取件码发我一下	kuai di gui de qu jian ma fa wo yi xia
+s	这件外套的颜色比图片上深	zhe jian wai tao de yan se bi tu pian shang shen
+s	早上起晚了差点没赶上地铁	zao shang qi wan le cha dian mei gan shang di tie
+s	明天早上要交实验报告	ming tian zao shang yao jiao shi yan bao gao
+s	组长让我们晚上线上开个会	zu zhang rang wo men wan shang xian shang kai ge hui
+s	最近颈椎有点不舒服	zui jin jing zhui you dian bu shu fu
+s	今晚可能有雷阵雨记得关窗	jin wan ke neng you lei zhen yu ji de guan chuang
+s	我妈给我寄了一箱橘子	wo ma gei wo ji le yi xiang ju zi
+s	小侄子吵着要去游乐园	xiao zhi zi chao zhe yao qu you le yuan
+s	看完那个结局我哭了半天	kan wan na ge jie ju wo ku le ban tian
+s	手机的存储空间又满了	shou ji de cun chu kong jian you man le
+s	帮我把这张照片修一下	bang wo ba zhe zhang zhao pian xiu yi xia
+s	这个副本我们打了三遍才过	zhe ge fu ben wo men da le san bian cai guo
+s	放长假打算去哪儿玩	fang chang jia da suan qu na er wan
+s	到了酒店给我报个平安	dao le jiu dian gei wo bao ge ping an
+s	这个月房租我先转给你	zhe ge yue fang zu wo xian zhuan gei ni
+s	你下班了跟我说一声	ni xia ban le gen wo shuo yi sheng
+s	麻烦把窗户开一下透透气	ma fan ba chuang hu kai yi xia tou tou qi
+s	谢谢你特意跑过来一趟	xie xie ni te yi pao guo lai yi tang
+s	不好意思刚才语气有点冲	bu hao yi si gang cai yu qi you dian chong
+s	你周末是在家还是出去	ni zhou mo shi zai jia hai shi chu qu
+s	好的那我们明天见	hao de na wo men ming tian jian
+s	我刚到家累得不想动	wo gang dao jia lei de bu xiang dong
+s	这家店的烤串味道一般	zhe jia dian de kao chuan wei dao yi ban
+s	我同事今天请大家喝奶茶	wo tong shi jin tian qing da jia he nai cha
+s	这个周末我想在家补觉	zhe ge zhou mo wo xiang zai jia bu jiao

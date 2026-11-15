@@ -137,7 +137,9 @@ pub fn prefix_offers(lexicon: &Lexicon, input: &str, hans: bool, lattice: &PathL
             let wr = lexicon.words.reading(&lexicon.storage, i).as_bytes();
             // As many syllables as the prefix: zhuyin with tones left out
             // would otherwise give 侍衛 for the ㄕㄨㄟˋ of 睡覺.
+            // A part of the input: never a never-volunteer word.
             if lexicon.pinyin && !lexicon.words.is_fully_spelled(i)
+                || lexicon.words.is_no_suggest(i)
                 || wr.iter().filter(|&&b| is_tone(b, lexicon.pinyin)).count() != c + 1
                 || !reading.matches(wr, 0, end)
             {

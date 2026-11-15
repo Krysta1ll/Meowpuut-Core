@@ -17,6 +17,8 @@ import hashlib
 import json
 import pathlib
 
+from blocked_terms import ja_hit
+
 from japanese_readings import (alias_keys, kana_to_hepburn, load_kanji_table, normalise_key,
                                romaji_to_kana, to_hiragana)
 from mimo_jp_binary import (CLASSES, FLAG_PINYIN_OK, FLAG_REVIEWED, KIND_ALIAS_KANA, KIND_ALIAS_KANJI,
@@ -360,6 +362,13 @@ def build(root, pinyin_rows, japanese, side=None):
             counts[f"alias_kind{posting['kind']}"] += 1
             if posting["kind"] == KIND_ALIAS_KANJI and side.zc.get(key, 0) > 0:
                 counts["alias_kind3_on_chinese_reading"] += 1
+
+    # The never-volunteer list ([ja] of Resources/Lexicon/blocked-terms.txt): such a word is never
+    # offered while typing pinyin (no FLAG_PINYIN_OK); typed as Japanese it is still there.
+    for posting in postings:
+        if posting["flags"] & FLAG_PINYIN_OK and ja_hit(words[posting["word"]]["surface"]):
+            posting["flags"] &= ~FLAG_PINYIN_OK
+            counts["never_volunteer_pinyin_bit_cleared"] += 1
 
     # One surface once per key: keep the first in stored order.
     by_key = collections.defaultdict(list)

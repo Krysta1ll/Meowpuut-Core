@@ -31,6 +31,7 @@ use std::panic::AssertUnwindSafe;
 use std::sync::Arc;
 
 use meowpuut_core::image::ImageOwner;
+use meowpuut_core::english::English;
 use meowpuut_core::pairs::Pairs;
 use meowpuut_core::{Lexicon, Session};
 
@@ -202,6 +203,46 @@ pub unsafe extern "C" fn mpn_lexicon_attach_pairs(
     match std::panic::catch_unwind(AssertUnwindSafe(|| Pairs::in_place(bytes, ids, Some(owner)))).ok().flatten() {
         Some(pairs) => {
             lex.set_pairs(pairs);
+            1
+        }
+        None => 0,
+    }
+}
+
+/// Attaches the English lexicon (`mimo_en.bin`) to a pinyin `lexicon`, read in
+/// place: English words beyond mimo-latin inside pinyin and nine-key typing.
+/// Returns 1 when attached; 0 when `data` is not a MIMO-EN-1 image, the lexicon
+/// is not pinyin, or sessions already use the lexicon.
+///
+/// Ownership as for `mpn_lexicon_attach_pairs`. The same mapped bytes may also
+/// be opened with `mpn_english_open(data, size, 0)` for the English keyboard.
+///
+/// # Safety
+/// As `mpn_lexicon_attach_pairs`.
+#[no_mangle]
+#[allow(unsafe_code)]
+pub unsafe extern "C" fn mpn_lexicon_attach_english(
+    lexicon: *mut MPNLexicon,
+    data: *const c_char,
+    size: usize,
+    release: MPNReleaseFn,
+    context: *mut c_void,
+) -> c_int {
+    let guard = Release { release, context };
+    // SAFETY: NULL or a live handle per the contract.
+    let Some(handle) = (unsafe { lexicon.as_mut() }) else { return 0 };
+    let Some(lex) = Arc::get_mut(&mut handle.value) else { return 0 };
+    if data.is_null() || size == 0 || !lex.pinyin {
+        return 0;
+    }
+    // SAFETY: the caller keeps `size` bytes at `data` valid and unchanged until
+    // `release` runs; `guard` is stored with the lexicon, so release runs only
+    // after the last reference to these bytes is dropped.
+    let bytes: &'static [u8] = unsafe { std::slice::from_raw_parts(data.cast::<u8>(), size) };
+    let owner = ImageOwner::new(Arc::new(guard));
+    match std::panic::catch_unwind(AssertUnwindSafe(|| English::in_place(bytes, Some(owner)))).ok().flatten() {
+        Some(english) => {
+            lex.set_english(english);
             1
         }
         None => 0,
@@ -407,6 +448,9 @@ session_fn!(/// Computes next-word associations for committed `context`; returns
 
 getter_fn!(/// Raw ASCII input.
     fn mpn_input(s) -> *const c_char, EMPTY.as_ptr(), s.input.as_cstr().as_ptr());
+getter_fn!(/// Uncommitted input as the user would write it: Zhuyin as Bopomofo
+    /// with tone marks and no ˉ (ㄋㄧˇㄏㄠˇ), Pinyin as the letters typed.
+    fn mpn_input_text(s) -> *const c_char, EMPTY.as_ptr(), s.input_text.as_cstr().as_ptr());
 getter_fn!(/// Display preedit (Zhuyin symbols or pinyin letters).
     fn mpn_preedit(s) -> *const c_char, EMPTY.as_ptr(), s.preedit.as_cstr().as_ptr());
 getter_fn!(/// Text committed by the last action.
@@ -423,6 +467,16 @@ getter_fn!(/// Current candidate page.
     fn mpn_page(s) -> usize, 0, s.core.page());
 getter_fn!(/// Association `index` from the last `mpn_predict` ("" when out of range).
     fn mpn_prediction(s, index: usize) -> *const c_char, EMPTY.as_ptr(), s.predictions.get(index).as_ptr());
+getter_fn!(/// 1 when `text` is or holds a word of the never-volunteer list (a word
+    /// the lexicon marks `FLAG_NO_SUGGEST`, in either script: 習近平, 習近平說;
+    /// not one inside an everyday word that holds it, 總統套房); 0 otherwise or for NULL.
+    /// Clients use it to keep such words out of what they learn and offer
+    /// as next words; the engine itself offers them only for their full spelling.
+    fn mpn_text_no_suggest(s, text: *const c_char) -> c_int, 0, {
+        // SAFETY: caller passes NULL or a valid NUL-terminated string.
+        let text = unsafe { arg_str(text) }.unwrap_or("");
+        c_int::from(!text.is_empty() && s.lexicon.holds_no_suggest(text))
+    });
 
 /// Writes up to `info_size` bytes of candidate metadata; 0 for invalid arguments.
 ///

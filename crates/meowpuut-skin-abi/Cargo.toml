@@ -1,0 +1,13 @@
+[package]
+name = "meowpuut-skin-abi"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish = false
+description = "Tests of the mps_* C ABI as a release build sees it (meowpuut-ffi with `skin`, without `skin-test-keys`)"
+
+[dependencies]
+meowpuut-ffi = { path = "../meowpuut-ffi", features = ["skin"] }
+
+[lints.rust]
+unsafe_code = "allow"

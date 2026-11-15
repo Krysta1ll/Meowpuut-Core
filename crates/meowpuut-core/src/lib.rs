@@ -30,9 +30,11 @@
 //! assert_eq!(session.committed(), "你好");
 //! ```
 
+pub mod abbrev;
 pub mod bin_format;
 pub mod context_index;
 pub mod decoder;
+pub mod english;
 pub mod fallback;
 pub mod image;
 pub mod japanese;

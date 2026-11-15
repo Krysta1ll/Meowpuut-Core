@@ -26,7 +26,7 @@ pub const LATIN_TERM: f64 = -2.0;
 /// Added on top when the letters also split into pinyin syllables.
 pub const PINYIN_SPAN_TERM: f64 = -1.5;
 /// Longest key of an English word (mimo_latin.py keeps up to 24 letters).
-const LONGEST: usize = 24;
+pub const LONGEST: usize = 24;
 /// Longest pinyin syllable (zhuang).
 const SYLLABLE: usize = 6;
 
@@ -59,7 +59,7 @@ pub fn span(lexicon: &Lexicon, sounds: &[u8], start: usize, end: usize) -> Optio
 }
 
 /// Fewest full pinyin syllables `letters` splits into; 0 if it does not split.
-fn syllables(lexicon: &Lexicon, letters: &[u8]) -> u8 {
+pub(crate) fn syllables(lexicon: &Lexicon, letters: &[u8]) -> u8 {
     let n = letters.len();
     let mut best = [u8::MAX; LONGEST + 1];
     best[0] = 0;

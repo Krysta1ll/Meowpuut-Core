@@ -225,8 +225,8 @@ def image_checks(directory, deny, lib_path, probe):
     rows = []
     for line in native.decode().splitlines()[1:]:
         fields = line.split("\t")
-        if len(fields) != 5:
-            break
+        if len(fields) not in (5, 6):
+            break  # `# context` starts the context rows; a sixth field is a row mark (w, n, k of compile-native-lexicon.py)
         if fields[0][:1].isupper():
             continue  # English words (upper-case keys, crates/meowpuut-core/src/latin.rs) are no Chinese reading
         rows.append(((fields[0], fields[1], fields[2], fields[3]), int(fields[4])))
