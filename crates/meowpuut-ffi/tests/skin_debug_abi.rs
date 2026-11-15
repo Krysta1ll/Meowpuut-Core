@@ -23,6 +23,7 @@ fn text(buf: &[u8]) -> String {
 #[test]
 fn redeem_verify_list_remove() {
     assert_eq!(mps_skin_accepts_test_keys(), 1);
+    assert_eq!(mps_skin_has_trusted_roots(), 1);
     let cases: Value = serde_json::from_slice(&std::fs::read(vectors().join("cases.json")).unwrap()).unwrap();
     let secret = b64_decode(cases["keys"]["request-a"]["secret"].as_str().unwrap()).unwrap();
     let public = b64_decode(cases["keys"]["request-a"]["public"].as_str().unwrap()).unwrap();

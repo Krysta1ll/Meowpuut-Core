@@ -124,6 +124,13 @@ pub extern "C" fn mps_skin_accepts_test_keys() -> i32 {
     i32::from(policy().accepts_test_keys())
 }
 
+/// 1 when this build can trust skin packages, 0 when no signing root is configured.
+#[no_mangle]
+#[allow(unsafe_code)]
+pub extern "C" fn mps_skin_has_trusted_roots() -> i32 {
+    i32::from(policy().has_trusted_roots())
+}
+
 /// A new request key pair from the system random source.
 ///
 /// # Safety

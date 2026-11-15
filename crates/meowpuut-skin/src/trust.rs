@@ -162,6 +162,11 @@ impl Policy {
         self.accept_test_keys
     }
 
+    /// Whether the policy trusts any signing root.
+    pub fn has_trusted_roots(&self) -> bool {
+        !self.roots.is_empty()
+    }
+
     /// Refuses a `test-` kid unless test keys are accepted.
     pub fn check_kid(&self, kid: &str) -> Result<()> {
         if is_test_kid(kid) && !self.accept_test_keys {

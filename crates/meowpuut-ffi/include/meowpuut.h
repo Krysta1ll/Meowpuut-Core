@@ -469,6 +469,8 @@ enum {
 size_t  mps_skin_max_package_len(void);
 // 1 in a Debug/Lab build (test keys accepted), 0 in a release build.
 int32_t mps_skin_accepts_test_keys(void);
+// 1 when this build trusts any skin signing root, 0 when no root is configured.
+int32_t mps_skin_has_trusted_roots(void);
 
 // A new X25519 request key pair, one per "ask the developer for a skin".
 // Keep the secret wrapped by the Keystore; keep the public key for
