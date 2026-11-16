@@ -1,6 +1,6 @@
 #![forbid(unsafe_code)]
 //! Stateful input session (`Session`) managing preallocated SoA candidate pools,
-//! segment context ranking, key editing, and mixed Pinyin/Romaji queries.
+//! segment context ranking, nine-key syllable enumeration, and mixed Pinyin/Romaji queries.
 //!
 //! # Examples
 //!
@@ -31,15 +31,14 @@
 
 use std::sync::Arc;
 
+use crate::decoder::last_word_id;
 use crate::lexicon::Lexicon;
 use crate::mixed::{mixed_pinyin_into, mixed_pinyin_prefix_into};
-use crate::nine_key::{NineKeyIndex, SEPARATOR as NINE_KEY_SEPARATOR};
-use crate::reading::{
-    is_tone, strict_han_count, zhuyin_symbol_for_key, zhuyin_text_into, CANDIDATE_LIMIT, KEYS, MAX_INPUT, PAGE_SIZE,
-};
-use crate::soa::{CandidatePoolSoA, JapaneseTableSoA};
-use crate::decoder::last_word_id;
+use crate::nine_key::syllables::leading_syllables_into;
+use crate::nine_key::{NineKeyState, SEPARATOR as NINE_KEY_SEPARATOR};
 use crate::pairs::START;
+use crate::reading::{strict_han_count, zhuyin_text_into, CANDIDATE_LIMIT, MAX_INPUT, PAGE_SIZE};
+use crate::soa::{CandidatePoolSoA, JapaneseTableSoA};
 use crate::workspace::{DecodeOutputSoA, DecoderScratchSoA};
 use crate::CandidateInfo;
 
@@ -47,7 +46,7 @@ use crate::CandidateInfo;
 #[derive(Debug, Clone)]
 pub struct Session {
     pub(crate) lexicon: Arc<Lexicon>,
-    pub(crate) nine_key: Option<NineKeyIndex>,
+    pub(crate) nine_key: Option<NineKeyState>,
     pub(crate) input: String,
     pub(crate) preedit: String,
     pub(crate) committed: String,
@@ -71,9 +70,6 @@ pub struct Session {
     pub(crate) hans: bool,
     /// Per-`refresh` memo of the complete-only decode: 0 unknown, 1 empty, 2 non-empty.
     pub(crate) complete_memo: u8,
-    /// Word id of the last picked word and the segment context it ends, so
-    /// that the same context set again (clients retype the rest after a
-    /// pick) gives the decoder the same left word.
     pub(crate) picked_id: u32,
     pub(crate) picked_context: String,
 }
@@ -116,9 +112,9 @@ impl Session {
         if !lexicon.pinyin {
             return None;
         }
-        let index = NineKeyIndex::new(&lexicon);
+        let state = NineKeyState::new(&lexicon);
         let mut session = Self::new(lexicon);
-        session.nine_key = Some(index);
+        session.nine_key = Some(state);
         Some(session)
     }
 
@@ -131,6 +127,15 @@ impl Session {
             + self.candidates.score.capacity()
             + self.ranked_work.arena.capacity()
             + self.scratch.capacity_signature()
+            + self.nine_key.as_ref().map_or(0, |s| s.scratch.capacity_signature())
+    }
+
+    /// Fills `out` with up to 32 valid Pinyin syllables matching the first unlocked nine-key span.
+    pub fn nine_key_syllables<'a>(&'a self, out: &mut [&'a str; 32]) -> usize {
+        match &self.nine_key {
+            Some(state) => leading_syllables_into(&state.index, &self.lexicon, self.input.as_bytes(), out),
+            None => 0,
+        }
     }
 
     #[inline]
@@ -150,22 +155,16 @@ impl Session {
     }
 
     #[inline]
-    pub fn input(&self) -> &str {
-        &self.input
-    }
-
+    pub fn input(&self) -> &str { &self.input }
     #[inline]
-    pub fn preedit(&self) -> &str {
-        &self.preedit
-    }
+    pub fn preedit(&self) -> &str { &self.preedit }
 
-    /// Writes the uncommitted input as the user would write it: Zhuyin as
-    /// Bopomofo with tone marks but no ˉ (`su3cl3` to ㄋㄧˇㄏㄠˇ), Pinyin and
-    /// nine-key as the keys typed. Replaces `out`; allocation-free once `out`
-    /// holds `MAX_INPUT * 3` bytes.
+    /// Writes uncommitted input as user-visible text without heap allocation once warm.
     pub fn input_text_into(&self, out: &mut String) {
         out.clear();
-        if self.lexicon.pinyin || self.nine_key.is_some() {
+        if self.nine_key.is_some() {
+            out.extend(self.input.bytes().map(|b| char::from(b.to_ascii_lowercase())));
+        } else if self.lexicon.pinyin {
             out.push_str(&self.input);
         } else {
             zhuyin_text_into(self.input.as_bytes(), out);
@@ -173,41 +172,22 @@ impl Session {
     }
 
     #[inline]
-    pub fn committed(&self) -> &str {
-        &self.committed
-    }
-
+    pub fn committed(&self) -> &str { &self.committed }
     #[inline]
-    pub fn clear_commit(&mut self) {
-        self.committed.clear();
-    }
-
+    pub fn clear_commit(&mut self) { self.committed.clear(); }
     #[inline]
-    pub fn page(&self) -> usize {
-        self.page
-    }
-
+    pub fn page(&self) -> usize { self.page }
     #[inline]
-    pub fn candidate_count(&self) -> usize {
-        self.candidates.len()
-    }
+    pub fn candidate_count(&self) -> usize { self.candidates.len() }
 
     #[inline]
     pub fn candidate(&self, index: usize) -> &str {
-        if index < self.candidates.len() {
-            self.candidates.text(index)
-        } else {
-            ""
-        }
+        if index < self.candidates.len() { self.candidates.text(index) } else { "" }
     }
 
     #[inline]
     pub fn candidate_consumed(&self, index: usize) -> usize {
-        if index < self.candidates.len() {
-            self.candidates.consumed[index]
-        } else {
-            0
-        }
+        if index < self.candidates.len() { self.candidates.consumed[index] } else { 0 }
     }
 
     #[inline]
@@ -226,9 +206,7 @@ impl Session {
     }
 
     #[inline]
-    pub fn segment_context(&self) -> &str {
-        &self.segment_context
-    }
+    pub fn segment_context(&self) -> &str { &self.segment_context }
 
     pub fn set_segment_context(&mut self, text: &str) {
         if text.len() <= 64 {
@@ -267,8 +245,8 @@ impl Session {
             return false;
         }
         let is_single_han = strict_han_count(text) == 1;
-        if let Some(index) = &mut self.nine_key {
-            index.add_japanese(reading, self.japanese.len(), weight);
+        if let Some(state) = &mut self.nine_key {
+            state.index.add_japanese(reading, self.japanese.len(), weight);
         }
         self.japanese.push(reading, text, weight, is_single_han);
         true
@@ -277,12 +255,7 @@ impl Session {
     /// Decodes a mixed Chinese-Pinyin + Japanese-Romaji reading.
     pub fn mixed_pinyin(&mut self, reading: &str, simplified: bool) -> &str {
         mixed_pinyin_into(
-            &self.lexicon,
-            &self.japanese,
-            reading,
-            simplified,
-            &mut self.scratch,
-            &mut self.mixed_pinyin_buf,
+            &self.lexicon, &self.japanese, reading, simplified, &mut self.scratch, &mut self.mixed_pinyin_buf,
         );
         &self.mixed_pinyin_buf
     }
@@ -290,12 +263,7 @@ impl Session {
     /// Decodes a leading mixed Chinese-Pinyin + Japanese-Romaji prefix and returns `(text, consumed)`.
     pub fn mixed_pinyin_prefix(&mut self, reading: &str, simplified: bool) -> (&str, usize) {
         let consumed = mixed_pinyin_prefix_into(
-            &self.lexicon,
-            &self.japanese,
-            reading,
-            simplified,
-            &mut self.scratch,
-            &mut self.mixed_pinyin_buf,
+            &self.lexicon, &self.japanese, reading, simplified, &mut self.scratch, &mut self.mixed_pinyin_buf,
         );
         (&self.mixed_pinyin_buf, consumed)
     }
@@ -310,9 +278,14 @@ impl Session {
         self.reset();
     }
 
-    fn append_literal_input(&mut self) {
+    pub(crate) fn append_literal_input(&mut self) {
         if self.nine_key.is_some() {
-            self.committed.extend(self.input.bytes().filter(|&key| key != NINE_KEY_SEPARATOR).map(char::from));
+            self.committed.extend(
+                self.input
+                    .bytes()
+                    .filter(|&key| key != NINE_KEY_SEPARATOR)
+                    .map(|b| char::from(b.to_ascii_lowercase())),
+            );
         } else {
             self.committed.push_str(&self.input);
         }
@@ -326,21 +299,19 @@ impl Session {
         self.tmp_text.push_str(self.candidates.text(index));
         let consumed = self.candidates.consumed[index];
         let reading = &self.input[..consumed];
-        let picked = if let Some(index) = &self.nine_key {
-            index.last_word_id(&self.lexicon, reading.as_bytes(), &self.tmp_text, self.hans)
+        let picked = if let Some(state) = &self.nine_key {
+            state.index.last_word_id(&self.lexicon, reading.as_bytes(), &self.tmp_text, self.hans)
         } else {
             last_word_id(&self.lexicon, reading, &self.tmp_text, self.hans)
         };
         self.tmp_remaining.clear();
         self.tmp_remaining.push_str(&self.input[consumed..]);
-        self.lexicon
-            .traditionalize_into(&self.tmp_text, true, &mut self.tmp_trad);
+        self.lexicon.traditionalize_into(&self.tmp_text, true, &mut self.tmp_trad);
         self.tmp_combined.clear();
         if !self.tmp_trad.is_empty() {
             self.tmp_combined.push_str(&self.segment_context);
             self.tmp_combined.push_str(&self.tmp_trad);
-            self.lexicon
-                .traditionalize_into(&self.tmp_combined, true, &mut self.tmp_trad);
+            self.lexicon.traditionalize_into(&self.tmp_combined, true, &mut self.tmp_trad);
         }
         self.reset();
         self.input.push_str(&self.tmp_remaining);
@@ -354,131 +325,6 @@ impl Session {
         self.refresh();
         self.committed.clear();
         self.committed.push_str(&self.tmp_text);
-        true
-    }
-
-    /// Processes a single key event (ASCII `32..=126` or X11 editing keys `0xff08`, `0xff0d`, `0xff1b`, `0xff55`, `0xff56`).
-    pub fn key(&mut self, key: i32) -> bool {
-        if key == 0xff55 || key == 0xff56 {
-            if self.input.is_empty() {
-                return false;
-            }
-            if key == 0xff55 && self.page > 0 {
-                self.page -= 1;
-            }
-            if key == 0xff56 && (self.page + 1) * PAGE_SIZE < self.candidates.len() {
-                self.page += 1;
-            }
-            return true;
-        }
-        if key == 0xff1b && !self.input.is_empty() {
-            self.clear();
-            return true;
-        }
-        if key == 0xff08 && !self.input.is_empty() {
-            self.input.pop();
-            if self.input.is_empty() {
-                self.segment_context.clear();
-            }
-            self.refresh();
-            return true;
-        }
-        if key == 0xff0d && !self.input.is_empty() {
-            self.commit();
-            return true;
-        }
-        if !(32..=126).contains(&key) {
-            return false;
-        }
-        let ch = key as u8;
-        if self.nine_key.is_some() {
-            if ch == b' ' && !self.input.is_empty() {
-                let literal = self.candidates.is_empty();
-                self.commit();
-                if literal { self.committed.push(' '); }
-                return true;
-            }
-            if ch == NINE_KEY_SEPARATOR {
-                if !self.input.as_bytes().last().is_some_and(|b| (b'2'..=b'9').contains(b)) {
-                    return false;
-                }
-                if self.input.len() == MAX_INPUT {
-                    return true;
-                }
-            } else if !(b'2'..=b'9').contains(&ch) {
-                return false;
-            }
-            if self.input.len() == MAX_INPUT {
-                self.append_literal_input();
-                self.reset();
-            }
-            self.input.push(char::from(ch));
-            self.refresh();
-            return true;
-        }
-        if self.lexicon.pinyin {
-            if ch == b' ' && self.input.len() == MAX_INPUT {
-                self.committed.push_str(&self.preedit);
-                self.committed.push(' ');
-                self.reset();
-                return true;
-            }
-            if ch == b' ' && !self.input.is_empty() {
-                self.commit();
-                return true;
-            }
-            let boundary = is_tone(ch, true) || ch == b'\'';
-            if !(b'a'..=b'z').contains(&ch) && !boundary {
-                return false;
-            }
-            if boundary {
-                let last = self.input.as_bytes().last().copied();
-                if last.map_or(true, |l| is_tone(l, true) || l == b'\'') {
-                    return false;
-                }
-            }
-            if self.input.len() == MAX_INPUT {
-                self.committed.push_str(&self.preedit);
-                if boundary {
-                    self.committed.push(ch as char);
-                }
-                self.reset();
-                if boundary {
-                    return true;
-                }
-            }
-            self.input.push(ch as char);
-            self.refresh();
-            return true;
-        }
-
-        let boundary = is_tone(ch, false) || ch == b'\'';
-        if !KEYS.contains(&ch) || (boundary && self.input.is_empty()) {
-            return false;
-        }
-        if boundary {
-            let last = *self.input.as_bytes().last().unwrap();
-            if is_tone(last, false) || last == b'\'' {
-                if ch == b' ' {
-                    self.commit();
-                }
-                return true;
-            }
-        }
-        if self.input.len() == MAX_INPUT {
-            self.committed.push_str(&self.preedit);
-            if boundary {
-                if let Some(sym) = zhuyin_symbol_for_key(ch) {
-                    self.committed.push_str(sym);
-                }
-            }
-            self.reset();
-            if boundary {
-                return true;
-            }
-        }
-        self.input.push(ch as char);
-        self.refresh();
         true
     }
 }

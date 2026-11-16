@@ -43,15 +43,17 @@ pub mod lexicon;
 pub mod merge;
 pub mod mixed;
 pub mod mixed_prefix;
-mod nine_key;
+pub mod nine_key;
 pub mod pairs;
 pub mod predict;
 pub mod reading;
 pub mod refresh;
+pub mod refresh_tail;
 pub mod row;
 pub mod romaji;
 pub mod segments;
 pub mod session;
+pub mod session_keys;
 pub mod soa;
 pub mod workspace;
 
