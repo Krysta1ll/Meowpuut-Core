@@ -1,0 +1,124 @@
+{
+  "name": "mimo-trigrams",
+  "description": "Stage-2 bridge-trigram and skip-1 bigram tables packed into mimo_trigrams.bin (format MIMO-TRI-1) at build time.",
+  "license": "Count tables are the project's own derived statistics (MIT); built from the 25 permissive corpora listed in DataSources/mimo-pairs/SOURCE.json (CC0-1.0, CC-BY-2.0-FR, CC-BY-4.0, Apache-2.0, and project-authored corpora). All Tests/eval/*.tsv 5-grams and Resources/Lexicon/blocked-terms.txt sentences are excluded.",
+  "built_at": "2026-11-19",
+  "locked_weights": {
+    "tri_weight": 0.0,
+    "skip_weight": 0.25,
+    "tuned_on": "Tests/eval/test2-sentences.tsv"
+  },
+  "stats": {
+    "files_processed": 25,
+    "unique_unigrams": 99157,
+    "unique_bigrams": 2879276,
+    "trigrams_kept": 446156,
+    "skip1_kept": 307709,
+    "sources": {
+      "chat-2.txt.xz": {
+        "lines": 44853,
+        "weight_x10": 100
+      },
+      "colloc-chat-4.txt.xz": {
+        "lines": 306601,
+        "weight_x10": 100
+      },
+      "colloc-domains-4.txt.xz": {
+        "lines": 71411,
+        "weight_x10": 20
+      },
+      "everyday.txt.xz": {
+        "lines": 92927,
+        "weight_x10": 100
+      },
+      "mixed-2.txt.xz": {
+        "lines": 9354,
+        "weight_x10": 15
+      },
+      "modern-chat-3.txt.xz": {
+        "lines": 46645,
+        "weight_x10": 100
+      },
+      "modern-domains-3.txt.xz": {
+        "lines": 191486,
+        "weight_x10": 20
+      },
+      "written-2.txt.xz": {
+        "lines": 53700,
+        "weight_x10": 15
+      },
+      "pair_commonvoice-zh-CN.txt.xz": {
+        "lines": 443,
+        "weight_x10": 35
+      },
+      "pair_commonvoice-zh-TW.txt.xz": {
+        "lines": 11500,
+        "weight_x10": 35
+      },
+      "pair_crosswoz-test.txt.xz": {
+        "lines": 7004,
+        "weight_x10": 2
+      },
+      "pair_crosswoz-train.txt.xz": {
+        "lines": 69882,
+        "weight_x10": 2
+      },
+      "pair_crosswoz-val.txt.xz": {
+        "lines": 6981,
+        "weight_x10": 2
+      },
+      "pair_kdconv-film-dev.txt.xz": {
+        "lines": 3803,
+        "weight_x10": 4
+      },
+      "pair_kdconv-film-test.txt.xz": {
+        "lines": 3887,
+        "weight_x10": 4
+      },
+      "pair_kdconv-film-train.txt.xz": {
+        "lines": 27929,
+        "weight_x10": 4
+      },
+      "pair_kdconv-music-dev.txt.xz": {
+        "lines": 2606,
+        "weight_x10": 4
+      },
+      "pair_kdconv-music-test.txt.xz": {
+        "lines": 2736,
+        "weight_x10": 4
+      },
+      "pair_kdconv-music-train.txt.xz": {
+        "lines": 18545,
+        "weight_x10": 4
+      },
+      "pair_kdconv-travel-dev.txt.xz": {
+        "lines": 2472,
+        "weight_x10": 4
+      },
+      "pair_kdconv-travel-test.txt.xz": {
+        "lines": 2527,
+        "weight_x10": 4
+      },
+      "pair_kdconv-travel-train.txt.xz": {
+        "lines": 17534,
+        "weight_x10": 4
+      },
+      "pair_massive-zh-CN.txt.xz": {
+        "lines": 14201,
+        "weight_x10": 15
+      },
+      "pair_massive-zh-TW.txt.xz": {
+        "lines": 13111,
+        "weight_x10": 15
+      },
+      "pair_tatoeba.txt.xz": {
+        "lines": 77296,
+        "weight_x10": 35
+      }
+    }
+  },
+  "tables": {
+    "trigram_bridge": "DataSources/mimo-trigrams/trigram_bridge.tsv.xz",
+    "skip1_bigram": "DataSources/mimo-trigrams/skip1_bigram.tsv.xz"
+  }
+}

@@ -1,0 +1,252 @@
+# Modern blind stress benchmark (250 sentences across 5 domains) written 2026-11-19 for scripts/eval-ranking.py; excluded from all training counts.
+# Buckets: [1] AI/CS Engineering (50) | [2] Med/Law/Finance (50) | [3] 2023-26 Slang & Chat (50) | [4] ACG & Gaming (50) | [5] Current Tech & Cross-Particle Context (50)
+s	我们正在本地部署开源大模型	wo men zheng zai ben di bu shu kai yuan da mo xing
+s	记得在系统提示词里加上约束	ji de zai xi tong ti shi ci li jia shang yue shu
+t	把這個對話模型的微調權重匯出	ba zhe ge dui hua mo xing de wei tiao quan zhong hui chu
+s	模型蒸馏之后推理速度提升很多	mo xing zheng liu zhi hou tui li su du ti sheng hen duo
+s	四比特量化几乎没有损失精度	si bi te liang hua ji hu mei you sun shi jing du
+t	我們把文件切成段落存入向量資料庫	wo men ba wen jian qie cheng duan luo cun ru xiang liang zi liao ku
+s	多模态模型可以直接听懂语音内容	duo mo tai mo xing ke yi zhi jie ting dong yu yin nei rong
+t	這個智能體能自動呼叫外部工具	zhe ge zhi neng ti neng zi dong hu jiao wai bu gong ju
+s	百万上下文窗口让长文档一次读完	bai wan shang xia wen chuang kou rang chang wen dang yi ci du wan
+s	先检查一下反向代理的超时配置	xian jian cha yi xia fan xiang dai li de chao shi pei zhi
+t	把整套後端服務改成容器化部署	ba zheng tao hou duan fu wu gai cheng rong qi hua bu shu
+s	拆分微服务的时候要注意事务一致	chai fen wei fu wu de shi hou yao zhu yi shi wu yi zhi
+s	两个线程互相等待结果发生了死锁	liang ge xian cheng hu xiang deng dai jie guo fa sheng le si suo
+t	壓測跑了半天終於找到記憶體洩漏	ya ce pao le ban tian zhong yu zhao dao ji yi ti xie lou
+s	高并发场景下必须控制锁的粒度	gao bing fa chang jing xia bi xu kong zhi suo de li du
+s	我们把接口改成了异步低延迟队列	wo men ba jie kou gai cheng le yi bu di yan chi dui lie
+t	零拷貝讀取可以直接減少緩衝複製	ling kao bei du qu ke yi zhi jie jian shao huan chong fu zhi
+s	训练神经网络的时候注意梯度爆炸	xun lian shen jing wang luo de shi hou zhu yi ti du bao zha
+s	注意力机制的长度开销是平方级的	zhu yi li ji zhi de chang du kai xiao shi ping fang ji de
+t	換用新的推理引擎後吞吐量翻倍	huan yong xin de tui li yin qing hou tun tu liang fan bei
+s	算力紧张的时候先把批大小调小	suan li jin zhang de shi hou xian ba pi da xiao tiao xiao
+s	梯度下降太快导致验证损失震荡	ti du xia jiang tai kuai dao zhi yan zheng sun shi zhen dang
+t	訓練集太小模型很容易出現過擬合	xun lian ji tai xiao mo xing hen rong yi chu xian guo ni he
+s	今天服务器内存泄漏报警又响了	jin tian fu wu qi nei cun xie lou bao jing you xiang le
+s	请求经过负载均衡转给后端节点	qing qiu jing guo fu zai jun heng zhuan gei hou duan jie dian
+s	这个缓存穿透的问题需要加布隆过滤	zhe ge huan cun chuan tou de wen ti xu yao jia bu long guo lv
+t	資料庫索引沒建好查詢直接超時	zi liao ku suo yin mei jian hao cha xun zhi jie chao shi
+s	离线打包的时候把调试符号剥离掉	li xian da bao de shi hou ba tiao shi fu hao bo li diao
+t	容器映像檔太大導致冷啟動變慢	rong qi ying xiang dang tai da dao zhi leng qi dong bian man
+s	这个分词器对生僻字的切分很不准	zhe ge fen ci qi dui sheng pi zi de qie fen hen bu zhun
+s	提示词工程加检索增强效果更稳	ti shi ci gong cheng jia jian suo zeng qiang xiao guo geng wen
+t	寫單元測試覆蓋所有邊界分支情況	xie dan yuan ce shi fu gai suo you bian jie fen zhi qing kuang
+s	代码审查发现这里存在空指针隐患	dai ma shen cha fa xian zhe li cun zai kong zhi zhen yin huan
+s	静态类型检查帮我拦住了很多错	jing tai lei xing jian cha bang wo lan zhu le hen duo cuo
+t	把熱點迴圈裡面的堆積體分配拿掉	ba re dian hui quan li mian de dui ji ti fen pei na diao
+s	增量编译这次只花了三秒钟完成	zeng liang bian yi zhe ci zhi hua le san miao zhong wan cheng
+s	语音识别结果直接送进语言模型	yu yin shi bie jie guo zhi jie song jin yu yan mo xing
+t	檢索增強生成需要先過濾無效文本	jian suo zeng qiang sheng cheng xu yao xian guo lv wu xiao wen ben
+s	前缀缓存命中后输入费用省九成	qian zhui huan cun ming zhong hou shu ru fei yong sheng jiu cheng
+s	这个开源协议允许免费商用和修改	zhe ge kai yuan xie yi yun xu mian fei shang yong he xiu gai
+t	日誌流水線每天都要處理上億條	ri zhi liu shui xian mei tian dou yao chu li shang yi tiao
+s	断点续训救了我跑了一夜的任务	duan dian xu xun jiu le wo pao le yi ye de ren wu
+t	把設定檔改回預設值再重新啟動	ba she ding dang gai hui yu she zhi zai chong xin qi dong
+s	异步回调嵌套太深看得头都大了	yi bu hui diao qian tao tai shen kan de tou dou da le
+s	这个补丁顺便修好了越界访问漏洞	zhe ge bu ding shun bian xiu hao le yue jie fang wen lou dong
+t	端側模型壓縮到五兆以內才能放進去	duan ce mo xing ya suo dao wu zhao yi nei cai neng fang jin qu
+s	词向量检索加关键词重排准确率高	ci xiang liang jian suo jia guan jian ci chong pai zhun que lv gao
+s	灰度发布先放百分之五的流量测试	hui du fa bu xian fang bai fen zhi wu de liu liang ce shi
+t	自動化腳本每晚定時備份資料到雲端	zi dong hua jiao ben mei wan ding shi bei fen zi liao dao yun duan
+s	网络抖动导致长连接偶尔断开重连	wang luo dou dong dao zhi chang lian jie ou er duan kai chong lian
+s	医生给他开了两盒布洛芬缓释胶囊	yi sheng gei ta kai le liang he bu luo fen huan shi jiao nang
+s	吃完阿莫西林这几天先别碰酒精	chi wan a mo xi lin zhe ji tian xian bie peng jiu jing
+t	阿茲海默症早期常常表現為健忘	a zi hai mo zheng zao qi chang chang biao xian wei jian wang
+s	下周要去医院预约做核磁共振检查	xia zhou yao qu yi yuan yu yue zuo he ci gong zhen jian cha
+s	术后需要按时服用免疫抑制剂药物	shu hou xu yao an shi fu yong mian yi yi zhi ji yao wu
+t	沒有醫師處方最好不要亂吃抗生素	mei you yi shi chu fang zui hao bu yao luan chi kang sheng su
+s	二型糖尿病患者每天监测血糖胰岛素	er xing tang niao bing huan zhe mei tian jian ce xue tang yi dao su
+s	突发胸痛要立刻排查急性心肌梗死	tu fa xiong tong yao li ke pai cha ji xing xin ji geng si
+t	長期高血壓容易增加心血管的負擔	chang qi gao xue ya rong yi zeng jia xin xue guan de fu dan
+s	体检报告显示甘油三酯指标略微偏高	ti jian bao gao xian shi gan you san zhi zhi biao lve wei pian gao
+s	最近换季花粉过敏鼻炎又犯了	zui jin huan ji hua fen guo min bi yan you fan le
+t	每天盯螢幕太久導致乾眼症發作	mei tian ding ying mu tai jiu dao zhi gan yan zheng fa zuo
+s	胃镜检查前一天晚上不能吃东西	wei jing jian cha qian yi tian wan shang bu neng chi dong xi
+s	医生叮嘱甲状腺结节定期复查彩超	yi sheng ding zhu jia zhuang xian jie jie ding qi fu cha cai chao
+t	感冒發燒記得多喝溫水注意休息	gan mao fa shao ji de duo he wen shui zhu yi xiu xi
+s	骨密度检测发现轻微缺乏维生素	gu mi du jian ce fa xian qing wei que fa wei sheng su
+s	转错账属于不当得利对方应当返还	zhuan cuo zhang shu yu bu dang de li dui fang ying dang fan huan
+t	善意取得制度保護了交易的安全	shan yi qu de zhi du bao hu le jiao yi de an quan
+s	刑事诉讼中必须坚持无罪推定原则	xing shi su song zhong bi xu jian chi wu zui tui ding yuan ze
+s	对方拒不还钱可以向法院申请强制执行	dui fang ju bu huan qian ke yi xiang fa yuan shen qing qiang zhi zhi xing
+t	民事請求權通常有三年的訴訟時效	min shi qing qiu quan tong chang you san nian de su song shi xiao
+s	公司十分重视核心技术的知识产权	gong si shi fen zhong shi he xin ji shu de zhi shi chan quan
+t	簽訂租賃合約前務必看清楚違約條款	qian ding zu lin he yue qian wu bi kan qing chu wei yue tiao kuan
+s	劳动仲裁申请需要准备好考勤证据	lao dong zhong cai shen qing xu yao zhun bei hao kao qin zheng ju
+s	侵权责任认定需要证明损害与因果	qin quan ze ren ren ding xu yao zheng ming sun hai yu yin guo
+t	遺產繼承順序要依照民法規定辦理	yi chan ji cheng shun xu yao yi zhao min fa gui ding ban li
+s	这份保密协议约定了两年的竞业限制	zhe fen bao mi xie yi yue ding le liang nian de jing ye xian zhi
+s	法官当庭宣判驳回原告全部诉讼请求	fa guan dang ting xuan pan bo hui yuan gao quan bu su song qing qiu
+t	檢察官針對新證據重新提起公訴	jian cha guan zhen dui xin zheng ju chong xin ti qi gong su
+s	这笔担保债权已经办理了抵押登记	zhe bi dan bao zhai quan yi jing ban li le di ya deng ji
+s	央行实施适度宽松的货币量化宽松	yang hang shi shi shi du kuan song de huo bi liang hua kuan song
+t	審計師正在核對第三季資產負債表	shen ji shi zheng zai he dui di san ji zi chan fu zhai biao
+s	这只科技股的动态市盈率已经偏高	zhe zhi ke ji gu de dong tai shi ying lv yi jing pian gao
+s	降息预期减弱导致债券市场陷入流动性陷阱	jiang xi yu qi jian ruo dao zhi zhai quan shi chang xian ru liu dong xing xian jing
+t	融資融券餘額大幅增加代表情緒升溫	rong zi rong quan yu e da fu zeng jia dai biao qing xu sheng wen
+s	对冲基金正在降低高波动资产的风险敞口	dui chong ji jin zheng zai jiang di gao bo dong zi chan de feng xian chang kou
+s	现金流量表比净利润更能反映真实造血	xian jin liu liang biao bi jing li run geng neng fan ying zhen shi zao xue
+t	分散投資指數基金可以降低單一風險	fen san tou zi zhi shu ji jin ke yi jiang di dan yi feng xian
+s	美联储本周公布最新的利率决议	mei lian chu ben zhou gong bu zui xin de li lv jue yi
+s	公司回购股票通常被视为利好信号	gong si hui gou gu piao tong chang bei shi wei li hao xin hao
+t	匯率波動對出口企業毛利率影響很大	hui lv bo dong dui chu kou qi ye mao li lv ying xiang hen da
+s	这家银行的不良贷款率保持在低位	zhe jia yin hang de bu liang dai kuan lv bao chi zai di wei
+s	可转债触发强赎条款后记得及时卖出	ke zhuan zhai chu fa qiang shu tiao kuan hou ji de ji shi mai chu
+t	長期國債殖利率倒掛往往預示衰退	chang qi guo zhai zhi li lv dao gua wang wang yu shi shuai tui
+s	跨境电商结算越来越依赖实时汇率	kua jing dian shang jie suan yue lai yue yi lai shi shi hui lv
+s	核对发票抬头与税号免得报销退回	he dui fa piao tai tou yu shui hao mian de bao xiao tui hui
+t	定期健檢能及早發現潛在的代謝異常	ding qi jian jian neng ji zao fa xian qian zai de dai xie yi chang
+s	临床试验三期通过后才能申请上市	lin chuang shi yan san qi tong guo hou cai neng shen qing shang shi
+t	這家新創公司剛完成首輪天使融資	zhe jia xin chuang gong si gang wan cheng shou lun tian shi rong zi
+s	法庭采信了电子签名的存证时间戳	fa ting cai xin le dian zi qian ming de cun zheng shi jian chuo
+s	你们家小黑猫真是全群最闹腾的显眼包	ni men jia xiao hei mao zhen shi quan qun zui nao teng de xian yan bao
+t	下飯配的劇最近都快找不到電子榨菜	xia fan pei de ju zui jin dou kuai zhao bu dao dian zi zha cai
+s	这只小猫每天提供满满的情绪价值	zhe zhi xiao mao mei tian ti gong man man de qing xu jia zhi
+s	熬个夜就腰酸背痛真是脆皮大学生	ao ge ye jiu yao suan bei tong zhen shi cui pi da xue sheng
+t	她拍出來的旅遊照片很有鬆弛感	ta pai chu lai de lv you zhao pian hen you song chi gan
+s	连续加班一周感觉整个人班味好重	lian xu jia ban yi zhou gan jue zheng ge ren ban wei hao zhong
+s	问他明天去不去结果他直接已读乱回	wen ta ming tian qu bu qu jie guo ta zhi jie yi du luan hui
+t	這個小貓撒嬌影片直接把我硬控三分鐘	zhe ge xiao mao sa jiao ying pian zhi jie ba wo ying kong san fen zhong
+s	干了半天发现整个项目都是草台班子	gan le ban tian fa xian zheng ge xiang mu dou shi cao tai ban zi
+s	连续匹配到演我的队友差点当场红温	lian xu pi pei dao yan wo de dui you cha dian dang chang hong wen
+t	看到這段結尾劇情我整個人直接破防	kan dao zhe duan jie wei ju qing wo zheng ge ren zhi jie po fang
+s	重度社恐人群在电梯里都不敢抬头	zhong du she kong ren qun zai dian ti li dou bu gan tai tou
+s	他才是真正的社牛跟谁都能聊半天	ta cai shi zhen zheng de she niu gen shui dou neng liao ban tian
+t	這家餐廳被朋友種草好久終於來吃	zhe jia can ting bei peng you zhong cao hao jiu zhong yu lai chi
+s	买键盘之前先看评测帖好好避雷	mai jian pan zhi qian xian kan ping ce tie hao hao bi lei
+s	别再因为别人一句话反复精神内耗	bie zai yin wei bie ren yi ju hua fan fu jing shen nei hao
+t	周末想在附近找一個咖啡廳搭子	zhou mo xiang zai fu jin zhao yi ge ka fei ting da zi
+s	今天群友发言一个比一个抽象好笑	jin tian qun you fa yan yi ge bi yi ge chou xiang hao xiao
+s	他把老旧出租屋爆改成了温馨猫房	ta ba lao jiu chu zu wu bao gai cheng le wen xin mao fang
+t	小貓就這樣水靈靈地趴在鍵盤上睡著	xiao mao jiu zhe yang shui ling ling di pa zai jian pan shang shui zhao
+s	这人做事说话总是带着一股莫名偷感	zhe ren zuo shi shuo hua zong shi dai zhe yi gu mo ming tou gan
+s	新版小猫回复终于去掉了那种人机感	xin ban xiao mao hui fu zhong yu qu diao le na zhong ren ji gan
+t	這段語音條聽起來活人感實在太強了	zhe duan yu yin tiao ting qi lai huo ren gan shi zai tai qiang le
+s	滤镜碎了一地彻底对网红店祛魅了	lv jing sui le yi di che di dui wang hong dian qu mei le
+s	每天早八起床全靠那杯冰美式续命	mei tian zao ba qi chuang quan kao na bei bing mei shi xu ming
+t	今天工作摸魚的時候又滑到可愛貓片	jin tian gong zuo mo yu de shi hou you hua dao ke ai mao pian
+s	别卷了这周大家一起躺平休息两天	bie juan le zhe zhou da jia yi qi tang ping xiu xi liang tian
+s	我宣布这个新主题就是今年的白月光	wo xuan bu zhe ge xin zhu ti jiu shi jin nian de bai yue guang
+t	他回訊息永遠簡短到像個複製人	ta hui xun xi yong yuan jian duan dao xiang ge fu zhi ren
+s	看到老板走过来立刻切换假装在工作	kan dao lao ban zou guo lai li ke qie huan jia zhuang zai gong zuo
+s	周末宅在纸箱旁边看猫就能治愈一切	zhou mo zhai zai zhi xiang pang bian kan mao jiu neng zhi yu yi qie
+t	這波操作簡直封神大家直接集體點讚	zhe bo cao zuo jian zhi feng shen da jia zhi jie ji ti dian zan
+s	晚上点份烧烤再配冰镇饮料太爽了	wan shang dian fen shao kao zai pei bing zhen yin liao tai shuang le
+s	群里发红包的时候大家手速一个比一个快	qun li fa hong bao de shi hou da jia shou su yi ge bi yi ge kuai
+t	每次買完鍵帽就覺得自己好像吃土了	mei ci mai wan jian mao jiu jue de zi ji hao xiang chi tu le
+s	他说这周肯定早睡结果凌晨两点还在聊	ta shuo zhe zhou ken ding zao shui jie guo ling chen liang dian hai zai liao
+s	把键盘声效开起来打字手感直接拉满	ba jian pan sheng xiao kai qi lai da zi shou gan zhi jie la man
+t	不要一遇到小挫折就開始自我懷疑	bu yao yi yu dao xiao cuo zhe jiu kai shi zi wo huai yi
+s	你这个表情包我先偷走存进收藏夹啦	ni zhe ge biao qing bao wo xian tou zou cun jin shou cang jia la
+s	这周排班排得满满当当完全喘不过气	zhe zhou pai ban pai de man man dang dang wan quan chuan bu guo qi
+t	難得放晴趕緊去陽台曬一下被子	nan de fang qing gan jin qu yang tai shai yi xia bei zi
+s	昨天晚上忘记给手机充电差点关机	zuo tian wan shang wang ji gei shou ji chong dian cha dian guan ji
+s	地铁早高峰挤得连转身都很困难	di tie zao gao feng ji de lian zhuan shen dou hen kun nan
+t	剛換上的粉紅色貓咪鍵盤真的太可愛	gang huan shang de fen hong se mao mi jian pan zhen de tai ke ai
+s	我把群友发的梗图全都保存下来了	wo ba qun you fa de geng tu quan dou bao cun xia lai le
+s	这么晚还不睡是不是又在刷短视频	zhe me wan hai bu shui shi bu shi you zai shua duan shi pin
+t	朋友推薦的這家抹茶蛋糕意外超好吃	peng you tui jian de zhe jia mo cha dan gao yi wai chao hao chi
+s	今天风这么大出门差点把伞吹翻了	jin tian feng zhe me da chu men cha dian ba san chui fan le
+s	刚发的语音条点开居然是一声真猫叫	gang fa de yu yin tiao dian kai ju ran shi yi sheng zhen mao jiao
+t	有空再一起去夜市撈金魚吃雞排	you kong zai yi qi qu ye shi lao jin yu chi ji pai
+s	下班回家第一时间打开原神清体力	xia ban hui jia di yi shi jian da kai yuan shen qing ti li
+s	崩坏星穹铁道这期主线剧情太刀了	beng huai xing qiong tie dao zhe qi zhu xian ju qing tai dao le
+t	絕區零這個新角色的打擊手感很爽	jue qu ling zhe ge xin jue se de da ji shou gan hen shuang
+s	昨天熬夜打鸣潮终于把深渊打满星	zuo tian ao ye da ming chao zhong yu ba shen yuan da man xing
+s	黑神话悟空的美术和配乐水平真高	hei shen hua wu kong de mei shu he pei yue shui ping zhen gao
+t	葬送的芙莉蓮每一集配樂都好溫柔	zang song de fu li lian mei yi ji pei yue dou hao wen rou
+s	周末重温一遍孤独摇滚还是笑到不行	zhou mo chong wen yi bian gu du yao gun hai shi xiao dao bu xing
+t	咒術迴戰漫畫完結那天討論度炸鍋	zhou shu hui zhan man hua wan jie na tian tao lun du zha guo
+s	初音未来演唱会现场应援气氛太好了	chu yin wei lai yan chang hui xian chang ying yuan qi fen tai hao le
+s	现在二次元线下展越来越卷周边质量	xian zai er ci yuan xian xia zhan yue lai yue juan zhou bian zhi liang
+t	這季新番裡我最期待的是這部番劇	zhe ji xin fan li wo zui qi dai de shi zhe bu fan ju
+s	每周五准时守在屏幕前面追番吐槽	mei zhou wu zhun shi shou zai ping mu qian mian zhui fan tu cao
+s	作者再不画下一话读者就要集体催更	zuo zhe zai bu hua xia yi hua du zhe jiu yao ji ti cui geng
+t	那群肝帝不到兩天就把活動搬空了	na qun gan di bu dao liang tian jiu ba huo dong ban kong le
+s	今天群里又有人十连双金简直是欧皇	jin tian qun li you you ren shi lian shuang jin jian zhi shi ou huang
+s	作为标准非酋每次抽卡都得吃大保底	zuo wei biao zhun fei qiu mei ci chou ka dou dei chi da bao di
+t	刷了整個月聖遺物還是沒有雙暴詞條	shua le zheng ge yue sheng yi wu hai shi mei you shuang bao ci tiao
+s	这套深渊配队伤害输出非常稳定	zhe tao shen yuan pei dui shang hai shu chu fei chang wen ding
+s	周末和搭子去秋叶原和南京东路吃谷	zhou mo he da zi qu qiu ye yuan he nan jing dong lu chi gu
+t	她背了一個掛滿閃亮徽章的痛包出門	ta bei le yi ge gua man shan liang hui zhang de tong bao chu men
+s	拆盲盒终于抽到了最想要的吧唧徽章	chai mang he zhong yu chou dao le zui xiang yao de ba ji hui zhang
+s	本命角色出新手办哪怕吃土也得买	ben ming jue se chu xin shou ban na pa chi tu ye dei mai
+t	從開服就單推這位虛擬主播到現在	cong kai fu jiu dan tui zhe wei xu ni zhu bo dao xian zai
+s	这场面配音多亏金牌声优演技在线	zhe chang mian pei yin duo kui jin pai sheng you yan ji zai xian
+s	官方今天放出的限定立绘真是太精致了	guan fang jin tian fang chu de xian ding li hui zhen shi tai jing zhi le
+t	漫展攤位上有超多神仙畫師出同人誌	man zhan tan wei shang you chao duo shen xian hua shi chu tong ren zhi
+s	这一段发糖剧情甜得我嘴角压不住	zhe yi duan fa tang ju qing tian de wo zui jiao ya bu zhu
+s	每次重刷动画名场面还是会被感动	mei ci chong shua dong hua ming chang mian hai shi hui bei gan dong
+t	課長為了滿命座角色直接衝了十單	ke zhang wei le man ming zuo jue se zhi jie chong le shi dan
+s	新手入坑先看清楚攻略再决定抽谁	xin shou ru keng xian kan qing chu gong lve zai jue ding chou shei
+s	新版本前瞻直播昨晚公布了一堆兑换码	xin ban ben qian zhan zhi bo zuo wan gong bu le yi dui dui huan ma
+t	這張特典小卡被炒到好幾倍價格太離譜	zhe zhang te dian xiao ka bei chao dao hao ji bei jia ge tai li pu
+s	玩音游手速跟不上眼睛早就看花了	wan yin you shou su gen bu shang yan jing zao jiu kan hua le
+s	这次联名咖啡厅预约名额一秒就没了	zhe ci lian ming ka fei ting yu yue ming e yi miao jiu mei le
+t	角色語音台詞跟劇情張力搭配得很好	jue se yu yin tai ci gen ju qing zhang li da pei de hen hao
+s	下周限定卡池复刻千万别上头乱抽	xia zhou xian ding ka chi fu ke qian wan bie shang tou luan chou
+s	为了凑齐整套角色立牌跑了好几家店	wei le cou qi zheng tao jue se li pai pao le hao ji jia dian
+t	這場電競比賽決勝局逆轉翻盤超刺激	zhe chang dian jing bi sai jue sheng ju ni zhuan fan pan chao ci ji
+s	买周边一定要认准官方正品防止被骗	mai zhou bian yi ding yao ren zhun guan fang zheng pin fang zhi bei pian
+s	老番重制版画风比十年前细腻太多了	lao fan chong zhi ban hua feng bi shi nian qian xi ni tai duo le
+t	活動關卡最後一關需要考驗走位技巧	huo dong guan ka zui hou yi guan xu yao kao yan zou wei ji qiao
+s	我把桌面壁纸换成了最喜欢的新皮肤	wo ba zhuo mian bi zhi huan cheng le zui xi huan de xin pi fu
+s	通关之后记得把二周目隐藏结局打了	tong guan zhi hou ji de ba er zhou mu yin cang jie ju da le
+t	這個副本機制如果不看指南很容易團滅	zhe ge fu ben ji zhi ru guo bu kan zhi nan hen rong yi tuan mie
+s	手柄摇杆飘移搞得角色一直往墙角跑	shou bing yao gan piao yi gao de jue se yi zhi wang qiang jiao pao
+s	今天公会战大家配合默契顺利拿第一	jin tian gong hui zhan da jia pei he mo qi shun li na di yi
+t	剛開服伺服器被玩家擠爆排隊排很久	gang kai fu si fu qi bei wan jia ji bao pai dui pai hen jiu
+s	买了个痛包准备下个月漫展背去逛	mai le ge tong bao zhun bei xia ge yue man zhan bei qu guang
+t	這個角色建模比預告片看起來更精緻	zhe ge jue se jian mo bi yu gao pian kan qi lai geng jing zhi
+s	今天刷了一下午材料终于把武器升满	jin tian shua le yi xia wu cai liao zhong yu ba wu qi sheng man
+s	人工智能大模型正在重塑软件开发方式	ren gong zhi neng da mo xing zheng zai chong su ruan jian kai fa fang shi
+s	人形机器人已经开始进厂测试搬运零件	ren xing ji qi ren yi jing kai shi jin chang ce shi ban yun ling jian
+t	無人機配送與低空經濟今年發展超快	wu ren ji pei song yu di kong jing ji jin nian fa zhan chao kuai
+s	具身智能让机械臂真正看懂桌面物体	ju shen zhi neng rang ji xie bi zhen zheng kan dong zhuo mian wu ti
+t	升級純血鴻蒙系統之後動畫流暢很多	sheng ji chun xue hong meng xi tong zhi hou dong hua liu chang hen duo
+s	三折叠屏手机合起来放口袋意外轻薄	san zhe die ping shou ji he qi lai fang kou dai yi wai qing bao
+t	今年路上看到的新能源車越來越多啦	jin nian lu shang kan dao de xin neng yuan che yue lai yue duo la
+s	高速路段开启智驾之后长途省心不少	gao su lu duan kai qi zhi jia zhi hou chang tu sheng xin bu shao
+t	趁著雙十一疊加國補買了一台新筆電	chen zhe shuang shi yi die jia guo bu mai le yi tai xin bi dian
+s	我们周末来了场说走就走的特种兵旅游	wo men zhou mo lai le chang shuo zou jiu zou de te zhong bing lv you
+s	年轻人热衷买徽章带火了谷子经济	nian qing ren re zhong mai hui zhang dai huo le gu zi jing ji
+t	這幾年手機上滑到微短劇的頻率超高	zhe ji nian shou ji shang hua dao wei duan ju de pin lv chao gao
+s	街头新开的咖啡店老板自称咖啡主理人	jie tou xin kai de ka fei dian lao ban zi cheng ka fei zhu li ren
+s	脑机接口技术帮助患者重新控制光标	nao ji jie kou ji shu bang zhu huan zhe chong xin kong zhi guang biao
+t	手機頂部的靈動島能即時顯示外送進度	shou ji ding bu de ling dong dao neng ji shi xian shi wai song jin du
+s	空间计算头显办公就像面前摆满大屏	kong jian ji suan tou xian ban gong jiu xiang mian qian bai man da ping
+s	绿色能源转型推动工业界加快实现碳中和	lv se neng yuan zhuan xing tui dong gong ye jie jia kuai shi xian tan zhong he
+t	大家趁著家電以舊換新優惠升級了洗衣機	da jia chen zhe jia dian yi jiu huan xin you hui sheng ji le xi yi ji
+s	各大品牌趁着首发经济纷纷开出首店	ge da pin pai chen zhe shou fa jing ji fen fen kai chu shou dian
+t	老齡化社會帶動銀髮經濟需求持續升溫	lao ling hua she hui dai dong yin fa jing ji xu qiu chi xu sheng wen
+s	我把这篇论文的核心提示词修改了一下	wo ba zhe pian lun wen de he xin ti shi ci xiu gai le yi xia
+s	她因为连续发烧只能先吃一片布洛芬	ta yin wei lian xu fa shao zhi neng xian chi yi pian bu luo fen
+t	把那個開源模型下載到本地電腦試試看	ba na ge kai yuan mo xing xia zai dao ben di dian nao shi shi kan
+s	这个季度的财务报表已经提交审核	zhe ge ji du de cai wu bao biao yi jing ti jiao shen he
+t	我今天打開軟體發現皮膚變得更透亮了	wo jin tian da kai ruan ti fa xian pi fu bian de geng tou liang le
+s	他们用高并发架构扛住了双十一流量	ta men yong gao bing fa jia gou kang zhu le shuang shi yi liu liang
+s	他在地铁上戴着降噪耳机看动画片	ta zai di tie shang dai zhe jiang zao er ji kan dong hua pian
+t	我們把所有的詞庫都轉成了高效率的檔案	wo men ba suo you de ci ku dou zhuan cheng le gao xiao lv de dang an
+s	这个版本的九键拼音连打准确率高了	zhe ge ban ben de jiu jian pin yin lian da zhun que lv gao le
+s	她趁着活动优惠入手了新的机械键盘	ta chen zhe huo dong you hui ru shou le xin de ji xie jian pan
+t	醫生建議做完核磁共振再決定後續方案	yi sheng jian yi zuo wan he ci gong zhen zai jue ding hou xu fang an
+s	那家咖啡店靠可爱的猫咪成了网红地标	na jia ka fei dian kao ke ai de mao mi cheng le wang hong di biao
+s	我们把日志都同步备份到了云端储存	wo men ba ri zhi dou tong bu bei fen dao le yun duan chu cun
+t	律師提醒不要隨便簽沒有寫期限的授權書	lv shi ti xing bu yao sui bian qian mei you xie qi xian de shou quan shu
+s	把手机里的语音条直接转成文字发送	ba shou ji li de yu yin tiao zhi jie zhuan cheng wen zi fa song
+s	他用大模型帮自己写了个自动整理脚本	ta yong da mo xing bang zi ji xie le ge zi dong zheng li jiao ben
+t	每天晚上散步的時候順便去超商買瓶水	mei tian wan shang san bu de shi hou shun bian qu chao shang mai ping shui
+s	这次系统更新把按键震动调得特别清脆	zhe ci xi tong geng xin ba an jian zhen dong tiao de te bie qing cui
+s	我刚查了一下明天香港还是多云有雨	wo gang cha le yi xia ming tian xiang gang hai shi duo yun you yu
+t	大家在群裡討論得熱火朝天氣氛超棒	da jia zai qun li tao lun de re huo chao tian qi fen chao bang
+s	把模型量化之后普通笔记本也能跑	ba mo xing liang hua zhi hou pu tong bi ji ben ye neng pao
+s	他把桌上的杂物收拾得干干净净的	ta ba zhuo shang de za wu shou shi de gan gan jing jing de
+t	昨晚睡得太晚今天早上差點就遲到了	zuo wan shui de tai wan jin tian zao shang cha dian jiu chi dao le
+s	把这句长句子分成两段发更容易看清	ba zhe ju chang ju zi fen cheng liang duan fa geng rong yi kan qing
+s	我们打算用三个月时间把词库全面升级	wo men da suan yong san ge yue shi jian ba ci ku quan mian sheng ji
+t	這隻黑色小貓每天都守在水龍頭旁邊喝水	zhe zhi hei se xiao mao mei tian dou shou zai shui long tou pang bian he shui
+s	新能源车的智驾功能跑高速真的稳	xin neng yuan che de zhi jia gong neng pao gao su zhen de wen
+s	公司要求把所有接口的延迟降到十毫秒	gong si yao qiu ba suo you jie kou de yan chi jiang dao shi hao miao
+t	他趁著特價一口氣囤了好幾盒貓咪零食	ta chen zhe te jia yi kou qi tun le hao ji he mao mi ling shi
+s	先把基准测试跑通再来对比优化效果	xian ba ji zhun ce shi pao tong zai lai dui bi you hua xiao guo

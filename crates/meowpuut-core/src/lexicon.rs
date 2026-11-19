@@ -34,6 +34,7 @@ use std::collections::HashMap;
 use crate::context_index::{phrase_hash, PhraseIndex};
 use crate::image::{ImageOwner, Text, U32Col};
 use crate::pairs::Pairs;
+use crate::trigrams::Trigrams;
 use crate::reading::{
     han_characters_stack, is_fully_spelled_reading, is_tone, strict_han_count, Reading, KEYS, MAX_INPUT,
 };
@@ -57,6 +58,8 @@ pub struct Lexicon {
     pub pinyin: bool,
     /// Word-pair table; without it the decoder ranks as before it existed.
     pairs: Option<Pairs>,
+    /// Stage-2 bridge-trigram and skip-1 bigram table (`mimo_trigrams.bin`).
+    trigrams: Option<Trigrams>,
     /// English lexicon (`mimo_en.bin`); the second tier of English inside
     /// pinyin and nine-key typing. Without it both behave as before.
     english: Option<crate::english::English>,
@@ -525,7 +528,7 @@ impl Lexicon {
         if words.is_empty() { return None; }
         let index = index.unwrap_or_else(|| LexiconIndex::build(&storage, &words, &buckets, &context));
         let no_suggest = NoSuggest::build(&storage, &words);
-        let mut lex = Self { storage, words, buckets, context, index, longest, pinyin, pairs: None, english: None, zhuyin_syllables: [0; 37], no_suggest, owner };
+        let mut lex = Self { storage, words, buckets, context, index, longest, pinyin, pairs: None, trigrams: None, english: None, zhuyin_syllables: [0; 37], no_suggest, owner };
         lex.zhuyin_syllables = crate::abbrev::syllable_table(&lex);
         Some(lex)
     }
@@ -533,6 +536,11 @@ impl Lexicon {
     /// Uses `pairs` for ranking (see `crate::pairs`).
     pub fn set_pairs(&mut self, pairs: Pairs) {
         self.pairs = Some(pairs);
+    }
+
+    /// Uses `trigrams` for Stage-2 path reranking (see `crate::trigrams`).
+    pub fn set_trigrams(&mut self, trigrams: Trigrams) {
+        self.trigrams = Some(trigrams);
     }
 
     /// Uses `english` for English words inside pinyin and nine-key typing (see `crate::english`).
@@ -550,6 +558,12 @@ impl Lexicon {
     #[inline]
     pub fn pairs(&self) -> Option<&Pairs> {
         self.pairs.as_ref()
+    }
+
+    /// The Stage-2 bridge-trigram / skip-1 table, if one is attached.
+    #[inline]
+    pub fn trigrams(&self) -> Option<&Trigrams> {
+        self.trigrams.as_ref()
     }
 
     /// The lookup index (for writing it into an image).
@@ -638,6 +652,7 @@ impl Lexicon {
             + self.context.heap_bytes()
             + self.index.heap_bytes()
             + self.pairs.as_ref().map_or(0, Pairs::heap_bytes)
+            + self.trigrams.as_ref().map_or(0, Trigrams::heap_bytes)
             + self.english.as_ref().map_or(0, crate::english::English::heap_bytes)
     }
 

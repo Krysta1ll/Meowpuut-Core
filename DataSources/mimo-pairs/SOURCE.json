@@ -6,11 +6,12 @@
   "sources": {
     "tatoeba": {
       "url": "https://downloads.tatoeba.org/exports/per_language/cmn/cmn_sentences_detailed.tsv.bz2",
-      "sha256": "df15b916580d97db21a4f28c4f49f47aad7755025bc969b81762bcde6a47ea6a",
+      "sha256": "d7dc7791eba00014a742fe0aff0d790affd54d49d9786fdfeabf0e8b98755a34",
       "cache": "tatoeba-cmn_sentences_detailed.tsv.bz2",
       "kind": "tatoeba",
       "group": "spoken",
-      "version": "weekly export downloaded 2026-11-11; the file at the URL changes every week",
+      "weight_scale": 0.35,
+      "version": "weekly export downloaded 2026-11-19; the file at the URL changes every week",
       "license": "CC-BY-2.0-FR",
       "license_file": "CC-BY-2.0-FR.html"
     },
@@ -64,12 +65,45 @@
       "version": "written 2026-11-12 for this project (DataSources/mimo-everyday/SOURCE.json)",
       "license": "written for this project"
     },
+    "modern-chat-3": {
+      "path": "DataSources/mimo-everyday/modern-chat-3.txt.xz",
+      "group": "spoken",
+      "kind": "lines",
+      "weight_scale": 1.0,
+      "version": "written 2026-11-19 for this project (DataSources/mimo-everyday/SOURCE.json)",
+      "license": "written for this project"
+    },
+    "modern-domains-3": {
+      "path": "DataSources/mimo-everyday/modern-domains-3.txt.xz",
+      "group": "written",
+      "kind": "lines",
+      "weight_scale": 2.0,
+      "version": "written 2026-11-19 for this project (DataSources/mimo-everyday/SOURCE.json)",
+      "license": "written for this project"
+    },
+    "colloc-chat-4": {
+      "path": "DataSources/mimo-everyday/colloc-chat-4.txt.xz",
+      "group": "written",
+      "kind": "lines",
+      "weight_scale": 3.0,
+      "version": "written 2026-11-19 for this project (DataSources/mimo-everyday/SOURCE.json)",
+      "license": "written for this project"
+    },
+    "colloc-domains-4": {
+      "path": "DataSources/mimo-everyday/colloc-domains-4.txt.xz",
+      "group": "written",
+      "kind": "lines",
+      "weight_scale": 2.0,
+      "version": "written 2026-11-19 for this project (DataSources/mimo-everyday/SOURCE.json)",
+      "license": "written for this project"
+    },
     "crosswoz-train": {
       "url": "https://raw.githubusercontent.com/thu-coai/CrossWOZ/df82c9fdff91b9b130f2d6b89110d3870ba6260e/data/crosswoz/train.json.zip",
       "sha256": "b81f6a0845011bb4593d21dd58e2d76af4dd5d52e300ecc68cb8dee17ccc3cf8",
       "cache": "crosswoz-train.json.zip",
       "kind": "crosswoz",
       "group": "written",
+      "weight_scale": 0.25,
       "version": "git commit df82c9fdff91b9b130f2d6b89110d3870ba6260e",
       "license": "Apache-2.0",
       "license_file": "Apache-2.0.txt"
@@ -80,6 +114,7 @@
       "cache": "crosswoz-val.json.zip",
       "kind": "crosswoz",
       "group": "written",
+      "weight_scale": 0.25,
       "version": "git commit df82c9fdff91b9b130f2d6b89110d3870ba6260e",
       "license": "Apache-2.0",
       "license_file": "Apache-2.0.txt"
@@ -90,6 +125,7 @@
       "cache": "crosswoz-test.json.zip",
       "kind": "crosswoz",
       "group": "written",
+      "weight_scale": 0.25,
       "version": "git commit df82c9fdff91b9b130f2d6b89110d3870ba6260e",
       "license": "Apache-2.0",
       "license_file": "Apache-2.0.txt"
@@ -100,6 +136,7 @@
       "cache": "kdconv-film-train.json",
       "kind": "kdconv",
       "group": "written",
+      "weight_scale": 0.35,
       "version": "git commit 653db76432de09a004ba708a68f8bbd5500e6bec",
       "license": "Apache-2.0",
       "license_file": "Apache-2.0.txt"
@@ -110,6 +147,7 @@
       "cache": "kdconv-film-dev.json",
       "kind": "kdconv",
       "group": "written",
+      "weight_scale": 0.35,
       "version": "git commit 653db76432de09a004ba708a68f8bbd5500e6bec",
       "license": "Apache-2.0",
       "license_file": "Apache-2.0.txt"
@@ -120,6 +158,7 @@
       "cache": "kdconv-film-test.json",
       "kind": "kdconv",
       "group": "written",
+      "weight_scale": 0.35,
       "version": "git commit 653db76432de09a004ba708a68f8bbd5500e6bec",
       "license": "Apache-2.0",
       "license_file": "Apache-2.0.txt"
@@ -130,6 +169,7 @@
       "cache": "kdconv-music-train.json",
       "kind": "kdconv",
       "group": "written",
+      "weight_scale": 0.35,
       "version": "git commit 653db76432de09a004ba708a68f8bbd5500e6bec",
       "license": "Apache-2.0",
       "license_file": "Apache-2.0.txt"
@@ -140,6 +180,7 @@
       "cache": "kdconv-music-dev.json",
       "kind": "kdconv",
       "group": "written",
+      "weight_scale": 0.35,
       "version": "git commit 653db76432de09a004ba708a68f8bbd5500e6bec",
       "license": "Apache-2.0",
       "license_file": "Apache-2.0.txt"
@@ -150,6 +191,7 @@
       "cache": "kdconv-music-test.json",
       "kind": "kdconv",
       "group": "written",
+      "weight_scale": 0.35,
       "version": "git commit 653db76432de09a004ba708a68f8bbd5500e6bec",
       "license": "Apache-2.0",
       "license_file": "Apache-2.0.txt"
@@ -160,6 +202,7 @@
       "cache": "kdconv-travel-train.json",
       "kind": "kdconv",
       "group": "written",
+      "weight_scale": 0.35,
       "version": "git commit 653db76432de09a004ba708a68f8bbd5500e6bec",
       "license": "Apache-2.0",
       "license_file": "Apache-2.0.txt"
@@ -170,6 +213,7 @@
       "cache": "kdconv-travel-dev.json",
       "kind": "kdconv",
       "group": "written",
+      "weight_scale": 0.35,
       "version": "git commit 653db76432de09a004ba708a68f8bbd5500e6bec",
       "license": "Apache-2.0",
       "license_file": "Apache-2.0.txt"
@@ -180,6 +224,7 @@
       "cache": "kdconv-travel-test.json",
       "kind": "kdconv",
       "group": "written",
+      "weight_scale": 0.35,
       "version": "git commit 653db76432de09a004ba708a68f8bbd5500e6bec",
       "license": "Apache-2.0",
       "license_file": "Apache-2.0.txt"
@@ -209,8 +254,8 @@
   },
   "not_used": "Wikipedia and its sister projects (CC BY-SA), any share-alike, non-commercial or no-derivatives text, news and government text, and web crawls whose publishers do not own the text.",
   "files": {
-    "counts.txt.xz": "3c008fa4c083c353f9261efa9f23d7689988591b3bd937288901f8e406445546",
-    "counts.json": "fb4bfc54572ad09e577cc28a04fc02c81a87ae4ef1b94d161daf9a92f6fbc085"
+    "counts.txt.xz": "43a45cdc9ad0e28d70648b79e7bbefa59edcfe496ce93610590548809ea6baa0",
+    "counts.json": "28815dc12a5e6f6ec4cd74f4dc198dca84436bd36a87d9f11850ed7199714c8c"
   },
   "license_files": {
     "CC-BY-2.0-FR.html": "597d4c64f6606c64da65ba6c079e5cc87e4cce2b5187eda908c939b538e7ab9b",

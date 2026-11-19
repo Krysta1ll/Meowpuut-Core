@@ -116,6 +116,7 @@
 日語|日语|ri4 yu3|8000
 日文|日文|ri4 wen2|8000
 東京|东京|dong1 jing1|6000
+#outranks-ok
 英文|英文|ying1 wen2|8000
 英語|英语|ying1 yu3|6000
 輸入|输入|shu1 ru4|7000
@@ -133,6 +134,7 @@
 測試|测试|ce4 shi4|6000
 問題|问题|wen4 ti2|9000
 可以|可以|ke3 yi3|10000
+#outranks-ok
 不行|不行|bu4 xing2|6000
 #outranks-ok
 不會|不会|bu4 hui4|6000
@@ -166,7 +168,9 @@
 一個|一个|yi1 ge5|8000
 一些|一些|yi4 xie1|7000
 一起|一起|yi4 qi3|7000
+#outranks-ok
 一起|一起|yi1 qi3|7000
+#outranks-ok
 沒有|没有|mei2 you3|9000
 還有|还有|hai2 you3|8000
 很多|很多|hen3 duo1|7000
@@ -224,6 +228,7 @@
 #outranks-ok
 鍵盤|键盘|jian4 pan2|7000
 滑鼠|滑鼠|hua2 shu3|6000
+#outranks-ok
 鼠標|鼠标|shu3 biao1|6000
 螢幕|萤幕|ying2 mu4|6000
 屏幕|屏幕|ping2 mu4|6000
@@ -242,6 +247,7 @@
 #outranks-ok
 米米莫|米米莫|mi3 mi3 mo4|8000
 莫莫|莫莫|mo4 mo4|8000
+#outranks-ok
 記憶|记忆|ji4 yi4|6000
 設定|设定|she4 ding4|7000
 設置|设置|she4 zhi4|7000
@@ -259,6 +265,7 @@
 保存|保存|bao3 cun2|6000
 檔案|档案|dang3 an4|6000
 文件|文件|wen2 jian4|6000
+#outranks-ok
 資料|资料|zi1 liao4|6000
 數據|数据|shu4 ju4|6000
 通行金鑰|通行金钥|tong1 xing2 jin1 yao4|5000
@@ -373,10 +380,13 @@
 哈哈|哈哈|ha1 ha1|8500
 哈哈哈|哈哈哈|ha1 ha1 ha1|8500
 嗚嗚|呜呜|wu1 wu1|8000
+#outranks-ok
 嘿嘿|嘿嘿|hei1 hei1|8000
 嘻嘻|嘻嘻|xi1 xi1|8000
+#outranks-ok
 嗷嗚|嗷呜|ao2 wu1|7000
 真的|真的|zhen1 de5|9000
+#outranks-ok
 確實|确实|que4 shi2|8500
 #outranks-ok
 沒錯|没错|mei2 cuo4|8500
@@ -465,6 +475,7 @@
 觸覺回饋|触觉回馈|chu4 jue2 hui2 kui4|6400
 # 2026-11-14: everyday words, phrases and idioms that are missing or ranked too low (chat, food, shopping, transport, study, work, feelings, weather, health).
 已讀|已读|yi3 du2|7000
+#outranks-ok
 未讀|未读|wei4 du2|4600
 撤回|撤回|che4 hui2|6800
 語音通話|语音通话|yu3 yin1 tong1 hua4|6600
@@ -488,6 +499,7 @@
 宅配|宅配|zhai2 pei4|5600
 超商取貨|超商取货|chao1 shang1 qu3 huo4|6200
 取件|取件|qu3 jian4|6000
+#outranks-ok
 配送|配送|pei4 song4|6200
 加入購物車|加入购物车|jia1 ru4 gou4 wu4 che1|6200
 限時|限时|xian4 shi2|6100
@@ -506,6 +518,7 @@
 睡過頭|睡过头|shui4 guo4 tou2|6600
 早退|早退|zao3 tui4|6000
 簡報|简报|jian3 bao4|6200
+#outranks-ok
 投影片|投影片|tou2 ying3 pian4|5800
 幻燈片|幻灯片|huan4 deng1 pian4|5600
 期中考|期中考|qi1 zhong1 kao3|6000
@@ -523,6 +536,7 @@
 幫我|帮我|bang1 wo3|7000
 請幫我|请帮我|qing3 bang1 wo3|6000
 老是|老是|lao3 shi4|6700
+#outranks-ok
 午安|午安|wu3 an1|5800
 下班了|下班了|xia4 ban1 le5|6400
 吃飯了嗎|吃饭了吗|chi1 fan4 le5 ma5|6600
@@ -579,6 +593,7 @@
 痘痘|痘痘|dou4 dou4|5600
 流鼻水|流鼻水|liu2 bi2 shui3|5000
 藥房|药房|yao4 fang2|5800
+#outranks-ok
 掛急診|挂急诊|gua4 ji2 zhen3|4800
 急診|急诊|ji2 zhen3|5600
 預習|预习|yu4 xi2|5600
@@ -595,3 +610,4 @@
 黃燜雞|黄焖鸡|huang2 men4 ji1|5200
 黃燜雞米飯|黄焖鸡米饭|huang2 men4 ji1 mi3 fan4|5000
 補覺|补觉|bu3 jiao4|5200
+#outranks-ok

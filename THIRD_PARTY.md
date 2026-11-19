@@ -43,8 +43,8 @@
 
 - 計數快照：`DataSources/mimo-pairs/counts.txt.xz`，由 `scripts/mimo_pairs.py` 從下列文字切詞計數；建置時打包為 `mimo_pairs.bin`（`MIMO-PAIR-1`），單詞次數也用來校準詞的權重。來源版本與 SHA-256 見 `DataSources/mimo-pairs/SOURCE.json`。
 - 來源與授權：
-  - **本專案自寫的句子**（`DataSources/mimo-everyday`，第 8 節）：約 20.6 萬句，佔計數文字的三成多。
-  - **Tatoeba** 中文句子（2026-11-11 匯出，**CC BY 2.0 FR**）：署名為 Tatoeba 與其貢獻者。
+  - **本專案自寫的句子**（`DataSources/mimo-everyday`，第 8 節）：約 82.2 萬句（822,480 句），包含口語聊天、詞語搭配與各領域例句。
+  - **Tatoeba** 中文句子（2026-11-19 匯出，**CC BY 2.0 FR**）：署名為 Tatoeba 與其貢獻者。
   - **Mozilla Common Voice sentence-collector** zh-TW、zh-CN（commit `bc5d2c4`，**CC0 1.0**）。
   - **CrossWOZ**（`thu-coai/CrossWOZ`，commit `df82c9f`，**Apache-2.0**）：訂房、餐廳、景點、交通的任務對話。
   - **KdConv**（`thu-coai/KdConv`，commit `653db76`，**Apache-2.0**）：電影、音樂、旅遊的對話。
@@ -83,11 +83,11 @@
 
 ## 7. 各行業用詞（本專案自行編寫）
 
-- `Resources/Lexicon/terms.tsv`：約 2 萬個詞，70 個領域（醫療、法律、會計、軟體、製造、動畫製作、餐飲、物流、科學等），台灣用語與大陸用語分列。2026-11-12 由語言模型為本專案寫成，不含第三方資料；尚未逐條經各領域的人審讀。
+- `Resources/Lexicon/terms.tsv`：約 2.78 萬個詞（含 AI 工程、臨床西醫、法律合規、金融經濟、網絡熱梗、ACG 遊戲、時事科技與各行業術語），台灣用語與大陸用語分列。2026-11-12 及 2026-11-19 由語言模型為本專案寫成，不含第三方資料；尚未逐條經各領域的人審讀。
 
 ## 8. mimo-everyday 本專案自寫的句子（本專案所有）
 
-- `DataSources/mimo-everyday`：`everyday.txt.xz`（2026-11-11，96,627 句日常聊天）、`chat-2.txt.xz`（45,606 句聊天、情境用語與問答）、`written-2.txt.xz`（54,676 句敘述、說明、故事與例句）、`mixed-2.txt.xz`（9,436 句中文夾英文）。後三份寫於 2026-11-12。
+- `DataSources/mimo-everyday`：`everyday.txt.xz`（2026-11-11，96,627 句日常聊天）、`chat-2.txt.xz`（45,606 句聊天、情境用語與問答）、`written-2.txt.xz`（54,676 句敘述、說明、故事與例句）、`mixed-2.txt.xz`（9,436 句中文夾英文；以上 3 份寫於 2026-11-12），`modern-chat-3.txt.xz`（46,645 句現代社群與熱梗對話）、`modern-domains-3.txt.xz`（191,486 句現代專業領域與錨點詞造句），以及 `colloc-chat-4.txt.xz`（306,601 句高頻口語與詞語搭配對話）、`colloc-domains-4.txt.xz`（71,411 句專業詞彙與同音消歧搭配造句；以上 4 份寫於 2026-11-19）。
 - 全部由語言模型為本專案寫成，每位寫手拿到主題、語體與內容限制（不寫爭議性內容、不針對任何群體、不寫真人與作品品牌名稱），沒有看過評測集與保留集。台灣用語（繁體）與大陸用語（簡體）都有。主題、行數與檢查碼見該目錄的 `SOURCE.json`。
 ## 9. 客製化皮膚 `crates/meowpuut-skin` 的 Rust 相依（BSD-3-Clause、MIT、Apache-2.0 等）
 

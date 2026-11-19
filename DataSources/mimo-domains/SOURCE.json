@@ -1,0 +1,13 @@
+{
+  "name": "mimo-domains",
+  "license": "written for this project; MIT (no third-party text)",
+  "sources": {
+    "modern-seed-terms.tsv": "Project-authored 2023-2026 seed terms (MIT)",
+    "modern-llm-terms.tsv": "Project-owned LLM-written domain terms (MIT)"
+  },
+  "files": {
+    "modern-llm-terms.tsv": "f9d50296717755b73deaa724aa114ba4d9cf3bd5c28fd01f9e7c5154ec425459",
+    "modern-seed-terms.tsv": "1e1c6d618df8986082ca2ed562ea8d736c36b92dfe5f7159ffb37f7733b65aa7"
+  },
+  "modern_seed_count": 208
+}

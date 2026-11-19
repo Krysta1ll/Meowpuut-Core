@@ -26,7 +26,11 @@
     "everyday.txt.xz": "8b6c86c1864b5e0cc9e8f534dd01e7ec8363af296d302e69f5b05e5f947232dc",
     "chat-2.txt.xz": "45dedd87f2aa8e2b084b6e4a569f7601c0ae98b8d35f55faba3852d82ced5ce6",
     "written-2.txt.xz": "fbf902dfa2f10111dd7f97320ad9d7c32975b3d0aef8a6b77a16eb36370496d4",
-    "mixed-2.txt.xz": "8ca6a7a236e1583dcc96d6bf81cd94158c26e03d7b26602af109158446da30ba"
+    "mixed-2.txt.xz": "8ca6a7a236e1583dcc96d6bf81cd94158c26e03d7b26602af109158446da30ba",
+    "modern-chat-3.txt.xz": "c4dc49497b2899c5b660f9037e33f2bb09abc73c0926bdbc764e0207e5da5685",
+    "modern-domains-3.txt.xz": "82248999914b4f94021f621d003ea506337ee2cd5565a4d34c41b34993dc4679",
+    "colloc-chat-4.txt.xz": "b9626667d94144e5c49acc5caeaeeb72b2c54fc69041989627d48d8849ff7835",
+    "colloc-domains-4.txt.xz": "7d8ea34a34c01422e8c296106a187c3641ebcf01883bb2f5c31d864057f7362f"
   },
   "batch_2": {
     "written": {
@@ -56,6 +60,34 @@
       "dropped": {
         "exact duplicate": 25
       }
+    }
+  },
+  "batch_3": {
+    "written_date": "2026-11-19",
+    "modern-chat-3": 46645,
+    "modern-domains-3": 191486,
+    "tw_counts": {
+      "spoken": 23253,
+      "written": 95717
+    },
+    "stats": {
+      "raw": 243468,
+      "eval_or_blocked": 4780,
+      "dup_or_bad": 557
+    }
+  },
+  "batch_4": {
+    "written_date": "2026-11-19",
+    "colloc-chat-4": 306601,
+    "colloc-domains-4": 71411,
+    "tw_counts": {
+      "spoken": 173755,
+      "written": 15617
+    },
+    "stats": {
+      "raw": 391222,
+      "eval_or_blocked": 12376,
+      "dup_or_bad": 834
     }
   }
 }

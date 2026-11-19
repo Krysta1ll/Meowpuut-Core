@@ -55,6 +55,7 @@ pub mod segments;
 pub mod session;
 pub mod session_keys;
 pub mod soa;
+pub mod trigrams;
 pub mod workspace;
 
 pub use lexicon::Lexicon;

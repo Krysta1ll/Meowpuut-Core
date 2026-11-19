@@ -251,6 +251,8 @@ macro_rules! column {
     };
 }
 
+column!(/// Column of `u64`.
+    U64Col, u64, 8);
 column!(/// Column of `u32`.
     U32Col, u32, 4);
 column!(/// Column of `u16`.

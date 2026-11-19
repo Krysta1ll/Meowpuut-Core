@@ -65,6 +65,7 @@ def load_core(lib):
             ("mpn_candidate_consumed", size, (ptr, size)),
             ("mpn_max_input_bytes", size, ()),
             ("mpn_lexicon_attach_pairs", ctypes.c_int, (ptr, text, size, ptr, ptr)),
+            ("mpn_lexicon_attach_trigrams", ctypes.c_int, (ptr, text, size, ptr, ptr)),
             ("mpn_lexicon_attach_english", ctypes.c_int, (ptr, text, size, ptr, ptr))):
         function = getattr(core, name)
         function.restype, function.argtypes = result, arguments
@@ -94,7 +95,7 @@ def edit_distance(a, b):
 
 
 class Engine:
-    def __init__(self, core, resources, pairs, english=False):
+    def __init__(self, core, resources, pairs, english=False, trigrams=False, trigrams_path=None):
         self.core = core
         self.base = (resources / "mimo_base.bin").read_bytes()
         self.lexicon = core.mpn_lexicon_create_from_base(self.base, len(self.base), 1)
@@ -108,6 +109,14 @@ class Engine:
             size = len(self.pair_bytes) - 1
             self.pairs = "on" if core.mpn_lexicon_attach_pairs(self.lexicon, self.pair_bytes, size, None, None) \
                 else "rejected (not made for this lexicon)"
+        self.trigrams = "off"
+        tri_path = Path(trigrams_path) if trigrams_path else (resources / "mimo_trigrams.bin")
+        if trigrams:
+            if not tri_path.exists():
+                sys.exit(f"eval-ranking: --trigrams needs {tri_path}")
+            self.tri_bytes = ctypes.create_string_buffer(tri_path.read_bytes())
+            self.trigrams = "on" if core.mpn_lexicon_attach_trigrams(
+                self.lexicon, self.tri_bytes, len(self.tri_bytes) - 1, None, None) else "rejected"
         self.english = "off"
         english_path = resources / "mimo_en.bin"
         if english:
@@ -258,6 +267,8 @@ def main():
     parser.add_argument("--resources", default=str(ROOT / ".build/lexicon"))
     parser.add_argument("--lib", default=None)
     parser.add_argument("--no-pairs", action="store_true", help="do not attach mimo_pairs.bin")
+    parser.add_argument("--trigrams", action="store_true", help="attach mimo_trigrams.bin (Stage-2 context reranker)")
+    parser.add_argument("--trigrams-path", default=None, help="explicit path to mimo_trigrams.bin")
     parser.add_argument("--english", action="store_true", help="attach mimo_en.bin (English inside Pinyin, as the clients do)")
     parser.add_argument("--show-failures", type=int, default=0, metavar="N")
     parser.add_argument("--dump", metavar="PATH")
@@ -267,9 +278,16 @@ def main():
     if not lib.exists():
         sys.exit(f"eval-ranking: {lib} not found (build it with cargo build --release -p meowpuut-ffi)")
     rows = read_sentences(arguments.file)
-    engine = Engine(load_core(lib), Path(arguments.resources), not arguments.no_pairs, arguments.english)
+    engine = Engine(
+        load_core(lib),
+        Path(arguments.resources),
+        not arguments.no_pairs,
+        arguments.english,
+        arguments.trigrams,
+        arguments.trigrams_path,
+    )
     results = evaluate(engine, rows)
-    print(f"{arguments.file}: {len(rows)} sentences; pairs {engine.pairs}; english {engine.english}")
+    print(f"{arguments.file}: {len(rows)} sentences; pairs {engine.pairs}; trigrams {engine.trigrams}; english {engine.english}")
     print(summarise(results))
     notes = [r for r in results if r["note"]]
     if notes:

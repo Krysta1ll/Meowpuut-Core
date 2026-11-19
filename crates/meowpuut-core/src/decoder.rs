@@ -373,6 +373,7 @@ pub fn decode_with_buffers(
     }
 
     let top_count = lattice.count_at(0);
+    let trigrams = if pairs.is_some() { lexicon.trigrams() } else { None };
     for b_idx in 0..top_count {
         let slot = PathLatticeSoA::slot_index(0, b_idx);
         let kind = if !reading.unambiguous {
@@ -386,13 +387,38 @@ pub fn decode_with_buffers(
         };
         let mut text = std::mem::take(&mut lattice.text);
         text.clear();
+        let mut tri_sum = 0i64;
+        let mut skip_sum = 0i64;
+        let mut prev2 = u32::MAX;
+        let mut prev1 = lattice.left;
         for s in lattice.words_from(slot) {
             text.push_str(lexicon.words.text(&lexicon.storage, lattice.word[s] as usize, hans));
+            if let Some(tri) = trigrams {
+                let cur = lattice.id[s];
+                if prev2 != u32::MAX {
+                    let (dt, ds) = tri.score_window(prev2, prev1, cur);
+                    tri_sum += i64::from(dt);
+                    skip_sum += i64::from(ds);
+                }
+                prev2 = prev1;
+                prev1 = cur;
+            }
         }
+        let path_score = match trigrams {
+            Some(tri) => {
+                if !open_end && prev2 != u32::MAX {
+                    let (dt, ds) = tri.score_window(prev2, prev1, END);
+                    tri_sum += i64::from(dt);
+                    skip_sum += i64::from(ds);
+                }
+                lattice.score[slot] + tri.scale_sums(tri_sum, skip_sum)
+            }
+            None => lattice.score[slot],
+        };
         if sort_from.is_some() {
-            merge::push_best(out, &text, input.len(), kind, CandidateScoreKind::Path as u32, lattice.score[slot]);
+            merge::push_best(out, &text, input.len(), kind, CandidateScoreKind::Path as u32, path_score);
         } else if !out.contains_text(&text) {
-            out.push(&text, input.len(), kind, CandidateScoreKind::Path as u32, lattice.score[slot]);
+            out.push(&text, input.len(), kind, CandidateScoreKind::Path as u32, path_score);
         }
         lattice.text = text;
         if out.len() == CANDIDATE_LIMIT {

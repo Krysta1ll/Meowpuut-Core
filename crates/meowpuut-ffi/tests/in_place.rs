@@ -7,6 +7,7 @@
 use std::ffi::{c_void, CStr};
 use std::sync::atomic::{AtomicUsize, Ordering};
 
+use meowpuut_core::trigrams::pack_image;
 use meowpuut_core::Lexicon;
 use meowpuut_ffi::*;
 
@@ -133,6 +134,43 @@ fn attach_pairs_releases_once() {
         let tsv = mpn_lexicon_create(PINYIN.as_ptr().cast(), PINYIN.len());
         assert_eq!(mpn_lexicon_attach_pairs(tsv, table.bytes.as_ptr().cast(), table.bytes.len(), Some(release), context), 0);
         assert_eq!(table.released.load(Ordering::SeqCst), 4, "a lexicon without word ids takes no table");
+        mpn_lexicon_destroy(tsv);
+    }
+}
+
+fn empty_trigrams(base: &[u8]) -> Vec<u8> {
+    let lex = Lexicon::load_from_base(base, true).unwrap();
+    pack_image(&lex.index().word_ids, &[], &[], &[], 256, 256).unwrap()
+}
+
+#[test]
+fn attach_trigrams_releases_once() {
+    let py = Lexicon::load(PINYIN).unwrap().to_binary();
+    let zy = Lexicon::load(ZHUYIN).unwrap().to_binary();
+    let base = Lexicon::pack_base(&py, &zy);
+    let table = Image { bytes: empty_trigrams(&base), released: AtomicUsize::new(0) };
+    let context = std::ptr::from_ref(&table).cast_mut().cast::<c_void>();
+    let mut other = table.bytes.clone();
+    other[24] ^= 1;
+    // SAFETY: `base`, `table` and `other` outlive the lexicons and sessions; release only counts.
+    unsafe {
+        let lex = mpn_lexicon_create_from_base(base.as_ptr().cast(), base.len(), 1);
+        let heap_before = mpn_lexicon_heap_bytes(lex);
+        assert_eq!(mpn_lexicon_attach_trigrams(lex, other.as_ptr().cast(), other.len(), Some(release), context), 0);
+        assert_eq!(table.released.load(Ordering::SeqCst), 1, "mismatched trigram table releases immediately");
+        assert_eq!(mpn_lexicon_attach_trigrams(lex, table.bytes.as_ptr().cast(), table.bytes.len(), Some(release), context), 1);
+        assert_eq!(mpn_lexicon_heap_bytes(lex), heap_before, "in-place trigram table must add 0 heap bytes");
+        let session = mpn_session_create(lex);
+        assert_eq!(candidates(session, "nihao").first().map(String::as_str), Some("你好"));
+        assert_eq!(mpn_lexicon_attach_trigrams(lex, table.bytes.as_ptr().cast(), table.bytes.len(), Some(release), context), 0);
+        assert_eq!(table.released.load(Ordering::SeqCst), 2, "no attach once sessions exist");
+        mpn_lexicon_destroy(lex);
+        assert_eq!(table.released.load(Ordering::SeqCst), 2);
+        mpn_session_destroy(session);
+        assert_eq!(table.released.load(Ordering::SeqCst), 3);
+        let tsv = mpn_lexicon_create(PINYIN.as_ptr().cast(), PINYIN.len());
+        assert_eq!(mpn_lexicon_attach_trigrams(tsv, table.bytes.as_ptr().cast(), table.bytes.len(), Some(release), context), 0);
+        assert_eq!(table.released.load(Ordering::SeqCst), 4, "a lexicon without word ids takes no trigram table");
         mpn_lexicon_destroy(tsv);
     }
 }

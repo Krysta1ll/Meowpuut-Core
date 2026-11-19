@@ -33,6 +33,7 @@ use std::sync::Arc;
 use meowpuut_core::image::ImageOwner;
 use meowpuut_core::english::English;
 use meowpuut_core::pairs::Pairs;
+use meowpuut_core::trigrams::Trigrams;
 use meowpuut_core::{Lexicon, Session};
 
 use crate::{arg_str, session_mut, session_ref, MPNLexicon, MPNSession, EMPTY};
@@ -166,13 +167,38 @@ pub unsafe extern "C" fn mpn_lexicon_create_from_base_in_place(
     }
 }
 
+/// Shared in-place attachment helper for optional lexicon tables.
+#[allow(unsafe_code)]
+unsafe fn attach_lexicon_table<F>(
+    lexicon: *mut MPNLexicon,
+    data: *const c_char,
+    size: usize,
+    release: MPNReleaseFn,
+    context: *mut c_void,
+    require_pinyin: bool,
+    attach: F,
+) -> c_int
+where
+    F: FnOnce(&mut Lexicon, &'static [u8], ImageOwner) -> bool,
+{
+    let guard = Release { release, context };
+    // SAFETY: NULL or a live handle per the contract.
+    let Some(handle) = (unsafe { lexicon.as_mut() }) else { return 0 };
+    let Some(lex) = Arc::get_mut(&mut handle.value) else { return 0 };
+    if data.is_null() || size == 0 || (require_pinyin && !lex.pinyin) {
+        return 0;
+    }
+    // SAFETY: the caller keeps `size` bytes at `data` valid and unchanged until
+    // `release` runs; `guard` is stored with the table, so release runs only
+    // after the last reference to these bytes is dropped.
+    let bytes: &'static [u8] = unsafe { std::slice::from_raw_parts(data.cast::<u8>(), size) };
+    let owner = ImageOwner::new(Arc::new(guard));
+    if std::panic::catch_unwind(AssertUnwindSafe(|| attach(lex, bytes, owner))).unwrap_or(false) { 1 } else { 0 }
+}
+
 /// Attaches a word-pair table (`mimo_pairs.bin`) to `lexicon`, read in place.
-/// Returns 1 when attached; 0 when `data` is not a pair table for this
-/// lexicon (another word list), or sessions already use the lexicon.
-///
-/// Ownership as for `mpn_lexicon_create_from_base_in_place`: `release(context)`
-/// runs exactly once, when the lexicon and every session created from it are
-/// destroyed, or before this function returns 0. `release` may be NULL.
+/// Returns 1 when attached; 0 when `data` is not a MIMO-PAIR-1 image for this
+/// lexicon (different word list or corrupt) or sessions already use `lexicon`.
 ///
 /// # Safety
 /// `lexicon` must be NULL or a live handle; `data` must be NULL or valid for
@@ -187,25 +213,42 @@ pub unsafe extern "C" fn mpn_lexicon_attach_pairs(
     release: MPNReleaseFn,
     context: *mut c_void,
 ) -> c_int {
-    let guard = Release { release, context };
-    // SAFETY: NULL or a live handle per the contract.
-    let Some(handle) = (unsafe { lexicon.as_mut() }) else { return 0 };
-    let Some(lex) = Arc::get_mut(&mut handle.value) else { return 0 };
-    if data.is_null() || size == 0 {
-        return 0;
-    }
-    // SAFETY: the caller keeps `size` bytes at `data` valid and unchanged until
-    // `release` runs; `guard` is stored with the table, so release runs only
-    // after the last reference to these bytes is dropped.
-    let bytes: &'static [u8] = unsafe { std::slice::from_raw_parts(data.cast::<u8>(), size) };
-    let owner = ImageOwner::new(Arc::new(guard));
-    let ids = &lex.index().word_ids;
-    match std::panic::catch_unwind(AssertUnwindSafe(|| Pairs::in_place(bytes, ids, Some(owner)))).ok().flatten() {
-        Some(pairs) => {
+    // SAFETY: caller upholds the pointer/lifetime contract documented above.
+    unsafe {
+        attach_lexicon_table(lexicon, data, size, release, context, false, |lex, bytes, owner| {
+            let Some(pairs) = Pairs::in_place(bytes, &lex.index().word_ids, Some(owner)) else {
+                return false;
+            };
             lex.set_pairs(pairs);
-            1
-        }
-        None => 0,
+            true
+        })
+    }
+}
+
+/// Attaches a Stage-2 bridge-trigram / skip-1 table (`mimo_trigrams.bin`) to
+/// `lexicon`, read in place. Returns 1 when attached; 0 when `data` is not a
+/// MIMO-TRI-1 image for this lexicon or sessions already use `lexicon`.
+///
+/// # Safety
+/// As `mpn_lexicon_attach_pairs`.
+#[no_mangle]
+#[allow(unsafe_code)]
+pub unsafe extern "C" fn mpn_lexicon_attach_trigrams(
+    lexicon: *mut MPNLexicon,
+    data: *const c_char,
+    size: usize,
+    release: MPNReleaseFn,
+    context: *mut c_void,
+) -> c_int {
+    // SAFETY: caller upholds the pointer/lifetime contract documented above.
+    unsafe {
+        attach_lexicon_table(lexicon, data, size, release, context, false, |lex, bytes, owner| {
+            let Some(trigrams) = Trigrams::in_place(bytes, &lex.index().word_ids, Some(owner)) else {
+                return false;
+            };
+            lex.set_trigrams(trigrams);
+            true
+        })
     }
 }
 
@@ -228,24 +271,15 @@ pub unsafe extern "C" fn mpn_lexicon_attach_english(
     release: MPNReleaseFn,
     context: *mut c_void,
 ) -> c_int {
-    let guard = Release { release, context };
-    // SAFETY: NULL or a live handle per the contract.
-    let Some(handle) = (unsafe { lexicon.as_mut() }) else { return 0 };
-    let Some(lex) = Arc::get_mut(&mut handle.value) else { return 0 };
-    if data.is_null() || size == 0 || !lex.pinyin {
-        return 0;
-    }
-    // SAFETY: the caller keeps `size` bytes at `data` valid and unchanged until
-    // `release` runs; `guard` is stored with the lexicon, so release runs only
-    // after the last reference to these bytes is dropped.
-    let bytes: &'static [u8] = unsafe { std::slice::from_raw_parts(data.cast::<u8>(), size) };
-    let owner = ImageOwner::new(Arc::new(guard));
-    match std::panic::catch_unwind(AssertUnwindSafe(|| English::in_place(bytes, Some(owner)))).ok().flatten() {
-        Some(english) => {
+    // SAFETY: caller upholds the pointer/lifetime contract documented above.
+    unsafe {
+        attach_lexicon_table(lexicon, data, size, release, context, true, |lex, bytes, owner| {
+            let Some(english) = English::in_place(bytes, Some(owner)) else {
+                return false;
+            };
             lex.set_english(english);
-            1
-        }
-        None => 0,
+            true
+        })
     }
 }
 

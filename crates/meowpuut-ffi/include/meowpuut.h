@@ -49,6 +49,10 @@ MPNLexicon *mpn_lexicon_create_from_base_in_place(const char *data, size_t size,
 // sessions are destroyed, or before this function returns 0.
 int mpn_lexicon_attach_pairs(MPNLexicon *lexicon, const char *data, size_t size,
                              MPNReleaseFn release, void *context);
+// Stage-2 bridge-trigram and skip-1 table (mimo_trigrams.bin, format MIMO-TRI-1).
+// Ownership and attachment preconditions as for mpn_lexicon_attach_pairs.
+int mpn_lexicon_attach_trigrams(MPNLexicon *lexicon, const char *data, size_t size,
+                                MPNReleaseFn release, void *context);
 void mpn_lexicon_destroy(MPNLexicon *lexicon);
 // Heap bytes held by the lexicon tables (memory diagnostics); 0 for NULL.
 // Bytes read in place are not counted.

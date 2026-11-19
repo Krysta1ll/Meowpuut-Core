@@ -285,30 +285,42 @@ def merge_simplified(tc_bundle, converter, with_phrases):
     # Names (scripts/mimo_names.py, from Wikidata) and the project's own lists of working words of many
     # fields (Resources/Lexicon/terms.tsv), read character by character. They are typed in full or not
     # at all, so they sit below everyday words; a name sits higher the better known it is.
-    name_keys = set()
-    def add_fixed(hant, hans, weight):
+    name_keys, term_keys = set(), set()
+    def add_fixed(hant, hans, weight, is_term=False):
+        if len(hant) != len(hans):
+            return
+        existing = best.get(hans)
+        if existing is not None:
+            if not is_term or existing in native_keys:
+                return
+            key = (hant, hans, existing[2]) if is_term and existing[0] != hant else existing
+            merged[key] = max(merged.get(existing, 0), weight)
+            native_keys.add(key)
+            (term_keys if is_term else name_keys).add(key)
+            return
         found = [best.get(character) for character in hans]
-        if hans in best or None in found or len(hant) != len(hans): return
+        if None in found:
+            return
         key = (hant, hans, " ".join(k[2] for k in found))
         merged[key] = max(merged.get(key, 0), weight)
         native_keys.add(key)
-        name_keys.add(key)
+        (term_keys if is_term else name_keys).add(key)
     for hant, hans, editions in names():
         add_fixed(hant, hans, clamp_i16_weight(NAME_BASE + NAME_STEP * math.log(editions)))
     for line in (ROOT / "Resources/Lexicon/terms.tsv").read_text(encoding="utf-8").splitlines():
         if line and not line.startswith("#"):
             hant, hans = line.split("\t")[:2]
-            add_fixed(hant, hans, TERM_WEIGHT)
+            add_fixed(hant, hans, TERM_WEIGHT, is_term=True)
     report = {"name": "mimo", "version": "1.0", "license": "see LICENSE and THIRD_PARTY.md",
               "lexicons": ["mimo-tc", "mimo-sc", "mimo-jp"],
               "simplified_rows": len(valid), "traditional_spellings_folded": traditional_spellings, "duplicate_readings_merged": duplicates,
               "new_readings": added, "excluded_invalid_rows": skipped,
-              "phrases": len(phrase_counts), "names": len(name_keys), "opencc_st_phrases_loaded": len(st_map),
+              "phrases": len(phrase_counts), "names": len(name_keys), "terms_promoted": len(term_keys), "opencc_st_phrases_loaded": len(st_map),
               "merged_readings": len(merged), "native_hot_readings": len(native_keys),
               "traditional_only_scale_offset": offset, "traditional_only_preference_discount": 350,
               "note": "All valid new readings remain in indexed SQLite; frequent words also enter native segmentation."}
     print("mimo-sc merge:", json.dumps(report, ensure_ascii=False))
-    return merged, native_keys, report, phrase_counts, name_keys, traditional_forms, folded_texts
+    return merged, native_keys, report, phrase_counts, name_keys, term_keys, traditional_forms, folded_texts
 
 
 # Zhuyin is typed in Taiwan, so its index takes McBopomofo (mimo-tc) evidence over the
@@ -393,7 +405,11 @@ def count_scale(words, skip, phrase_counts, report, folded_texts):
     platform converter, so a word tc_dataset spells otherwise (大坂 -> 大阪) takes the count of the
     converter's spelling.
     Returns key -> weight."""
-    counted = {text: written + COUNT_SPOKEN * spoken for text, (written, spoken) in counted_words().items()}
+    counted = {
+        text: written + COUNT_SPOKEN * spoken
+        for text, (written, spoken) in counted_words().items()
+        if written > 0 or spoken >= 2
+    }
     for text, other in sorted(folded_texts.items()):
         if text in counted: counted[other] = counted.get(other, 0) + counted.pop(text)
     top = {}
@@ -415,7 +431,7 @@ def count_scale(words, skip, phrase_counts, report, folded_texts):
     return count_weight
 
 
-def pinyin_weights(words, native, reviewed, fixed, tc_raw, offset, count_weight, report):
+def pinyin_weights(words, native, reviewed, fixed, tc_raw, offset, count_weight, report, upward_only=frozenset()):
     """Weight of each (hant, hans, reading) in the pinyin index: a blend of the sources.
 
     Multi-character words: mean of the merged weight, mimo-tc weight + offset (words both
@@ -424,7 +440,7 @@ def pinyin_weights(words, native, reviewed, fixed, tc_raw, offset, count_weight,
     The count is of the text, whatever its reading: the most likely reading of a text is blended
     and its other readings move by the same amount, so their order stays.
     Taiwan and Hong Kong words from OpenCC (regional_tw_hk): at least mimo-tc weight + offset - 350.
-    Reviewed overlay rows and the names (`fixed`) keep their weight."""
+    Reviewed overlay rows and the names (`fixed`) keep their weight; `upward_only` terms only shift up."""
     sc_keys = {(hans, code) for hans, code, _ in load_mimo_sc_dataset()["entries"]}
     regional = tc_dataset().get("regional_tw_hk", {})
     def listed(key):
@@ -441,7 +457,8 @@ def pinyin_weights(words, native, reviewed, fixed, tc_raw, offset, count_weight,
         counted = count_weight(key)
         if counted is not None:
             mean, n, _ = listed(key)
-            shift[text] = (mean * n + counted) / (n + 1) - mean
+            delta = (mean * n + counted) / (n + 1) - mean
+            shift[text] = max(0.0, delta) if key in upward_only else delta
     result = {}
     for key, weight in words.items():
         hant, hans, code = key
@@ -465,14 +482,17 @@ def pinyin_weights(words, native, reviewed, fixed, tc_raw, offset, count_weight,
     return result
 
 
-def counted_shift(weights, fixed, count_weight, share):
+def counted_shift(weights, fixed, count_weight, share, upward_only=frozenset()):
     """Moves every reading of a text towards the count of the text by `share` of the gap between
     the count and the weight of its most likely reading. Reviewed rows and names (`fixed`) are not
     moved, but each stays below the words with the same reading that it was below before."""
     top = {}
     for key, weight in weights.items():
         if key not in fixed and (key[1] not in top or weights[top[key[1]]] < weight): top[key[1]] = key
-    shift = {text: share * (count_weight(key) - weights[key]) for text, key in top.items()}
+    shift = {
+        text: max(0.0, share * (count_weight(key) - weights[key])) if key in upward_only else share * (count_weight(key) - weights[key])
+        for text, key in top.items()
+    }
     result = {key: clamp_i16_weight(weight + shift[key[1]]) if key[1] in shift and key not in fixed else weight for key, weight in weights.items()}
     letters = lambda key: toneless(key[2]).replace(" ", "")  # a first tone is typed without a mark, so it meets every tone
     above = collections.defaultdict(list)
@@ -591,7 +611,7 @@ def main(destination, converter, *options):
     output.mkdir(parents=True, exist_ok=True)
     associations = json.loads((ROOT / "Resources/Lexicon/associations.json").read_text())
     (output / "associations.json").write_text(json.dumps(associations, ensure_ascii=False))
-    words, native_keys, merge_report, phrase_counts, name_keys, traditional_forms, folded_texts = merge_simplified(imported_words(converter), converter, "--no-phrases" not in options)
+    words, native_keys, merge_report, phrase_counts, name_keys, term_keys, traditional_forms, folded_texts = merge_simplified(imported_words(converter), converter, "--no-phrases" not in options)
     (output / "lexicon-merge-report.json").write_text(json.dumps(merge_report, indent=2))
     authored_count = 0
     reviewed_groups = {}
@@ -657,9 +677,9 @@ def main(destination, converter, *options):
     # Pinyin is typed to the mainland standard: rare readings of a character go below its usual one.
     # Zhuyin keeps McBopomofo's readings, which come with their own Taiwan heterophony tiers.
     rare = rare_readings(words, reviewed_keys | derived_keys, name_keys | set(phrase_counts), merge_report)
-    pinyin_weight = pinyin_weights({**words, **rare}, native_keys, reviewed_keys, name_keys, tc_raw, merge_report["traditional_only_scale_offset"], count_weight, merge_report)
+    pinyin_weight = pinyin_weights({**words, **rare}, native_keys, reviewed_keys, name_keys, tc_raw, merge_report["traditional_only_scale_offset"], count_weight, merge_report, upward_only=term_keys)
     if counts:
-        zhuyin_weight = counted_shift(zhuyin_weight, reviewed_keys | name_keys, count_weight, ZHUYIN_COUNT_SHARE)
+        zhuyin_weight = counted_shift(zhuyin_weight, reviewed_keys | name_keys, count_weight, ZHUYIN_COUNT_SHARE, upward_only=term_keys)
         zhuyin_weight = spoken_weights(zhuyin_weight, reviewed_keys, merge_report, "zhuyin")
         pinyin_weight = spoken_weights(pinyin_weight, reviewed_keys, merge_report, "pinyin")
     sandhi_tones(zhuyin_weight, tc_raw, reviewed_keys, merge_report)

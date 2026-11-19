@@ -67,6 +67,7 @@ from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 import blocked_terms as blocked_terms_list
+import mimo_pairs_ext
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "DataSources/mimo-pairs"
@@ -134,7 +135,7 @@ def read_rows(lexicon_dir: Path, mode: str):
         for line in f:
             if line.startswith("# context"):
                 break
-            bare, reading, hant, hans, weight = line.rstrip("\n").split("\t")
+            bare, reading, hant, hans, weight = line.rstrip("\n").split("\t")[:5]
             rows.append(((bare, reading, hant, hans), int(weight)))
     return rows
 
@@ -321,6 +322,9 @@ def exclusions(files: list[str], to_simplified: dict):
     """Texts (simplified Han characters, 5 or more) and Tatoeba ids from test and held-out sets."""
     texts, ids = set(), set()
     for path in files:
+        if Path(path).suffix == ".tsv":
+            texts.update(mimo_pairs_ext.tsv_texts(Path(path)))
+            continue
         for line in open(path, encoding="utf-8"):
             item = json.loads(line)
             for key in ("expected", "text", "simp"):
@@ -480,16 +484,12 @@ def snapshot(lexicon_dir: str, keep: str, out: Path):
     for name, src in sources().items():
         meta, uni, codes, counts = load_counts(name, lex)
         metas[name] = meta
-        groups[src["group"]].append((uni, codes, counts))
+        groups[src["group"]].append((float(src.get("weight_scale", 1.0)), uni, codes, counts))
     n = len(lex.forms)
     weights = {"written": 0 if keep == "spoken" else 1, "spoken": SPOKEN_WEIGHT}
-    uni = [0] * n
-    for group, items in groups.items():
-        for u, _, _ in items:
-            for i in range(n):
-                uni[i] += weights[group] * u[i]
-    written = merge_runs([(c, k) for _, c, k in groups["written"]])
-    spoken = merge_runs([(c, k) for _, c, k in groups["spoken"]])
+    written_uni, written = mimo_pairs_ext.merge_weighted_sources(groups["written"], n)
+    spoken_uni, spoken = mimo_pairs_ext.merge_weighted_sources(groups["spoken"], n)
+    uni = [weights["written"] * written_uni[i] + weights["spoken"] * spoken_uni[i] for i in range(n)]
     codes, wc, sc = array.array("Q"), array.array("Q"), array.array("Q")
     for code, w, s in merge_groups(written, spoken):
         codes.append(code)
@@ -497,7 +497,6 @@ def snapshot(lexicon_dir: str, keep: str, out: Path):
         sc.append(s)
     weighted = array.array("Q", (weights["written"] * w + weights["spoken"] * s for w, s in zip(wc, sc)))
     spoken_boundaries(codes, sc, weighted, uni)
-    spoken_uni = [sum(u[i] for u, _, _ in groups["spoken"]) for i in range(n)]
     context = [0] * n
     for code, c in zip(codes, weighted):
         context[code >> 20] += c
