@@ -1,5 +1,7 @@
 #![forbid(unsafe_code)]
 //! Reader for the Japanese lexicon image `MIMO-JP-1` (`mimo_jp.bin`) and the whole-input lookup.
+//! `JapaneseQuery::lookup_extended` adds inflected forms (`japanese_forms.rs`), completions
+//! (`japanese_complete.rs`) and leading segments, all derived at lookup time.
 //!
 //! The image is read in place: every access is a bounds-checked slice plus `from_le_bytes`.
 //! Opening checks the header only. A damaged image can make a lookup return fewer rows; it
@@ -52,7 +54,12 @@
 use std::collections::HashMap;
 use std::sync::Arc;
 
-use crate::romaji::{normalise_key, to_kana, to_katakana};
+use crate::romaji::{normalise_key, to_kana, to_katakana, KanaResult};
+
+#[path = "japanese_complete.rs"]
+mod complete;
+#[path = "japanese_forms.rs"]
+mod forms;
 
 /// First 12 bytes of an image.
 pub const MAGIC: &[u8; 12] = b"MIMO-JP-1\0\0\0";
@@ -95,8 +102,18 @@ pub const KIND_AUTHORED: u8 = 4;
 pub const FLAG_PINYIN_OK: u8 = 1;
 /// Posting and word flag: reviewed word.
 pub const FLAG_REVIEWED: u8 = 2;
-/// Posting and word flag: generated inflected form.
+/// Posting and word flag: generated inflected form. `lookup_extended` sets it on the forms it
+/// derives at lookup time.
 pub const FLAG_FORM: u8 = 4;
+/// Row flag of `lookup_extended`, never stored in an image: the word continues the input.
+pub const FLAG_COMPLETION: u8 = 8;
+
+/// Option of `lookup_extended`: inflected forms and function-word tails of the whole input.
+pub const OPTION_FORMS: u32 = 1;
+/// Option of `lookup_extended`: words that continue a half-typed reading (Japanese mode only).
+pub const OPTION_COMPLETIONS: u32 = 2;
+/// Option of `lookup_extended`: words for a leading part of the input (Japanese mode only).
+pub const OPTION_SEGMENTS: u32 = 4;
 
 /// Reviewed-row flag: register the row for mixed sentences.
 pub const REVIEWED_POOL: u32 = 1;
@@ -141,6 +158,7 @@ struct Posting {
 struct WordRecord {
     surface_offset: u32,
     surface_len: u16,
+    class: u8,
     flags: u8,
 }
 
@@ -311,6 +329,7 @@ impl JapaneseLexicon {
         Some(WordRecord {
             surface_offset: le_u32(record, 0)?,
             surface_len: le_u16(record, 4)?,
+            class: *record.get(6)?,
             flags: *record.get(7)?,
         })
     }
@@ -325,6 +344,27 @@ impl JapaneseLexicon {
             weight: le_i16(record, 12)?,
             flags: le_u16(record, 14)?,
         })
+    }
+
+    /// Bytes of key `index`.
+    fn key_bytes(&self, index: usize) -> Option<&[u8]> {
+        let record = self.key_record(index)?;
+        self.blob(record.key_offset, record.key_len)
+    }
+
+    /// Index of the first key that is not less than `prefix` in byte order (`key_count` when
+    /// there is none). On a damaged image the search stops early and may give a later index.
+    fn lower_bound(&self, prefix: &[u8]) -> usize {
+        let (mut low, mut high) = (0, self.key_count);
+        while low < high {
+            let middle = low + (high - low) / 2;
+            match self.key_bytes(middle) {
+                Some(key) if key < prefix => low = middle + 1,
+                Some(_) => high = middle,
+                None => return self.key_count,
+            }
+        }
+        low
     }
 
     /// Index of the key record with exactly these bytes.
@@ -468,11 +508,29 @@ pub struct JapaneseRow {
     pub flags: u8,
 }
 
+/// Where the written form of a result is kept.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Text {
+    /// A surface in the blob of the image.
+    Image { offset: u32, len: u16 },
+    /// A text the query built (a generated form), in `JapaneseQuery::built`.
+    Built { start: usize, len: usize },
+}
+
 #[derive(Clone, Copy)]
 struct Hit {
     row: JapaneseRow,
-    surface_offset: u32,
-    surface_len: u16,
+    text: Text,
+    /// Bytes of the input the result converts.
+    consumed: usize,
+}
+
+/// Written form of a hit; `""` when it cannot be read.
+fn hit_text<'a>(lexicon: &'a JapaneseLexicon, built: &'a str, text: Text) -> &'a str {
+    match text {
+        Text::Image { offset, len } => lexicon.blob_str(offset, len).unwrap_or(""),
+        Text::Built { start, len } => start.checked_add(len).and_then(|end| built.get(start..end)).unwrap_or(""),
+    }
 }
 
 /// Buffers and result of one lookup. Reused between lookups, so a lookup does not allocate
@@ -486,6 +544,17 @@ pub struct JapaneseQuery {
     hits: Vec<Hit>,
     texts: String,
     spans: Vec<(usize, usize)>,
+    /// Texts of generated forms.
+    built: String,
+    /// Completions, best first, before they are merged into `hits`.
+    extra: Vec<Hit>,
+    /// Merge buffer, swapped with `hits`.
+    merged: Vec<Hit>,
+    /// Kana of the input behind a leading part, for segments.
+    rest: String,
+    /// Key prefix scanned for completions.
+    prefix: String,
+    forms: forms::FormScratch,
 }
 
 impl Default for JapaneseQuery {
@@ -507,6 +576,12 @@ impl JapaneseQuery {
             hits: Vec::with_capacity(2 * MAX_POSTINGS_PER_KEY),
             texts: String::with_capacity(2048),
             spans: Vec::with_capacity(MAX_POSTINGS_PER_KEY),
+            built: String::with_capacity(2048),
+            extra: Vec::with_capacity(complete::MAX_COMPLETIONS + 1),
+            merged: Vec::with_capacity(2 * MAX_POSTINGS_PER_KEY),
+            rest: String::with_capacity(256),
+            prefix: String::with_capacity(256),
+            forms: forms::FormScratch::new(),
         }
     }
 
@@ -524,20 +599,96 @@ impl JapaneseQuery {
     /// order, postings of the typed key before those of the kana key. A surface is returned
     /// once.
     pub fn lookup(&mut self, lexicon: &JapaneseLexicon, input: &str, mode: JapaneseMode, limit: usize) -> usize {
+        let Some(converted) = self.start(input) else { return 0 };
+        self.collect_whole(lexicon, mode, converted);
+        sort_by_rank(&mut self.hits);
+        self.finish(lexicon, limit)
+    }
+
+    /// Looks up the input like `lookup`, plus what `options` (`OPTION_*` bits) asks for, and
+    /// returns the number of results (at most `limit`). `options == 0` gives exactly what
+    /// `lookup` gives.
+    ///
+    /// - `OPTION_FORMS`: inflected forms of verbs and adjectives, and words followed by up to
+    ///   two particles or copula forms (`食べました`, `天気ですね`), derived at lookup time from
+    ///   the dictionary form and the class of a word. They carry `FLAG_FORM`, the kind and word
+    ///   of the base posting, and its weight less a deduction per step. They need the kana key
+    ///   of the whole input (see `lookup`); in pinyin mode only verbs and adjectives whose
+    ///   posting has `FLAG_PINYIN_OK` or `FLAG_REVIEWED` are inflected, and no particle or copula is added.
+    /// - `OPTION_COMPLETIONS` (Japanese mode only): words whose reading continues the input,
+    ///   which may end in half a syllable (`arig`). They carry `FLAG_COMPLETION` and their
+    ///   score as weight: posting weight less 150 per kana still to type (at most six).
+    /// - `OPTION_SEGMENTS` (Japanese mode only): when the whole input converts completely but
+    ///   gives no word and no form, the words and forms of the longest leading part of the
+    ///   input that has some, then the first three of up to two shorter leading parts.
+    ///   `consumed` gives the bytes of input a result converts.
+    ///
+    /// Order: words and forms of the whole input as in `lookup` (reviewed words first, then
+    /// weight; a surface once, the better ranked). Completions follow the first of them and
+    /// are merged by score, a word or form counting its weight plus 1500. Without a word or a
+    /// form of the whole input, segments come first and completions after them.
+    pub fn lookup_extended(
+        &mut self,
+        lexicon: &JapaneseLexicon,
+        input: &str,
+        mode: JapaneseMode,
+        limit: usize,
+        options: u32,
+    ) -> usize {
+        if options & (OPTION_FORMS | OPTION_COMPLETIONS | OPTION_SEGMENTS) == 0 {
+            return self.lookup(lexicon, input, mode, limit);
+        }
+        let Some(converted) = self.start(input) else { return 0 };
+        self.collect_whole(lexicon, mode, converted);
+        let whole = self.input.len();
+        let kana_key =
+            converted.complete && !self.kana.is_empty() && (mode == JapaneseMode::Japanese || converted.strict);
+        if options & OPTION_FORMS != 0 && kana_key {
+            self.key.clear();
+            normalise_key(&self.kana, &mut self.key);
+            self.add_forms(lexicon, mode, 0, whole, forms::MAX_SEARCHES);
+        }
+        sort_by_rank(&mut self.hits);
+        let japanese = mode == JapaneseMode::Japanese;
+        if options & OPTION_COMPLETIONS != 0 && japanese {
+            self.add_completions(lexicon);
+        }
+        if self.hits.is_empty() {
+            if options & OPTION_SEGMENTS != 0 && japanese && converted.complete && !self.kana.is_empty() {
+                self.add_segments(lexicon, options & OPTION_FORMS != 0);
+            }
+            self.merge_completions(lexicon, false);
+        } else {
+            self.merge_completions(lexicon, true);
+        }
+        self.finish(lexicon, limit)
+    }
+
+    /// Bytes of the (lower-cased) input that result `index` of the last lookup converts: the
+    /// input length for a result of the whole input, less for a segment; 0 when out of range.
+    pub fn consumed(&self, index: usize) -> usize {
+        self.hits.get(index).map_or(0, |hit| hit.consumed)
+    }
+
+    /// Clears the last result, checks the input and converts it to kana; `None` when the input
+    /// is rejected.
+    fn start(&mut self, input: &str) -> Option<KanaResult> {
         self.input.clear();
         self.kana.clear();
         self.katakana.clear();
         self.hits.clear();
         self.texts.clear();
         self.spans.clear();
+        self.built.clear();
+        self.extra.clear();
         if input.is_empty() || input.len() > MAX_INPUT_BYTES {
-            return 0;
+            return None;
         }
         for byte in input.bytes() {
             let lower = byte.to_ascii_lowercase();
             if !(lower.is_ascii_lowercase() || lower == b'\'' || lower == b'-') {
                 self.input.clear();
-                return 0;
+                return None;
             }
             self.input.push(char::from(lower));
         }
@@ -547,7 +698,12 @@ impl JapaneseQuery {
         } else {
             self.kana.clear();
         }
+        Some(converted)
+    }
 
+    /// Collects, unsorted, the postings of the typed key and of the kana key of the input.
+    fn collect_whole(&mut self, lexicon: &JapaneseLexicon, mode: JapaneseMode, converted: KanaResult) {
+        let whole = self.input.len();
         let mut typed = lexicon.find_key(self.input.as_bytes());
         if typed.is_none() && self.input.contains('\'') {
             self.key.clear();
@@ -555,7 +711,7 @@ impl JapaneseQuery {
             typed = lexicon.find_key(self.key.as_bytes());
         }
         if let Some(index) = typed {
-            self.collect(lexicon, index, mode);
+            self.collect(lexicon, index, mode, 0, whole);
         }
 
         if converted.complete && !self.kana.is_empty() && (mode == JapaneseMode::Japanese || converted.strict) {
@@ -567,29 +723,104 @@ impl JapaneseQuery {
                 reading = lexicon.find_key(self.key.as_bytes());
             }
             if let Some(index) = reading {
-                self.collect(lexicon, index, mode);
+                self.collect(lexicon, index, mode, 0, whole);
             }
         }
+    }
 
-        // Stable insertion sort: at most 128 short records, and no allocation.
-        for index in 1..self.hits.len() {
-            let mut slot = index;
-            while slot > 0 {
-                let (Some(&before), Some(&current)) = (self.hits.get(slot - 1), self.hits.get(slot)) else { break };
-                if rank(&before.row) <= rank(&current.row) {
-                    break;
-                }
-                self.hits.swap(slot - 1, slot);
-                slot -= 1;
-            }
-        }
+    /// Cuts the result to `limit` and copies the texts out; returns the number of results.
+    fn finish(&mut self, lexicon: &JapaneseLexicon, limit: usize) -> usize {
         self.hits.truncate(limit);
         for hit in &self.hits {
-            let text = lexicon.blob_str(hit.surface_offset, hit.surface_len).unwrap_or("");
+            let text = hit_text(lexicon, &self.built, hit.text);
             self.spans.push((self.texts.len(), self.texts.len() + text.len()));
             self.texts.push_str(text);
         }
         self.hits.len()
+    }
+
+    /// Puts the completions into the result. With `behind_first`, the first hit stays first and
+    /// the other hits and the completions are merged by score; otherwise the completions follow
+    /// the hits. A completion whose surface is already a hit is dropped.
+    fn merge_completions(&mut self, lexicon: &JapaneseLexicon, behind_first: bool) {
+        if self.extra.is_empty() {
+            return;
+        }
+        self.merged.clear();
+        let mut next_hit = usize::from(behind_first);
+        self.merged.extend(self.hits.iter().take(next_hit));
+        let mut next_completion = 0;
+        loop {
+            let hit = self.hits.get(next_hit).copied();
+            let completion = self.extra.get(next_completion).copied();
+            let completion_first = match (hit, completion) {
+                (_, None) => false,
+                (None, Some(_)) => true,
+                (Some(hit), Some(completion)) => {
+                    behind_first && hit.row.weight.saturating_add(complete::WORD_BONUS) < completion.row.weight
+                }
+            };
+            match (completion_first, hit, completion) {
+                (true, _, Some(completion)) => {
+                    next_completion += 1;
+                    let text = hit_text(lexicon, &self.built, completion.text);
+                    if !self.hits.iter().any(|hit| hit_text(lexicon, &self.built, hit.text) == text) {
+                        self.merged.push(completion);
+                    }
+                }
+                (false, Some(hit), _) => {
+                    self.merged.push(hit);
+                    next_hit += 1;
+                }
+                _ => break,
+            }
+        }
+        std::mem::swap(&mut self.hits, &mut self.merged);
+    }
+
+    /// Segments: tries the leading parts of the input from the longest down. A part counts when
+    /// it converts completely, the rest of the input converts to the rest of the kana (the cut
+    /// does not split a kana: `gakkou|niiku`, never `gak|kou`), and its kana key has words or
+    /// forms. Keeps every result of the longest such part and the first three of the next two.
+    fn add_segments(&mut self, lexicon: &JapaneseLexicon, with_forms: bool) {
+        let mut groups = 0;
+        let mut attempts = 0;
+        let mut budget = forms::MAX_SEGMENT_SEARCHES;
+        for end in (1..self.input.len()).rev() {
+            if groups == MAX_SEGMENT_GROUPS || attempts == MAX_SEGMENT_ATTEMPTS {
+                break;
+            }
+            let (Some(head), Some(rest)) = (self.input.get(..end), self.input.get(end..)) else { continue };
+            if head.ends_with('\'') {
+                continue;
+            }
+            self.scratch.clear();
+            if !to_kana(head, &mut self.scratch).complete || self.scratch.is_empty() {
+                continue;
+            }
+            self.rest.clear();
+            to_kana(rest, &mut self.rest);
+            if self.kana.strip_prefix(self.scratch.as_str()) != Some(self.rest.as_str()) {
+                continue;
+            }
+            attempts += 1;
+            let group = self.hits.len();
+            self.key.clear();
+            normalise_key(&self.scratch, &mut self.key);
+            if let Some(index) = lexicon.find_key(self.key.as_bytes()) {
+                self.collect(lexicon, index, JapaneseMode::Japanese, group, end);
+            }
+            if with_forms && budget > 0 {
+                let used = self.add_forms(lexicon, JapaneseMode::Japanese, group, end, budget.min(forms::MAX_SEARCHES));
+                budget = budget.saturating_sub(used);
+            }
+            let Some(found) = self.hits.get_mut(group..).filter(|found| !found.is_empty()) else { continue };
+            sort_by_rank(found);
+            if groups > 0 {
+                self.hits.truncate(group + SHORTER_SEGMENT_ROWS);
+            }
+            groups += 1;
+        }
     }
 
     /// Writes into `key` the normalised key of the kana with every んん read as ん.
@@ -608,10 +839,19 @@ impl JapaneseQuery {
         normalise_key(&self.scratch, &mut self.key);
     }
 
-    fn collect(&mut self, lexicon: &JapaneseLexicon, key_index: usize, mode: JapaneseMode) {
+    /// Adds the postings of key `key_index` behind `hits[group..]`, skipping a surface that is
+    /// already there; at most 128 hits per group.
+    fn collect(
+        &mut self,
+        lexicon: &JapaneseLexicon,
+        key_index: usize,
+        mode: JapaneseMode,
+        group: usize,
+        consumed: usize,
+    ) {
         let Some(record) = lexicon.key_record(key_index) else { return };
         for slot in 0..record.posting_count.min(MAX_POSTINGS_PER_KEY) {
-            if self.hits.len() >= 2 * MAX_POSTINGS_PER_KEY {
+            if self.hits.len().saturating_sub(group) >= 2 * MAX_POSTINGS_PER_KEY {
                 return;
             }
             let Some(posting) = record.first_posting.checked_add(slot).and_then(|at| lexicon.posting(at)) else {
@@ -625,11 +865,8 @@ impl JapaneseQuery {
             if lexicon.blob_str(word.surface_offset, word.surface_len).is_none() {
                 continue;
             }
-            let seen = self
-                .hits
-                .iter()
-                .any(|hit| hit.surface_offset == word.surface_offset && hit.surface_len == word.surface_len);
-            if seen {
+            let text = Text::Image { offset: word.surface_offset, len: word.surface_len };
+            if self.hits.get(group..).is_some_and(|hits| hits.iter().any(|hit| hit.text == text)) {
                 continue;
             }
             self.hits.push(Hit {
@@ -639,8 +876,8 @@ impl JapaneseQuery {
                     kind: posting.kind,
                     flags: posting.flags,
                 },
-                surface_offset: word.surface_offset,
-                surface_len: word.surface_len,
+                text,
+                consumed,
             });
         }
     }
@@ -676,7 +913,29 @@ impl JapaneseQuery {
     }
 }
 
+/// Leading parts of the input tried for segments, at most.
+const MAX_SEGMENT_ATTEMPTS: usize = 48;
+/// Leading parts with results kept: the longest and two shorter ones.
+const MAX_SEGMENT_GROUPS: usize = 3;
+/// Results kept for each shorter leading part.
+const SHORTER_SEGMENT_ROWS: usize = 3;
+
 /// Sort rank of a result: reviewed first, then weight descending.
 fn rank(row: &JapaneseRow) -> (bool, i32) {
     (row.flags & FLAG_REVIEWED == 0, -row.weight)
+}
+
+/// Stable insertion sort by `rank`: a few hundred short records at most, and no allocation.
+fn sort_by_rank(hits: &mut [Hit]) {
+    for index in 1..hits.len() {
+        let mut slot = index;
+        while slot > 0 {
+            let (Some(before), Some(current)) = (hits.get(slot - 1), hits.get(slot)) else { break };
+            if rank(&before.row) <= rank(&current.row) {
+                break;
+            }
+            hits.swap(slot - 1, slot);
+            slot -= 1;
+        }
+    }
 }

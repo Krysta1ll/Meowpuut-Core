@@ -145,7 +145,8 @@ const char *mpn_prediction(const MPNSession *session, size_t index);
 int mpn_text_no_suggest(const MPNSession *session, const char *text);
 
 // Japanese lexicon image (mimo_jp.bin, format MIMO-JP-1) and its lookup. One romaji string or
-// ASCII alias gives the words stored for exactly that input; there is no prefix search.
+// ASCII alias gives the words stored for exactly that input (mpn_japanese_lookup);
+// mpn_japanese_lookup_ex adds inflected forms, completions and leading segments.
 typedef struct MPNJapanese MPNJapanese;
 typedef struct MPNJapaneseQuery MPNJapaneseQuery;
 
@@ -154,13 +155,20 @@ enum { MPN_JP_KIND_READING = 0, MPN_JP_KIND_VARIANT = 1, MPN_JP_KIND_ALIAS_KANA 
        MPN_JP_KIND_ALIAS_KANJI = 3, MPN_JP_KIND_AUTHORED = 4 };
 enum { MPN_JP_FLAG_PINYIN_OK = 1, MPN_JP_FLAG_REVIEWED = 2, MPN_JP_FLAG_FORM = 4 };
 enum { MPN_JP_REVIEWED_POOL = 1 };
+// Flag of a mpn_japanese_lookup_ex result, never stored in an image: the word continues the input.
+#define MPN_JP_FLAG_COMPLETION 8u
+// options of mpn_japanese_lookup_ex (bit set).
+#define MPN_JP_OPTION_FORMS 1u        // inflected forms and particle/copula tails (MPN_JP_FLAG_FORM)
+#define MPN_JP_OPTION_COMPLETIONS 2u  // words that continue a half-typed reading; Japanese mode only
+#define MPN_JP_OPTION_SEGMENTS 4u     // words for a leading part of the input; Japanese mode only
 
 typedef struct {
     uint32_t kind;
     uint32_t flags;
     int32_t  weight;
     uint32_t word;      // index of the word in the image; equal for the same word under two keys
-} MPNJapaneseInfo;      // 16 bytes
+    uint32_t consumed;  // input bytes the result converts: the input length, less for a segment
+} MPNJapaneseInfo;      // 20 bytes; callers built against the 16-byte struct pass info_size 16
 
 // Opens a MIMO-JP-1 image. size must be the length of the whole file.
 // copy == 0: the bytes are used in place. They must stay mapped and unchanged until
@@ -201,12 +209,52 @@ void mpn_japanese_query_destroy(MPNJapaneseQuery *query);
 // and info stay valid until the next lookup on this query.
 size_t mpn_japanese_lookup(MPNJapaneseQuery *query, const MPNJapanese *japanese,
                            const char *input, int mode, size_t limit);
+// mpn_japanese_lookup plus what `options` (MPN_JP_OPTION_*) asks for; options == 0 gives exactly
+// what mpn_japanese_lookup gives.
+// - FORMS: inflected forms of verbs and adjectives and words followed by up to two particles or
+//   copula forms (食べました, 天気ですね), derived at lookup time; MPN_JP_FLAG_FORM, the kind and
+//   word of the base posting, weight below it. Pinyin mode: Hepburn input, verbs and adjectives
+//   with MPN_JP_FLAG_PINYIN_OK only, no particle or copula.
+// - COMPLETIONS: words whose reading continues the input, which may end in half a syllable
+//   ("arig"); MPN_JP_FLAG_COMPLETION, weight is the score.
+// - SEGMENTS: when the whole input converts completely but gives no word and no form: the words
+//   of the longest leading part that has some, then the first three of up to two shorter parts.
+//   MPNJapaneseInfo.consumed tells how many input bytes each converts; commit the text and keep
+//   the rest of the input composing.
+// Order: whole-input words and forms as in mpn_japanese_lookup, the best one first; completions
+// merged after it by score (word or form weight + 1500 against completion weight). Without a
+// whole-input word or form: segments, then completions.
+size_t mpn_japanese_lookup_ex(MPNJapaneseQuery *query, const MPNJapanese *japanese,
+                              const char *input, int mode, size_t limit, uint32_t options);
 const char *mpn_japanese_text(const MPNJapaneseQuery *query, size_t index);
-// Writes the fields fitting in info_size; returns 0 for invalid arguments.
+// Writes the fields fitting in info_size (16 bytes: without consumed); returns 0 for invalid
+// arguments.
 int mpn_japanese_info(const MPNJapaneseQuery *query, size_t index, MPNJapaneseInfo *info, size_t info_size);
 // Hiragana and katakana of the whole input; "" when the input is not a complete romaji string.
 const char *mpn_japanese_kana(const MPNJapaneseQuery *query);
 const char *mpn_japanese_katakana(const MPNJapaneseQuery *query);
+
+// Japanese next-word table (mimo_jp_next.bin, format MIMO-JN-1): what may follow the text that
+// was just committed (ありがとう → ございます, 今日 → は). Opening and ownership as for
+// mpn_japanese_open: with copy == 0 the bytes stay mapped and unchanged until
+// mpn_japanese_next_close has returned. One MPNJapaneseNext may be shared between threads; use
+// one MPNJapaneseNextQuery on one thread.
+typedef struct MPNJapaneseNext MPNJapaneseNext;
+typedef struct MPNJapaneseNextQuery MPNJapaneseNextQuery;
+MPNJapaneseNext *mpn_japanese_next_open(const void *data, size_t size, int copy);
+void mpn_japanese_next_close(MPNJapaneseNext *next);
+size_t mpn_japanese_next_key_count(const MPNJapaneseNext *next);
+MPNJapaneseNextQuery *mpn_japanese_next_query_create(void);
+void mpn_japanese_next_query_destroy(MPNJapaneseNextQuery *query);
+// Finds up to limit (at most 32) words that may follow context, best first, and returns their
+// number. context is the committed pieces, oldest first, separated by U+001F ("ご飯\x1fを");
+// only the last two are read: both together, then the last one, then the longest ending of
+// the last one that the table lists as an ending (ました of 食べました). Replaces the previous
+// result of the query.
+size_t mpn_japanese_next_predict(MPNJapaneseNextQuery *query, const MPNJapaneseNext *next,
+                                 const char *context, size_t limit);
+// Word index of the last prediction ("" when out of range); valid until the next prediction.
+const char *mpn_japanese_next_text(const MPNJapaneseNextQuery *query, size_t index);
 
 // English lexicon (mimo_en.bin, format MIMO-EN-1).
 // Attaching it to a pinyin lexicon adds English words beyond mimo-latin to pinyin and nine-key

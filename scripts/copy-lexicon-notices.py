@@ -21,6 +21,7 @@ NOTICES = {
     'mimo-jp-SOURCE.json': 'DataSources/mimo-jp/SOURCE.json',
     'mimo-jp-Mozc-BSD.txt': 'DataSources/mimo-jp/MOZC-LICENSE.txt',
     'mimo-jp-Unicode-3.0.txt': 'DataSources/mimo-jp/UNICODE-LICENSE.txt',
+    'mimo-jp-next-SOURCE.json': 'DataSources/mimo-jp-next/SOURCE.json',
     'mimo-pairs-SOURCE.json': 'DataSources/mimo-pairs/SOURCE.json',
     'mimo-pairs-Apache-2.0.txt': 'DataSources/mimo-pairs/Apache-2.0.txt',
     'mimo-pairs-CC-BY-4.0.txt': 'DataSources/mimo-pairs/CC-BY-4.0.txt',

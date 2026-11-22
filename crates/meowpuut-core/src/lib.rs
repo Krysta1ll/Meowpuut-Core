@@ -38,6 +38,7 @@ pub mod english;
 pub mod fallback;
 pub mod image;
 pub mod japanese;
+pub mod japanese_next;
 pub mod latin;
 pub mod lexicon;
 pub mod merge;

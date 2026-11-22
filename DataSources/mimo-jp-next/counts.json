@@ -1,0 +1,41 @@
+{
+ "keys": 33279,
+ "next": 85252,
+ "tail_keys": 747,
+ "sources": {
+  "tatoeba-jpn": {
+   "clauses": 330435,
+   "units": 1921848,
+   "blocked clauses": 30,
+   "lines": 249006,
+   "weight": 1
+  },
+  "commonvoice-ja": {
+   "clauses": 13334,
+   "units": 82138,
+   "lines": 9469,
+   "weight": 1
+  },
+  "authored-chat-a": {
+   "clauses": 732,
+   "units": 2074,
+   "lines": 600,
+   "weight": 4
+  },
+  "authored-chat-b": {
+   "clauses": 670,
+   "units": 2941,
+   "lines": 604,
+   "weight": 4
+  }
+ },
+ "rules": {
+  "min_key_count": 6,
+  "min_pair_count": 3,
+  "min_share": 0.004,
+  "max_next_per_key": 12,
+  "max_unit_chars": 12,
+  "max_pair_key_chars": 8
+ },
+ "snapshot_sha256": "fe5294f70ef90aeb2b1fb0f4b6b3198cf7da9cc9f6a0d2b97e7e7a21e3698ea9"
+}

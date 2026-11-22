@@ -33,6 +33,18 @@
 - 授權：快照、`SOURCE.json` 與編譯出的 `mimo_jp.bin` 為 `BSD-3-Clause AND NAIST-2003 AND Apache-2.0 AND Unicode-3.0 AND MIT`。只在開發時用來排審讀順序的 JMdict（CC BY-SA 4.0）不進建置，也不隨附。
 - 隨附授權聲明：`Licenses/mimo-jp-Mozc-BSD.txt`（Mozc `LICENSE`，含 NAIST 聲明）、`Licenses/mimo-jp-Unicode-3.0.txt`、`Licenses/mimo-jp-BSD.txt`、`Licenses/mimo-jp-derived-BSD.txt`、`Licenses/mimo-jp-COPYING.txt`、`Licenses/mimo-jp-SOURCE.json`；OpenCC 與 pinyin-pro、McBopomofoData 的聲明即上文的 `OpenCC-Apache-2.0.txt`、`mimo-sc-MIT.txt`、`mimo-tc-MIT.txt`。
 
+## 3a. mimo-jp-next 日語聯想詞計數（計數為本專案所有；來源只需註明出處）
+
+- 計數快照：`DataSources/mimo-jp-next/next.tsv.xz`，由 `scripts/mimo_jp_next.py` 數出「送出一段日文之後，下一段接什麼」（ありがとう → ございます、今日 → は）；建置時打包為 `mimo_jp_next.bin`（`MIMO-JN-1`）。來源版本與 SHA-256 見 `DataSources/mimo-jp-next/SOURCE.json`，各來源的句數與篩選規則見 `counts.json`。
+- 來源與授權：
+  - **Tatoeba** 日語句子（2026-11-22 匯出，**CC BY 2.0 FR**）：署名為 Tatoeba 與其貢獻者。例句裡反覆出現的幾個人名與地名（トム、メアリー、ボストン 等）不計入。
+  - **Mozilla Common Voice sentence-collector** ja（commit `bc5d2c4`，**CC0 1.0**）。
+  - **本專案自寫的句子**（`DataSources/mimo-jp-next/authored`，1,204 句日常訊息：問候、約時間、家人與工作訊息、吃飯、購物、天氣、出門、學習、興趣、心情），權重 ×4。
+- 斷詞：用第 3 節同一版 **Mozc** 字典與連接成本（BSD-3-Clause）求最可能的斷法，再把詞併成鍵盤上一次送出的單位（食べ＋まし＋た 為「食べました」）。快照只有本專案數出的次數，不含 Mozc 的資料。
+- 不用的來源：同第 5 節（維基百科與其姊妹計畫、相同方式分享／非商業／禁止改作的文字、新聞與官方文件、網頁爬取的語料）。
+- 內容篩選：含 `Resources/Lexicon/blocked-terms.txt` [ja] 節所列用語的子句整句不計入，打包時再檢查一次；這些詞不會出現在日語聯想裡。
+- 隨附授權聲明：`Licenses/mimo-jp-next-SOURCE.json`；Tatoeba 的 CC BY 2.0 FR 與 Common Voice 的 CC0 沿用 `Licenses/mimo-pairs-Tatoeba-CC-BY-2.0-FR.html`、`Licenses/mimo-pairs-CommonVoice-CC0-1.0.txt`，Mozc 沿用 `Licenses/mimo-jp-Mozc-BSD.txt`。
+
 ## 4. 表情符號與顏文字（Unicode-3.0 與本專案自行編寫）
 
 - CLDR 快照：`DataSources/cldr-emoji/cldr-emoji.tsv`（中文）與 `cldr-emoji-ja.tsv`（日語），由 `scripts/build-emoji-associations.py --cldr` 產生；來源與檢查碼記在 `DataSources/cldr-emoji/SOURCE.json`。上游：**CLDR** 49（`unicode-org/cldr`，標籤 `release-49`，`common/annotations/zh.xml`、`zh_Hant.xml`、`ja.xml`，**Unicode-3.0**）。

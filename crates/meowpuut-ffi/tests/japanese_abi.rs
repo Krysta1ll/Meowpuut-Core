@@ -33,9 +33,10 @@ fn info(query: *const MPNJapaneseQuery, index: usize) -> MPNJapaneseInfo {
 }
 
 #[test]
-fn info_struct_is_16_bytes() {
-    assert_eq!(std::mem::size_of::<MPNJapaneseInfo>(), 16);
+fn info_struct_is_20_bytes() {
+    assert_eq!(std::mem::size_of::<MPNJapaneseInfo>(), 20);
     assert_eq!(std::mem::align_of::<MPNJapaneseInfo>(), 4);
+    assert_eq!(std::mem::offset_of!(MPNJapaneseInfo, consumed), 16);
 }
 
 #[test]
@@ -56,7 +57,8 @@ fn lookup_through_the_c_functions() {
                     kind: MPN_JP_KIND_AUTHORED,
                     flags: MPN_JP_FLAG_PINYIN_OK | MPN_JP_FLAG_REVIEWED,
                     weight: 10_000,
-                    word: 0
+                    word: 0,
+                    consumed: 5
                 }
             );
             assert_eq!(s(mpn_japanese_kana(query)), "すし");
@@ -107,9 +109,17 @@ fn info_writes_only_the_bytes_asked_for() {
         assert_eq!(&out[4..8], &(MPN_JP_FLAG_PINYIN_OK | MPN_JP_FLAG_REVIEWED).to_ne_bytes());
         assert!(out[8..].iter().all(|&b| b == 0xAA));
 
-        let mut out = [0xAAu8; 20];
-        assert_eq!(mpn_japanese_info(query, 0, out.as_mut_ptr().cast(), 20), 1);
+        // A caller built against the 16-byte struct: nothing behind it is written.
+        let mut out = [0xAAu8; 24];
+        assert_eq!(mpn_japanese_info(query, 0, out.as_mut_ptr().cast(), 16), 1);
+        assert_eq!(&out[12..16], &0u32.to_ne_bytes());
         assert!(out[16..].iter().all(|&b| b == 0xAA));
+
+        // The whole struct, and nothing behind it.
+        let mut out = [0xAAu8; 24];
+        assert_eq!(mpn_japanese_info(query, 0, out.as_mut_ptr().cast(), 24), 1);
+        assert_eq!(&out[16..20], &5u32.to_ne_bytes());
+        assert!(out[20..].iter().all(|&b| b == 0xAA));
 
         let mut one = MPNJapaneseInfo::default();
         assert_eq!(mpn_japanese_info(query, 0, &mut one, 0), 0);
@@ -319,6 +329,8 @@ fn header_declares_every_function_and_constant() {
         "MPNJapaneseQuery *mpn_japanese_query_create(void);",
         "void mpn_japanese_query_destroy(MPNJapaneseQuery *query);",
         "size_t mpn_japanese_lookup(",
+        "size_t mpn_japanese_lookup_ex(MPNJapaneseQuery *query, const MPNJapanese *japanese,",
+        "const char *input, int mode, size_t limit, uint32_t options);",
         "const char *mpn_japanese_text(const MPNJapaneseQuery *query, size_t index);",
         "int mpn_japanese_info(const MPNJapaneseQuery *query, size_t index, MPNJapaneseInfo *info, size_t info_size);",
         "const char *mpn_japanese_kana(const MPNJapaneseQuery *query);",
@@ -328,9 +340,16 @@ fn header_declares_every_function_and_constant() {
         "MPN_JP_KIND_ALIAS_KANJI = 3, MPN_JP_KIND_AUTHORED = 4",
         "MPN_JP_FLAG_PINYIN_OK = 1, MPN_JP_FLAG_REVIEWED = 2, MPN_JP_FLAG_FORM = 4",
         "MPN_JP_REVIEWED_POOL = 1",
+        "#define MPN_JP_FLAG_COMPLETION 8u",
+        "#define MPN_JP_OPTION_FORMS 1u",
+        "#define MPN_JP_OPTION_COMPLETIONS 2u",
+        "#define MPN_JP_OPTION_SEGMENTS 4u",
+        "    uint32_t consumed;",
     ] {
         assert!(block.contains(name), "missing in the header: {name}");
     }
+    assert_eq!(MPN_JP_FLAG_COMPLETION, 8);
+    assert_eq!((MPN_JP_OPTION_FORMS, MPN_JP_OPTION_COMPLETIONS, MPN_JP_OPTION_SEGMENTS), (1, 2, 4));
     assert_eq!((MPN_JP_MODE_JAPANESE, MPN_JP_MODE_PINYIN), (0, 1));
     assert_eq!((MPN_JP_KIND_READING, MPN_JP_KIND_VARIANT, MPN_JP_KIND_ALIAS_KANA), (0, 1, 2));
     assert_eq!((MPN_JP_KIND_ALIAS_KANJI, MPN_JP_KIND_AUTHORED), (3, 4));

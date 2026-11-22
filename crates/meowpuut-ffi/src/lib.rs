@@ -32,6 +32,7 @@
 pub mod api;
 pub mod english;
 pub mod japanese;
+pub mod japanese_next;
 pub mod pets;
 #[cfg(feature = "skin")]
 pub mod skin;
@@ -40,6 +41,7 @@ pub mod text;
 pub use api::*;
 pub use english::*;
 pub use japanese::*;
+pub use japanese_next::*;
 pub use pets::*;
 
 use std::ffi::{c_char, CStr};

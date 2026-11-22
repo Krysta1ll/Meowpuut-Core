@@ -1,0 +1,127 @@
+# Source of the image for tests/japanese_forms.rs (lookup_extended: forms, completions, segments).
+# Same format as mimo_jp_fixture.tsv; the test writer builds the image at test time.
+# W	id	surface	class	flags (2 reviewed, 4 form); ids count up from 0
+# P	key	word id	weight	kind (0 reading, 1 variant)	flags (1 pinyin ok, 2 reviewed, 4 form)
+# Verbs, one per conjugation class.
+W	0	食べる	v1	0
+W	1	行く	v5k	0
+W	2	言う	v5w	0
+W	3	書く	v5k	0
+W	4	泳ぐ	v5g	0
+W	5	話す	v5s	0
+W	6	待つ	v5t	0
+W	7	死ぬ	v5n	0
+W	8	遊ぶ	v5b	2
+W	9	読む	v5m	0
+W	10	帰る	v5r	0
+W	11	買う	v5w	0
+W	12	来る	vk	0
+W	13	する	v?	0
+W	14	愛する	vs	0
+W	15	案ずる	vs	0
+W	16	言い出す	v?	0
+W	17	いる	v?	0
+# Adjectives.
+W	18	大きい	adj-i	0
+W	19	温かい	adj?	0
+W	20	いい	adj-i	0
+W	21	良い	adj-i	0
+W	22	綺麗	adj-na	2
+W	23	静か	adj-na	0
+# Nouns, pronoun, place, adverb, adnominal, interjections.
+W	24	元気	n	0
+W	25	私	pn	0
+W	26	学校	n	0
+W	27	天気	n	0
+W	28	勉強	n	0
+W	29	お願い	n	0
+W	30	今日	n	0
+W	31	教	n	0
+W	32	胃	n	0
+W	33	花	n	0
+W	34	ありがとう	int	0
+W	35	有難う	int	0
+W	36	ありがたい	adj-i	0
+W	37	ありがち	n	0
+W	38	おはよう	int	0
+W	39	京都	place	0
+W	40	教室	n	0
+W	41	協力	n	0
+W	42	こんにちは	int	0
+W	43	この	adn	0
+W	44	庫内	n	0
+W	45	池	n	0
+W	46	また	adv	0
+W	47	下	n	0
+# Stored forms: one lighter than the generated form, one reviewed.
+W	48	食べた	v1	4
+W	49	行った	v5k	6
+W	50	蚊	n	0
+W	51	缶	n	0
+W	52	子	n	0
+W	53	恋愛	n	0
+W	54	価値	n	0
+W	55	出来る	v1	0
+# A word whose reading is also a noun and a particle (運 + と).
+W	56	うんと	adv	0
+W	57	運	n	0
+P	たべる	0	7000	0	1
+P	いく	1	7000	0	1
+P	いう	2	6500	0	0
+P	かく	3	6800	0	1
+P	およぐ	4	4800	0	0
+P	はなす	5	7000	0	0
+P	まつ	6	7000	0	0
+P	しぬ	7	6000	0	0
+P	あそぶ	8	7000	0	2
+P	よむ	9	7000	0	0
+P	かえる	10	7000	0	0
+P	かう	11	7000	0	0
+P	くる	12	7000	0	0
+P	する	13	9000	0	1
+P	あいする	14	5700	0	0
+P	あんずる	15	2600	0	0
+P	いいだす	16	4000	0	0
+P	いる	17	7000	0	0
+P	おおきい	18	7000	0	1
+P	あたたかい	19	4000	0	0
+P	いい	20	7700	0	0
+P	よい	21	7200	0	0
+P	いい	21	7000	0	0
+P	きれい	22	8000	0	2
+P	しずか	23	5500	0	0
+P	げんき	24	7500	0	0
+P	わたし	25	8000	0	0
+P	がっこう	26	9000	0	1
+P	てんき	27	8000	0	0
+P	べんきょう	28	8000	0	1
+P	おねがい	29	8000	0	0
+P	きょう	30	9000	0	0
+P	きょう	31	3000	0	0
+P	い	32	4500	0	0
+P	はな	33	8000	0	0
+P	ありがとう	34	9000	0	0
+P	ありがとう	35	5300	0	0
+P	ありがたい	36	5200	0	0
+P	ありがち	37	2000	0	0
+P	おはよう	38	8000	0	0
+P	きょうと	39	8700	0	0
+P	きょうしつ	40	5000	0	0
+P	きょうりょく	41	3500	0	0
+P	こんにちは	42	8000	0	0
+P	この	43	7000	0	0
+P	こない	44	3000	0	0
+P	いけ	45	4300	0	0
+P	また	46	7000	0	0
+P	した	47	5300	0	0
+P	たべた	48	6000	0	4
+P	いった	49	3000	0	6
+P	か	50	3000	0	0
+P	かん	51	5000	0	0
+P	こ	52	4000	0	0
+P	れんあい	53	4800	0	0
+P	れない	53	3300	1	0
+P	かち	54	6000	0	0
+P	できる	55	6000	0	0
+P	うんと	56	2300	0	0
+P	うん	57	4800	0	0

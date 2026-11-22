@@ -32,7 +32,18 @@
 use std::ffi::{c_char, c_int, c_void};
 use std::panic::{catch_unwind, AssertUnwindSafe};
 
-use meowpuut_core::japanese::{JapaneseLexicon, JapaneseMode, JapaneseQuery, REVIEWED_POOL};
+use meowpuut_core::japanese::{
+    JapaneseLexicon, JapaneseMode, JapaneseQuery, FLAG_COMPLETION, OPTION_COMPLETIONS, OPTION_FORMS,
+    OPTION_SEGMENTS, REVIEWED_POOL,
+};
+
+// The C constants are the core constants.
+const _: () = assert!(
+    MPN_JP_FLAG_COMPLETION == FLAG_COMPLETION as u32
+        && MPN_JP_OPTION_FORMS == OPTION_FORMS
+        && MPN_JP_OPTION_COMPLETIONS == OPTION_COMPLETIONS
+        && MPN_JP_OPTION_SEGMENTS == OPTION_SEGMENTS
+);
 
 use crate::text::{CArena, CBuf};
 use crate::{arg_str, session_mut, MPNSession, EMPTY};
@@ -59,6 +70,15 @@ pub const MPN_JP_FLAG_PINYIN_OK: u32 = 1;
 pub const MPN_JP_FLAG_REVIEWED: u32 = 2;
 /// `MPNJapaneseInfo.flags`: generated inflected form.
 pub const MPN_JP_FLAG_FORM: u32 = 4;
+/// `MPNJapaneseInfo.flags` of a `mpn_japanese_lookup_ex` result: the word continues the input.
+pub const MPN_JP_FLAG_COMPLETION: u32 = 8;
+
+/// `options` of `mpn_japanese_lookup_ex`: inflected forms and particle or copula tails.
+pub const MPN_JP_OPTION_FORMS: u32 = 1;
+/// `options` of `mpn_japanese_lookup_ex`: words that continue a half-typed reading.
+pub const MPN_JP_OPTION_COMPLETIONS: u32 = 2;
+/// `options` of `mpn_japanese_lookup_ex`: words for a leading part of the input.
+pub const MPN_JP_OPTION_SEGMENTS: u32 = 4;
 
 /// Reviewed-row flag: the row is registered for mixed sentences.
 pub const MPN_JP_REVIEWED_POOL: u32 = 1;
@@ -84,7 +104,8 @@ impl MPNJapaneseQuery {
     }
 }
 
-/// Mirrors `MPNJapaneseInfo` in the C header (16 bytes, no padding).
+/// Mirrors `MPNJapaneseInfo` in the C header (20 bytes, no padding). Callers built against the
+/// former 16-byte struct pass `info_size` 16 and get the first four fields.
 #[repr(C)]
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub struct MPNJapaneseInfo {
@@ -92,10 +113,12 @@ pub struct MPNJapaneseInfo {
     pub kind: u32,
     /// `MPN_JP_FLAG_*`.
     pub flags: u32,
-    /// Posting weight, 1..=10000.
+    /// Posting weight, 1..=10000; for a form or a completion, the weight it is ranked by.
     pub weight: i32,
     /// Index of the word in the image; equal for the same word under two keys.
     pub word: u32,
+    /// Input bytes the result converts: the input length, less for a segment.
+    pub consumed: u32,
 }
 
 /// Shared image from a C handle.
@@ -349,6 +372,50 @@ pub unsafe extern "C" fn mpn_japanese_lookup(
     limit: usize,
 ) -> usize {
     // SAFETY: forwarded caller contract.
+    unsafe {
+        lookup_with(query, japanese, input, mode, |core, lexicon, input, mode| core.lookup(lexicon, input, mode, limit))
+    }
+}
+
+/// `mpn_japanese_lookup` plus what `options` (`MPN_JP_OPTION_*`) asks for: inflected forms,
+/// completions, leading segments (see `JapaneseQuery::lookup_extended`). `options == 0` gives
+/// exactly what `mpn_japanese_lookup` gives; unknown bits are ignored.
+///
+/// # Safety
+/// As for `mpn_japanese_lookup`.
+#[no_mangle]
+#[allow(unsafe_code)]
+pub unsafe extern "C" fn mpn_japanese_lookup_ex(
+    query: *mut MPNJapaneseQuery,
+    japanese: *const MPNJapanese,
+    input: *const c_char,
+    mode: c_int,
+    limit: usize,
+    options: u32,
+) -> usize {
+    // SAFETY: forwarded caller contract.
+    unsafe {
+        lookup_with(query, japanese, input, mode, |core, lexicon, input, mode| {
+            core.lookup_extended(lexicon, input, mode, limit, options)
+        })
+    }
+}
+
+/// Clears the query, checks the arguments, runs `lookup` and copies the strings of its result
+/// into the query. 0 for a NULL handle, NULL or non-UTF-8 input, or an unknown mode.
+///
+/// # Safety
+/// `query` must be NULL or a live handle used by this thread only; `japanese` must be NULL or a
+/// live handle; `input` must be NULL or a NUL-terminated string.
+#[allow(unsafe_code)]
+unsafe fn lookup_with(
+    query: *mut MPNJapaneseQuery,
+    japanese: *const MPNJapanese,
+    input: *const c_char,
+    mode: c_int,
+    lookup: impl FnOnce(&mut JapaneseQuery, &JapaneseLexicon, &str, JapaneseMode) -> usize,
+) -> usize {
+    // SAFETY: forwarded caller contract.
     let Some(query) = (unsafe { query_mut(query) }) else { return 0 };
     query.clear();
     // SAFETY: forwarded caller contract.
@@ -361,7 +428,7 @@ pub unsafe extern "C" fn mpn_japanese_lookup(
         _ => return 0,
     };
     let core = &mut query.core;
-    let found = catch_unwind(AssertUnwindSafe(|| core.lookup(&japanese.value, input, mode, limit)));
+    let found = catch_unwind(AssertUnwindSafe(|| lookup(core, &japanese.value, input, mode)));
     let Ok(count) = found else {
         // Not expected. The query buffers may be half written, so start from new ones.
         query.core = JapaneseQuery::new();
@@ -405,11 +472,13 @@ pub unsafe extern "C" fn mpn_japanese_info(
         return 0;
     }
     let Some(row) = query.core.row(index) else { return 0 };
+    let consumed = u32::try_from(query.core.consumed(index)).unwrap_or(u32::MAX);
     let mut bytes = [0u8; std::mem::size_of::<MPNJapaneseInfo>()];
     bytes[0..4].copy_from_slice(&u32::from(row.kind).to_ne_bytes());
     bytes[4..8].copy_from_slice(&u32::from(row.flags).to_ne_bytes());
     bytes[8..12].copy_from_slice(&row.weight.to_ne_bytes());
     bytes[12..16].copy_from_slice(&row.word.to_ne_bytes());
+    bytes[16..20].copy_from_slice(&consumed.to_ne_bytes());
     let n = info_size.min(bytes.len());
     // SAFETY: caller guarantees `info_size` writable bytes; `n <= info_size`, no overlap.
     unsafe { std::ptr::copy_nonoverlapping(bytes.as_ptr(), info.cast::<u8>(), n) };

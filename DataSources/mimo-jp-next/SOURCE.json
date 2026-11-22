@@ -1,0 +1,43 @@
+{
+ "name": "mimo-jp-next",
+ "description": "Counts of which typed unit follows which in Japanese, made by scripts/mimo_jp_next.py from the texts below; packed into mimo_jp_next.bin at build time. A clause with a term of Resources/Lexicon/blocked-terms.txt [ja] is not counted.",
+ "license": "The counts are the project's own work; the texts they were counted in are CC-BY-2.0-FR (Tatoeba), CC0-1.0 (Common Voice) and written for this project. Words were split with the Mozc dictionary and connection costs (BSD-3-Clause, the revision pinned in scripts/mimo_jp_pipeline.py); no Mozc data is copied into the counts.",
+ "attribution": "Tatoeba (https://tatoeba.org) and its contributors; Mozilla Common Voice sentence-collector contributors; Mozc (Google Inc.) for the dictionary used to split words.",
+ "sources": {
+  "tatoeba-jpn": {
+   "url": "https://downloads.tatoeba.org/exports/per_language/jpn/jpn_sentences_detailed.tsv.bz2",
+   "sha256": "7725f5e04795db081c20d615a66a79780e77df1577c088074bfe72a477dab543",
+   "cache": "tatoeba-jpn_sentences_detailed.tsv.bz2",
+   "kind": "tatoeba",
+   "weight": 1,
+   "version": "weekly export downloaded 2026-11-22; the file at the URL changes every week",
+   "license": "CC-BY-2.0-FR",
+   "license_file": "DataSources/mimo-pairs/CC-BY-2.0-FR.html"
+  },
+  "commonvoice-ja": {
+   "url": "https://raw.githubusercontent.com/common-voice/common-voice/bc5d2c4cc31f2fd853f7ef0026581fe50c67779b/server/data/ja/sentence-collector.txt",
+   "sha256": "964acfaa4c6ed0f968fbeb152300ab800bb30fce5b2e4c234201ffb3a971598b",
+   "cache": "commonvoice-ja-sentence-collector.txt",
+   "kind": "lines",
+   "weight": 1,
+   "version": "git commit bc5d2c4cc31f2fd853f7ef0026581fe50c67779b",
+   "license": "CC0-1.0",
+   "license_file": "DataSources/mimo-pairs/CC0-1.0.txt",
+   "license_note": "DataSources/mimo-pairs/commonvoice-README.md: sentence-collector submissions are CC0; other files in server/data are not used"
+  },
+  "authored-chat-a": {
+   "path": "DataSources/mimo-jp-next/authored/chat-a.txt",
+   "kind": "lines",
+   "weight": 4,
+   "version": "written 2026-11-22 for this project: greetings, arranging to meet, family and work messages",
+   "license": "written for this project"
+  },
+  "authored-chat-b": {
+   "path": "DataSources/mimo-jp-next/authored/chat-b.txt",
+   "kind": "lines",
+   "weight": 4,
+   "version": "written 2026-11-22 for this project: food, shopping, weather, travel, study, hobbies, feelings",
+   "license": "written for this project"
+  }
+ }
+}
