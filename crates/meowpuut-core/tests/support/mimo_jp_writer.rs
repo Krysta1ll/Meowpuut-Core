@@ -13,10 +13,11 @@
 
 use std::collections::{BTreeMap, HashMap};
 
-/// Class names in the order of their index in a word record.
-pub const CLASSES: [&str; 22] = [
+/// Class names in the order of their index in a word record (`CLASSES` of
+/// `scripts/mimo_jp_binary.py`).
+pub const CLASSES: [&str; 23] = [
     "n", "pn", "v1", "v5k", "v5g", "v5s", "v5t", "v5n", "v5b", "v5m", "v5r", "v5w", "vs", "vk", "v?", "adj-i",
-    "adj-na", "adv", "adn", "conj", "int", "place",
+    "adj-na", "adv", "adn", "conj", "int", "place", "adj?",
 ];
 
 pub struct Word {
@@ -59,7 +60,13 @@ pub struct Layout {
 
 impl Image {
     pub fn word(&mut self, surface: &str, flags: u8) -> u32 {
-        self.words.push(Word { surface: surface.to_string(), class: 0, flags });
+        self.class_word(surface, "n", flags)
+    }
+
+    /// A word of the class named `class` (see `CLASSES`).
+    pub fn class_word(&mut self, surface: &str, class: &str, flags: u8) -> u32 {
+        let class = CLASSES.iter().position(|&name| name == class).expect("class name") as u8;
+        self.words.push(Word { surface: surface.to_string(), class, flags });
         u32::try_from(self.words.len() - 1).expect("word count")
     }
 

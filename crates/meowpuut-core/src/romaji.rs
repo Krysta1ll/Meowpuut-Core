@@ -88,6 +88,18 @@ const TABLE: &[(&str, &str, bool)] = &[
 /// Longest token in `TABLE`, in bytes.
 const MAX_TOKEN: usize = 4;
 
+/// Kana of every token that starts with `letters` (lower case), in table order: what a
+/// half-typed syllable can still become.
+pub(crate) fn kana_of_tokens_starting_with(letters: &str) -> impl Iterator<Item = &'static str> + '_ {
+    let start = TABLE.partition_point(|(key, _, _)| key.as_bytes() < letters.as_bytes());
+    TABLE
+        .get(start..)
+        .unwrap_or(&[])
+        .iter()
+        .take_while(move |(key, _, _)| key.starts_with(letters))
+        .map(|&(_, kana, _)| kana)
+}
+
 fn token(bytes: &[u8]) -> Option<(&'static str, bool)> {
     TABLE
         .binary_search_by(|(key, _, _)| key.as_bytes().cmp(bytes))
