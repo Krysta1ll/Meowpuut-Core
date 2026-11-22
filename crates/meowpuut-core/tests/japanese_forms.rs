@@ -591,22 +591,34 @@ fn segments() {
         summary("kyouhaiitenkidesune", ALL),
         pairs(&[("今日は", 6), ("教は", 6), ("今日", 4), ("教", 4)])
     );
-    assert_eq!(summary("iitenkidesune", ALL), pairs(&[("いい", 2), ("良い", 2), ("胃", 1)]));
+    // A leading part is at least two kana: 胃 for the first い is not offered.
+    assert_eq!(summary("iitenkidesune", ALL), pairs(&[("いい", 2), ("良い", 2)]));
     assert_eq!(summary("tenkidesune", ALL), pairs(&[("天気ですね", 11)]));
-    // The cut never splits a kana: gakkou|niiku, kan|u is not か|ぬ.
+    // The cut never splits a kana: gakkou|niiku; kan|u is not かん and う, and か alone is one kana.
     assert_eq!(summary("gakkouniiku", ALL), pairs(&[("学校に", 8), ("学校", 6)]));
-    assert_eq!(summary("kanu", ALL), pairs(&[("蚊", 2)]));
+    assert!(summary("kanu", ALL).is_empty());
+    assert!(summary("koko", ALL).is_empty());
     // A part ending in ' is the same kana as the one without it.
-    assert_eq!(summary("ko'ko", ALL), pairs(&[("子", 2)]));
-    // Segments first, completions of the whole input after them.
+    assert_eq!(summary("kyou'kyou", ALL), pairs(&[("今日", 4), ("教", 4)]));
+    // A word that continues the whole input comes before the words of its start.
+    let ahead = found(&lexicon, "kyouryo", Japanese, ALL);
+    assert_eq!(ahead.iter().map(|found| (found.text.as_str(), found.consumed)).collect::<Vec<_>>(), [("協力", 7), ("今日", 4), ("教", 4)]);
+    assert_ne!(ahead[0].row.flags & FLAG_COMPLETION, 0);
+    assert_eq!(ahead[1].row.flags & FLAG_COMPLETION, 0);
     let konnichi = found(&lexicon, "konnichi", Japanese, ALL);
-    assert_eq!(konnichi.iter().map(|found| (found.text.as_str(), found.consumed)).collect::<Vec<_>>(), [("子", 2), ("こんにちは", 8)]);
-    assert_ne!(konnichi[1].row.flags & FLAG_COMPLETION, 0);
+    assert_eq!(konnichi.iter().map(|found| (found.text.as_str(), found.consumed)).collect::<Vec<_>>(), [("こんにちは", 8)]);
     // Without FORMS, the parts are looked up exactly.
     assert_eq!(summary("kyouhaiitenkidesune", OPTION_SEGMENTS), pairs(&[("今日", 4), ("教", 4)]));
-    // Not when the whole input has a word or a form, nor for input that is not complete romaji.
+    // Not when the whole input has a word or a form.
     assert_eq!(summary("tabemashita", ALL), pairs(&[("食べました", 11)]));
-    assert!(summary("kyouhag", ALL).is_empty());
+    // The input may end in half a syllable: the letters stay with the rest, and the candidates
+    // do not come and go at every consonant of a sentence.
+    assert_eq!(summary("kyouhag", ALL), pairs(&[("今日は", 6), ("教は", 6), ("今日", 4), ("教", 4)]));
+    assert_eq!(summary("kyouhaiit", ALL), summary("kyouhaiitenkidesune", ALL));
+    assert_eq!(summary("tabemashitak", ALL), pairs(&[("食べました", 11)]));
+    assert_eq!(summary("gakkounikk", ALL), pairs(&[("学校に", 8), ("学校", 6)]));
+    // With a completion for the half syllable, that comes first.
+    assert_eq!(summary("kyoush", ALL), pairs(&[("教室", 6), ("今日", 4), ("教", 4)]));
     // Many leading parts without words: the search stops, nothing is found.
     assert!(summary(&"a".repeat(80), ALL).is_empty());
     assert!(summary(&"zo".repeat(40), ALL).is_empty());

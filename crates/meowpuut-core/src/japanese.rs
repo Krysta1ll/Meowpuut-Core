@@ -618,15 +618,16 @@ impl JapaneseQuery {
     /// - `OPTION_COMPLETIONS` (Japanese mode only): words whose reading continues the input,
     ///   which may end in half a syllable (`arig`). They carry `FLAG_COMPLETION` and their
     ///   score as weight: posting weight less 150 per kana still to type (at most six).
-    /// - `OPTION_SEGMENTS` (Japanese mode only): when the whole input converts completely but
-    ///   gives no word and no form, the words and forms of the longest leading part of the
-    ///   input that has some, then the first three of up to two shorter leading parts.
-    ///   `consumed` gives the bytes of input a result converts.
+    /// - `OPTION_SEGMENTS` (Japanese mode only): when the whole input gives no word and no
+    ///   form, the words and forms of the longest leading part of the input that has some,
+    ///   then the first three of up to two shorter leading parts. A leading part is at least
+    ///   two kana, and the input may end in half a syllable (`ikimasuk` gives 行きます for
+    ///   `ikimasu`). `consumed` gives the bytes of input a result converts.
     ///
     /// Order: words and forms of the whole input as in `lookup` (reviewed words first, then
     /// weight; a surface once, the better ranked). Completions follow the first of them and
     /// are merged by score, a word or form counting its weight plus 1500. Without a word or a
-    /// form of the whole input, segments come first and completions after them.
+    /// form of the whole input, completions come first and segments after them.
     pub fn lookup_extended(
         &mut self,
         lexicon: &JapaneseLexicon,
@@ -654,12 +655,14 @@ impl JapaneseQuery {
             self.add_completions(lexicon);
         }
         if self.hits.is_empty() {
-            if options & OPTION_SEGMENTS != 0 && japanese && converted.complete && !self.kana.is_empty() {
+            if options & OPTION_SEGMENTS != 0 && japanese {
                 self.add_segments(lexicon, options & OPTION_FORMS != 0);
             }
-            self.merge_completions(lexicon, false);
+            // A word that continues the whole input comes before a word for only its start:
+            // `tabe` is 食べる on its way, not 他 with `be` left over.
+            self.merge_completions(lexicon, Completions::Ahead);
         } else {
-            self.merge_completions(lexicon, true);
+            self.merge_completions(lexicon, Completions::BehindFirst);
         }
         self.finish(lexicon, limit)
     }
@@ -739,14 +742,22 @@ impl JapaneseQuery {
         self.hits.len()
     }
 
-    /// Puts the completions into the result. With `behind_first`, the first hit stays first and
-    /// the other hits and the completions are merged by score; otherwise the completions follow
-    /// the hits. A completion whose surface is already a hit is dropped.
-    fn merge_completions(&mut self, lexicon: &JapaneseLexicon, behind_first: bool) {
+    /// Puts the completions into the result. `BehindFirst`: the first hit stays first and the
+    /// other hits and the completions are merged by score; a completion whose surface is
+    /// already a hit is dropped. `Ahead`: the completions come first and the hits (segments)
+    /// follow them.
+    fn merge_completions(&mut self, lexicon: &JapaneseLexicon, place: Completions) {
         if self.extra.is_empty() {
             return;
         }
         self.merged.clear();
+        if place == Completions::Ahead {
+            self.merged.extend(self.extra.iter());
+            self.merged.extend(self.hits.iter());
+            std::mem::swap(&mut self.hits, &mut self.merged);
+            return;
+        }
+        let behind_first = true;
         let mut next_hit = usize::from(behind_first);
         self.merged.extend(self.hits.iter().take(next_hit));
         let mut next_completion = 0;
@@ -779,10 +790,15 @@ impl JapaneseQuery {
     }
 
     /// Segments: tries the leading parts of the input from the longest down. A part counts when
-    /// it converts completely, the rest of the input converts to the rest of the kana (the cut
-    /// does not split a kana: `gakkou|niiku`, never `gak|kou`), and its kana key has words or
-    /// forms. Keeps every result of the longest such part and the first three of the next two.
+    /// it converts completely to at least `MIN_SEGMENT_KANA` kana, the rest of the input
+    /// converts to the rest of the kana (the cut does not split a kana: `gakkou|niiku`, never
+    /// `gak|kou`), and its kana key has words or forms. The input itself need not convert
+    /// completely: its last letters may be half a syllable, which stays with the rest. Keeps
+    /// every result of the longest such part and the first three of the next two.
     fn add_segments(&mut self, lexicon: &JapaneseLexicon, with_forms: bool) {
+        // The kana of the whole input, with any letters that do not make a kana yet.
+        self.prefix.clear();
+        to_kana(&self.input, &mut self.prefix);
         let mut groups = 0;
         let mut attempts = 0;
         let mut budget = forms::MAX_SEGMENT_SEARCHES;
@@ -795,12 +811,12 @@ impl JapaneseQuery {
                 continue;
             }
             self.scratch.clear();
-            if !to_kana(head, &mut self.scratch).complete || self.scratch.is_empty() {
+            if !to_kana(head, &mut self.scratch).complete || self.scratch.chars().count() < MIN_SEGMENT_KANA {
                 continue;
             }
             self.rest.clear();
             to_kana(rest, &mut self.rest);
-            if self.kana.strip_prefix(self.scratch.as_str()) != Some(self.rest.as_str()) {
+            if self.prefix.strip_prefix(self.scratch.as_str()) != Some(self.rest.as_str()) {
                 continue;
             }
             attempts += 1;
@@ -913,8 +929,20 @@ impl JapaneseQuery {
     }
 }
 
+/// Where `merge_completions` puts the completions.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Completions {
+    /// After the first hit, merged with the other hits by score.
+    BehindFirst,
+    /// Before every hit.
+    Ahead,
+}
+
 /// Leading parts of the input tried for segments, at most.
 const MAX_SEGMENT_ATTEMPTS: usize = 48;
+/// Kana a leading part has, at least: a one-kana word before the rest of the input is mostly
+/// an accident (他 of `tabe`, 蚊 of `kaita`).
+const MIN_SEGMENT_KANA: usize = 2;
 /// Leading parts with results kept: the longest and two shorter ones.
 const MAX_SEGMENT_GROUPS: usize = 3;
 /// Results kept for each shorter leading part.

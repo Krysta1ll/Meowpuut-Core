@@ -217,13 +217,15 @@ size_t mpn_japanese_lookup(MPNJapaneseQuery *query, const MPNJapanese *japanese,
 //   with MPN_JP_FLAG_PINYIN_OK only, no particle or copula.
 // - COMPLETIONS: words whose reading continues the input, which may end in half a syllable
 //   ("arig"); MPN_JP_FLAG_COMPLETION, weight is the score.
-// - SEGMENTS: when the whole input converts completely but gives no word and no form: the words
-//   of the longest leading part that has some, then the first three of up to two shorter parts.
+// - SEGMENTS: when the whole input gives no word and no form: the words of the longest leading
+//   part (two kana or more) that has some, then the first three of up to two shorter parts. The
+//   input may end in half a syllable ("ikimasuk" gives 行きます for "ikimasu").
 //   MPNJapaneseInfo.consumed tells how many input bytes each converts; commit the text and keep
 //   the rest of the input composing.
 // Order: whole-input words and forms as in mpn_japanese_lookup, the best one first; completions
 // merged after it by score (word or form weight + 1500 against completion weight). Without a
-// whole-input word or form: segments, then completions.
+// whole-input word or form: completions, then segments ("tabe" is 食べる on its way, not a word
+// for "ta" with "be" left over).
 size_t mpn_japanese_lookup_ex(MPNJapaneseQuery *query, const MPNJapanese *japanese,
                               const char *input, int mode, size_t limit, uint32_t options);
 const char *mpn_japanese_text(const MPNJapaneseQuery *query, size_t index);
