@@ -1,9 +1,9 @@
 {
- "rule": "kl:2500000",
+ "rule": "kl:3500000",
  "spoken_weight": 10,
- "pairs_counted": 2700426,
- "pairs_kept": 2500000,
- "bytes": 7782168,
+ "pairs_counted": 4473602,
+ "pairs_kept": 3499998,
+ "bytes": 11353388,
  "exclude_files": {
   "heldout-sentences.tsv": "9900cbf23feaeb4d479515c401c2cbfa55b29fd053f5450bacf00e3b5c4ced5a",
   "test2-sentences.tsv": "fbd1614b920d480a9f87c89230f46f719b67ad043c70509d473193099c5a95fd",
@@ -17,206 +17,312 @@
    "characters": 898068,
    "sentences_blocked": 963,
    "clauses_excluded": 8,
-   "pairs": 242002,
-   "pair_tokens": 635617,
-   "words": 528320
+   "pairs": 244645,
+   "pair_tokens": 628117,
+   "words": 520820
   },
   "commonvoice-zh-TW": {
    "clauses": 15632,
    "characters": 115104,
    "sentences_blocked": 568,
-   "pairs": 51356,
-   "pair_tokens": 77719,
-   "words": 62107
+   "pairs": 51406,
+   "pair_tokens": 77430,
+   "words": 61818
   },
   "commonvoice-zh-CN": {
    "clauses": 963,
    "characters": 9059,
    "sentences_blocked": 71,
-   "pairs": 4960,
-   "pair_tokens": 6043,
-   "words": 5083
+   "pairs": 4967,
+   "pair_tokens": 6023,
+   "words": 5063
   },
   "everyday": {
    "clauses": 135628,
    "characters": 994292,
    "clauses_excluded": 89,
    "sentences_blocked": 33,
-   "pairs": 207618,
-   "pair_tokens": 728939,
-   "words": 593934
+   "pairs": 211555,
+   "pair_tokens": 713251,
+   "words": 578246
   },
   "everyday-chat-2": {
    "clauses": 69043,
    "characters": 460074,
    "sentences_blocked": 10,
    "clauses_excluded": 13,
-   "pairs": 137563,
-   "pair_tokens": 339841,
-   "words": 270953
+   "pairs": 138896,
+   "pair_tokens": 334194,
+   "words": 265306
   },
   "everyday-written-2": {
    "clauses": 109025,
    "characters": 880437,
    "sentences_blocked": 39,
    "clauses_excluded": 19,
-   "pairs": 248542,
-   "pair_tokens": 618474,
-   "words": 509869
+   "pairs": 249982,
+   "pair_tokens": 614289,
+   "words": 505684
   },
   "everyday-mixed-2": {
    "clauses": 13077,
    "characters": 48755,
    "clauses_excluded": 1,
-   "pairs": 15300,
-   "pair_tokens": 44618,
-   "words": 31543
+   "pairs": 15385,
+   "pair_tokens": 43458,
+   "words": 30383
   },
   "modern-chat-3": {
    "clauses": 98386,
    "characters": 1174000,
    "sentences_blocked": 60,
-   "pairs": 271235,
-   "pair_tokens": 751424,
-   "words": 653834
+   "pairs": 274659,
+   "pair_tokens": 739849,
+   "words": 642259
   },
   "modern-domains-3": {
    "clauses": 295498,
    "characters": 4991813,
    "sentences_blocked": 246,
-   "pairs": 982955,
-   "pair_tokens": 2813609,
-   "words": 2518495
+   "pairs": 988634,
+   "pair_tokens": 2801158,
+   "words": 2506044
   },
   "colloc-chat-4": {
    "clauses": 632347,
    "characters": 7678131,
    "sentences_blocked": 352,
-   "pairs": 1176173,
-   "pair_tokens": 4878606,
-   "words": 4250374
+   "pairs": 1191958,
+   "pair_tokens": 4821381,
+   "words": 4193149
   },
   "colloc-domains-4": {
    "clauses": 112690,
    "characters": 1805428,
    "sentences_blocked": 32,
-   "pairs": 433920,
-   "pair_tokens": 1059283,
-   "words": 946738
+   "pairs": 436572,
+   "pair_tokens": 1051678,
+   "words": 939133
   },
   "crosswoz-train": {
    "clauses": 214924,
    "characters": 1683386,
    "sentences_blocked": 1886,
    "clauses_excluded": 5,
-   "pairs": 70586,
-   "pair_tokens": 1180242,
-   "words": 1006379
+   "pairs": 71065,
+   "pair_tokens": 1170024,
+   "words": 996161
   },
   "crosswoz-val": {
    "clauses": 21681,
    "characters": 168420,
    "sentences_blocked": 173,
    "clauses_excluded": 2,
-   "pairs": 19593,
-   "pair_tokens": 118171,
-   "words": 100695
+   "pairs": 19659,
+   "pair_tokens": 117082,
+   "words": 99606
   },
   "crosswoz-test": {
    "clauses": 21481,
    "characters": 168049,
    "sentences_blocked": 189,
-   "pairs": 19641,
-   "pair_tokens": 117588,
-   "words": 100236
+   "pairs": 19733,
+   "pair_tokens": 116654,
+   "words": 99302
   },
   "kdconv-film-train": {
    "clauses": 63504,
    "characters": 449895,
    "sentences_blocked": 240,
-   "pairs": 68576,
-   "pair_tokens": 319539,
-   "words": 266029
+   "pairs": 68763,
+   "pair_tokens": 318163,
+   "words": 264653
   },
   "kdconv-film-dev": {
    "clauses": 9417,
    "characters": 68532,
    "sentences_blocked": 34,
-   "pairs": 18117,
-   "pair_tokens": 47727,
-   "words": 39966
+   "pairs": 18198,
+   "pair_tokens": 47564,
+   "words": 39803
   },
   "kdconv-film-test": {
    "clauses": 9917,
    "characters": 71816,
    "sentences_blocked": 40,
-   "pairs": 17638,
-   "pair_tokens": 49902,
-   "words": 41798
+   "pairs": 17718,
+   "pair_tokens": 49698,
+   "words": 41594
   },
   "kdconv-music-train": {
    "clauses": 38867,
    "characters": 283039,
    "sentences_blocked": 128,
-   "pairs": 38493,
-   "pair_tokens": 207001,
-   "words": 174778
+   "pairs": 38631,
+   "pair_tokens": 206112,
+   "words": 173889
   },
   "kdconv-music-dev": {
    "clauses": 5896,
    "characters": 44234,
    "sentences_blocked": 18,
-   "pairs": 11118,
-   "pair_tokens": 31658,
-   "words": 26921
+   "pairs": 11189,
+   "pair_tokens": 31532,
+   "words": 26795
   },
   "kdconv-music-test": {
    "clauses": 6378,
    "characters": 47771,
    "sentences_blocked": 26,
-   "pairs": 10994,
-   "pair_tokens": 34062,
-   "words": 28806
+   "pairs": 11036,
+   "pair_tokens": 33988,
+   "words": 28732
   },
   "kdconv-travel-train": {
    "clauses": 41754,
    "characters": 304469,
    "sentences_blocked": 359,
-   "pairs": 41106,
-   "pair_tokens": 209534,
-   "words": 179024
+   "pairs": 41204,
+   "pair_tokens": 208161,
+   "words": 177651
   },
   "kdconv-travel-dev": {
    "clauses": 6287,
    "characters": 47152,
    "sentences_blocked": 34,
-   "pairs": 10841,
-   "pair_tokens": 31766,
-   "words": 27341
+   "pairs": 10886,
+   "pair_tokens": 31539,
+   "words": 27114
   },
   "kdconv-travel-test": {
    "clauses": 6338,
    "characters": 47812,
    "sentences_blocked": 96,
-   "pairs": 9881,
-   "pair_tokens": 32326,
-   "words": 27825
+   "pairs": 9915,
+   "pair_tokens": 32062,
+   "words": 27561
   },
   "massive-zh-TW": {
    "clauses": 16798,
    "characters": 148021,
    "sentences_blocked": 214,
-   "pairs": 36650,
-   "pair_tokens": 101583,
-   "words": 84790
+   "pairs": 37150,
+   "pair_tokens": 99491,
+   "words": 82698
   },
   "massive-zh-CN": {
    "clauses": 16468,
    "characters": 168078,
    "sentences_blocked": 196,
-   "pairs": 38505,
-   "pair_tokens": 114087,
-   "words": 97622
+   "pairs": 39132,
+   "pair_tokens": 111851,
+   "words": 95386
+  },
+  "hydrogen-chat-5": {
+   "clauses": 33345,
+   "characters": 411614,
+   "sentences_blocked": 14,
+   "pairs": 135566,
+   "pair_tokens": 266275,
+   "words": 233664
+  },
+  "hydrogen-written-5": {
+   "clauses": 32404,
+   "characters": 532868,
+   "sentences_blocked": 34,
+   "pairs": 177160,
+   "pair_tokens": 315917,
+   "words": 283677
+  },
+  "hydrogen-mixed-5": {
+   "clauses": 3368,
+   "characters": 38158,
+   "sentences_blocked": 3,
+   "pairs": 17185,
+   "pair_tokens": 23794,
+   "words": 21712
+  },
+  "hydrogen-chat-6": {
+   "clauses": 112616,
+   "characters": 1838221,
+   "sentences_blocked": 86,
+   "pairs": 461414,
+   "pair_tokens": 1148620,
+   "words": 1038701
+  },
+  "hydrogen-written-6": {
+   "clauses": 66156,
+   "characters": 1028926,
+   "sentences_blocked": 30,
+   "pairs": 327119,
+   "pair_tokens": 621552,
+   "words": 555818
+  },
+  "hydrogen-mixed-6": {
+   "clauses": 8509,
+   "characters": 115784,
+   "sentences_blocked": 2,
+   "pairs": 43758,
+   "pair_tokens": 69676,
+   "words": 64651
+  },
+  "hydrogen-chat-7": {
+   "clauses": 175462,
+   "characters": 2984364,
+   "sentences_blocked": 174,
+   "pairs": 687039,
+   "pair_tokens": 1855296,
+   "words": 1685037
+  },
+  "hydrogen-written-7": {
+   "clauses": 82877,
+   "characters": 1395026,
+   "sentences_blocked": 59,
+   "pairs": 438354,
+   "pair_tokens": 836941,
+   "words": 754538
+  },
+  "hydrogen-mixed-7": {
+   "clauses": 12706,
+   "characters": 164237,
+   "sentences_blocked": 5,
+   "pairs": 62034,
+   "pair_tokens": 100318,
+   "words": 91710
+  },
+  "hydrogen-chat-8": {
+   "clauses": 48307,
+   "characters": 770938,
+   "sentences_blocked": 31,
+   "pairs": 236552,
+   "pair_tokens": 481228,
+   "words": 434199
+  },
+  "hydrogen-written-8": {
+   "clauses": 7552,
+   "characters": 106744,
+   "sentences_blocked": 4,
+   "pairs": 39821,
+   "pair_tokens": 66233,
+   "words": 58694
+  },
+  "hydrogen-chat-9": {
+   "clauses": 872068,
+   "characters": 12968858,
+   "sentences_blocked": 425,
+   "clauses_excluded": 16,
+   "pairs": 1728788,
+   "pair_tokens": 8453930,
+   "words": 7594956
+  },
+  "hydrogen-written-9": {
+   "clauses": 241594,
+   "characters": 4647919,
+   "sentences_blocked": 159,
+   "clauses_excluded": 1,
+   "pairs": 874852,
+   "pair_tokens": 2731963,
+   "words": 2511112
   }
  }
 }

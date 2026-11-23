@@ -32,6 +32,7 @@
 
 pub mod abbrev;
 pub mod bin_format;
+pub mod assoc;
 pub mod context_index;
 pub mod decoder;
 pub mod english;
@@ -56,6 +57,7 @@ pub mod segments;
 pub mod session;
 pub mod session_keys;
 pub mod soa;
+pub mod spatial;
 pub mod trigrams;
 pub mod workspace;
 

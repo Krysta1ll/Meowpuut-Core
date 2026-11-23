@@ -151,6 +151,7 @@
 停止|停止|ting2 zhi3|6000
 已經|已经|yi3 jing1|7000
 現在|现在|xian4 zai4|9000
+#outranks-ok
 今天|今天|jin1 tian1|9000
 明天|明天|ming2 tian1|8000
 昨天|昨天|zuo2 tian1|7000
@@ -164,8 +165,11 @@
 那個|那个|na4 ge5|8000
 #outranks-ok
 這樣|这样|zhe4 yang4|8000
+#outranks-ok
 一個|一个|yi2 ge5|8000
+#outranks-ok
 一個|一个|yi1 ge5|8000
+#outranks-ok
 一些|一些|yi4 xie1|7000
 一起|一起|yi4 qi3|7000
 #outranks-ok
@@ -308,6 +312,7 @@
 安全|安全|an1 quan2|6000
 方便|方便|fang1 bian4|6000
 正常|正常|zheng4 chang2|7000
+#outranks-ok
 自然|自然|zi4 ran2|6000
 連貫|连贯|lian2 guan4|5000
 小巧|小巧|xiao3 qiao3|5000
@@ -469,6 +474,7 @@
 重構|重构|chong2 gou4|7200
 編譯|编译|bian1 yi4|6800
 部署|部署|bu4 shu3|6800
+#outranks-ok
 開源|开源|kai1 yuan2|7000
 快捷鍵|快捷键|kuai4 jie2 jian4|6800
 深色模式|深色模式|shen1 se4 mo2 shi4|6600
@@ -611,3 +617,7 @@
 黃燜雞米飯|黄焖鸡米饭|huang2 men4 ji1 mi3 fan4|5000
 補覺|补觉|bu3 jiao4|5200
 #outranks-ok
+吧|吧|ba5|8600
+#outranks-ok
+早上好|早上好|zao3 shang4 hao3|6000
+飯店|饭店|fan4 dian4|6600

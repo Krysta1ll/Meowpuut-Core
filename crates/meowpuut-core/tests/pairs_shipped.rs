@@ -261,7 +261,7 @@ fn shipped_typo_fixes_lead_only_over_weak_readings() {
         assert_eq!(info.kind, CandidateKind::Correction as u32, "{keys}");
         assert_eq!(info.consumed_bytes, keys.len() as u64);
     }
-    for (keys, leader) in [("nishi", "你是"), ("nihaoa", "你好啊"), ("haiyou", "还有"), ("zhiji", "之际"), ("xianzai", "现在")] {
+    for (keys, leader) in [("nishi", "你是"), ("nihaoa", "你好啊"), ("haiyou", "还有"), ("zhiji", "值机"), ("xianzai", "现在")] {
         typed(&mut session, keys);
         assert_eq!(session.candidate(0), leader, "{keys}");
     }

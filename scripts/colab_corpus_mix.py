@@ -28,6 +28,9 @@ HAN_RUN = re.compile(r"[㐀-䶿一-鿿]+")
 BRIDGE_WORDS = frozenset("的了在一个片把很不是给会要想到和与还都就也")
 
 SOURCE_WEIGHTS = {
+    "hydrogen-chat": 10.0,
+    "hydrogen-written": 2.0,
+    "hydrogen-mixed": 1.5,
     "modern-chat-3": 10.0,
     "colloc-chat-4": 10.0,
     "everyday": 10.0,

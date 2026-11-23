@@ -30,7 +30,20 @@
     "modern-chat-3.txt.xz": "c4dc49497b2899c5b660f9037e33f2bb09abc73c0926bdbc764e0207e5da5685",
     "modern-domains-3.txt.xz": "82248999914b4f94021f621d003ea506337ee2cd5565a4d34c41b34993dc4679",
     "colloc-chat-4.txt.xz": "b9626667d94144e5c49acc5caeaeeb72b2c54fc69041989627d48d8849ff7835",
-    "colloc-domains-4.txt.xz": "7d8ea34a34c01422e8c296106a187c3641ebcf01883bb2f5c31d864057f7362f"
+    "colloc-domains-4.txt.xz": "7d8ea34a34c01422e8c296106a187c3641ebcf01883bb2f5c31d864057f7362f",
+    "hydrogen-chat-5.txt.xz": "4a58081bedac497ead3f7fe218b4acfadaba3a41afb9fc1d63fefa14d35fb5fb",
+    "hydrogen-written-5.txt.xz": "53fac9e983e33cf81228f63e170e7782523939f2ccc9baee1435c19430c08173",
+    "hydrogen-mixed-5.txt.xz": "65714623d7b74da0cfdd6b1fec79356bd8bb27939000d7109770e61096680886",
+    "hydrogen-chat-6.txt.xz": "1172740fa77d44147ac082e1c0b79a1112081d53181a0332b3fe804437e051e2",
+    "hydrogen-written-6.txt.xz": "89642efd9848f0b3101e624769defeb72577d08b37bec1223ed522039faf400f",
+    "hydrogen-mixed-6.txt.xz": "d1643d90d61202c7dc364741d6ec3178beba240f3dd68b38dd9fab60672ebb17",
+    "hydrogen-chat-7.txt.xz": "baa8c76e13fd99143635f0b9845a75d73d49969221a6a1e4cb00746a43e1eeea",
+    "hydrogen-written-7.txt.xz": "72d3bfff9b2d8163141ccd1c48fe4af5e7ef100ce86d3eaaf0e5167fea400204",
+    "hydrogen-mixed-7.txt.xz": "8899f3e386990c4a8ceedc0ad236c4d0dbea841172037e27a201d2372f29e89c",
+    "hydrogen-chat-8.txt.xz": "9da050f8fb06dcdf8f61a936f8f986004e352d801465603e1e3e570637ede93b",
+    "hydrogen-written-8.txt.xz": "fd7923c7264c0796e68e19aa7ee8afe01fc601b44fc87b43d678628e05112c02",
+    "hydrogen-chat-9.txt.xz": "f51d9a890ca090180f61c1de6a3ef09ece876a66992663385d3708e4be3e3dd5",
+    "hydrogen-written-9.txt.xz": "215dd9a2a96ef080ab1fa6da99c875b4d367f666ef42791b862ea61c1255311d"
   },
   "batch_2": {
     "written": {
@@ -89,5 +102,91 @@
       "eval_or_blocked": 12376,
       "dup_or_bad": 834
     }
+  },
+  "batch_5": {
+    "written_date": "2026-11-23",
+    "author": "Meowpuut project (Gemini 4 Hydrogen Low swarm, hand-authored per micro-topic)",
+    "hydrogen-chat-5": 22524,
+    "hydrogen-written-5": 20075,
+    "hydrogen-mixed-5": 2346,
+    "tw_counts": {
+      "chat": 11265,
+      "written": 10943,
+      "mixed": 1168
+    },
+    "stats": {
+      "raw": 44945
+    }
+  },
+  "batch_6": {
+    "written_date": "2026-11-23",
+    "author": "Meowpuut project (Gemini 4 Hydrogen Low swarm wave batch_6, hand-authored)",
+    "tw_counts": {
+      "chat": 35474,
+      "written": 18374,
+      "mixed": 2801
+    },
+    "stats": {
+      "raw": 113187,
+      "duplicate": 62,
+      "eval_overlap": 4
+    },
+    "hydrogen-chat-6": 70894,
+    "hydrogen-written-6": 36690,
+    "hydrogen-mixed-6": 5537
+  },
+  "batch_7": {
+    "written_date": "2026-11-23",
+    "author": "Meowpuut project (Gemini 4 Hydrogen Low swarm wave batch_7, hand-authored)",
+    "tw_counts": {
+      "chat": 56947,
+      "written": 24554,
+      "mixed": 3524
+    },
+    "stats": {
+      "raw": 170089,
+      "duplicate": 206,
+      "eval_overlap": 193,
+      "bad_format": 68,
+      "blocked": 3
+    },
+    "hydrogen-chat-7": 115459,
+    "hydrogen-written-7": 47113,
+    "hydrogen-mixed-7": 7047
+  },
+  "batch_8": {
+    "written_date": "2026-11-23",
+    "author": "Meowpuut project (Gemini 4 Hydrogen Low swarm wave batch_8, hand-authored)",
+    "tw_counts": {
+      "chat": 17950,
+      "written": 2707,
+      "mixed": 0
+    },
+    "stats": {
+      "raw": 41774,
+      "duplicate": 452,
+      "blocked": 25,
+      "eval_overlap": 220,
+      "template_file_skipped": 788
+    },
+    "hydrogen-chat-8": 35559,
+    "hydrogen-written-8": 5518
+  },
+  "batch_9_vertex_hydrogen": {
+    "written_date": "2026-11-23",
+    "author": "Meowpuut project (Vertex AI Batch Prediction publishers/google/models/gemini-4-hydrogen global)",
+    "job_name": "projects/272762785868/locations/global/batchPredictionJobs/4006410777211699200",
+    "reqs_succeeded": 5743,
+    "actual_batch_usd": 91.529,
+    "stats": {
+      "raw": 950367,
+      "kept": 915706,
+      "blocked_or_eval": 26518,
+      "dup_or_bad": 8143,
+      "chat_g3div": 0.835,
+      "written_g3div": 0.807
+    },
+    "hydrogen-chat-9": 711320,
+    "hydrogen-written-9": 204386
   }
 }

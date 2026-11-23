@@ -20,3 +20,9 @@ if [ -f DataSources/mimo-trigrams/trigram_bridge.tsv.xz ] && [ -f DataSources/mi
     --tri-weight 0.00 --skip-weight 0.25 \
     --out "${1:-.build/lexicon}/mimo_trigrams.bin"
 fi
+if [ -f scripts/mimo_assoc.py ] && [ -d DataSources/mimo-everyday ]; then
+  python3 scripts/mimo_assoc.py build \
+    --lexicon-dir "${1:-.build/lexicon}" \
+    --corpus-dirs DataSources/mimo-everyday \
+    --out "${1:-.build/lexicon}/mimo_assoc.bin"
+fi

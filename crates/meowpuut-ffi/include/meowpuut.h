@@ -53,6 +53,10 @@ int mpn_lexicon_attach_pairs(MPNLexicon *lexicon, const char *data, size_t size,
 // Ownership and attachment preconditions as for mpn_lexicon_attach_pairs.
 int mpn_lexicon_attach_trigrams(MPNLexicon *lexicon, const char *data, size_t size,
                                 MPNReleaseFn release, void *context);
+// Script-aware cross-word association table (mimo_assoc.bin, format MIMO-ASC-1).
+// Ownership and attachment preconditions as for mpn_lexicon_attach_pairs.
+int mpn_lexicon_attach_assoc(MPNLexicon *lexicon, const char *data, size_t size,
+                             MPNReleaseFn release, void *context);
 void mpn_lexicon_destroy(MPNLexicon *lexicon);
 // Heap bytes held by the lexicon tables (memory diagnostics); 0 for NULL.
 // Bytes read in place are not counted.

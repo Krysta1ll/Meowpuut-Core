@@ -32,6 +32,7 @@ use crate::{CandidateKind, CandidateScoreKind};
 const FUZZY_LEAD: f64 = 3.0;
 const FUZZY_LEAD_FLOOR: f64 = 3000.0 / 700.0 - 19.0 - 3.4;
 const EDIT_FIRST: f64 = 3.0;
+const COVERED_FIRST: f64 = 4.5;
 const ZHUYIN_WHOLE_LEAD: f64 = 1.0;
 
 impl Session {
@@ -120,10 +121,33 @@ impl Session {
             &mut self.scratch,
             &mut self.reorder_buf,
         );
+        let valid = has_exact_match(&self.lexicon, &self.input)
+            || (0..self.japanese.len()).any(|j| self.japanese.reading(j) == self.input);
+        let whole = self.input.len();
+        let covered_rescue = self.reorder_buf.is_empty();
+        if covered_rescue
+            && !self.ranked_work.is_empty()
+            && self.ranked_work.consumed[0] == whole
+        {
+            if let Some(lit) = crate::spatial::score_to_nats(
+                &self.lexicon,
+                self.ranked_work.score_kind[0],
+                self.ranked_work.score[0],
+            ) {
+                crate::spatial::covered_typo_corrections_into(
+                    &self.lexicon,
+                    &self.input,
+                    self.hans,
+                    lit,
+                    valid,
+                    &mut self.scratch,
+                    &mut self.reorder_buf,
+                );
+            }
+        }
         if self.reorder_buf.is_empty() {
             return;
         }
-        let whole = self.input.len();
         let guessed = !self.ranked_work.is_empty()
             && self.ranked_work.consumed[0] == whole
             && self.ranked_work.kind[0] == CandidateKind::Correction as u32
@@ -132,21 +156,29 @@ impl Session {
             && self.ranked_work.consumed[0] < whole
             && self.ranked_work.kind[0] == CandidateKind::Partial as u32
             && self.ranked_work.score_kind[0] == CandidateScoreKind::None as u32;
-        let valid = has_exact_match(&self.lexicon, &self.input)
-            || (0..self.japanese.len()).any(|j| self.japanese.reading(j) == self.input);
-        let first = !guessed && !partial && !self.abbreviated_lead() && !valid;
+        let first = !guessed && !partial && !self.abbreviated_lead() && !valid && (!covered_rescue || whole >= 8);
+        let first_bar = if covered_rescue { COVERED_FIRST } else { EDIT_FIRST };
         let mut position = 0;
         for i in 0..self.reorder_buf.len() {
             let gain = self.reorder_buf.score[i];
-            let at = if first && gain >= EDIT_FIRST {
+            let mut at = if first && gain >= first_bar {
                 position
             } else {
-                position.max(if guessed { 1 } else { 2 })
+                position.max(if guessed || covered_rescue { 1 } else { 2 })
             };
+            if covered_rescue && at > 0 {
+                while at < self.ranked_work.len()
+                    && self.ranked_work.score_kind[at] == CandidateScoreKind::FuzzyInitial as u32
+                {
+                    at += 1;
+                }
+            }
             let at = at.min(self.ranked_work.len());
             let text = self.reorder_buf.text(i);
             if let Some(existing) = (0..self.ranked_work.len()).find(|&r| self.ranked_work.text(r) == text) {
-                if existing <= at {
+                if existing <= at
+                    || (covered_rescue && self.ranked_work.score_kind[existing] == CandidateScoreKind::FuzzyInitial as u32)
+                {
                     position = existing + 1;
                     continue;
                 }
@@ -279,8 +311,14 @@ impl Session {
                 && [CandidateKind::Exact, CandidateKind::Path, CandidateKind::Unknown]
                     .iter()
                     .any(|&k| self.ranked_work.kind[0] == k as u32);
+            let guessed_lead = !initials
+                && !self.ranked_work.is_empty()
+                && self.ranked_work.consumed[0] == self.input.len()
+                && self.ranked_work.kind[0] == CandidateKind::Correction as u32
+                && self.ranked_work.score_kind[0] == CandidateScoreKind::Fallback as u32
+                && self.reorder_buf.score[0] > self.ranked_work.score[0];
             let lead = words
-                && literal
+                && (literal || guessed_lead)
                 && strict_han_count(self.reorder_buf.text(0)) > 1
                 && self.reorder_buf.score[0] >= FUZZY_LEAD_FLOOR
                 && self.reorder_buf.score[0] > self.typed_score() + FUZZY_LEAD;

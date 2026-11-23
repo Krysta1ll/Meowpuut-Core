@@ -250,12 +250,116 @@
       "version": "MASSIVE 1.1",
       "license": "CC-BY-4.0",
       "license_file": "CC-BY-4.0.txt"
+    },
+    "hydrogen-chat-5": {
+      "path": "DataSources/mimo-everyday/hydrogen-chat-5.txt.xz",
+      "group": "spoken",
+      "kind": "lines",
+      "weight_scale": 0.6,
+      "version": "written 2026-11-23 for this project (DataSources/mimo-everyday/SOURCE.json)",
+      "license": "written for this project"
+    },
+    "hydrogen-written-5": {
+      "path": "DataSources/mimo-everyday/hydrogen-written-5.txt.xz",
+      "group": "written",
+      "kind": "lines",
+      "weight_scale": 2.5,
+      "version": "written 2026-11-23 for this project (DataSources/mimo-everyday/SOURCE.json)",
+      "license": "written for this project"
+    },
+    "hydrogen-mixed-5": {
+      "path": "DataSources/mimo-everyday/hydrogen-mixed-5.txt.xz",
+      "group": "written",
+      "kind": "lines",
+      "weight_scale": 1.5,
+      "version": "written 2026-11-23 for this project (DataSources/mimo-everyday/SOURCE.json)",
+      "license": "written for this project"
+    },
+    "hydrogen-chat-6": {
+      "path": "DataSources/mimo-everyday/hydrogen-chat-6.txt.xz",
+      "group": "spoken",
+      "kind": "lines",
+      "weight_scale": 0.6,
+      "version": "written 2026-11-23 for this project (DataSources/mimo-everyday/SOURCE.json)",
+      "license": "written for this project"
+    },
+    "hydrogen-written-6": {
+      "path": "DataSources/mimo-everyday/hydrogen-written-6.txt.xz",
+      "group": "written",
+      "kind": "lines",
+      "weight_scale": 2.5,
+      "version": "written 2026-11-23 for this project (DataSources/mimo-everyday/SOURCE.json)",
+      "license": "written for this project"
+    },
+    "hydrogen-mixed-6": {
+      "path": "DataSources/mimo-everyday/hydrogen-mixed-6.txt.xz",
+      "group": "written",
+      "kind": "lines",
+      "weight_scale": 1.5,
+      "version": "written 2026-11-23 for this project (DataSources/mimo-everyday/SOURCE.json)",
+      "license": "written for this project"
+    },
+    "hydrogen-chat-7": {
+      "path": "DataSources/mimo-everyday/hydrogen-chat-7.txt.xz",
+      "group": "spoken",
+      "kind": "lines",
+      "weight_scale": 0.6,
+      "version": "written 2026-11-23 for this project (DataSources/mimo-everyday/SOURCE.json)",
+      "license": "written for this project"
+    },
+    "hydrogen-written-7": {
+      "path": "DataSources/mimo-everyday/hydrogen-written-7.txt.xz",
+      "group": "written",
+      "kind": "lines",
+      "weight_scale": 2.5,
+      "version": "written 2026-11-23 for this project (DataSources/mimo-everyday/SOURCE.json)",
+      "license": "written for this project"
+    },
+    "hydrogen-mixed-7": {
+      "path": "DataSources/mimo-everyday/hydrogen-mixed-7.txt.xz",
+      "group": "written",
+      "kind": "lines",
+      "weight_scale": 1.5,
+      "version": "written 2026-11-23 for this project (DataSources/mimo-everyday/SOURCE.json)",
+      "license": "written for this project"
+    },
+    "hydrogen-chat-8": {
+      "path": "DataSources/mimo-everyday/hydrogen-chat-8.txt.xz",
+      "group": "spoken",
+      "kind": "lines",
+      "weight_scale": 0.6,
+      "version": "written 2026-11-23 for this project (DataSources/mimo-everyday/SOURCE.json)",
+      "license": "written for this project"
+    },
+    "hydrogen-written-8": {
+      "path": "DataSources/mimo-everyday/hydrogen-written-8.txt.xz",
+      "group": "written",
+      "kind": "lines",
+      "weight_scale": 2.5,
+      "version": "written 2026-11-23 for this project (DataSources/mimo-everyday/SOURCE.json)",
+      "license": "written for this project"
+    },
+    "hydrogen-chat-9": {
+      "path": "DataSources/mimo-everyday/hydrogen-chat-9.txt.xz",
+      "group": "spoken",
+      "kind": "lines",
+      "weight_scale": 0.2,
+      "version": "written 2026-11-23 for this project (DataSources/mimo-everyday/SOURCE.json)",
+      "license": "written for this project"
+    },
+    "hydrogen-written-9": {
+      "path": "DataSources/mimo-everyday/hydrogen-written-9.txt.xz",
+      "group": "written",
+      "kind": "lines",
+      "weight_scale": 1.5,
+      "version": "written 2026-11-23 for this project (DataSources/mimo-everyday/SOURCE.json)",
+      "license": "written for this project"
     }
   },
   "not_used": "Wikipedia and its sister projects (CC BY-SA), any share-alike, non-commercial or no-derivatives text, news and government text, and web crawls whose publishers do not own the text.",
   "files": {
-    "counts.txt.xz": "43a45cdc9ad0e28d70648b79e7bbefa59edcfe496ce93610590548809ea6baa0",
-    "counts.json": "28815dc12a5e6f6ec4cd74f4dc198dca84436bd36a87d9f11850ed7199714c8c"
+    "counts.txt.xz": "689c500de762d7452433f7c0e81edfa49c9dd6c0a14dacda363f1b234e7710d5",
+    "counts.json": "a959c560ee02d8bf357c5e224c8d0edfcadb244f8db359698686f42f0e7ebea0"
   },
   "license_files": {
     "CC-BY-2.0-FR.html": "597d4c64f6606c64da65ba6c079e5cc87e4cce2b5187eda908c939b538e7ab9b",

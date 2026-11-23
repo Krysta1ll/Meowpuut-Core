@@ -149,12 +149,31 @@ def mutate(category, keys, sylls, rng):
 
 
 class Engine:
-    def __init__(self, lib, resources):
+    def __init__(self, lib, resources, pairs=False, trigrams=False):
         self.core = GOLDEN.load_core(lib)
-        base = (resources / "mimo_base.bin").read_bytes()
-        self.lexicon = self.core.mpn_lexicon_create_from_base(base, len(base), 1)
+        ptr, text, size = ctypes.c_void_p, ctypes.c_char_p, ctypes.c_size_t
+        for name in ("mpn_lexicon_attach_pairs", "mpn_lexicon_attach_trigrams"):
+            fn = getattr(self.core, name)
+            fn.restype, fn.argtypes = ctypes.c_int, (ptr, text, size, ptr, ptr)
+        self.base = (resources / "mimo_base.bin").read_bytes()
+        self.lexicon = self.core.mpn_lexicon_create_from_base(self.base, len(self.base), 1)
         if not self.lexicon:
             sys.exit("eval-typos: mimo_base.bin did not load")
+        self._bufs = []
+        if pairs:
+            p = resources / "mimo_pairs.bin"
+            if p.exists():
+                b = p.read_bytes()
+                self._bufs.append(b)
+                if not self.core.mpn_lexicon_attach_pairs(self.lexicon, b, len(b), None, None):
+                    sys.exit("eval-typos: mimo_pairs.bin did not attach")
+        if trigrams:
+            t = resources / "mimo_trigrams.bin"
+            if t.exists():
+                b = t.read_bytes()
+                self._bufs.append(b)
+                if not self.core.mpn_lexicon_attach_trigrams(self.lexicon, b, len(b), None, None):
+                    sys.exit("eval-typos: mimo_trigrams.bin did not attach")
         pool = json.loads((resources / "native-japanese.json").read_text(encoding="utf-8"))
         self.sessions = {}
         for script in "ts":
@@ -177,6 +196,77 @@ class Engine:
         return result
 
 
+def run_real_word_benchmark(engine, syllables, show_failures):
+    """Test 'fake-valid' typos on real sentences whose mutated keys still segment into valid syllables."""
+    sent_files = [ROOT / "Tests/eval/heldout-sentences.tsv", ROOT / "Tests/eval/modern-stress-sentences.tsv"]
+    rows = []
+    for path in sent_files:
+        if not path.exists():
+            continue
+        for line in path.read_text(encoding="utf-8").splitlines():
+            if not line.strip() or line.startswith("#"):
+                continue
+            parts = line.split("\t")
+            if len(parts) < 3 or parts[0] not in ("t", "s"):
+                continue
+            script, expected, py = parts[0], parts[1].strip(), "".join(parts[2].split())
+            if not (6 <= len(py) <= 30 and py.isascii() and py.isalpha() and py.islower() and is_han(expected)):
+                continue
+            rows.append((script, expected, py))
+    stats = defaultdict(lambda: [0, 0, 0, 0])  # cases, top1, top5, top8
+    failures = defaultdict(list)
+    for idx, (script, expected, py) in enumerate(rows):
+        clean_top = engine.top(script, py)
+        if not clean_top or clean_top[0] != expected:
+            continue
+        # Only test sentences the clean engine gets right so we isolate typo recovery.
+        for cat in ("rw_omit", "rw_neighbor", "rw_swap"):
+            rng = random.Random(f"{SEED}:rw:{idx}:{cat}")
+            cands = []
+            if cat == "rw_omit":
+                for i in range(1, len(py)):
+                    m = py[:i] + py[i + 1:]
+                    if m != py and segment(m, syllables) is not None:
+                        cands.append(m)
+            elif cat == "rw_neighbor":
+                for i, ch in enumerate(py):
+                    for nb in NEIGHBORS[ch]:
+                        m = py[:i] + nb + py[i + 1:]
+                        if m != py and segment(m, syllables) is not None:
+                            cands.append(m)
+            else:
+                for i in range(len(py) - 1):
+                    if py[i] != py[i + 1]:
+                        m = py[:i] + py[i + 1] + py[i] + py[i + 2:]
+                        if m != py and segment(m, syllables) is not None:
+                            cands.append(m)
+            if not cands:
+                continue
+            typed = rng.choice(cands)
+            got = engine.top(script, typed)
+            rank = got.index(expected) + 1 if expected in got else 0
+            for g in (cat, "rw_TOTAL"):
+                s = stats[g]
+                s[0] += 1
+                s[1] += rank == 1
+                s[2] += 1 <= rank <= 5
+                s[3] += 1 <= rank <= 8
+            if rank != 1:
+                failures[cat].append(f"{cat} [{script}] {typed} (from {py}) expected={expected} got={got[:3]}")
+    print("\n-- real-word ('fake-valid') sentence typos (mutated input still segments into valid syllables)")
+    print(f"{'category':<28}{'cases':>7}{'top1%':>8}{'top5%':>8}{'top8%':>8}")
+    for cat in ("rw_omit", "rw_neighbor", "rw_swap", "rw_TOTAL"):
+        s = stats[cat]
+        cases = s[0] or 1
+        print(f"{cat:<28}{s[0]:>7}{100 * s[1] / cases:>8.1f}{100 * s[2] / cases:>8.1f}{100 * s[3] / cases:>8.1f}")
+    if show_failures:
+        pick = random.Random(SEED)
+        for cat in ("rw_omit", "rw_neighbor", "rw_swap"):
+            found = failures[cat]
+            for text in sorted(pick.sample(found, min(show_failures, len(found))), key=found.index):
+                print("  " + text)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--lib", default=str(ROOT / "target/release/libmeowpuut_ffi.dylib"))
@@ -184,6 +274,9 @@ def main():
     parser.add_argument("--limit", type=int, default=0, help="use only the first N items (0 = all)")
     parser.add_argument("--show-failures", type=int, default=0)
     parser.add_argument("--items-from", help="draw the items from this build's native-pinyin.tsv")
+    parser.add_argument("--pairs", action="store_true", help="attach mimo_pairs.bin")
+    parser.add_argument("--trigrams", action="store_true", help="attach mimo_trigrams.bin")
+    parser.add_argument("--real-word", action="store_true", help="also evaluate fake-valid sentence typos")
     args = parser.parse_args()
     resources = Path(args.resources)
 
@@ -214,7 +307,7 @@ def main():
     if args.limit:
         items = items[:args.limit]
 
-    engine = Engine(args.lib, resources)
+    engine = Engine(args.lib, resources, pairs=args.pairs, trigrams=args.trigrams)
     stats = defaultdict(lambda: [0, 0, 0, 0, 0])  # cases, top1, top5, top8, skipped
     failures = defaultdict(list)
     for item_index, (kind, script, keys, expected) in enumerate(items):
@@ -274,6 +367,8 @@ def main():
             found = failures[category]
             for text in sorted(pick.sample(found, min(args.show_failures, len(found))), key=found.index):
                 print("  " + text)
+    if args.real_word:
+        run_real_word_benchmark(engine, syllables, args.show_failures)
     return 0
 
 

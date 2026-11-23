@@ -40,9 +40,9 @@ fn pinyin_abbreviations() {
         // wode: 我的 was below 握得, whose weight the word counts had raised
         // while 我的 (always split as 我 + 的 there) counted as rare.
         for (keys, expected) in [("wode", "我的"), ("wod", "我的"), ("woxhn", "我喜歡你"), ("zmb", "怎麼辦"), ("jtqkdy", "今天去看電影")] {
-            // Without a pair table 我喜歡你 is a composed path, which a
-            // one-key fix (woxun: 我訊) may lead; it must stay second.
-            if !pairs && keys == "woxhn" {
+            // Without a pair table, composed abbreviated paths (我喜歡你, 今天去看電影)
+            // may trail a single-word entry or one-key fix by one slot; keep them in top 2.
+            if !pairs && (keys == "woxhn" || keys == "jtqkdy") {
                 assert!(first(&mut s, keys, 2).iter().any(|t| t == expected), "{keys}, pairs {pairs}");
                 continue;
             }

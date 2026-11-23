@@ -30,6 +30,7 @@ use std::ffi::{c_char, c_int, c_void};
 use std::panic::AssertUnwindSafe;
 use std::sync::Arc;
 
+use meowpuut_core::assoc::Assoc;
 use meowpuut_core::image::ImageOwner;
 use meowpuut_core::english::English;
 use meowpuut_core::pairs::Pairs;
@@ -247,6 +248,33 @@ pub unsafe extern "C" fn mpn_lexicon_attach_trigrams(
                 return false;
             };
             lex.set_trigrams(trigrams);
+            true
+        })
+    }
+}
+
+/// Attaches a script-aware cross-word association table (`mimo_assoc.bin`) to
+/// `lexicon`, read in place. Returns 1 when attached; 0 when `data` is not a
+/// MIMO-ASC-1 image or sessions already use `lexicon`.
+///
+/// # Safety
+/// As `mpn_lexicon_attach_pairs`.
+#[no_mangle]
+#[allow(unsafe_code)]
+pub unsafe extern "C" fn mpn_lexicon_attach_assoc(
+    lexicon: *mut MPNLexicon,
+    data: *const c_char,
+    size: usize,
+    release: MPNReleaseFn,
+    context: *mut c_void,
+) -> c_int {
+    // SAFETY: caller upholds the pointer/lifetime contract documented above.
+    unsafe {
+        attach_lexicon_table(lexicon, data, size, release, context, false, |lex, bytes, owner| {
+            let Some(assoc) = Assoc::in_place(bytes, Some(owner)) else {
+                return false;
+            };
+            lex.set_assoc(assoc);
             true
         })
     }

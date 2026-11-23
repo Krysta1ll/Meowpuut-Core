@@ -669,9 +669,17 @@ pub(crate) fn key_edit_corrections_into(
         let near = ((1u64 << (edit.removed.max(1) + 2)) - 1) << edit.at >> 1;
         if covered && cover.fillers & near == 0 { return; }
         let len = edit.write(letters, &mut buffer);
+        let edit_adj = if edit.removed == 1 && edit.count == 1 {
+            crate::spatial::key_sub_adjustment(letters[edit.at], edit.added[0])
+        } else if edit.removed == 2 && edit.count == 2 {
+            crate::spatial::swap_adjustment(letters[edit.at], letters[edit.at + 1])
+        } else {
+            0.0
+        };
         // A second fix is decoded only when it is nearly as good as the first.
         let need = floor.max(best[EDIT_DECODES - 1]).max(best[0] - SECOND_FIX);
-        let score = cover.edited(lexicon, letters.len(), edit, &buffer[..len], need, &mut budget);
+        let raw = cover.edited(lexicon, letters.len(), edit, &buffer[..len], need + edit_adj, &mut budget);
+        let score = raw - edit_adj;
         if score <= need { return; }
         if (0..EDIT_DECODES).any(|k| kept[k][..kept_len[k]] == buffer[..len]) { return; }
         let mut slot = EDIT_DECODES - 1;

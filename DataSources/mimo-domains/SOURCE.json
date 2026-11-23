@@ -7,7 +7,15 @@
   },
   "files": {
     "modern-llm-terms.tsv": "f9d50296717755b73deaa724aa114ba4d9cf3bd5c28fd01f9e7c5154ec425459",
-    "modern-seed-terms.tsv": "1e1c6d618df8986082ca2ed562ea8d736c36b92dfe5f7159ffb37f7733b65aa7"
+    "modern-seed-terms.tsv": "1e1c6d618df8986082ca2ed562ea8d736c36b92dfe5f7159ffb37f7733b65aa7",
+    "hydrogen-v5-terms.tsv": "d53e5bdc86f4e2a46caf8bba049139fff1fbf3ef0b150ad2188c38fe1a143c09",
+    "hydrogen-v6-terms.tsv": "e556645023a6ffa43c5f460a06d29134aeaa4fa7e9b3b30b08ba4726b340917f",
+    "hydrogen-v7-terms.tsv": "f65db931ff044d010f9e150ac46c14815ccb426f04f8dba638a600997a969c76",
+    "hydrogen-v8-terms.tsv": "0029e4c5b6c2ff3ce9eac4a5fc9150ae4a1a86780e3578134640aed394bc89ea"
   },
-  "modern_seed_count": 208
+  "modern_seed_count": 208,
+  "hydrogen_v5_term_count": 15515,
+  "hydrogen_v6_term_count": 8770,
+  "hydrogen_v7_term_count": 8495,
+  "hydrogen_v8_term_count": 9605
 }

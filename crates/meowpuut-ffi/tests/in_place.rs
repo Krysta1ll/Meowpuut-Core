@@ -174,3 +174,50 @@ fn attach_trigrams_releases_once() {
         mpn_lexicon_destroy(tsv);
     }
 }
+
+#[test]
+fn attach_assoc_predicts_cross_word_and_releases_once() {
+    let py = Lexicon::load(PINYIN).unwrap().to_binary();
+    let zy = Lexicon::load(ZHUYIN).unwrap().to_binary();
+    let base = Lexicon::pack_base(&py, &zy);
+    let assoc_bytes = meowpuut_core::assoc::pack_image(
+        &[("你好", &[("世界", 9000), ("嗎", 6000)])],
+        &[("你好", &[("世界", 9000), ("吗", 6000)])],
+    ).unwrap();
+    let table = Image { bytes: assoc_bytes, released: AtomicUsize::new(0) };
+    let context = std::ptr::from_ref(&table).cast_mut().cast::<c_void>();
+    let bad = b"MIMO-ASC-1\0\0bad".to_vec();
+    // SAFETY: `base`, `table` and `bad` outlive the lexicons and sessions; release only counts.
+    unsafe {
+        let lex = mpn_lexicon_create_from_base(base.as_ptr().cast(), base.len(), 1);
+        let heap_before = mpn_lexicon_heap_bytes(lex);
+        assert_eq!(mpn_lexicon_attach_assoc(lex, bad.as_ptr().cast(), bad.len(), Some(release), context), 0);
+        assert_eq!(table.released.load(Ordering::SeqCst), 1, "invalid assoc image releases immediately");
+        assert_eq!(mpn_lexicon_attach_assoc(lex, table.bytes.as_ptr().cast(), table.bytes.len(), Some(release), context), 1);
+        assert_eq!(mpn_lexicon_heap_bytes(lex), heap_before, "in-place assoc table adds 0 heap bytes");
+        let session = mpn_session_create(lex);
+        assert_eq!(mpn_lexicon_attach_assoc(lex, table.bytes.as_ptr().cast(), table.bytes.len(), Some(release), context), 0);
+        assert_eq!(table.released.load(Ordering::SeqCst), 2, "no attach once sessions exist");
+        let ctx = "你好\0";
+        let n_tc = mpn_predict(session, ctx.as_ptr().cast(), 8);
+        assert!(n_tc >= 2);
+        let preds_tc: Vec<String> = (0..n_tc)
+            .map(|i| CStr::from_ptr(mpn_prediction(session, i)).to_string_lossy().into_owned())
+            .collect();
+        assert_eq!(preds_tc[0], "世界");
+        assert!(preds_tc.iter().any(|s| s == "嗎"));
+        assert!(!preds_tc.iter().any(|s| s == "吗"));
+        mpn_set_simplified(session, 1);
+        let n_sc = mpn_predict(session, ctx.as_ptr().cast(), 8);
+        let preds_sc: Vec<String> = (0..n_sc)
+            .map(|i| CStr::from_ptr(mpn_prediction(session, i)).to_string_lossy().into_owned())
+            .collect();
+        assert_eq!(preds_sc[0], "世界");
+        assert!(preds_sc.iter().any(|s| s == "吗"));
+        assert!(!preds_sc.iter().any(|s| s == "嗎"));
+        mpn_lexicon_destroy(lex);
+        assert_eq!(table.released.load(Ordering::SeqCst), 2);
+        mpn_session_destroy(session);
+        assert_eq!(table.released.load(Ordering::SeqCst), 3);
+    }
+}

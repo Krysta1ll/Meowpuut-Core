@@ -2,18 +2,18 @@
   "name": "mimo-trigrams",
   "description": "Stage-2 bridge-trigram and skip-1 bigram tables packed into mimo_trigrams.bin (format MIMO-TRI-1) at build time.",
   "license": "Count tables are the project's own derived statistics (MIT); built from the 25 permissive corpora listed in DataSources/mimo-pairs/SOURCE.json (CC0-1.0, CC-BY-2.0-FR, CC-BY-4.0, Apache-2.0, and project-authored corpora). All Tests/eval/*.tsv 5-grams and Resources/Lexicon/blocked-terms.txt sentences are excluded.",
-  "built_at": "2026-11-19",
+  "built_at": "2026-11-23",
   "locked_weights": {
     "tri_weight": 0.0,
     "skip_weight": 0.25,
     "tuned_on": "Tests/eval/test2-sentences.tsv"
   },
   "stats": {
-    "files_processed": 25,
-    "unique_unigrams": 99157,
-    "unique_bigrams": 2879276,
-    "trigrams_kept": 446156,
-    "skip1_kept": 307709,
+    "files_processed": 38,
+    "unique_unigrams": 125384,
+    "unique_bigrams": 5481914,
+    "trigrams_kept": 345683,
+    "skip1_kept": 212006,
     "sources": {
       "chat-2.txt.xz": {
         "lines": 44853,
@@ -30,6 +30,58 @@
       "everyday.txt.xz": {
         "lines": 92927,
         "weight_x10": 100
+      },
+      "hydrogen-chat-5.txt.xz": {
+        "lines": 22524,
+        "weight_x10": 100
+      },
+      "hydrogen-chat-6.txt.xz": {
+        "lines": 70894,
+        "weight_x10": 100
+      },
+      "hydrogen-chat-7.txt.xz": {
+        "lines": 115459,
+        "weight_x10": 100
+      },
+      "hydrogen-chat-8.txt.xz": {
+        "lines": 35559,
+        "weight_x10": 100
+      },
+      "hydrogen-chat-9.txt.xz": {
+        "lines": 705794,
+        "weight_x10": 100
+      },
+      "hydrogen-mixed-5.txt.xz": {
+        "lines": 2346,
+        "weight_x10": 15
+      },
+      "hydrogen-mixed-6.txt.xz": {
+        "lines": 5537,
+        "weight_x10": 15
+      },
+      "hydrogen-mixed-7.txt.xz": {
+        "lines": 7047,
+        "weight_x10": 15
+      },
+      "hydrogen-written-5.txt.xz": {
+        "lines": 20075,
+        "weight_x10": 20
+      },
+      "hydrogen-written-6.txt.xz": {
+        "lines": 36690,
+        "weight_x10": 20
+      },
+      "hydrogen-written-7.txt.xz": {
+        "lines": 47113,
+        "weight_x10": 20
+      },
+      "hydrogen-written-8.txt.xz": {
+        "lines": 5518,
+        "weight_x10": 20
+      },
+      "hydrogen-written-9.txt.xz": {
+        "lines": 202904,
+        "weight_x10": 20
       },
       "mixed-2.txt.xz": {
         "lines": 9354,
@@ -120,5 +172,9 @@
   "tables": {
     "trigram_bridge": "DataSources/mimo-trigrams/trigram_bridge.tsv.xz",
     "skip1_bigram": "DataSources/mimo-trigrams/skip1_bigram.tsv.xz"
+  },
+  "files": {
+    "trigram_bridge.tsv.xz": "5792854620926e775d8da50ea83fb50c5342665778681bdec94bd1728104b6bd",
+    "skip1_bigram.tsv.xz": "178c9cbcca55897e4bc4811ac804b339abe882543d30e9bdd26a668d64432000"
   }
 }
