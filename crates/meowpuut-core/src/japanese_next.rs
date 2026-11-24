@@ -120,6 +120,11 @@ impl JapaneseNext {
         Self::open(Bytes::Owned(Arc::from(bytes)))
     }
 
+    /// Opens an image by copying `bytes` once directly into an `Arc<[u8]>`.
+    pub fn from_slice(bytes: &[u8]) -> Option<Self> {
+        Self::open(Bytes::Owned(Arc::from(bytes)))
+    }
+
     /// Checks the magic, the version, `file_len`, and that the three sections lie inside the
     /// file behind the header and do not overlap. Does not read the tables.
     fn open(bytes: Bytes) -> Option<Self> {

@@ -125,7 +125,195 @@ fn tight_neighbors(ch: u8) -> &'static [u8] {
     }
 }
 
-/// Fast zero-alloc dictionary-word cover score for `letters` (sum of heaviest non-nosuggest word spans).
+/// Best non-nosuggest fully-spelled dictionary word score (nats) for `slice`.
+#[inline]
+fn span_word_score(lexicon: &Lexicon, slice: &[u8]) -> f64 {
+    let Ok(span) = std::str::from_utf8(slice) else { return f64::NEG_INFINITY };
+    let (lo, hi) = lexicon.range(span);
+    if lo == hi {
+        return f64::NEG_INFINITY;
+    }
+    (lo..hi.min(lo + 6))
+        .filter(|&row| lexicon.words.is_fully_spelled(row) && !lexicon.words.is_no_suggest(row))
+        .map(|row| f64::from(lexicon.words.weight(row)) / 700.0 - 19.0)
+        .fold(f64::NEG_INFINITY, f64::max)
+}
+
+/// Precomputed prefix/suffix word-cover tables for `letters` so single edits only probe
+/// spans crossing the edit point instead of re-running full `O(n * 24)` DP per edit.
+struct CoverTables {
+    prefix: [f64; MAX_COVERED_LEN + 1],
+    suffix: [f64; MAX_COVERED_LEN + 1],
+    valid_prefix: [u8; MAX_COVERED_LEN + 1],
+    valid_prefix_len: usize,
+    valid_suffix: [u8; MAX_COVERED_LEN + 1],
+    valid_suffix_len: usize,
+}
+
+impl CoverTables {
+    fn build(lexicon: &Lexicon, letters: &[u8]) -> Self {
+        let n = letters.len();
+        let mut span = [[f64::NEG_INFINITY; MAX_COVERED_LEN + 1]; MAX_COVERED_LEN];
+        for i in 0..n {
+            let max_end = (i + MAX_WORD_SPAN).min(n);
+            for end in i + 1..=max_end {
+                span[i][end] = span_word_score(lexicon, &letters[i..end]);
+            }
+        }
+        let mut prefix = [f64::NEG_INFINITY; MAX_COVERED_LEN + 1];
+        prefix[0] = 0.0;
+        for i in 0..n {
+            if prefix[i] == f64::NEG_INFINITY {
+                continue;
+            }
+            let max_end = (i + MAX_WORD_SPAN).min(n);
+            for end in i + 1..=max_end {
+                let best = span[i][end];
+                if best > f64::NEG_INFINITY {
+                    let cand = prefix[i] + best;
+                    if cand > prefix[end] {
+                        prefix[end] = cand;
+                    }
+                }
+            }
+        }
+        let mut suffix = [f64::NEG_INFINITY; MAX_COVERED_LEN + 1];
+        suffix[n] = 0.0;
+        for i in (0..n).rev() {
+            let max_end = (i + MAX_WORD_SPAN).min(n);
+            let mut best_from = f64::NEG_INFINITY;
+            for end in i + 1..=max_end {
+                if suffix[end] > f64::NEG_INFINITY && span[i][end] > f64::NEG_INFINITY {
+                    let cand = span[i][end] + suffix[end];
+                    if cand > best_from {
+                        best_from = cand;
+                    }
+                }
+            }
+            suffix[i] = best_from;
+        }
+        let mut valid_prefix = [0u8; MAX_COVERED_LEN + 1];
+        let mut valid_prefix_len = 0usize;
+        let mut valid_suffix = [0u8; MAX_COVERED_LEN + 1];
+        let mut valid_suffix_len = 0usize;
+        for i in 0..=n {
+            if prefix[i] > f64::NEG_INFINITY {
+                valid_prefix[valid_prefix_len] = i as u8;
+                valid_prefix_len += 1;
+            }
+            if suffix[i] > f64::NEG_INFINITY {
+                valid_suffix[valid_suffix_len] = i as u8;
+                valid_suffix_len += 1;
+            }
+        }
+        Self { prefix, suffix, valid_prefix, valid_prefix_len, valid_suffix, valid_suffix_len }
+    }
+
+    /// Exact word-cover score for a single-position edit (insert `delta = 1` at `pos`,
+    /// or substitute `delta = 0` at `pos`) probing only spans crossing `pos`.
+    fn single_point_cover(&self, lexicon: &Lexicon, cand: &[u8], pos: usize, delta: usize) -> f64 {
+        let min_t = pos + (1 - delta);
+        let mut best = f64::NEG_INFINITY;
+        for &sb in &self.valid_prefix[..self.valid_prefix_len] {
+            let s = usize::from(sb);
+            if s > pos {
+                break;
+            }
+            let p_score = self.prefix[s];
+            for &tb in &self.valid_suffix[..self.valid_suffix_len] {
+                let t = usize::from(tb);
+                if t < min_t {
+                    continue;
+                }
+                let e = t + delta;
+                if e - s > MAX_WORD_SPAN {
+                    break;
+                }
+                let w = span_word_score(lexicon, &cand[s..e]);
+                if w > f64::NEG_INFINITY {
+                    let sc = p_score + w + self.suffix[t];
+                    if sc > best {
+                        best = sc;
+                    }
+                }
+            }
+        }
+        best
+    }
+
+    /// Exact word-cover score for an adjacent transposition at `(i, i + 1)`.
+    fn swap_cover(&self, lexicon: &Lexicon, cand: &[u8], i: usize) -> f64 {
+        let mut best = f64::NEG_INFINITY;
+        // Case 1: one word spans both `i` and `i + 1`.
+        for &sb in &self.valid_prefix[..self.valid_prefix_len] {
+            let s = usize::from(sb);
+            if s > i {
+                break;
+            }
+            let p_score = self.prefix[s];
+            for &tb in &self.valid_suffix[..self.valid_suffix_len] {
+                let t = usize::from(tb);
+                if t < i + 2 {
+                    continue;
+                }
+                if t - s > MAX_WORD_SPAN {
+                    break;
+                }
+                let w = span_word_score(lexicon, &cand[s..t]);
+                if w > f64::NEG_INFINITY {
+                    let sc = p_score + w + self.suffix[t];
+                    if sc > best {
+                        best = sc;
+                    }
+                }
+            }
+        }
+        // Case 2: word boundary falls directly between `i` and `i + 1`.
+        let split = i + 1;
+        let mut left_best = f64::NEG_INFINITY;
+        for &sb in &self.valid_prefix[..self.valid_prefix_len] {
+            let s = usize::from(sb);
+            if s > i {
+                break;
+            }
+            if split - s > MAX_WORD_SPAN {
+                continue;
+            }
+            let w = span_word_score(lexicon, &cand[s..split]);
+            if w > f64::NEG_INFINITY {
+                let sc = self.prefix[s] + w;
+                if sc > left_best {
+                    left_best = sc;
+                }
+            }
+        }
+        if left_best > f64::NEG_INFINITY {
+            let mut right_best = f64::NEG_INFINITY;
+            for &tb in &self.valid_suffix[..self.valid_suffix_len] {
+                let t = usize::from(tb);
+                if t < split + 1 {
+                    continue;
+                }
+                if t - split > MAX_WORD_SPAN {
+                    break;
+                }
+                let w = span_word_score(lexicon, &cand[split..t]);
+                if w > f64::NEG_INFINITY {
+                    let sc = w + self.suffix[t];
+                    if sc > right_best {
+                        right_best = sc;
+                    }
+                }
+            }
+            if right_best > f64::NEG_INFINITY {
+                best = best.max(left_best + right_best);
+            }
+        }
+        best
+    }
+}
+
+#[cfg(test)]
 fn fast_word_cover(lexicon: &Lexicon, letters: &[u8]) -> f64 {
     let n = letters.len();
     if n == 0 || n > MAX_COVERED_LEN + 1 {
@@ -139,15 +327,7 @@ fn fast_word_cover(lexicon: &Lexicon, letters: &[u8]) -> f64 {
         }
         let max_end = (i + MAX_WORD_SPAN).min(n);
         for end in i + 1..=max_end {
-            let Ok(span) = std::str::from_utf8(&letters[i..end]) else { continue };
-            let (lo, hi) = lexicon.range(span);
-            if lo == hi {
-                continue;
-            }
-            let best = (lo..hi.min(lo + 6))
-                .filter(|&row| lexicon.words.is_fully_spelled(row) && !lexicon.words.is_no_suggest(row))
-                .map(|row| f64::from(lexicon.words.weight(row)) / 700.0 - 19.0)
-                .fold(f64::NEG_INFINITY, f64::max);
+            let best = span_word_score(lexicon, &letters[i..end]);
             if best > f64::NEG_INFINITY {
                 let cand = dp[i] + best;
                 if cand > dp[end] {
@@ -190,7 +370,8 @@ pub(crate) fn covered_typo_corrections_into(
     if !lexicon.pinyin || !(MIN_COVERED_LEN..=MAX_COVERED_LEN).contains(&n) || !letters.iter().all(u8::is_ascii_lowercase) {
         return;
     }
-    let base_cover = fast_word_cover(lexicon, letters);
+    let tables = CoverTables::build(lexicon, letters);
+    let base_cover = tables.prefix[n];
     if base_cover == f64::NEG_INFINITY {
         return;
     }
@@ -201,11 +382,11 @@ pub(crate) fn covered_typo_corrections_into(
     let mut kept_len = [0usize; TOP_EDITS];
     let mut buf = [0u8; MAX_COVERED_LEN + 2];
 
-    let mut consider = |len: usize, cand: &[u8], pen: f64| {
+    let mut consider = |len: usize, cand: &[u8], raw_cover: f64, pen: f64| {
         if cand == letters {
             return;
         }
-        let sc = fast_word_cover(lexicon, cand) - pen;
+        let sc = raw_cover - pen;
         if sc <= floor.max(best_cover[TOP_EDITS - 1]) {
             return;
         }
@@ -237,24 +418,27 @@ pub(crate) fn covered_typo_corrections_into(
             buf[..pos].copy_from_slice(&letters[..pos]);
             buf[pos] = ch;
             buf[pos + 1..n + 1].copy_from_slice(&letters[pos..]);
-            consider(n + 1, &buf[..n + 1], 0.45);
+            let cov = tables.single_point_cover(lexicon, &buf[..n + 1], pos, 1);
+            consider(n + 1, &buf[..n + 1], cov, 0.45);
         }
     }
-    // 2) Adjacent transpositions (e.g. keiy->keyi, zheg->zhen? / xianazi->xianzai).
+    // 2) Adjacent transpositions (e.g. keiy->keyi, xianazi->xianzai).
     for i in 0..n - 1 {
         if letters[i] == letters[i + 1] {
             continue;
         }
         buf[..n].copy_from_slice(letters);
         buf.swap(i, i + 1);
-        consider(n, &buf[..n], (0.60 + swap_adjustment(letters[i], letters[i + 1])).max(0.15));
+        let cov = tables.swap_cover(lexicon, &buf[..n], i);
+        consider(n, &buf[..n], cov, (0.60 + swap_adjustment(letters[i], letters[i + 1])).max(0.15));
     }
     // 3) Tight QWERTY neighbor substitutions.
     for i in 0..n {
         for &near in tight_neighbors(letters[i]) {
             buf[..n].copy_from_slice(letters);
             buf[i] = near;
-            consider(n, &buf[..n], (0.80 + key_sub_adjustment(letters[i], near)).max(0.25));
+            let cov = tables.single_point_cover(lexicon, &buf[..n], i, 0);
+            consider(n, &buf[..n], cov, (0.80 + key_sub_adjustment(letters[i], near)).max(0.25));
         }
     }
 
@@ -350,5 +534,88 @@ mod tests {
         covered_typo_corrections_into(&lex, "shijiabugou", false, lit2, false, &mut scratch, &mut out);
         assert_eq!(out.len(), 1);
         assert_eq!(out.text(0), "時間不夠");
+    }
+
+    #[test]
+    fn incremental_cover_matches_full_dp_across_100_seeds() {
+        let lex = Lexicon::load(concat!(
+            "MEOWPUUT-PINYIN-1\n",
+            "bu\tbu4\t不\t不\t7000\n",
+            "bugou\tbu4gou4\t不夠\t不够\t8000\n",
+            "chi\tchi1\t吃\t吃\t7200\n",
+            "fan\tfan4\t飯\t饭\t7100\n",
+            "gou\tgou4\t夠\t够\t6800\n",
+            "ka\tka3\t卡\t卡\t6000\n",
+            "kaishi\tkai1shi3\t開始\t开始\t8200\n",
+            "qu\tqu4\t去\t去\t7600\n",
+            "shi\tshi4\t是\t是\t7500\n",
+            "shijia\tshi4jia1\t世家\t世家\t6100\n",
+            "shijian\tshi2jian1\t時間\t时间\t8500\n",
+            "wo\two3\t我\t我\t9000\n",
+            "xian\txian1\t先\t先\t7100\n",
+            "xiang\txiang3\t想\t想\t8600\n",
+        ))
+        .unwrap();
+        let syls: &[&[u8]] = &[b"wo", b"xian", b"xiang", b"qu", b"chi", b"fan", b"shi", b"ka", b"bu", b"gou", b"shijia"];
+        let mut state = 0x2026_1124_1234_5678u64;
+        let mut next_u64 = || {
+            state = state.wrapping_add(0x9E37_79B9_7F4A_7C15);
+            let mut z = state;
+            z = (z ^ (z >> 30)).wrapping_mul(0xBF58_476D_1CE4_E5B9);
+            z = (z ^ (z >> 27)).wrapping_mul(0x94D0_49BB_1331_11EB);
+            z ^ (z >> 31)
+        };
+        for _seed in 0..100 {
+            let mut letters = Vec::new();
+            let parts = 2 + (next_u64() as usize % 4);
+            for _ in 0..parts {
+                let s = syls[next_u64() as usize % syls.len()];
+                if letters.len() + s.len() <= MAX_COVERED_LEN {
+                    letters.extend_from_slice(s);
+                }
+            }
+            if letters.len() < MIN_COVERED_LEN {
+                continue;
+            }
+            let n = letters.len();
+            let tables = CoverTables::build(&lex, &letters);
+            assert!((tables.prefix[n] - fast_word_cover(&lex, &letters)).abs() < 1e-11);
+            let mut buf = [0u8; MAX_COVERED_LEN + 2];
+            for pos in 1..=n {
+                for &ch in b"gni" {
+                    buf[..pos].copy_from_slice(&letters[..pos]);
+                    buf[pos] = ch;
+                    buf[pos + 1..n + 1].copy_from_slice(&letters[pos..]);
+                    let inc = tables.single_point_cover(&lex, &buf[..n + 1], pos, 1);
+                    let full = fast_word_cover(&lex, &buf[..n + 1]);
+                    assert!(
+                        (inc == full) || (inc - full).abs() < 1e-11,
+                        "insert mismatch: inc={inc} full={full}"
+                    );
+                }
+            }
+            for i in 0..n - 1 {
+                buf[..n].copy_from_slice(&letters);
+                buf.swap(i, i + 1);
+                let inc = tables.swap_cover(&lex, &buf[..n], i);
+                let full = fast_word_cover(&lex, &buf[..n]);
+                assert!(
+                    (inc == full) || (inc - full).abs() < 1e-11,
+                    "swap mismatch: inc={inc} full={full}"
+                );
+            }
+            for i in 0..n {
+                for &near in tight_neighbors(letters[i]).iter().take(2) {
+                    buf[..n].copy_from_slice(&letters);
+                    buf[i] = near;
+                    let inc = tables.single_point_cover(&lex, &buf[..n], i, 0);
+                    let full = fast_word_cover(&lex, &buf[..n]);
+                    assert!(
+                        (inc == full) || (inc - full).abs() < 1e-11,
+                        "sub mismatch: inc={inc} full={full}"
+                    );
+                }
+            }
+        }
     }
 }

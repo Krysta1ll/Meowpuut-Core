@@ -126,8 +126,8 @@ impl PathLatticeSoA {
             hash: vec![0; slots],
             pow: vec![1; slots],
             len: vec![0; slots],
-            head: vec![[0; 16]; slots],
-            head_len: vec![0; slots],
+            head: Vec::new(),
+            head_len: Vec::new(),
             spelled: vec![false; slots],
             verified: vec![false; slots],
             counts: [0u8; MAX_INPUT + 1],
@@ -135,6 +135,50 @@ impl PathLatticeSoA {
             left: crate::pairs::START,
             pair_cache: PairCache::new(),
             skip_no_suggest: false,
+        }
+    }
+
+    /// Empty lattice carrying only `left` context (used by nine-key sessions that never run the 26-key decoder).
+    pub(crate) fn empty() -> Self {
+        Self {
+            score: Vec::new(),
+            word: Vec::new(),
+            next: Vec::new(),
+            id: Vec::new(),
+            hash: Vec::new(),
+            pow: Vec::new(),
+            len: Vec::new(),
+            head: Vec::new(),
+            head_len: Vec::new(),
+            spelled: Vec::new(),
+            verified: Vec::new(),
+            counts: [0u8; MAX_INPUT + 1],
+            text: String::new(),
+            left: crate::pairs::START,
+            pair_cache: PairCache::empty(),
+            skip_no_suggest: false,
+        }
+    }
+
+    /// Ensures the full 26-key lattice vectors are allocated (no-op for standard sessions).
+    #[inline]
+    pub(crate) fn ensure_allocated(&mut self) {
+        if self.score.is_empty() {
+            let left = self.left;
+            let skip = self.skip_no_suggest;
+            *self = Self::new();
+            self.left = left;
+            self.skip_no_suggest = skip;
+        }
+    }
+
+    /// Lazily allocates `head`/`head_len` only when decoding without a pair table (`join_bonus` path).
+    #[inline]
+    pub(crate) fn ensure_heads(&mut self) {
+        if self.head.is_empty() {
+            let slots = self.score.len();
+            self.head = vec![[0; 16]; slots];
+            self.head_len = vec![0; slots];
         }
     }
 
@@ -158,7 +202,9 @@ impl PathLatticeSoA {
         self.hash[slot] = 0;
         self.pow[slot] = 1;
         self.len[slot] = 0;
-        self.head_len[slot] = 0;
+        if !self.head_len.is_empty() {
+            self.head_len[slot] = 0;
+        }
         self.spelled[slot] = true;
         self.verified[slot] = true;
         self.counts[pos] = 1;
@@ -167,20 +213,24 @@ impl PathLatticeSoA {
     /// Adds step `idx` as a path at `pos`; `traditional` is the first word's traditional text.
     pub fn push_step(&mut self, pos: usize, step: &StepPathsSoA, idx: usize, traditional: &str) {
         let slot = Self::slot_index(pos, self.counts[pos] as usize);
-        let next = step.next[idx] as usize;
-        let mut head = [0u8; 16];
-        let mut head_len = 0usize;
-        let mut chars = 0usize;
-        for &b in traditional.as_bytes().iter().chain(&self.head[next][..self.head_len[next] as usize]) {
-            let starts_char = (b & 0xC0) != 0x80;
-            if starts_char && chars == 4 {
-                break;
+        if !self.head.is_empty() {
+            let next = step.next[idx] as usize;
+            let mut head = [0u8; 16];
+            let mut head_len = 0usize;
+            let mut chars = 0usize;
+            for &b in traditional.as_bytes().iter().chain(&self.head[next][..self.head_len[next] as usize]) {
+                let starts_char = (b & 0xC0) != 0x80;
+                if starts_char && chars == 4 {
+                    break;
+                }
+                chars += usize::from(starts_char);
+                if head_len < 16 {
+                    head[head_len] = b;
+                    head_len += 1;
+                }
             }
-            chars += usize::from(starts_char);
-            if head_len < 16 {
-                head[head_len] = b;
-                head_len += 1;
-            }
+            self.head[slot] = head;
+            self.head_len[slot] = head_len as u8;
         }
         self.score[slot] = step.score[idx];
         self.word[slot] = step.word[idx];
@@ -189,8 +239,6 @@ impl PathLatticeSoA {
         self.hash[slot] = step.hash[idx];
         self.pow[slot] = step.pow[idx];
         self.len[slot] = step.len[idx];
-        self.head[slot] = head;
-        self.head_len[slot] = head_len as u8;
         self.spelled[slot] = step.spelled[idx];
         self.verified[slot] = step.verified[idx];
         self.counts[pos] += 1;
@@ -199,6 +247,9 @@ impl PathLatticeSoA {
     /// First four characters of the traditional text of the path in `slot`.
     #[inline]
     pub fn head(&self, slot: usize) -> &str {
+        if self.head.is_empty() {
+            return "";
+        }
         std::str::from_utf8(&self.head[slot][..self.head_len[slot] as usize]).unwrap_or("")
     }
 
@@ -215,7 +266,7 @@ impl Default for PathLatticeSoA { fn default() -> Self { Self::new() } }
 #[derive(Debug, Clone)]
 pub struct PairCache {
     keys: Vec<u64>,
-    scores: Vec<i32>,
+    scores: Vec<i16>,
     table: usize,
 }
 
@@ -226,9 +277,17 @@ impl PairCache {
         Self { keys: vec![u64::MAX; 1 << Self::BITS], scores: vec![0; 1 << Self::BITS], table: 0 }
     }
 
+    pub(crate) fn empty() -> Self {
+        Self { keys: Vec::new(), scores: Vec::new(), table: 0 }
+    }
+
     /// Empties the cache when `table` (the address of the pair table) changed.
     pub fn use_table(&mut self, table: usize) {
-        if self.table != table {
+        if self.keys.is_empty() {
+            self.keys = vec![u64::MAX; 1 << Self::BITS];
+            self.scores = vec![0; 1 << Self::BITS];
+            self.table = table;
+        } else if self.table != table {
             self.keys.fill(u64::MAX);
             self.table = table;
         }
@@ -241,9 +300,9 @@ impl PairCache {
         let slot = (key.wrapping_mul(0x9E37_79B9_7F4A_7C15) >> (64 - Self::BITS)) as usize;
         if self.keys[slot] != key {
             self.keys[slot] = key;
-            self.scores[slot] = pairs.score(left, right);
+            self.scores[slot] = pairs.score(left, right) as i16;
         }
-        self.scores[slot]
+        i32::from(self.scores[slot])
     }
 }
 
@@ -329,7 +388,7 @@ pub struct DecodeOutputSoA {
 impl DecodeOutputSoA {
     pub fn with_capacity(cap: usize) -> Self {
         Self {
-            arena: String::with_capacity((cap * 64).max(16384)),
+            arena: String::with_capacity(if cap == 0 { 0 } else { (cap * 48).max(1536) }),
             text_offset: Vec::with_capacity(cap),
             text_len: Vec::with_capacity(cap),
             consumed: Vec::with_capacity(cap),
@@ -433,10 +492,36 @@ impl DecoderScratchSoA {
             step_paths: StepPathsSoA::new(),
             decoded: DecodeOutputSoA::with_capacity(CANDIDATE_LIMIT + 32),
             aux_decoded: DecodeOutputSoA::with_capacity(CANDIDATE_LIMIT + 32),
-            fallback_raw: DecodeOutputSoA::with_capacity(8192),
-            fallback_out: DecodeOutputSoA::with_capacity(256),
-            fallback_order: Vec::with_capacity(8192),
+            fallback_raw: DecodeOutputSoA::with_capacity(0),
+            fallback_out: DecodeOutputSoA::with_capacity(32),
+            fallback_order: Vec::new(),
             trad_scratch: String::with_capacity(256),
+            span_costs: Box::default(),
+        }
+    }
+
+    /// Lightweight scratch carrying no 26-key decoder arrays (used by nine-key sessions).
+    pub(crate) fn empty() -> Self {
+        Self {
+            lattice: PathLatticeSoA::empty(),
+            step_paths: StepPathsSoA {
+                score: Vec::new(),
+                word: Vec::new(),
+                next: Vec::new(),
+                id: Vec::new(),
+                hash: Vec::new(),
+                pow: Vec::new(),
+                len: Vec::new(),
+                spelled: Vec::new(),
+                verified: Vec::new(),
+                order: Vec::new(),
+            },
+            decoded: DecodeOutputSoA::with_capacity(0),
+            aux_decoded: DecodeOutputSoA::with_capacity(0),
+            fallback_raw: DecodeOutputSoA::with_capacity(0),
+            fallback_out: DecodeOutputSoA::with_capacity(0),
+            fallback_order: Vec::new(),
+            trad_scratch: String::new(),
             span_costs: Box::default(),
         }
     }

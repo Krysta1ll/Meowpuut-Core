@@ -169,17 +169,16 @@ fn lookup(index: &[u64], hash: u32) -> impl Iterator<Item = usize> + '_ {
         .map(|&e| e as u32 as usize)
 }
 
-/// Precomputed sorted nine-key signature tables over a Pinyin [`Lexicon`].
+/// Immutable sorted nine-key signature tables shared across all nine-key sessions of a [`Lexicon`].
 #[derive(Debug, Clone)]
-pub struct NineKeyIndex {
+pub struct NineKeyBaseIndex {
     chinese: Vec<u64>,
     initials: Vec<u64>,
     latin: Vec<u64>,
-    japanese: Vec<u64>,
 }
 
-impl NineKeyIndex {
-    pub fn new(lexicon: &Lexicon) -> Self {
+impl NineKeyBaseIndex {
+    pub(crate) fn new(lexicon: &Lexicon) -> Self {
         let mut chinese = Vec::with_capacity(lexicon.buckets.len());
         let mut initials = Vec::new();
         let mut latin = Vec::new();
@@ -207,7 +206,27 @@ impl NineKeyIndex {
         }
         initials.sort_unstable_by_key(|&e| (e >> 32, std::cmp::Reverse(lexicon.words.weight(e as u32 as usize)), e));
         initials.shrink_to_fit();
-        Self { chinese, initials, latin, japanese: Vec::new() }
+        Self { chinese, initials, latin }
+    }
+}
+
+/// Precomputed sorted nine-key signature tables over a Pinyin [`Lexicon`].
+/// The immutable lexicon tables (`chinese`, `initials`, `latin`) are shared via
+/// [`Lexicon::nine_key_base`]; only the tiny session-local `japanese` list is owned per session.
+#[derive(Debug, Clone)]
+pub struct NineKeyIndex {
+    base: std::sync::Arc<std::sync::OnceLock<NineKeyBaseIndex>>,
+    japanese: Vec<u64>,
+}
+
+impl NineKeyIndex {
+    pub fn new(lexicon: &Lexicon) -> Self {
+        Self { base: lexicon.nine_key_base(), japanese: Vec::new() }
+    }
+
+    #[inline]
+    fn base(&self) -> &NineKeyBaseIndex {
+        self.base.get().expect("NineKeyBaseIndex initialized by Lexicon::nine_key_base")
     }
 
     pub fn add_japanese(&mut self, reading: &str, row: usize, weight: i32) {
@@ -218,7 +237,7 @@ impl NineKeyIndex {
     }
 
     pub(crate) fn chinese_bucket_rows<'a>(&'a self, lexicon: &'a Lexicon, keys: &'a [u8], hash: u32) -> impl Iterator<Item = usize> + 'a {
-        lookup(&self.chinese, hash).filter(move |&row| matches_keys(lexicon.buckets.key(&lexicon.storage, row), keys))
+        lookup(&self.base().chinese, hash).filter(move |&row| matches_keys(lexicon.buckets.key(&lexicon.storage, row), keys))
     }
 
     pub(crate) fn chinese_rows<'a>(&'a self, lexicon: &'a Lexicon, keys: &'a [u8], hash: u32) -> impl Iterator<Item = (usize, usize)> + 'a {
@@ -226,7 +245,7 @@ impl NineKeyIndex {
     }
 
     pub(crate) fn initials_rows<'a>(&'a self, lexicon: &'a Lexicon, keys: &'a [u8]) -> impl Iterator<Item = usize> + 'a {
-        lookup(&self.initials, signature_keys(keys)).filter(move |&row| {
+        lookup(&self.base().initials, signature_keys(keys)).filter(move |&row| {
             if lexicon.words.is_no_suggest(row) { return false; }
             let r = lexicon.words.reading(&lexicon.storage, row);
             r.len() == 2 * keys.len() && r.bytes().step_by(2).zip(keys.iter().copied()).all(|(b, k)| key_matches(b, k))
@@ -234,7 +253,7 @@ impl NineKeyIndex {
     }
 
     pub(crate) fn latin_rows<'a>(&'a self, lexicon: &'a Lexicon, keys: &'a [u8]) -> impl Iterator<Item = (usize, usize)> + 'a {
-        lookup(&self.latin, signature_keys(keys))
+        lookup(&self.base().latin, signature_keys(keys))
             .filter(move |&row| matches_keys(lexicon.buckets.key(&lexicon.storage, row), keys))
             .map(|row| lexicon.buckets.range(row))
     }

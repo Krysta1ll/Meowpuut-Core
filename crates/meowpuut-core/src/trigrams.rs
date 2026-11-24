@@ -50,17 +50,31 @@ pub struct Trigrams {
 }
 
 impl Trigrams {
-    /// Loads a `MIMO-TRI-1` image by copying its packed arrays onto the heap.
+    /// Loads a `MIMO-TRI-1` image by copying its packed arrays onto the heap and verifying all entries.
     pub fn load(bytes: &[u8], ids: &WordIds) -> Option<Self> {
-        Self::parse(bytes, ids, &|b| Bytes::owned(b.to_vec()), None)
+        Self::parse(bytes, ids, &|b| Bytes::owned(b.to_vec()), None, true)
     }
 
     /// Reads a `MIMO-TRI-1` image directly from caller-owned `'static` bytes (`heap_bytes() == 0`).
+    /// Only header, fingerprint, length, and bridge IDs are checked at open so untouched mmap pages
+    /// stay unfaulted; call [`Trigrams::verify`] to validate every packed entry.
     pub fn in_place(bytes: &'static [u8], ids: &WordIds, owner: Option<ImageOwner>) -> Option<Self> {
-        Self::parse(bytes, ids, &Bytes::mapped, owner)
+        Self::parse(bytes, ids, &Bytes::mapped, owner, false)
     }
 
-    fn parse<'a>(bytes: &'a [u8], ids: &WordIds, col: &dyn Fn(&'a [u8]) -> Bytes, owner: Option<ImageOwner>) -> Option<Self> {
+    /// Runs a full validation pass checking strict key ordering and ID bounds for every packed entry.
+    pub fn verify(&self) -> bool {
+        validate_entries(&self.tri_entries, self.word_count, Some(self.bridge_count))
+            && validate_entries(&self.skip_entries, self.word_count, None)
+    }
+
+    fn parse<'a>(
+        bytes: &'a [u8],
+        ids: &WordIds,
+        col: &dyn Fn(&'a [u8]) -> Bytes,
+        owner: Option<ImageOwner>,
+        full_validate: bool,
+    ) -> Option<Self> {
         if bytes.len() < DATA_OFFSET || &bytes[0..12] != MAGIC {
             return None;
         }
@@ -97,8 +111,9 @@ impl Trigrams {
         }
         let tri_entries = U64Col::new(col(&bytes[DATA_OFFSET..tri_end]));
         let skip_entries = U64Col::new(col(&bytes[tri_end..]));
-        if !validate_entries(&tri_entries, word_count, Some(bridge_count))
-            || !validate_entries(&skip_entries, word_count, None)
+        if full_validate
+            && (!validate_entries(&tri_entries, word_count, Some(bridge_count))
+                || !validate_entries(&skip_entries, word_count, None))
         {
             return None;
         }

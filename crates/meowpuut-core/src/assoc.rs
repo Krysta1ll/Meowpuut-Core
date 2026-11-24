@@ -63,6 +63,7 @@ impl ScriptTable {
         edges: usize,
         strings: &[u8],
         col: &dyn Fn(&'a [u8]) -> Bytes,
+        full_validate: bool,
     ) -> Option<Self> {
         let mut pos = 0usize;
         let mut take = |len: usize| -> Option<&'a [u8]> {
@@ -81,7 +82,12 @@ impl ScriptTable {
             return None;
         }
         let table = Self { keys, edges, key_offsets, key_lens, edge_offsets, val_offsets, val_lens, scores };
-        table.validate(strings).then_some(table)
+        let ok = if full_validate {
+            table.validate(strings)
+        } else {
+            table.edge_offsets.get(0) == 0 && table.edge_offsets.get(table.keys) as usize == table.edges
+        };
+        ok.then_some(table)
     }
 
     fn validate(&self, strings: &[u8]) -> bool {
@@ -130,7 +136,7 @@ impl ScriptTable {
     fn key_bytes<'a>(&self, strings: &'a [u8], idx: usize) -> &'a [u8] {
         let off = self.key_offsets.get(idx) as usize;
         let len = usize::from(self.key_lens.get(idx));
-        &strings[off..off + len]
+        off.checked_add(len).and_then(|end| strings.get(off..end)).unwrap_or(b"")
     }
 
     fn find_key(&self, strings: &[u8], target: &[u8]) -> Option<usize> {
@@ -148,12 +154,13 @@ impl ScriptTable {
 
     fn visit<'a>(&self, strings: &'a [u8], key: &[u8], mut f: impl FnMut(&'a str, u16)) {
         let Some(k_idx) = self.find_key(strings, key) else { return };
-        let start = self.edge_offsets.get(k_idx) as usize;
-        let end = self.edge_offsets.get(k_idx + 1) as usize;
+        let start = (self.edge_offsets.get(k_idx) as usize).min(self.edges);
+        let end = (self.edge_offsets.get(k_idx + 1) as usize).min(self.edges);
         for e in start..end {
             let off = self.val_offsets.get(e) as usize;
             let len = usize::from(self.val_lens.get(e));
-            if let Ok(text) = std::str::from_utf8(&strings[off..off + len]) {
+            let Some(slice) = off.checked_add(len).and_then(|e_end| strings.get(off..e_end)) else { continue };
+            if let Ok(text) = std::str::from_utf8(slice) {
                 f(text, self.scores.get(e));
             }
         }
@@ -179,17 +186,29 @@ pub struct Assoc {
 }
 
 impl Assoc {
-    /// Loads a `MIMO-ASC-1` image by copying its columns onto the heap.
+    /// Loads a `MIMO-ASC-1` image by copying its columns onto the heap and verifying all entries.
     pub fn load(bytes: &[u8]) -> Option<Self> {
-        Self::parse(bytes, &|b| Bytes::owned(b.to_vec()), None)
+        Self::parse(bytes, &|b| Bytes::owned(b.to_vec()), None, true)
     }
 
     /// Reads a `MIMO-ASC-1` image directly from caller-owned `'static` bytes (`heap_bytes() == 0`).
+    /// Only header and section bounds are validated at open so unused mmap pages stay unfaulted;
+    /// call [`Assoc::verify`] to audit every key and edge.
     pub fn in_place(bytes: &'static [u8], owner: Option<ImageOwner>) -> Option<Self> {
-        Self::parse(bytes, &Bytes::mapped, owner)
+        Self::parse(bytes, &Bytes::mapped, owner, false)
     }
 
-    fn parse<'a>(bytes: &'a [u8], col: &dyn Fn(&'a [u8]) -> Bytes, owner: Option<ImageOwner>) -> Option<Self> {
+    /// Runs a full validation pass over all Traditional and Simplified keys, edges, and UTF-8 strings.
+    pub fn verify(&self) -> bool {
+        self.tc.validate(&self.strings) && self.sc.validate(&self.strings)
+    }
+
+    fn parse<'a>(
+        bytes: &'a [u8],
+        col: &dyn Fn(&'a [u8]) -> Bytes,
+        owner: Option<ImageOwner>,
+        full_validate: bool,
+    ) -> Option<Self> {
         if bytes.len() < HEADER_BYTES || &bytes[0..12] != MAGIC {
             return None;
         }
@@ -210,8 +229,8 @@ impl Assoc {
             return None;
         }
         let strings_slice = &bytes[sc_end..];
-        let tc = ScriptTable::parse(&bytes[HEADER_BYTES..tc_end], tc_keys, tc_edges, strings_slice, col)?;
-        let sc = ScriptTable::parse(&bytes[tc_end..sc_end], sc_keys, sc_edges, strings_slice, col)?;
+        let tc = ScriptTable::parse(&bytes[HEADER_BYTES..tc_end], tc_keys, tc_edges, strings_slice, col, full_validate)?;
+        let sc = ScriptTable::parse(&bytes[tc_end..sc_end], sc_keys, sc_edges, strings_slice, col, full_validate)?;
         Some(Self { tc, sc, strings: col(strings_slice), _owner: owner })
     }
 

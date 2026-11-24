@@ -63,7 +63,7 @@ pub struct MPNLexicon {
 pub struct MPNSession {
     pub(crate) core: Session,
     pub(crate) lexicon: Arc<Lexicon>,
-    pub(crate) predictor: Predictor,
+    pub(crate) predictor: Option<Predictor>,
     pub(crate) input: CBuf,
     pub(crate) input_text: CBuf,
     pub(crate) input_text_work: String,
@@ -85,7 +85,7 @@ impl MPNSession {
         let mut session = Self {
             core,
             lexicon,
-            predictor: Predictor::new(),
+            predictor: None,
             input: CBuf::with_capacity(512),
             input_text: CBuf::with_capacity(1024),
             input_text_work: String::with_capacity(1024),
@@ -94,7 +94,7 @@ impl MPNSession {
             context: CBuf::with_capacity(128),
             mixed: CBuf::with_capacity(512),
             candidates: CArena::with_capacity(320, 16 * 1024),
-            predictions: CArena::with_capacity(64, 1024),
+            predictions: CArena::with_capacity(0, 0),
             simplified: false,
         };
         session.sync();

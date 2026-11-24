@@ -59,22 +59,22 @@ impl Session {
         } else {
             return;
         };
-        let lead = r.text(0).to_owned();
-        let lead = lead.as_str();
-        if !lead.bytes().any(|b| b.is_ascii_alphabetic()) {
+        self.tmp_text.clear();
+        self.tmp_text.push_str(self.ranked_work.text(0));
+        if !self.tmp_text.bytes().any(|b| b.is_ascii_alphabetic()) {
             return;
         }
-        let Some((cut, last)) = lead.char_indices().last() else { return };
-        if strict_han_count(&lead[cut..cut + last.len_utf8()]) != 1 {
+        let Some((cut, last)) = self.tmp_text.char_indices().last() else { return };
+        if strict_han_count(&self.tmp_text[cut..cut + last.len_utf8()]) != 1 {
             return;
         }
-        if self.lead_word_goes_on(lead, n - initial) {
+        if self.lead_word_goes_on(&self.tmp_text, n - initial) {
             return;
         }
-        let phrase = &lead[..cut];
+        let phrase = &self.tmp_text[..cut];
         let consumed = whole - initial;
-        let Some(at) = (1..r.len().min(CANDIDATE_LIMIT))
-            .find(|&i| r.consumed[i] == consumed && r.text(i) == phrase)
+        let Some(at) = (1..self.ranked_work.len().min(CANDIDATE_LIMIT))
+            .find(|&i| self.ranked_work.consumed[i] == consumed && self.ranked_work.text(i) == phrase)
         else {
             return;
         };
@@ -217,7 +217,7 @@ impl Session {
         word.max(typed_cover_score(&self.lexicon, &self.input, &mut self.scratch))
     }
 
-    pub(crate) fn zhuyin_typed_prefix(&self) -> Option<(String, usize)> {
+    pub(crate) fn zhuyin_typed_prefix_range(&self) -> Option<(usize, usize, usize)> {
         let whole = self.input.len();
         let seg = self.segments_work.text(0);
         let seg_consumed = self.segments_work.consumed[0];
@@ -251,7 +251,7 @@ impl Session {
                 }
             }
         }
-        Some((text[..cut].to_owned(), seg_consumed))
+        Some((r.text_offset[best] as usize, cut, seg_consumed))
     }
 
     pub(crate) fn zhuyin_initial_after_tone(&self) -> bool {

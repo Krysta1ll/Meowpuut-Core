@@ -196,12 +196,15 @@ pub fn decode_with_buffers(
         guesses.end = out.len();
     }
 
-    lattice.reset(length);
-    lattice.push_end(length, if open_end { OPEN_END } else { END });
+    lattice.ensure_allocated();
     let pairs = lexicon.pairs();
     if let Some(p) = pairs {
         lattice.pair_cache.use_table(std::ptr::from_ref(p) as usize);
+    } else {
+        lattice.ensure_heads();
     }
+    lattice.reset(length);
+    lattice.push_end(length, if open_end { OPEN_END } else { END });
     // Without a pair table the decoder keeps BEAM paths per position and
     // BEAM rows per span, as before the table existed.
     let (states, span_words) = if pairs.is_some() { (PAIR_STATES, PAIR_SPAN_WORDS) } else { (BEAM, BEAM) };
@@ -260,19 +263,22 @@ pub fn decode_with_buffers(
                 0
             };
             let english = latin::span(lexicon, reading.sounds_bytes(), start, end);
+            let need_spelled_check = lexicon.pinyin
+                && lo < hi
+                && ((english.is_none() && pairs.is_some() && end != length)
+                    || abbrev::pinyin_initials(reading.sounds_bytes(), start, end));
+            let has_spelled = need_spelled_check
+                && (lo..hi).any(|i| lexicon.words.is_fully_spelled(i) && matches(i, start, end));
             // First-letter abbreviations only where the span is not a spelled word, or at the end of the input,
             // and never where an English word stands.
-            let skip_short = english.is_some() || pairs.is_some()
-                && lexicon.pinyin
-                && end != length
-                && (lo..hi).any(|i| lexicon.words.is_fully_spelled(i) && matches(i, start, end));
+            let skip_short = english.is_some() || (pairs.is_some() && lexicon.pinyin && end != length && has_spelled);
             // Where the span can only be initials (no spelled word reads it, and
             // it is not the end of a syllable before it), an abbreviation row is
             // scored as its word less the mixed penalty (merge::abbreviation_score).
             let abbreviation_only = lexicon.pinyin
                 && lo < hi
                 && abbrev::pinyin_initials(reading.sounds_bytes(), start, end)
-                && !(lo..hi).any(|i| lexicon.words.is_fully_spelled(i) && matches(i, start, end));
+                && !has_spelled;
             let mut taken = [0usize; PAIR_SPAN_WORDS];
             let mut used = 0usize;
             for index in (lo..hi).chain(mixed_buf[..mixed].iter().map(|&r| r as usize)) {
@@ -436,10 +442,20 @@ pub fn decode_with_buffers(
         let completion = completes(lexicon, reading.sounds(), out.text(guesses.start), hans);
         if let Some(i) = (guesses.end..out.len()).find(|&i| !completion && out.kind[i] == CandidateKind::Path as u32) {
             if out.score[i] > best_guess {
-                let text = out.text(i).to_owned();
-                let (kind, score) = (out.kind[i], out.score[i]);
-                out.remove_at(i);
-                out.insert_at(guesses.start, &text, input.len(), kind, CandidateScoreKind::Path as u32, score);
+                let (off, len, cons, kind, skind, score) = (
+                    out.text_offset.remove(i),
+                    out.text_len.remove(i),
+                    out.consumed.remove(i),
+                    out.kind.remove(i),
+                    out.score_kind.remove(i),
+                    out.score.remove(i),
+                );
+                out.text_offset.insert(guesses.start, off);
+                out.text_len.insert(guesses.start, len);
+                out.consumed.insert(guesses.start, cons);
+                out.kind.insert(guesses.start, kind);
+                out.score_kind.insert(guesses.start, skind);
+                out.score.insert(guesses.start, score);
             }
         }
     }

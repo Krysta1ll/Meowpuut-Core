@@ -173,7 +173,7 @@ pub unsafe extern "C" fn mpn_japanese_open(data: *const c_void, size: usize, cop
         if copy == 0 {
             JapaneseLexicon::from_static(bytes)
         } else {
-            JapaneseLexicon::from_vec(bytes.to_vec())
+            JapaneseLexicon::from_slice(bytes)
         }
     });
     match opened.ok().flatten() {

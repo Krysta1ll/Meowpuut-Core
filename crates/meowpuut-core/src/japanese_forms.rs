@@ -410,8 +410,8 @@ impl FormScratch {
     pub(super) fn new() -> Self {
         Self {
             arena: Vec::with_capacity(16 * 1024),
-            nodes: Vec::with_capacity(64),
-            searched: Vec::with_capacity(MAX_SEARCHES),
+            nodes: Vec::with_capacity(MAX_NODES),
+            searched: Vec::with_capacity(MAX_SEGMENT_SEARCHES),
         }
     }
 }

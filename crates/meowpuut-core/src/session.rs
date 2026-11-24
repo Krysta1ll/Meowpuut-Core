@@ -90,7 +90,7 @@ impl Session {
             tmp_remaining: String::with_capacity(MAX_INPUT + 8),
             tmp_trad: String::with_capacity(64),
             tmp_combined: String::with_capacity(128),
-            japanese: JapaneseTableSoA::with_capacity(512, 8192),
+            japanese: JapaneseTableSoA::default(),
             candidates: CandidatePoolSoA::with_capacity(CANDIDATE_LIMIT + 32),
             ranked_work: DecodeOutputSoA::with_capacity(CANDIDATE_LIMIT + 32),
             partial_work: DecodeOutputSoA::with_capacity(32),
@@ -108,14 +108,39 @@ impl Session {
     }
 
     /// Creates a session taking the telephone keypad digits 2–9 as Pinyin/Romaji.
+    /// Skips allocating 26-key decoder scratch buffers (saving ~1 MiB per nine-key session).
     pub fn new_nine_key(lexicon: Arc<Lexicon>) -> Option<Self> {
         if !lexicon.pinyin {
             return None;
         }
         let state = NineKeyState::new(&lexicon);
-        let mut session = Self::new(lexicon);
-        session.nine_key = Some(state);
-        Some(session)
+        Some(Self {
+            lexicon,
+            nine_key: Some(state),
+            input: String::with_capacity(MAX_INPUT + 8),
+            preedit: String::with_capacity(MAX_INPUT * 3 + 8),
+            committed: String::with_capacity(MAX_INPUT * 3 + 8),
+            mixed_pinyin_buf: String::new(),
+            segment_context: String::with_capacity(64),
+            tmp_text: String::with_capacity(128),
+            tmp_remaining: String::with_capacity(MAX_INPUT + 8),
+            tmp_trad: String::with_capacity(64),
+            tmp_combined: String::with_capacity(128),
+            japanese: JapaneseTableSoA::default(),
+            candidates: CandidatePoolSoA::with_capacity(CANDIDATE_LIMIT + 32),
+            ranked_work: DecodeOutputSoA::with_capacity(0),
+            partial_work: DecodeOutputSoA::with_capacity(0),
+            predictive_work: DecodeOutputSoA::with_capacity(0),
+            segments_work: DecodeOutputSoA::with_capacity(0),
+            reorder_buf: DecodeOutputSoA::with_capacity(0),
+            row_work: DecodeOutputSoA::with_capacity(0),
+            scratch: DecoderScratchSoA::empty(),
+            page: 0,
+            hans: false,
+            complete_memo: 0,
+            picked_id: START,
+            picked_context: String::with_capacity(256),
+        })
     }
 
     /// Returns a combined capacity signature of internal SoA buffers for zero-allocation testing.
@@ -243,6 +268,9 @@ impl Session {
             || !reading.bytes().all(|c| (b'a'..=b'z').contains(&c))
         {
             return false;
+        }
+        if self.japanese.is_empty() && self.japanese.arena.capacity() == 0 {
+            self.japanese = JapaneseTableSoA::with_capacity(128, 2048);
         }
         let is_single_han = strict_han_count(text) == 1;
         if let Some(state) = &mut self.nine_key {

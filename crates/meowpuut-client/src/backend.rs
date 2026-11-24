@@ -162,14 +162,7 @@ impl ChineseWithJapaneseBackend {
                 let _ = session.add_japanese_word(key, surf, w);
             }
         }
-        let mut pairs = Vec::with_capacity(lexicon.words.len());
-        for i in 0..lexicon.words.len() {
-            pairs.push((
-                lexicon.words.text(&lexicon.storage, i, false),
-                lexicon.words.weight(i),
-            ));
-        }
-        let evidence = WordEvidenceSoA::from_pairs(&pairs);
+        let evidence = WordEvidenceSoA::from_pairs(&[]);
 
         Self {
             session,

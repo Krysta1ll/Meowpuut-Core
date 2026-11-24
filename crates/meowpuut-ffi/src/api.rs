@@ -450,7 +450,11 @@ session_fn!(/// Registers a Japanese word for mixed input; 1 if accepted.
         // SAFETY: forwarded caller contract for `text`.
         let text = unsafe { arg_str(text) };
         match (reading, text) {
-            (Some(r), Some(t)) => c_int::from(s.mutate(|core| core.add_japanese_word(r, t, weight))),
+            (Some(r), Some(t)) => {
+                let ok = std::panic::catch_unwind(AssertUnwindSafe(|| s.core.add_japanese_word(r, t, weight)))
+                    .unwrap_or(false);
+                c_int::from(ok)
+            }
             _ => 0,
         }
     });
@@ -498,12 +502,13 @@ session_fn!(/// Computes next-word associations for committed `context`; returns
     fn mpn_predict(s, context: *const c_char, limit: usize) -> usize, 0, {
         // SAFETY: forwarded caller contract for `context`.
         let context = unsafe { arg_str(context) }.unwrap_or("");
+        let predictor = s.predictor.get_or_insert_with(meowpuut_core::predict::Predictor::new);
         // A panic yields no associations instead of unwinding into the caller.
-        let n = std::panic::catch_unwind(AssertUnwindSafe(|| s.predictor.predict(&s.lexicon, context, s.simplified, limit)))
+        let n = std::panic::catch_unwind(AssertUnwindSafe(|| predictor.predict(&s.lexicon, context, s.simplified, limit)))
             .unwrap_or(0);
         s.predictions.clear();
         for i in 0..n {
-            s.predictions.push(s.predictor.text(i));
+            s.predictions.push(predictor.text(i));
         }
         n
     });

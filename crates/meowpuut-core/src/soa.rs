@@ -141,8 +141,8 @@ impl WordTableSoA {
     #[inline]
     pub fn reading<'a>(&self, storage: &'a str, idx: usize) -> &'a str {
         let start = self.reading_offset.get(idx) as usize;
-        let end = start + self.reading_len.get(idx) as usize;
-        &storage[start..end]
+        let end = start.saturating_add(self.reading_len.get(idx) as usize);
+        storage.get(start..end).unwrap_or("")
     }
 
     #[inline]
@@ -152,7 +152,7 @@ impl WordTableSoA {
         } else {
             (self.hant_offset.get(idx) as usize, self.hant_len.get(idx) as usize)
         };
-        &storage[off..off + len]
+        storage.get(off..off.saturating_add(len)).unwrap_or("")
     }
 
     #[inline]
@@ -237,8 +237,8 @@ impl BucketTableSoA {
     #[inline]
     pub fn key<'a>(&self, storage: &'a str, idx: usize) -> &'a str {
         let start = self.key_offset.get(idx) as usize;
-        let end = start + self.key_len.get(idx) as usize;
-        &storage[start..end]
+        let end = start.saturating_add(self.key_len.get(idx) as usize);
+        storage.get(start..end).unwrap_or("")
     }
 
     #[inline]
@@ -288,8 +288,8 @@ impl ContextTableSoA {
     #[inline]
     pub fn phrase<'a>(&self, storage: &'a str, idx: usize) -> &'a str {
         let start = self.phrase_offset.get(idx) as usize;
-        let end = start + self.phrase_len.get(idx) as usize;
-        &storage[start..end]
+        let end = start.saturating_add(self.phrase_len.get(idx) as usize);
+        storage.get(start..end).unwrap_or("")
     }
 }
 

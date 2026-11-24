@@ -228,11 +228,19 @@ impl Session {
                 }
             }
             if !self.segments_work.is_empty() && after_tone {
-                let (text, consumed) = self.zhuyin_typed_prefix().unwrap_or_else(|| (self.segments_work.text(0).to_owned(), self.segments_work.consumed[0]));
-                if let Some(d) = (0..self.ranked_work.len()).find(|&r| same_selection(&self.ranked_work, r, &text, consumed)) {
+                let consumed = if let Some((off, len, cons)) = self.zhuyin_typed_prefix_range() {
+                    self.tmp_text.clear();
+                    self.tmp_text.push_str(&self.ranked_work.arena[off..off + len]);
+                    cons
+                } else {
+                    self.tmp_text.clear();
+                    self.tmp_text.push_str(self.segments_work.text(0));
+                    self.segments_work.consumed[0]
+                };
+                if let Some(d) = (0..self.ranked_work.len()).find(|&r| same_selection(&self.ranked_work, r, &self.tmp_text, consumed)) {
                     let _ = remove_item_at(&mut self.ranked_work, d);
                 }
-                self.ranked_work.insert_at(0, &text, consumed, CandidateKind::Partial as u32, CandidateScoreKind::None as u32, 0.0);
+                self.ranked_work.insert_at(0, &self.tmp_text, consumed, CandidateKind::Partial as u32, CandidateScoreKind::None as u32, 0.0);
                 self.ranked_work.truncate(CANDIDATE_LIMIT);
             }
             insert_partials_at(&mut self.ranked_work, &self.segments_work, 3, true);
@@ -298,17 +306,25 @@ impl Session {
             }
         }
         self.candidates.clear();
+        let full_reading = crate::reading::Reading::new(&self.input, self.lexicon.pinyin);
+        let full_sounds = full_reading.sounds_bytes();
+        let whole_len = self.input.len();
         for i in 0..self.ranked_work.len() {
-            if self.volunteered(i) { continue; }
+            if self.volunteered_with_reading(i, whole_len, full_sounds) { continue; }
             self.candidates.push(self.ranked_work.text(i), self.ranked_work.consumed[i], self.ranked_work.kind[i], self.ranked_work.score_kind[i], self.ranked_work.score[i]);
         }
         self.page = 0;
     }
 
-    pub(crate) fn volunteered(&self, i: usize) -> bool {
+    pub(crate) fn volunteered_with_reading(&self, i: usize, whole_len: usize, full_sounds: &[u8]) -> bool {
         let text = self.ranked_work.text(i);
-        let consumed = self.ranked_work.consumed[i].min(self.input.len());
-        if self.lexicon.volunteers(&self.input[..consumed], text) {
+        let consumed = self.ranked_work.consumed[i].min(whole_len);
+        let is_volunteered = if consumed == whole_len {
+            self.lexicon.volunteers_with_sounds(&self.input, full_sounds, text)
+        } else {
+            self.lexicon.volunteers(&self.input[..consumed], text)
+        };
+        if is_volunteered {
             return true;
         }
         let score_kind = self.ranked_work.score_kind[i];

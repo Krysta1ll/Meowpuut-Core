@@ -23,8 +23,6 @@
 //! assert_eq!(out.text(0), "你好");
 //! ```
 
-use std::cmp::Ordering;
-
 use crate::decoder::decode_with_buffers;
 use crate::latin;
 use crate::lexicon::Lexicon;
@@ -764,6 +762,9 @@ pub fn unfinished_phrase_into(
 
 /// Generates bounded prefix completions, single-edit typo corrections, and single-char fallbacks
 /// into preallocated SoA buffers without heap allocation.
+///
+/// Uses an inline stack-allocated top-28 deduplicated SoA buffer so callers do not need to
+/// allocate large temporary `raw`/`order` buffers (`raw` and `order` are cleared for compatibility).
 pub fn fallback_into(
     lexicon: &Lexicon,
     input: &str,
@@ -776,6 +777,63 @@ pub fn fallback_into(
     raw.clear();
     order.clear();
     out.clear();
+    const TOP_K: usize = 28;
+    struct TopFallback {
+        word: [usize; TOP_K],
+        consumed: [usize; TOP_K],
+        kind: [u32; TOP_K],
+        score: [f64; TOP_K],
+        len: usize,
+    }
+    impl TopFallback {
+        #[inline]
+        fn offer(&mut self, lexicon: &Lexicon, hans: bool, word_idx: usize, consumed: usize, kind: u32, score: f64) {
+            if self.len == TOP_K && score <= self.score[TOP_K - 1] {
+                return;
+            }
+            let text = lexicon.words.text(&lexicon.storage, word_idx, hans);
+            if let Some(existing) = (0..self.len).find(|&k| lexicon.words.text(&lexicon.storage, self.word[k], hans) == text) {
+                if score <= self.score[existing] {
+                    return;
+                }
+                for k in existing..self.len - 1 {
+                    self.word[k] = self.word[k + 1];
+                    self.consumed[k] = self.consumed[k + 1];
+                    self.kind[k] = self.kind[k + 1];
+                    self.score[k] = self.score[k + 1];
+                }
+                self.len -= 1;
+            }
+            // Strictly greater preserves stable order on ties (earlier entry stays first).
+            let mut pos = self.len;
+            while pos > 0 && score > self.score[pos - 1] {
+                pos -= 1;
+            }
+            if pos >= TOP_K {
+                return;
+            }
+            let new_len = (self.len + 1).min(TOP_K);
+            for k in (pos + 1..new_len).rev() {
+                self.word[k] = self.word[k - 1];
+                self.consumed[k] = self.consumed[k - 1];
+                self.kind[k] = self.kind[k - 1];
+                self.score[k] = self.score[k - 1];
+            }
+            self.word[pos] = word_idx;
+            self.consumed[pos] = consumed;
+            self.kind[pos] = kind;
+            self.score[pos] = score;
+            self.len = new_len;
+        }
+    }
+    let mut top = TopFallback {
+        word: [0; TOP_K],
+        consumed: [0; TOP_K],
+        kind: [0; TOP_K],
+        score: [f64::NEG_INFINITY; TOP_K],
+        len: 0,
+    };
+
     let reading = Reading::new(input, lexicon.pinyin);
     let sounds = reading.sounds();
     let sounds_bytes = reading.sounds_bytes();
@@ -792,19 +850,19 @@ pub fn fallback_into(
         }
     };
 
-    let collect = |key: &str, penalty: f64, raw_buf: &mut DecodeOutputSoA| {
+    let collect = |top: &mut TopFallback, key: &str, penalty: f64| {
         let (lo, hi) = lexicon.range(key);
         for i in lo..hi.min(lo + 7) {
             // Completions and typo fixes: never a never-volunteer word.
             if lexicon.words.is_no_suggest(i) && key != sounds {
                 continue;
             }
-            let text = lexicon.words.text(&lexicon.storage, i, hans);
-            raw_buf.push(
-                text,
+            top.offer(
+                lexicon,
+                hans,
+                i,
                 input.len(),
                 CandidateKind::Correction as u32,
-                CandidateScoreKind::Fallback as u32,
                 f64::from(lexicon.words.weight(i)) - penalty + edges(i, true),
             );
         }
@@ -812,11 +870,12 @@ pub fn fallback_into(
 
     if sounds_bytes.len() == 1 {
         for idx in lexicon.initials(sounds_bytes[0]) {
-            raw.push(
-                lexicon.words.text(&lexicon.storage, idx, hans),
+            top.offer(
+                lexicon,
+                hans,
+                idx,
                 input.len(),
                 CandidateKind::Correction as u32,
-                CandidateScoreKind::Fallback as u32,
                 f64::from(lexicon.words.weight(idx)) + edges(idx, true),
             );
         }
@@ -833,7 +892,7 @@ pub fn fallback_into(
             }
             let extra = bkey.len() - sounds.len();
             if extra <= 6 {
-                collect(bkey, 1200.0 * (extra as f64), raw);
+                collect(&mut top, bkey, 1200.0 * (extra as f64));
             }
             bucket_idx += 1;
         }
@@ -846,53 +905,56 @@ pub fn fallback_into(
                     key_buf[..slen].copy_from_slice(sounds_bytes);
                     key_buf.swap(i, i + 1);
                     if let Ok(s) = std::str::from_utf8(&key_buf[..slen]) {
-                        collect(s, 800.0, raw);
+                        collect(&mut top, s, 800.0);
                     }
                 }
                 if i > 0 && sounds_bytes[i] == sounds_bytes[i - 1] {
                     key_buf[..i].copy_from_slice(&sounds_bytes[..i]);
                     key_buf[i..slen - 1].copy_from_slice(&sounds_bytes[i + 1..slen]);
                     if let Ok(s) = std::str::from_utf8(&key_buf[..slen - 1]) {
-                        collect(s, 800.0, raw);
+                        collect(&mut top, s, 800.0);
                     }
                 }
                 for &ch in qwerty_neighbors(sounds_bytes[i]) {
                     key_buf[..slen].copy_from_slice(sounds_bytes);
                     key_buf[i] = ch;
                     if let Ok(s) = std::str::from_utf8(&key_buf[..slen]) {
-                        collect(s, 1200.0, raw);
+                        collect(&mut top, s, 1200.0);
                     }
                 }
             }
         }
-
     }
 
-    if raw.is_empty() && allow_single {
+    if top.len == 0 && allow_single {
         let mut count = input.len().min(7);
         while count > 0 {
             let prefix = Reading::new(&input[..count], lexicon.pinyin);
             if !prefix.is_empty() {
                 let (lo, hi) = lexicon.range(prefix.sounds());
+                let mut pushed = 0usize;
                 for i in lo..hi {
-                    if raw.len() >= 28 {
+                    if pushed >= TOP_K {
                         break;
                     }
                     let text = lexicon.words.text(&lexicon.storage, i, hans);
                     let wr = lexicon.words.reading(&lexicon.storage, i).as_bytes();
-                    if utf8_char_count(text) == 1 && prefix.matches(wr, 0, prefix.len())
+                    if utf8_char_count(text) == 1
+                        && prefix.matches(wr, 0, prefix.len())
                         && !(lexicon.words.is_no_suggest(i) && count != input.len())
                     {
-                        raw.push(
-                            text,
+                        pushed += 1;
+                        top.offer(
+                            lexicon,
+                            hans,
+                            i,
                             count,
                             CandidateKind::Partial as u32,
-                            CandidateScoreKind::Fallback as u32,
                             f64::from(lexicon.words.weight(i)) + edges(i, count == input.len()),
                         );
                     }
                 }
-                if !raw.is_empty() {
+                if top.len > 0 {
                     break;
                 }
             }
@@ -900,27 +962,15 @@ pub fn fallback_into(
         }
     }
 
-    for i in 0..raw.len() {
-        order.push(i);
-    }
-    order.sort_by(|&a, &b| {
-        if raw.score[a] > raw.score[b] {
-            Ordering::Less
-        } else if raw.score[a] < raw.score[b] {
-            Ordering::Greater
-        } else {
-            Ordering::Equal
-        }
-    });
-
-    for &idx in order.iter() {
-        let text = raw.text(idx);
-        if !out.contains_text(text) {
-            out.push(text, raw.consumed[idx], raw.kind[idx], raw.score_kind[idx], raw.score[idx]);
-            if out.len() == 28 {
-                break;
-            }
-        }
+    for k in 0..top.len {
+        let text = lexicon.words.text(&lexicon.storage, top.word[k], hans);
+        out.push(
+            text,
+            top.consumed[k],
+            top.kind[k],
+            CandidateScoreKind::Fallback as u32,
+            top.score[k],
+        );
     }
 }
 

@@ -69,7 +69,7 @@ pub unsafe extern "C" fn mpn_japanese_next_open(data: *const c_void, size: usize
         if copy == 0 {
             JapaneseNext::from_static(bytes)
         } else {
-            JapaneseNext::from_vec(bytes.to_vec())
+            JapaneseNext::from_slice(bytes)
         }
     });
     match opened.ok().flatten() {

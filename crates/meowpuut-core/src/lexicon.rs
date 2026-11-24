@@ -30,6 +30,7 @@
 //! `k`: an everyday word that holds a listed word (`FLAG_LISTED_KEEP`).
 
 use std::collections::HashMap;
+use std::sync::{Arc, OnceLock};
 
 use crate::context_index::{phrase_hash, PhraseIndex};
 use crate::image::{ImageOwner, Text, U32Col};
@@ -71,8 +72,16 @@ pub struct Lexicon {
     pub(crate) zhuyin_syllables: crate::abbrev::SyllableTable,
     /// Texts of the `FLAG_NO_SUGGEST` rows (both scripts) and their rows.
     no_suggest: NoSuggest,
+    /// Shared immutable nine-key lookup tables, built lazily on first nine-key session.
+    nine_key_base: Arc<OnceLock<crate::nine_key::NineKeyBaseIndex>>,
     /// Keeps in-place bytes alive; `None` when everything is owned.
     owner: Option<ImageOwner>,
+}
+
+#[inline]
+fn char_bloom_slot(ch: char) -> (usize, u64) {
+    let h = (u32::from(ch).wrapping_mul(0x9E37_79B1)) >> 21; // 11 bits -> 0..2048
+    ((h >> 6) as usize, 1u64 << (h & 63))
 }
 
 /// The words of the never-volunteer list in a lexicon: the hash of each text
@@ -80,7 +89,7 @@ pub struct Lexicon {
 /// sorted. Built at load from the flag column (a few thousand rows, 16 bytes
 /// each); not counted in `Lexicon::heap_bytes`, which is the size of the
 /// tables (0 when they are read in place).
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone)]
 pub struct NoSuggest {
     rows: Vec<(u64, u32)>,
     /// Longest text, in characters.
@@ -88,14 +97,24 @@ pub struct NoSuggest {
     /// The same for the `FLAG_LISTED_KEEP` rows.
     keep: Vec<(u64, u32)>,
     keep_longest: usize,
+    /// 2048-bit Bloom filter of the first `char` of every `rows` text (fast rejection in `each_part`).
+    first_char_bloom: [u64; 32],
+}
+
+impl Default for NoSuggest {
+    fn default() -> Self {
+        Self { rows: Vec::new(), longest: 0, keep: Vec::new(), keep_longest: 0, first_char_bloom: [0; 32] }
+    }
 }
 
 impl NoSuggest {
     fn build(storage: &str, words: &WordTableSoA) -> Self {
         let (mut rows, mut keep) = (Vec::new(), Vec::new());
         let (mut longest, mut keep_longest) = (0, 0);
+        let mut first_char_bloom = [0u64; 32];
         for i in 0..words.len() {
-            let (list, most) = if words.is_no_suggest(i) {
+            let is_ns = words.is_no_suggest(i);
+            let (list, most) = if is_ns {
                 (&mut rows, &mut longest)
             } else if words.is_listed_keep(i) {
                 (&mut keep, &mut keep_longest)
@@ -104,6 +123,16 @@ impl NoSuggest {
             };
             let (hant, hans) = (words.text(storage, i, false), words.text(storage, i, true));
             *most = (*most).max(hant.chars().count()).max(hans.chars().count());
+            if is_ns {
+                if let Some(c) = hant.chars().next() {
+                    let (w, m) = char_bloom_slot(c);
+                    first_char_bloom[w] |= m;
+                }
+                if let Some(c) = hans.chars().next() {
+                    let (w, m) = char_bloom_slot(c);
+                    first_char_bloom[w] |= m;
+                }
+            }
             list.push((phrase_hash(hant.as_bytes()), i as u32));
             if hans != hant {
                 list.push((phrase_hash(hans.as_bytes()), i as u32));
@@ -114,7 +143,13 @@ impl NoSuggest {
             list.dedup();
             list.shrink_to_fit();
         }
-        Self { rows, longest, keep, keep_longest }
+        Self { rows, longest, keep, keep_longest, first_char_bloom }
+    }
+
+    #[inline]
+    fn may_start_with(&self, ch: char) -> bool {
+        let (w, m) = char_bloom_slot(ch);
+        (self.first_char_bloom[w] & m) != 0
     }
 
     /// Rows whose hash is that of `text` (the caller compares the text).
@@ -531,9 +566,31 @@ impl Lexicon {
         if words.is_empty() { return None; }
         let index = index.unwrap_or_else(|| LexiconIndex::build(&storage, &words, &buckets, &context));
         let no_suggest = NoSuggest::build(&storage, &words);
-        let mut lex = Self { storage, words, buckets, context, index, longest, pinyin, pairs: None, trigrams: None, assoc: None, english: None, zhuyin_syllables: [0; 37], no_suggest, owner };
+        let mut lex = Self {
+            storage,
+            words,
+            buckets,
+            context,
+            index,
+            longest,
+            pinyin,
+            pairs: None,
+            trigrams: None,
+            assoc: None,
+            english: None,
+            zhuyin_syllables: [0; 37],
+            no_suggest,
+            nine_key_base: Arc::new(OnceLock::new()),
+            owner,
+        };
         lex.zhuyin_syllables = crate::abbrev::syllable_table(&lex);
         Some(lex)
+    }
+
+    /// Lazily builds and shares the immutable nine-key lookup tables across all nine-key sessions.
+    pub(crate) fn nine_key_base(&self) -> Arc<OnceLock<crate::nine_key::NineKeyBaseIndex>> {
+        let _ = self.nine_key_base.get_or_init(|| crate::nine_key::NineKeyBaseIndex::new(self));
+        Arc::clone(&self.nine_key_base)
     }
 
     /// Uses `pairs` for ranking (see `crate::pairs`).
@@ -795,6 +852,19 @@ impl Lexicon {
         self.volunteers_by(text, |_| false, |letters| sounds.windows(letters.len()).any(|w| w == letters))
     }
 
+    /// Faster variant of [`Lexicon::volunteers`] when the caller already parsed `Reading` for the
+    /// full input and only needs the sounds prefix for `&input[..consumed]` (avoids constructing
+    /// a 1 KiB `Reading` up to 256× per keystroke).
+    pub(crate) fn volunteers_with_sounds(&self, input: &str, sounds: &[u8], text: &str) -> bool {
+        if self.no_suggest.rows.is_empty() {
+            return false;
+        }
+        if self.is_no_suggest_text(text) {
+            return !self.spells_no_suggest(input, text);
+        }
+        self.volunteers_by(text, |_| false, |letters| sounds.windows(letters.len()).any(|w| w == letters))
+    }
+
     /// `volunteers` for keys of another kind (nine-key digits): `whole`
     /// says whether the keys are the full spelling of a row with these
     /// letters (its reading without tones), `inside` whether they contain it.
@@ -872,15 +942,23 @@ impl Lexicon {
     /// 印度支那, 總統套房) is not tested.
     fn each_part(&self, text: &str, mut test: impl FnMut(&str) -> bool) -> bool {
         let mut starts = [0usize; 65];
+        let mut may_start = [false; 64];
+        let mut any_hit = false;
         let mut n = 0;
         let mut end = text.len();
-        for (i, _) in text.char_indices() {
+        for (i, ch) in text.char_indices() {
             if n == 64 {
                 end = i;
                 break;
             }
             starts[n] = i;
+            let hit = self.no_suggest.may_start_with(ch);
+            may_start[n] = hit;
+            any_hit |= hit;
             n += 1;
+        }
+        if !any_hit || n < 2 {
+            return false;
         }
         starts[n] = end;
         // kept[a]: the end (in characters) of the longest everyday word that starts at a.
@@ -899,6 +977,9 @@ impl Lexicon {
         let inside_kept = |a: usize, b: usize| (a.saturating_sub(self.no_suggest.keep_longest)..=a).any(|k| kept[k] >= b);
         let longest = self.no_suggest.longest.max(2);
         for a in 0..n {
+            if !may_start[a] {
+                continue;
+            }
             for b in a + 2..=n.min(a + longest) {
                 if !(self.no_suggest.keep_longest > 0 && inside_kept(a, b)) && test(&text[starts[a]..starts[b]]) {
                     return true;

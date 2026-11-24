@@ -144,9 +144,11 @@ struct Tables {
     pinyin: bool,
 }
 
-/// Parses and validates a `MIMO-BIN-1` image. Every offset is checked, so a
-/// damaged file is rejected here instead of failing while typing.
-fn parse_image<'a>(bytes: &'a [u8], src: &Source<'a>) -> Option<Tables> {
+/// Parses a `MIMO-BIN-1` image. When `validate_rows` is true, every word,
+/// bucket, and context offset is checked eagerly; in-place v2 containers skip
+/// that full-table scan so untouched mmap pages remain unfaulted (column
+/// accessors bounds-check lazily and `parse_index` verifies the fingerprint).
+fn parse_image<'a>(bytes: &'a [u8], src: &Source<'a>, validate_rows: bool) -> Option<Tables> {
     if bytes.len() < HEADER_LEN || &bytes[..12] != MIMO_BIN_MAGIC {
         return None;
     }
@@ -194,27 +196,29 @@ fn parse_image<'a>(bytes: &'a [u8], src: &Source<'a>) -> Option<Tables> {
         frequency: I16Col::new(col(&mut cursor, context_len, 2)?),
     };
 
-    let in_storage = |start: u32, len: u16, allow_empty: bool| {
-        let s = start as usize;
-        (allow_empty || len != 0) && s.checked_add(len as usize).and_then(|e| storage_str.get(s..e)).is_some()
-    };
-    for i in 0..words_len {
-        if !in_storage(words.reading_offset.get(i), words.reading_len.get(i), false)
-            || !in_storage(words.hant_offset.get(i), words.hant_len.get(i), true)
-            || !in_storage(words.hans_offset.get(i), words.hans_len.get(i), true)
-        {
-            return None;
+    if validate_rows {
+        let in_storage = |start: u32, len: u16, allow_empty: bool| {
+            let s = start as usize;
+            (allow_empty || len != 0) && s.checked_add(len as usize).and_then(|e| storage_str.get(s..e)).is_some()
+        };
+        for i in 0..words_len {
+            if !in_storage(words.reading_offset.get(i), words.reading_len.get(i), false)
+                || !in_storage(words.hant_offset.get(i), words.hant_len.get(i), true)
+                || !in_storage(words.hans_offset.get(i), words.hans_len.get(i), true)
+            {
+                return None;
+            }
         }
-    }
-    for i in 0..buckets_len {
-        let (ws, we) = buckets.range(i);
-        if !in_storage(buckets.key_offset.get(i), buckets.key_len.get(i), false) || ws >= we || we > words_len {
-            return None;
+        for i in 0..buckets_len {
+            let (ws, we) = buckets.range(i);
+            if !in_storage(buckets.key_offset.get(i), buckets.key_len.get(i), false) || ws >= we || we > words_len {
+                return None;
+            }
         }
-    }
-    for i in 0..context_len {
-        if !in_storage(context.phrase_offset.get(i), context.phrase_len.get(i), false) {
-            return None;
+        for i in 0..context_len {
+            if !in_storage(context.phrase_offset.get(i), context.phrase_len.get(i), false) {
+                return None;
+            }
         }
     }
     Some(Tables { storage: (src.text)(storage_str), words, buckets, context, longest, pinyin })
@@ -267,7 +271,7 @@ fn parse_index<'a>(base: &'a [u8], offset: usize, image: &[u8], tables: &Tables,
 }
 
 /// Reads one mode from a `MIMO-BASE-1` container (version 1 or 2).
-fn parse_base<'a>(base: &'a [u8], pinyin: bool, src: &Source<'a>) -> Option<(Tables, Option<LexiconIndex>)> {
+fn parse_base<'a>(base: &'a [u8], pinyin: bool, src: &Source<'a>, in_place: bool) -> Option<(Tables, Option<LexiconIndex>)> {
     if base.len() < HEADER_LEN || &base[..12] != MIMO_BASE_MAGIC {
         return None;
     }
@@ -278,7 +282,7 @@ fn parse_base<'a>(base: &'a [u8], pinyin: bool, src: &Source<'a>) -> Option<(Tab
     let field = |at: usize| read_u32(base, at).map(|v| v as usize);
     let (offset, len) = if pinyin { (field(16)?, field(20)?) } else { (field(24)?, field(28)?) };
     let image = base.get(offset..offset.checked_add(len)?)?;
-    let tables = parse_image(image, src)?;
+    let tables = parse_image(image, src, !(in_place && version == 2))?;
     let index = if version == 2 {
         let idx_offset = if pinyin { field(32)? } else { field(40)? };
         Some(parse_index(base, idx_offset, image, &tables, src)?)
@@ -417,7 +421,7 @@ impl Lexicon {
 
     /// Loads a `MIMO-BIN-1` binary image, copying it to the heap and building the index there.
     pub fn load_binary(bytes: &[u8]) -> Option<Self> {
-        let tables = parse_image(bytes, &Source { bytes: &copied, text: &copied_text })?;
+        let tables = parse_image(bytes, &Source { bytes: &copied, text: &copied_text }, true)?;
         assemble(tables, None, None)
     }
 
@@ -476,7 +480,7 @@ impl Lexicon {
     /// A version 2 index section is copied as is, a version 1 file gets its
     /// index built.
     pub fn load_from_base(base_bytes: &[u8], pinyin: bool) -> Option<Self> {
-        let (tables, index) = parse_base(base_bytes, pinyin, &Source { bytes: &copied, text: &copied_text })?;
+        let (tables, index) = parse_base(base_bytes, pinyin, &Source { bytes: &copied, text: &copied_text }, false)?;
         assemble(tables, index, None)
     }
 
@@ -486,7 +490,7 @@ impl Lexicon {
     /// to unmap or free the bytes. With a version 1 file only the index is
     /// built on the heap (about 6 MiB for the shipped lexicon).
     pub fn from_base_in_place(base_bytes: &'static [u8], pinyin: bool, owner: Option<ImageOwner>) -> Option<Self> {
-        let (tables, index) = parse_base(base_bytes, pinyin, &Source { bytes: &Bytes::mapped, text: &Text::mapped })?;
+        let (tables, index) = parse_base(base_bytes, pinyin, &Source { bytes: &Bytes::mapped, text: &Text::mapped }, true)?;
         assemble(tables, index, owner)
     }
 }
