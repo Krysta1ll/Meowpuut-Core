@@ -47,20 +47,29 @@ use crate::names::{file_name, is_display_name, is_name, FileKind};
 use crate::sound;
 use crate::{fail, limits, Code, Error, Result};
 
-/// Cat sprites a skin may replace (`render_cats.py` `EDGE_SPRITES`) and their kind.
-pub const EDGE_SPRITES: [(&str, Pose); 8] = [
+/// Cat sprites a skin may replace (`EDGE_SPRITES` + whole-body interaction poses) and their kind.
+pub const EDGE_SPRITES: [(&str, Pose); 14] = [
     ("mimimo_edge_rest", Pose::Top),
     ("mimimo_edge_peek", Pose::Top),
     ("mimimo_edge_lounge", Pose::Top),
     ("mimimo_side_hold", Pose::Side),
+    ("mimimo_grab", Pose::Whole),
+    ("mimimo_happy", Pose::Whole),
+    ("mimimo_sleep", Pose::Whole),
     ("momo_edge_rest", Pose::Top),
     ("momo_edge_peek", Pose::Top),
     ("momo_edge_lounge", Pose::Top),
     ("momo_side_hold", Pose::Side),
+    ("momo_grab", Pose::Whole),
+    ("momo_happy", Pose::Whole),
+    ("momo_sleep", Pose::Whole),
 ];
 
 /// Sound roles.
 pub const ROLES: [&str; 11] = ["delete", "key", "key0", "key1", "key2", "key3", "key4", "key5", "pick", "return", "space"];
+
+/// Supported keystroke particle shapes for `keys.particles.kind`.
+pub const PARTICLE_KINDS: [&str; 3] = ["petal", "sparkle", "snow"];
 
 /// How a sprite sits on the bar.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -69,6 +78,8 @@ pub enum Pose {
     Top,
     /// Holding the bar's end at the anchor.
     Side,
+    /// Whole-body interactive pose (grab, happy, sleep) with transparent margins.
+    Whole,
 }
 
 /// Pixels per point: images are @3x only.
@@ -320,6 +331,7 @@ fn measure_sprite(img: &Rgba, anchor: (f64, f64), pose: Pose, path: &str) -> Res
                 return Err(ierr("no paw at the anchor"));
             }
         }
+        Pose::Whole => {}
     }
     Ok(out)
 }
@@ -431,7 +443,7 @@ pub fn validate(entries: &[Entry<'_>], id: &str, rev: u32) -> Result<Rewritten> 
     let p = object(&m["palette"], "palette", &["contrastPill", "dark", "light"], &[])?;
     let contrast_pill = color(&p["contrastPill"], "palette.contrastPill")?;
     need_contrast("palette.contrastPill", "white text", WHITE, contrast_pill, 4.5)?;
-    let k = object(&m["keys"], "keys", &["dark", "light", "rim", "tint"], &[])?;
+    let k = object(&m["keys"], "keys", &["dark", "light", "rim", "tint"], &["particles", "spaceMark"])?;
     let key_tint = number(&k["tint"], "keys.tint", 0.0, 0.22, 3)?;
     let rim = boolean(&k["rim"], "keys.rim")?;
     let mut palette_out = Map::new();
@@ -479,8 +491,29 @@ pub fn validate(entries: &[Entry<'_>], id: &str, rev: u32) -> Result<Rewritten> 
         "strength": choice(&g["strength"], "glass.strength", &["soft", "balanced", "vivid"])?,
     });
 
-    // Cats, trim and ends.
+    // Cats, trim, ends, and optional key decorations.
     let mut out_files: Vec<(String, Vec<u8>)> = Vec::new();
+    if let Some(mark) = k.get("spaceMark") {
+        let sm = object(mark, "keys.spaceMark", &["image", "size"], &[])?;
+        let wh = size(&sm["size"], "keys.spaceMark.size", 32, 32)?;
+        files.image(&sm["image"], wh, "keys.spaceMark", &mut out_files)?;
+        keys_out.insert("spaceMark".into(), json!({"image": sm["image"].clone(), "size": [wh.0, wh.1]}));
+    }
+    if let Some(particles) = k.get("particles") {
+        let po = object(particles, "keys.particles", &["dark", "kind", "light"], &[])?;
+        let kind = choice(&po["kind"], "keys.particles.kind", &PARTICLE_KINDS)?;
+        let parse_tints = |val: &Value, ppath: &str| -> Result<Vec<String>> {
+            let arr = val.as_array().filter(|l| (1..=4).contains(&l.len()))
+                .ok_or_else(|| err(ppath, "1..4 #RRGGBB colors"))?;
+            arr.iter().enumerate().map(|(i, c)| {
+                let rgb = color(c, &format!("{ppath}[{i}]"))?;
+                Ok(color_text(rgb))
+            }).collect()
+        };
+        let light_tints = parse_tints(&po["light"], "keys.particles.light")?;
+        let dark_tints = parse_tints(&po["dark"], "keys.particles.dark")?;
+        keys_out.insert("particles".into(), json!({"dark": dark_tints, "kind": kind, "light": light_tints}));
+    }
     let cats = object(&m["cats"], "cats", &["seating"], &["ends", "sprites", "trim"])?;
     let mut cats_out = Map::new();
     cats_out.insert("seating".into(), json!(choice(&cats["seating"], "cats.seating", &["perched", "edges"])?));
@@ -673,5 +706,57 @@ mod tests {
         for bad in ["7A4E52", "#7A4E5", "#7A4E522", "#GGGGGG", "#7A4E52 "] {
             assert_eq!(parse_color(bad), None, "{bad}");
         }
+    }
+
+    #[test]
+    fn whole_pose_and_key_decorations_validate() {
+        fn mk_png(w: u32, h: u32, margin: u32) -> Vec<u8> {
+            let mut rgba = Rgba { width: w, height: h, pixels: vec![0; (w * h * 4) as usize] };
+            for y in margin..(h - margin) {
+                for x in margin..(w - margin) {
+                    let i = ((y * w + x) * 4) as usize;
+                    rgba.pixels[i..i + 4].copy_from_slice(&[240, 180, 200, 255]);
+                }
+            }
+            encode(&rgba).unwrap()
+        }
+        let manifest = serde_json::to_vec(&json!({
+            "schema": 1, "id": "decoupled", "rev": 1, "serial": "0123456789abcdef",
+            "names": {"hant": "測試", "hans": "测试", "ja": "テスト", "en": "Test"},
+            "base": "current",
+            "palette": {
+                "light": {"paper": "#FBF3F5", "paper2": "#F4E5EA", "ink": "#664C55", "inkSecondary": "#80626C",
+                          "pill": ["#966070", "#875362"], "pillText": "#FFFDFE", "stamp": "#E8A2B8", "accent": "#966070"},
+                "dark": {"paper": "#2A2227", "paper2": "#231C20", "ink": "#DFCED4", "inkSecondary": "#B59CA5",
+                         "pill": ["#CFA0B0", "#BF8FA0"], "pillText": "#2D1E24", "stamp": "#E5A8BC", "accent": "#945E6E"},
+                "contrastPill": "#7E4B5A"
+            },
+            "glass": {"shape": "cloud", "lockShape": true, "strength": "soft", "deckTint": 0.05},
+            "keys": {
+                "tint": 0.04, "rim": true,
+                "light": {"character": "#FFF9FB", "utility": "#F3E1E7", "text": "#634A53"},
+                "dark": {"character": "#372D33", "utility": "#30262C", "text": "#E3D3D8"},
+                "spaceMark": {"image": "mark", "size": [22, 22]},
+                "particles": {"kind": "petal", "light": ["#FAD6E2"], "dark": ["#E5A8BC"]}
+            },
+            "cats": {
+                "seating": "perched",
+                "sprites": {
+                    "momo_grab": {"image": "mgrab", "size": [64, 64], "anchor": [0.5, 0.22]}
+                }
+            }
+        })).unwrap();
+        let grab_png = mk_png(192, 192, 20);
+        let mark_png = mk_png(66, 66, 4);
+        let rw = validate(&[
+            Entry { name: "manifest.json", data: &manifest },
+            Entry { name: "mark.png", data: &mark_png },
+            Entry { name: "mgrab.png", data: &grab_png },
+        ], "decoupled", 1).expect("decoupled schema validates");
+        let parsed: Value = serde_json::from_slice(&rw.files.iter().find(|(n, _)| n == "manifest.json").unwrap().1).unwrap();
+        assert_eq!(parsed["keys"]["particles"]["kind"], "petal");
+        assert_eq!(parsed["keys"]["spaceMark"]["image"], "mark");
+        assert!(parsed["cats"]["sprites"]["momo_grab"]["cut"].is_null());
+        assert!(parsed["cats"]["sprites"]["momo_grab"]["bounds"].is_array());
     }
 }
