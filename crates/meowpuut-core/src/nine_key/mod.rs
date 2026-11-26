@@ -40,7 +40,7 @@ pub const SEPARATOR: u8 = b'\'';
 pub const INITIALS: usize = 6;
 /// Lightest abbreviation row indexed (an eighth of 4000); lighter ones are mostly names.
 pub const INITIALS_WEIGHT: i32 = 500;
-const INITIALS_ROWS: usize = 128;
+const INITIALS_ROWS: usize = 256;
 
 /// Stack-allocated parser for raw nine-key input (`2`–`9`, locked `A`–`Z`, and `'`).
 #[derive(Debug, Clone)]
@@ -304,4 +304,44 @@ impl NineKeyState {
     pub fn new(lexicon: &Lexicon) -> Self {
         Self { index: NineKeyIndex::new(lexicon), scratch: NineKeyScratchSoA::new() }
     }
+}
+
+/// Replaces the raw keys in `preedit` with `reading` for the first `consumed` bytes in place.
+pub fn show_reading(preedit: &mut String, reading: &str, consumed: usize, keys: &KeyInputSoA) {
+    let raw = preedit.len();
+    if !push_reading(preedit, reading, consumed, keys) {
+        preedit.truncate(raw);
+        return;
+    }
+    if consumed < raw {
+        if !preedit.ends_with('\'') { preedit.push(' '); }
+        preedit.extend_from_within(consumed..raw);
+    }
+    preedit.drain(..raw);
+}
+
+fn push_reading(out: &mut String, reading: &str, consumed: usize, keys: &KeyInputSoA) -> bool {
+    let (mut position, mut boundary) = (0usize, false);
+    let mut breaks = keys.breaks_slice().iter().copied().peekable();
+    let slice = keys.slice();
+    for byte in reading.bytes() {
+        let byte = byte.to_ascii_lowercase();
+        if byte.is_ascii_lowercase() {
+            if !slice.get(position).is_some_and(|&k| key_matches(byte, k)) { return false; }
+            if breaks.peek().copied().map(usize::from) == Some(position) {
+                breaks.next();
+                out.push('\'');
+            } else if boundary {
+                out.push(' ');
+            }
+            boundary = false;
+            out.push(char::from(byte));
+            position += 1;
+        } else if is_tone(byte, true) || byte == b' ' || byte == b'\'' {
+            boundary = true;
+        }
+    }
+    if position == 0 || keys.consumed(position) != consumed { return false; }
+    if breaks.peek().copied().map(usize::from) == Some(position) { out.push('\''); }
+    true
 }

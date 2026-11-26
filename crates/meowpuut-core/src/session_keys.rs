@@ -61,11 +61,12 @@ impl Session {
         let ch = key as u8;
         if self.nine_key.is_some() {
             if ch == b' ' && !self.input.is_empty() {
-                let literal = self.candidates.is_empty();
-                self.commit();
-                if literal {
-                    self.committed.push(' ');
+                // #59: never silently auto-commit unmatched 9-key digits on Space;
+                // explicit raw fallback stays gated on Enter (0xff0d) / commit().
+                if self.candidates.is_empty() {
+                    return false;
                 }
+                self.commit();
                 return true;
             }
             if ch == NINE_KEY_SEPARATOR {

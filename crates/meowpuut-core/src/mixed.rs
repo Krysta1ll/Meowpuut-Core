@@ -115,7 +115,7 @@ impl StackSpanCache {
                 return self.push_entry(key, lexicon.words.text(&lexicon.storage, i, simplified), w);
             }
         }
-        if self.decodes < 12 {
+        if self.decodes < 16 {
             self.decodes += 1;
             decode_with_buffers(lexicon, part, simplified, true, false, true, &mut sc.lattice, &mut sc.step_paths, &mut sc.fallback_raw, &mut sc.fallback_order, &mut sc.fallback_out, &mut sc.aux_decoded);
             // The Chinese part is Han text: no English words (sushiswap is not 寿司swap).
@@ -145,11 +145,14 @@ pub fn mixed_pinyin_into(
         return;
     }
 
-    let mut shortlist = [Match::default(); 32];
+    let mut shortlist = [Match::default(); 48];
     let mut shortlist_len = 0usize;
     for j in 0..japanese.len() {
         let reading = japanese.reading(j);
         let weight = japanese.weight[j];
+        if weight == 3500 && reading.len() <= 2 {
+            continue;
+        }
         let mut search_from = 0usize;
         while search_from <= input.len() {
             let Some(rel) = input[search_from..].find(reading) else { break };
@@ -159,11 +162,11 @@ pub fn mixed_pinyin_into(
                 continue;
             }
             let m = Match { start: pos, end: pos + reading.len(), word_idx: j, weight };
-            if shortlist_len == 32 && !match_precedes(&m, &shortlist[31]) {
+            if shortlist_len == 48 && !match_precedes(&m, &shortlist[47]) {
                 break;
             }
             let ins = (0..shortlist_len).find(|&k| match_precedes(&m, &shortlist[k])).unwrap_or(shortlist_len);
-            if shortlist_len < 32 {
+            if shortlist_len < 48 {
                 shortlist_len += 1;
             }
             for k in (ins + 1..shortlist_len).rev() {
@@ -175,7 +178,7 @@ pub fn mixed_pinyin_into(
         }
     }
 
-    let mut matches = [Match::default(); 16];
+    let mut matches = [Match::default(); 24];
     let mut matches_len = 0usize;
     for s_idx in 0..shortlist_len {
         let m = shortlist[s_idx];
@@ -187,7 +190,7 @@ pub fn mixed_pinyin_into(
         if !covered {
             matches[matches_len] = m;
             matches_len += 1;
-            if matches_len == 16 {
+            if matches_len == 24 {
                 break;
             }
         }
@@ -349,16 +352,16 @@ pub fn mixed_pinyin_into(
 
     let mut combinations = 0usize;
     for i in 0..matches_len {
-        if combinations >= 256 { break; }
+        if combinations >= 384 { break; }
         combinations += 1;
         consider(matches[i], None, None, scratch, out);
         for j in (i + 1)..matches_len {
-            if combinations >= 256 { break; }
+            if combinations >= 384 { break; }
             if matches[j].start < matches[i].end { continue; }
             combinations += 1;
             consider(matches[i], Some(matches[j]), None, scratch, out);
             for k in (j + 1)..matches_len {
-                if combinations >= 256 { break; }
+                if combinations >= 384 { break; }
                 if matches[k].start < matches[j].end { continue; }
                 combinations += 1;
                 consider(matches[i], Some(matches[j]), Some(matches[k]), scratch, out);

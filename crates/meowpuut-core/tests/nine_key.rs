@@ -315,3 +315,40 @@ fn nine_key_offers_english_words_by_their_letters() {
     typed(&mut session, "6'5");
     assert!(!candidates(&session).contains(&"OK"));
 }
+
+#[test]
+fn nine_key_space_keeps_unmatched_digits_and_trailing_vowel_stays_prefix() {
+    let lexicon = Arc::new(Lexicon::load(concat!(
+        "MEOWPUUT-PINYIN-1\n",
+        "a\ta5\t啊\t啊\t8500\n",
+        "e\te4\t餓\t饿\t8500\n",
+        "hao\thao3\t好\t好\t9000\n",
+        "haode\thao3de5\t好的\t好的\t9100\n",
+        "o\to1\t喔\t喔\t8500\n",
+        "qi\tqi3\t起\t起\t5000\n",
+        "qilai\tqi3lai2\t起來\t起来\t6000\n",
+        "ql\tq3l2\t起來\t起来\t750\n",
+        "wo\two3\t我\t我\t9500\n",
+        "xz\tx4z4\t現在\t现在\t1125\n",
+    )).unwrap());
+    let mut session = Session::new_nine_key(lexicon).unwrap();
+    session.set_simplified(true);
+
+    // #59: Space on unmatched 9-key digits must NOT silently commit raw digits + space.
+    typed(&mut session, "999");
+    assert_eq!(session.candidate_count(), 0);
+    assert!(!session.key(i32::from(b' ')));
+    assert_eq!((session.input(), session.preedit(), session.committed()), ("999", "999", ""));
+    // Explicit Enter still commits raw digits when desired.
+    assert!(session.key(0xff0d));
+    assert_eq!((session.committed(), session.input()), ("999", ""));
+
+    // Trailing single-digit vowel trap (4263 = hao + d/e): prefix "好" must stay ahead of "好饿".
+    typed(&mut session, "4263");
+    assert_eq!(session.candidate(0), "好");
+    assert_eq!(session.preedit(), "hao 3");
+
+    // Two-word initials (ql + xz = 7599) compose even when 74/75 prefix has lattice activity.
+    typed(&mut session, "7599");
+    assert!(candidates(&session).contains(&"起来现在"));
+}

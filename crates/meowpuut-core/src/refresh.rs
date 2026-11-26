@@ -138,7 +138,14 @@ impl Session {
         if !self.partial_work.is_empty() && self.has_complete_decode() {
             self.partial_work.clear();
         }
-        if self.abbreviated_lead() {
+        let min_fb_score = if self.lexicon.pairs().is_some() { -15.0 } else { 3500.0 };
+        let fallback_lead = self.lexicon.pairs().is_some()
+            && !self.ranked_work.is_empty()
+            && self.ranked_work.score_kind[0] == CandidateScoreKind::Fallback as u32
+            && self.ranked_work.consumed[0] == self.input.len()
+            && self.ranked_work.score[0] >= min_fb_score
+            && !self.is_bucket_prefix_text(self.ranked_work.text(0));
+        if self.abbreviated_lead() || fallback_lead {
             insert_partials_at(&mut self.ranked_work, &self.partial_work, 1, false);
         } else {
             prepend_items(&mut self.ranked_work, &self.partial_work);
@@ -147,7 +154,7 @@ impl Session {
         predictive_segments_into(&self.lexicon, &self.input, self.hans, &mut self.scratch, &mut self.predictive_work);
         if !self.predictive_work.is_empty() {
             let no_complete = if self.lexicon.pinyin { !self.has_complete_decode() } else { self.ranked_work.is_empty() };
-            if no_complete && self.abbreviated_lead() {
+            if no_complete && (self.abbreviated_lead() || fallback_lead) {
                 insert_partials_at(&mut self.ranked_work, &self.predictive_work, 1, false);
             } else if no_complete {
                 prepend_items(&mut self.ranked_work, &self.predictive_work);
@@ -330,5 +337,23 @@ impl Session {
         let score_kind = self.ranked_work.score_kind[i];
         (score_kind == CandidateScoreKind::Fallback as u32 || score_kind == CandidateScoreKind::FuzzyInitial as u32)
             && self.lexicon.mentions_no_suggest(text)
+    }
+
+    pub(crate) fn is_bucket_prefix_text(&self, text: &str) -> bool {
+        let mut bucket = self.lexicon.lower_bound_bucket(&self.input);
+        let mut scanned = 0usize;
+        while bucket < self.lexicon.buckets.len() && scanned < 64 {
+            let key = self.lexicon.buckets.key(&self.lexicon.storage, bucket);
+            if !key.starts_with(&self.input) {
+                break;
+            }
+            let (lo, hi) = self.lexicon.buckets.range(bucket);
+            if (lo..hi).any(|i| self.lexicon.words.text(&self.lexicon.storage, i, self.hans) == text) {
+                return true;
+            }
+            bucket += 1;
+            scanned += 1;
+        }
+        false
     }
 }

@@ -47,6 +47,7 @@ const SPAN_WORDS: usize = 32;
 const WHOLE_WORDS: usize = 160;
 const INITIALS_TERM: f64 = -3.0;
 const SINGLE_INITIAL_PENALTY: f64 = 1.2;
+const TRAILING_SINGLE_VOWEL_PENALTY: f64 = 4.5;
 pub(crate) const FIRST_PAGE_WEIGHT: i32 = 750;
 
 #[inline]
@@ -175,7 +176,7 @@ impl<'a> DecodeCtx<'a> {
         let breaks = self.keys.internal_breaks(span.start, span.end);
         let limit = if whole { WHOLE_WORDS } else { SPAN_WORDS };
         self.chinese_words(span.clone(), hash, whole, at_end && slice.len() == 1, limit, words);
-        let pairs = self.lexicon.pairs();
+        let (pairs, trigrams) = (self.lexicon.pairs(), self.lexicon.trigrams());
         for k in 0..words.kept.len() {
             let w = words.word_ref(words.kept[k]);
             if whole {
@@ -190,7 +191,7 @@ impl<'a> DecodeCtx<'a> {
                     );
                     choices.partial.push(c);
                 }
-                lattice.extend(span.start, span.end, w, pairs, at_end);
+                lattice.extend(span.start, span.end, w, pairs, trigrams, at_end);
             }
         }
         let minimum = if whole { 3 } else { 4 };
@@ -214,7 +215,7 @@ impl<'a> DecodeCtx<'a> {
                 );
                 choices.japanese.push(c);
             } else {
-                lattice.extend(span.start, span.end, w, pairs, at_end);
+                lattice.extend(span.start, span.end, w, pairs, trigrams, at_end);
             }
         }
     }
@@ -246,7 +247,11 @@ impl<'a> DecodeCtx<'a> {
                 } else {
                     word_score(lexicon.words.weight(row))
                 };
-                if !spelled { sc -= 5.0; }
+                if !spelled {
+                    sc -= 5.0;
+                } else if span.start > 0 && initial && slice.len() == 1 {
+                    sc -= TRAILING_SINGLE_VOWEL_PENALTY;
+                }
                 let id = lexicon.pairs().map_or(START, |_| lexicon.index.word_ids.ids.get(row));
                 let kind = if spelled { CandidateKind::Exact } else { CandidateKind::Correction };
                 words.push(

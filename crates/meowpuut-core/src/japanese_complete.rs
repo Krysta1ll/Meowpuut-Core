@@ -143,6 +143,66 @@ impl JapaneseQuery {
                 }
             }
         }
+        let mut head_buf = [0u8; 192];
+        let mut pend_buf = [0u8; 8];
+        let (head_len, pend_len) = (head.len(), pending.len());
+        if head_len <= head_buf.len() && pend_len <= pend_buf.len() {
+            head_buf[..head_len].copy_from_slice(head.as_bytes());
+            pend_buf[..pend_len].copy_from_slice(pending.as_bytes());
+            let h = std::str::from_utf8(&head_buf[..head_len]).unwrap_or("");
+            let p = std::str::from_utf8(&pend_buf[..pend_len]).unwrap_or("");
+            self.add_sentence_endings(lexicon, h, p, consumed);
+        }
+    }
+
+    /// Offers polite/clause sentence-end completions when the pending tail matches
+    /// an unfinished auxiliary ending (`tabemas` -> `食べます`, `tenkides` -> `天気です`).
+    fn add_sentence_endings(&mut self, lexicon: &JapaneseLexicon, head: &str, pending: &str, consumed: usize) {
+        if pending.is_empty() || head.chars().count() < 2 {
+            return;
+        }
+        // `(head_kana_suffix, pending_romaji_prefix, complete_ending_kana, penalty)`
+        const ENDINGS: &[(&str, &str, &str, i32)] = &[
+            ("ま", "s", "ます", 180),
+            ("ま", "sh", "ました", 220),
+            ("ま", "sh", "ましょう", 320),
+            ("ま", "se", "ません", 220),
+            ("まし", "t", "ました", 140),
+            ("まし", "y", "ましょう", 180),
+            ("ませ", "n", "ません", 140),
+            ("で", "s", "です", 180),
+            ("です", "n", "ですね", 160),
+            ("です", "y", "ですよ", 220),
+            ("です", "k", "ですか", 220),
+            ("でし", "t", "でした", 160),
+            ("し", "m", "します", 220),
+            ("ござい", "m", "ございます", 220),
+            ("ございま", "s", "ございます", 140),
+            ("てい", "r", "ている", 240),
+            ("てい", "m", "ています", 240),
+        ];
+        let base_hits = self.hits.len();
+        for &(req_head, req_pend, full_kana, penalty) in ENDINGS {
+            if !head.ends_with(req_head) || !req_pend.starts_with(pending) {
+                continue;
+            }
+            let stem_head = &head[..head.len() - req_head.len()];
+            self.scratch.clear();
+            self.scratch.push_str(stem_head);
+            self.scratch.push_str(full_kana);
+            self.key.clear();
+            normalise_key(&self.scratch, &mut self.key);
+            let _ = self.add_forms(lexicon, super::JapaneseMode::Japanese, base_hits, consumed, 64);
+            if self.hits.len() > base_hits {
+                for idx in base_hits..self.hits.len() {
+                    let mut hit = self.hits[idx];
+                    hit.row.weight = (hit.row.weight - penalty).max(1);
+                    hit.row.flags |= FLAG_COMPLETION;
+                    keep_best(&mut self.extra, hit);
+                }
+                self.hits.truncate(base_hits);
+            }
+        }
     }
 }
 

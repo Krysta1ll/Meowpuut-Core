@@ -282,3 +282,50 @@ fn test_layout_and_windows_adapter_all_branches() {
     win.handle_key(0x4E, b'n', false, false);
     assert_eq!(win.handle_key(VK_RETURN, 0x0D, false, false), WindowsKeyAction::Commit("n".into()));
 }
+
+#[test]
+fn test_whole_sentence_learning_and_recall() {
+    let py = Arc::new(Lexicon::load(PY_TSV).unwrap());
+    let jp = parse_japanese_tsv(JP_TSV).unwrap();
+    let mut backend = ChineseWithJapaneseBackend::new(Arc::clone(&py), jp);
+    backend.set_simplified(true);
+
+    // Multi-segment composition: pick "你好" (5 bytes) then remaining "世界" (6 bytes).
+    backend.type_keys("nihaoshijie");
+    let idx_nihao = backend
+        .candidates()
+        .iter()
+        .position(|c| c == "你好")
+        .expect("prefix 你好 must exist");
+    assert_eq!(backend.select(idx_nihao).as_deref(), Some("你好"));
+    assert_eq!(backend.input(), "shijie");
+
+    let idx_shijie = backend
+        .candidates()
+        .iter()
+        .position(|c| c == "世界")
+        .expect("remaining 世界 must exist");
+    assert_eq!(backend.select(idx_shijie).as_deref(), Some("世界"));
+    assert_eq!(backend.input(), "");
+
+    // Whole sentence merged into ChoiceMemorySoA while last_committed stays on final segment.
+    assert_eq!(backend.memory.pinned_for("nihaoshijie"), Some("你好世界"));
+    assert_eq!(backend.memory.last_committed(), "世界");
+
+    // Re-typing with or without syllable separator recalls learned sentence at rank 0.
+    backend.type_keys("ni'hao'shi'jie");
+    assert_eq!(backend.candidates().first().map(String::as_str), Some("你好世界"));
+
+    // Persistence via serialize/deserialize & WAL keeps whole sentence intact.
+    let saved = backend.memory.serialize();
+    let restored = ChoiceMemorySoA::deserialize(&saved);
+    assert_eq!(restored.pinned_for("nihaoshijie"), Some("你好世界"));
+
+    // Clearing or backspacing to empty resets unfinished partial learning run cleanly.
+    backend.clear();
+    backend.type_keys("nihao");
+    let idx = backend.candidates().iter().position(|c| c == "你好").unwrap();
+    let _ = backend.select(idx);
+    backend.clear();
+    assert_eq!(backend.sentence_run.ready_to_learn(), None);
+}

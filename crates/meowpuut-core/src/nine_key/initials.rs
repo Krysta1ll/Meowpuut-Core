@@ -35,15 +35,16 @@ use crate::{CandidateKind, CandidateScoreKind};
 
 use super::decoder::{initials_score, word_score, DecodeCtx, FIRST_PAGE_WEIGHT};
 use super::rank::ChoicesSoA;
-use super::scratch::{NineKeyLatticeSoA, SpanWordsSoA, WordRef, EDGE_LIMIT};
+use super::scratch::{NineKeyLatticeSoA, SpanWordsSoA, WordRef, BEAM_CHINESE, EDGE_LIMIT};
 use super::{matches_breaks, signature_keys, INITIALS};
 
 const TAIL: usize = 3;
 const TAIL_SPELLED: usize = 12;
 const TAIL_WORDS: usize = 64;
-const TAIL_ROWS: usize = 64;
-const NEXT_WORDS: usize = 4;
-const INITIALS_WORDS: usize = 16;
+const TAIL_SCAN: usize = 256;
+const TAIL_KEEP: usize = 32;
+const NEXT_WORDS: usize = 6;
+const INITIALS_WORDS: usize = 32;
 const LATIN_FIRST_TERM: f64 = 1.5;
 const LATIN_MAX: usize = 24;
 
@@ -67,7 +68,7 @@ fn word_initials(reading: &str, letters: &mut [u8; INITIALS]) -> usize {
 impl<'a> DecodeCtx<'a> {
     pub(crate) fn trailing_initials(&self, lattice: &mut NineKeyLatticeSoA, words: &mut SpanWordsSoA) {
         let length = self.keys.len;
-        let pairs = self.lexicon.pairs();
+        let (pairs, trigrams) = (self.lexicon.pairs(), self.lexicon.trigrams());
         let first = length.saturating_sub(INITIALS).max(2);
         for start in first..length.saturating_sub(1) {
             if lattice.is_pos_empty(start) {
@@ -77,7 +78,7 @@ impl<'a> DecodeCtx<'a> {
             self.initials_words(start..length, breaks, false, words);
             for k in 0..words.kept.len() {
                 let w = words.word_ref(words.kept[k]);
-                lattice.extend(start, length, w, pairs, true);
+                lattice.extend(start, length, w, pairs, trigrams, true);
             }
         }
         for tail in 1..=TAIL {
@@ -112,7 +113,8 @@ impl<'a> DecodeCtx<'a> {
                 *dst = l.to_ascii_uppercase();
             }
             q_keys[count..count + tail.len()].copy_from_slice(tail);
-            for row in self.index.initials_rows(lexicon, &q_keys[..count + tail.len()]).take(TAIL_ROWS) {
+            let mut matched_count = 0usize;
+            for row in self.index.initials_rows(lexicon, &q_keys[..count + tail.len()]).take(TAIL_SCAN) {
                 let weight = lexicon.words.weight(row);
                 let reading = lexicon.words.reading(&lexicon.storage, row);
                 let text = lexicon.words.text(&lexicon.storage, row, self.hans);
@@ -132,7 +134,11 @@ impl<'a> DecodeCtx<'a> {
                     id,
                     kind: CandidateKind::Correction,
                 };
-                lattice.extend(start, self.keys.len, completed, lexicon.pairs(), true);
+                lattice.extend(start, self.keys.len, completed, lexicon.pairs(), lexicon.trigrams(), true);
+                matched_count += 1;
+                if matched_count >= TAIL_KEEP {
+                    break;
+                }
             }
         }
     }
@@ -174,8 +180,9 @@ impl<'a> DecodeCtx<'a> {
 
     pub(crate) fn two_initials(&self, lattice: &NineKeyLatticeSoA, words: &mut SpanWordsSoA, choices: &mut ChoicesSoA) {
         let length = self.keys.len;
-        if !choices.initials.is_empty() || !choices.latin.is_empty()
-            || !(4..=2 * INITIALS).contains(&length) || (1..=length).any(|p| !lattice.is_pos_empty(p))
+        if lattice.count(length, BEAM_CHINESE) > 0
+            || choices.initials.len() >= 8
+            || !(4..=2 * INITIALS).contains(&length)
         {
             return;
         }

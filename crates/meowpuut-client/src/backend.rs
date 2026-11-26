@@ -35,7 +35,7 @@ use meowpuut_lexicon::{
     pinyin_kana, AssociationTableSoA, JapaneseLexiconSoA, WordEvidenceSoA,
 };
 
-use crate::memory::ChoiceMemorySoA;
+use crate::memory::{ChoiceMemorySoA, SentenceRun};
 
 /// Compacts raw Japanese `(surface, weight, consumed)` candidates by deduplicating
 /// surfaces and capping low-weight Kana fallbacks.
@@ -145,6 +145,7 @@ pub struct ChineseWithJapaneseBackend {
     pub memory: ChoiceMemorySoA,
     pub associations: AssociationTableSoA,
     pub pool: ChoicePoolSoA,
+    pub sentence_run: SentenceRun,
     pub ranked_texts: Vec<String>,
     pub ranked_consumed: Vec<usize>,
     pub simplified: bool,
@@ -171,6 +172,7 @@ impl ChineseWithJapaneseBackend {
             memory: ChoiceMemorySoA::new(),
             associations: AssociationTableSoA::default_builtin(),
             pool: ChoicePoolSoA::with_capacity(96),
+            sentence_run: SentenceRun::with_capacity(128),
             ranked_texts: Vec::with_capacity(96),
             ranked_consumed: Vec::with_capacity(96),
             simplified: false,
@@ -185,6 +187,7 @@ impl ChineseWithJapaneseBackend {
 
     pub fn clear(&mut self) {
         self.session.clear();
+        self.sentence_run.clear();
         self.pool.clear();
         self.ranked_texts.clear();
         self.ranked_consumed.clear();
@@ -205,6 +208,9 @@ impl ChineseWithJapaneseBackend {
 
     pub fn backspace(&mut self) -> bool {
         let handled = self.session.key(0xff08);
+        if self.session.input().is_empty() {
+            self.sentence_run.clear();
+        }
         self.rebuild_candidates();
         handled
     }
@@ -234,6 +240,13 @@ impl ChineseWithJapaneseBackend {
         let full_input = String::from(self.session.input());
         let reading_slice = &full_input[..consumed.min(full_input.len())];
         self.memory.learn(reading_slice, &chosen);
+        self.sentence_run.push_segment(reading_slice, &chosen);
+        if consumed >= full_input.len() {
+            if let Some((full_r, full_t)) = self.sentence_run.ready_to_learn() {
+                self.memory.learn_sentence(full_r, full_t);
+            }
+            self.sentence_run.clear();
+        }
 
         for k in 0..self.session.candidate_count() {
             if self.session.candidate(k) == chosen && self.session.candidate_consumed(k) == consumed {
@@ -268,6 +281,19 @@ impl ChineseWithJapaneseBackend {
         let raw_input = String::from(self.session.input());
         if raw_input.is_empty() {
             return;
+        }
+        let mut norm_buf = [0u8; 128];
+        let mut norm_len = 0usize;
+        for b in raw_input.bytes() {
+            if b != b'\'' && norm_len < norm_buf.len() {
+                norm_buf[norm_len] = b;
+                norm_len += 1;
+            }
+        }
+        let norm_input = std::str::from_utf8(&norm_buf[..norm_len]).unwrap_or("");
+        if let Some(pinned) = self.memory.pinned_for(norm_input) {
+            let pinned_owned = String::from(pinned);
+            self.pool.push(&pinned_owned, 100, 12_500.0, raw_input.len(), false);
         }
 
         let mixed = String::from(self.session.mixed_pinyin(&raw_input, self.simplified));

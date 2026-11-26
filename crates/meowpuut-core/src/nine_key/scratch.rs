@@ -15,6 +15,7 @@
 
 use crate::pairs::{Pairs, END, START, STEP};
 use crate::reading::MAX_INPUT;
+use crate::trigrams::Trigrams;
 use crate::workspace::text_hash;
 use crate::CandidateKind;
 
@@ -152,6 +153,9 @@ pub struct NineKeyLatticeSoA {
     pub read_off: Vec<u32>,
     pub read_len: Vec<u16>,
     pub score: Vec<f64>,
+    pub tri_sum: Vec<i64>,
+    pub skip_sum: Vec<i64>,
+    pub prev2_id: Vec<u32>,
     pub last_id: Vec<u32>,
     pub common: Vec<bool>,
     pub slots: Vec<[u16; PATHS]>,
@@ -166,7 +170,8 @@ impl NineKeyLatticeSoA {
             text_off: Vec::with_capacity(cap), text_len: Vec::with_capacity(cap), text_hash: Vec::with_capacity(cap),
             prefix_hash: Vec::with_capacity(cap), prefix_len: Vec::with_capacity(cap),
             read_off: Vec::with_capacity(cap), read_len: Vec::with_capacity(cap),
-            score: Vec::with_capacity(cap), last_id: Vec::with_capacity(cap), common: Vec::with_capacity(cap),
+            score: Vec::with_capacity(cap), tri_sum: Vec::with_capacity(cap), skip_sum: Vec::with_capacity(cap),
+            prev2_id: Vec::with_capacity(cap), last_id: Vec::with_capacity(cap), common: Vec::with_capacity(cap),
             slots: vec![[0u16; PATHS]; cells], counts: vec![0u8; cells],
         }
     }
@@ -176,12 +181,14 @@ impl NineKeyLatticeSoA {
         self.text_off.clear(); self.text_len.clear(); self.text_hash.clear();
         self.prefix_hash.clear(); self.prefix_len.clear();
         self.read_off.clear(); self.read_len.clear();
-        self.score.clear(); self.last_id.clear(); self.common.clear();
+        self.score.clear(); self.tri_sum.clear(); self.skip_sum.clear();
+        self.prev2_id.clear(); self.last_id.clear(); self.common.clear();
         self.counts[..(length + 1) * BEAMS].fill(0);
         self.text_off.push(0); self.text_len.push(0); self.text_hash.push(0);
         self.prefix_hash.push(0); self.prefix_len.push(0);
         self.read_off.push(0); self.read_len.push(0);
-        self.score.push(0.0); self.last_id.push(left); self.common.push(true);
+        self.score.push(0.0); self.tri_sum.push(0); self.skip_sum.push(0);
+        self.prev2_id.push(u32::MAX); self.last_id.push(left); self.common.push(true);
         self.slots[0][0] = 0; self.counts[0] = 1;
     }
 
@@ -202,7 +209,29 @@ impl NineKeyLatticeSoA {
         &self.read_arena[s..s + self.read_len[node] as usize]
     }
 
-    pub fn extend(&mut self, prev_pos: usize, next_pos: usize, word: WordRef<'_>, pairs: Option<&Pairs>, at_end: bool) {
+    /// Stage-2 trigram + skip-1 adjusted score for `node` (`at_end` folds the `END` window).
+    #[inline]
+    pub fn trigram_score(&self, node: usize, trigrams: Option<&Trigrams>, at_end: bool) -> f64 {
+        let Some(tri) = trigrams else { return self.score[node]; };
+        let (mut tri_s, mut skip_s) = (self.tri_sum[node], self.skip_sum[node]);
+        let (p2, p1) = (self.prev2_id[node], self.last_id[node]);
+        if at_end && p2 != u32::MAX && p1 != NO_WORD_ID {
+            let (dt, ds) = tri.score_window(p2, p1, END);
+            tri_s += i64::from(dt);
+            skip_s += i64::from(ds);
+        }
+        self.score[node] + tri.scale_sums(tri_s, skip_s)
+    }
+
+    pub fn extend(
+        &mut self,
+        prev_pos: usize,
+        next_pos: usize,
+        word: WordRef<'_>,
+        pairs: Option<&Pairs>,
+        trigrams: Option<&Trigrams>,
+        at_end: bool,
+    ) {
         let japanese = word.id == NO_WORD_ID;
         let (w_hash, w_pow) = text_hash(word.text);
         for (src_beam, already_mixed) in [(BEAM_CHINESE, false), (BEAM_MIXED, true)] {
@@ -221,13 +250,36 @@ impl NineKeyLatticeSoA {
                     }
                     if at_end { sc += (f64::from(p.score(word.id, END)) / STEP).clamp(-EDGE_LIMIT, EDGE_LIMIT); }
                 }
-                self.push_path(next_pos, dst_beam, prev, word, w_hash, w_pow, sc, at_end);
+                let next_prev2 = self.last_id[prev];
+                let (mut tri_s, mut skip_s) = (self.tri_sum[prev], self.skip_sum[prev]);
+                if let (Some(tri), true) = (trigrams, word.id != NO_WORD_ID && next_prev2 != NO_WORD_ID) {
+                    let p2 = self.prev2_id[prev];
+                    if p2 != u32::MAX {
+                        let (dt, ds) = tri.score_window(p2, next_prev2, word.id);
+                        tri_s += i64::from(dt);
+                        skip_s += i64::from(ds);
+                    }
+                }
+                self.push_path(next_pos, dst_beam, prev, word, w_hash, w_pow, sc, tri_s, skip_s, next_prev2, at_end);
             }
         }
     }
 
     #[allow(clippy::too_many_arguments)]
-    fn push_path(&mut self, pos: usize, beam: usize, prev: usize, word: WordRef<'_>, w_hash: u64, w_pow: u64, sc: f64, at_end: bool) {
+    fn push_path(
+        &mut self,
+        pos: usize,
+        beam: usize,
+        prev: usize,
+        word: WordRef<'_>,
+        w_hash: u64,
+        w_pow: u64,
+        sc: f64,
+        tri_s: i64,
+        skip_s: i64,
+        next_prev2: u32,
+        at_end: bool,
+    ) {
         if self.score.len() >= u16::MAX as usize { return; }
         let cell = Self::cell(pos, beam);
         let mut count = usize::from(self.counts[cell]);
@@ -293,7 +345,8 @@ impl NineKeyLatticeSoA {
         self.text_off.push(t_off); self.text_len.push(new_len); self.text_hash.push(new_hash);
         self.prefix_hash.push(prev_hash); self.prefix_len.push(prev_len as u16);
         self.read_off.push(r_off); self.read_len.push(r_len);
-        self.score.push(sc); self.last_id.push(word.id); self.common.push(common);
+        self.score.push(sc); self.tri_sum.push(tri_s); self.skip_sum.push(skip_s);
+        self.prev2_id.push(next_prev2); self.last_id.push(word.id); self.common.push(common);
 
         let new_count = (count + 1).min(PATHS);
         if at + 1 < new_count { self.slots[cell].copy_within(at..new_count - 1, at + 1); }

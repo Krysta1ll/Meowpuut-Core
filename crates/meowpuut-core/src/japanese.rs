@@ -824,14 +824,17 @@ impl JapaneseQuery {
             if self.prefix.strip_prefix(self.scratch.as_str()) != Some(self.rest.as_str()) {
                 continue;
             }
-            attempts += 1;
+            let head_kana = self.scratch.chars().count();
+            if head_kana <= MAX_SEGMENT_FORM_KANA {
+                attempts += 1;
+            }
             let group = self.hits.len();
             self.key.clear();
             normalise_key(&self.scratch, &mut self.key);
             if let Some(index) = lexicon.find_key(self.key.as_bytes()) {
                 self.collect(lexicon, index, JapaneseMode::Japanese, group, end);
             }
-            if with_forms && budget > 0 {
+            if with_forms && budget > 0 && head_kana <= MAX_SEGMENT_FORM_KANA {
                 let used = self.add_forms(lexicon, JapaneseMode::Japanese, group, end, budget.min(forms::MAX_SEARCHES));
                 budget = budget.saturating_sub(used);
             }
@@ -943,8 +946,11 @@ enum Completions {
     Ahead,
 }
 
-/// Leading parts of the input tried for segments, at most.
+/// Leading parts of the input tried for segments within form budget, at most.
 const MAX_SEGMENT_ATTEMPTS: usize = 48;
+/// Longest kana prefix probed for inflected segment forms so long sentences never
+/// exhaust `MAX_SEGMENT_ATTEMPTS` before reaching the first bunsetsu.
+const MAX_SEGMENT_FORM_KANA: usize = 24;
 /// Kana a leading part has, at least: a one-kana word before the rest of the input is mostly
 /// an accident (他 of `tabe`, 蚊 of `kaita`).
 const MIN_SEGMENT_KANA: usize = 2;

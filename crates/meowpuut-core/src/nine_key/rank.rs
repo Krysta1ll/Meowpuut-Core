@@ -15,13 +15,14 @@
 //! ```
 
 use crate::lexicon::Lexicon;
-use crate::reading::{is_tone, CANDIDATE_LIMIT};
+use crate::reading::CANDIDATE_LIMIT;
 use crate::soa::CandidatePoolSoA;
 use crate::workspace::text_hash;
 use crate::{CandidateKind, CandidateScoreKind};
 
 use super::scratch::{NineKeyLatticeSoA, BEAM_CHINESE, BEAM_INITIALS, BEAM_MIXED};
-use super::{key_matches, KeyInputSoA};
+use super::KeyInputSoA;
+pub use super::show_reading;
 
 const LATIN_LEAD_LETTERS: usize = 4;
 const LATIN_LEAD_GAP: f64 = 2.0;
@@ -188,23 +189,27 @@ impl ChoicesSoA {
     }
 
     fn collect_lattice(&mut self, lattice: &NineKeyLatticeSoA, keys: &KeyInputSoA, lexicon: &Lexicon) {
-        let (end, full) = (keys.len, keys.consumed(keys.len));
+        let (end, full, trigrams) = (keys.len, keys.consumed(keys.len), lexicon.trigrams());
         for &n_u16 in &lattice.slots[NineKeyLatticeSoA::cell(end, BEAM_CHINESE)][..lattice.count(end, BEAM_CHINESE)] {
             let n = usize::from(n_u16);
-            let idx = self.push_item(lattice.node_text(n), lattice.node_reading(n), lattice.prefix_hash[n], lattice.prefix_len[n], full, lattice.score[n], CandidateKind::Path, CandidateScoreKind::Path, lattice.common[n]);
+            let sc = lattice.trigram_score(n, trigrams, true);
+            let idx = self.push_item(lattice.node_text(n), lattice.node_reading(n), lattice.prefix_hash[n], lattice.prefix_len[n], full, sc, CandidateKind::Path, CandidateScoreKind::Path, lattice.common[n]);
             self.complete.push(idx);
         }
         for &n_u16 in &lattice.slots[NineKeyLatticeSoA::cell(end, BEAM_INITIALS)][..lattice.count(end, BEAM_INITIALS)] {
             let n = usize::from(n_u16);
-            let idx = self.push_item(lattice.node_text(n), lattice.node_reading(n), lattice.prefix_hash[n], lattice.prefix_len[n], full, lattice.score[n], CandidateKind::Correction, CandidateScoreKind::Path, lattice.common[n]);
+            let sc = lattice.trigram_score(n, trigrams, true);
+            let idx = self.push_item(lattice.node_text(n), lattice.node_reading(n), lattice.prefix_hash[n], lattice.prefix_len[n], full, sc, CandidateKind::Correction, CandidateScoreKind::Path, lattice.common[n]);
             self.initials.push(idx);
         }
-        if self.complete.is_empty() {
+        let trailing_vowel = end >= 2 && matches!(keys.slice().last(), Some(b'2' | b'3' | b'6'));
+        if self.complete.is_empty() || trailing_vowel {
             if let Some(pos) = (1..end).rev().find(|&p| lattice.count(p, BEAM_CHINESE) > 0) {
-                let (cons, cnt) = (keys.consumed(pos), lattice.count(pos, BEAM_CHINESE).min(2));
+                let (cons, cnt) = (keys.consumed(pos), lattice.count(pos, BEAM_CHINESE).min(8));
                 for &n_u16 in &lattice.slots[NineKeyLatticeSoA::cell(pos, BEAM_CHINESE)][..cnt] {
                     let n = usize::from(n_u16);
-                    let idx = self.push_item(lattice.node_text(n), lattice.node_reading(n), 0, 0, cons, lattice.score[n], CandidateKind::Partial, CandidateScoreKind::Path, lattice.common[n]);
+                    let sc = lattice.trigram_score(n, trigrams, false);
+                    let idx = self.push_item(lattice.node_text(n), lattice.node_reading(n), 0, 0, cons, sc, CandidateKind::Partial, CandidateScoreKind::Path, lattice.common[n]);
                     self.partial.push(idx);
                 }
             }
@@ -271,8 +276,18 @@ impl ChoicesSoA {
         self.japanese.truncate(jp_write);
 
         let spelled = !self.complete_unique.is_empty();
-        let typing = !spelled && self.japanese.is_empty() && self.partial.first().is_some_and(|&p| self.consumed[p as usize] >= 2);
-        let decoded = spelled || typing;
+        let trailing_vowel_trap = spelled && keys.len >= 3
+            && matches!(keys.slice().last(), Some(b'2' | b'3' | b'6'))
+            && self.partial.first().is_some_and(|&p| {
+                self.consumed[p as usize] == keys.consumed(keys.len - 1)
+                    && self.score[p as usize] > self.score[self.complete_primary[0] as usize] + 0.5
+            });
+        let common_initial_lead = !spelled
+            && self.japanese.is_empty()
+            && !self.initials.is_empty()
+            && self.partial.first().is_none_or(|&p| self.consumed[p as usize] <= 1);
+        let typing = !spelled && !common_initial_lead && self.japanese.is_empty() && self.partial.first().is_some_and(|&p| self.consumed[p as usize] >= 2);
+        let decoded = spelled || typing || common_initial_lead;
         let lead = self.latin_first && !typing && self.latin.first().is_some_and(|&l| {
             let l_sc = self.score[l as usize];
             self.complete_unique.first().is_none_or(|&c| {
@@ -284,31 +299,46 @@ impl ChoicesSoA {
         let (mut c_pos, mut j_pos, mut p_pos, mut i_pos, mut l_pos) = (0, 0, 0, 0, 0);
         self.first.clear();
         if lead && l_pos < self.latin.len() { self.first.push(self.latin[l_pos]); l_pos += 1; }
-        if typing {
+        if typing || trailing_vowel_trap {
             let end_p = (p_pos + 2).min(self.partial.len());
             self.first.extend_from_slice(&self.partial[p_pos..end_p]);
             p_pos = end_p;
+        }
+        if common_initial_lead {
+            let end_i = (i_pos + 4).min(self.initials.len());
+            self.first.extend_from_slice(&self.initials[i_pos..end_i]);
+            i_pos = end_i;
         }
         let end_c2 = (c_pos + 2).min(self.complete_primary.len());
         self.first.extend_from_slice(&self.complete_primary[c_pos..end_c2]);
         c_pos = end_c2;
         if self.latin_first && decoded && !lead && l_pos < self.latin.len() { self.first.push(self.latin[l_pos]); l_pos += 1; }
         if j_pos < self.japanese.len() { self.first.push(self.japanese[j_pos]); j_pos += 1; }
-        let extra_c = if one_syllable { PAGE.saturating_sub(self.first.len()) } else { 3 };
+        let extra_c = if one_syllable {
+            if self.initials.is_empty() { PAGE.saturating_sub(self.first.len()) } else { 2 }
+        } else {
+            3
+        };
         let end_cm = (c_pos + extra_c).min(self.complete_primary.len());
         self.first.extend_from_slice(&self.complete_primary[c_pos..end_cm]);
         c_pos = end_cm;
-        let strong = self.initials.iter().take(2).take_while(|&&c| !decoded || self.common[c as usize]).count();
-        if strong > 0 { self.first.push(self.initials[0]); i_pos = 1; }
-        if !decoded && l_pos < self.latin.len() { self.first.push(self.latin[l_pos]); l_pos += 1; }
-        if strong > 1 { self.first.push(self.initials[1]); i_pos = 2; }
+        if l_pos < self.latin.len() { self.first.push(self.latin[l_pos]); l_pos += 1; }
+        if i_pos < self.initials.len() {
+            let cap = if typing { 4 } else if one_syllable { 3 } else { 2 };
+            let strong = self.initials[i_pos..].iter().take(cap).take_while(|&&c| !decoded || self.common[c as usize]).count();
+            let end_is = i_pos + strong;
+            self.first.extend_from_slice(&self.initials[i_pos..end_is]);
+            i_pos = end_is;
+        }
         let end_p2 = (p_pos + 2).min(self.partial.len());
         self.first.extend_from_slice(&self.partial[p_pos..end_p2]);
         p_pos = end_p2;
-        if typing {
-            let end_pt = (p_pos + PAGE.saturating_sub(self.first.len())).min(self.partial.len());
-            self.first.extend_from_slice(&self.partial[p_pos..end_pt]);
-            p_pos = end_pt;
+        if typing || common_initial_lead {
+            let src = if common_initial_lead { &self.initials } else { &self.partial };
+            let pos = if common_initial_lead { &mut i_pos } else { &mut p_pos };
+            let end_pt = (*pos + PAGE.saturating_sub(self.first.len())).min(src.len());
+            self.first.extend_from_slice(&src[*pos..end_pt]);
+            *pos = end_pt;
         }
 
         self.order.clear();
@@ -347,44 +377,4 @@ impl ChoicesSoA {
 
 impl Default for ChoicesSoA {
     fn default() -> Self { Self::new() }
-}
-
-/// Replaces the raw keys in `preedit` with `reading` for the first `consumed` bytes in place.
-pub fn show_reading(preedit: &mut String, reading: &str, consumed: usize, keys: &KeyInputSoA) {
-    let raw = preedit.len();
-    if !push_reading(preedit, reading, consumed, keys) {
-        preedit.truncate(raw);
-        return;
-    }
-    if consumed < raw {
-        if !preedit.ends_with('\'') { preedit.push(' '); }
-        preedit.extend_from_within(consumed..raw);
-    }
-    preedit.drain(..raw);
-}
-
-fn push_reading(out: &mut String, reading: &str, consumed: usize, keys: &KeyInputSoA) -> bool {
-    let (mut position, mut boundary) = (0usize, false);
-    let mut breaks = keys.breaks_slice().iter().copied().peekable();
-    let slice = keys.slice();
-    for byte in reading.bytes() {
-        let byte = byte.to_ascii_lowercase();
-        if byte.is_ascii_lowercase() {
-            if !slice.get(position).is_some_and(|&k| key_matches(byte, k)) { return false; }
-            if breaks.peek().copied().map(usize::from) == Some(position) {
-                breaks.next();
-                out.push('\'');
-            } else if boundary {
-                out.push(' ');
-            }
-            boundary = false;
-            out.push(char::from(byte));
-            position += 1;
-        } else if is_tone(byte, true) || byte == b' ' || byte == b'\'' {
-            boundary = true;
-        }
-    }
-    if position == 0 || keys.consumed(position) != consumed { return false; }
-    if breaks.peek().copied().map(usize::from) == Some(position) { out.push('\''); }
-    true
 }

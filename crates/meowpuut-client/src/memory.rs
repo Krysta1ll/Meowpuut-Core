@@ -94,6 +94,28 @@ impl ChoiceMemorySoA {
         self.last_committed.push_str(chosen);
     }
 
+    /// Learns a merged multi-segment whole sentence `(reading -> sentence)` without
+    /// replacing `last_committed`, keeping cross-word sequential bigram tracking anchored.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use meowpuut_client::memory::ChoiceMemorySoA;
+    ///
+    /// let mut mem = ChoiceMemorySoA::new();
+    /// mem.learn("jintian", "今天");
+    /// mem.learn_sentence("jintianhenhao", "今天很好");
+    /// assert_eq!(mem.pinned_for("jintianhenhao"), Some("今天很好"));
+    /// assert_eq!(mem.last_committed(), "今天");
+    /// ```
+    pub fn learn_sentence(&mut self, reading: &str, sentence: &str) {
+        if reading.is_empty() || sentence.is_empty() {
+            return;
+        }
+        self.set_pin(reading, sentence);
+        self.increment_boost(sentence, 1);
+    }
+
     /// Resets the sequential context chain (e.g. when clearing or switching fields).
     pub fn clear_context(&mut self) {
         self.last_committed.clear();
@@ -158,16 +180,20 @@ impl ChoiceMemorySoA {
         self.bigram_count.push(delta.min(50));
     }
 
-    /// Returns `true` if `text` is the most recently pinned choice for `reading`.
-    pub fn is_pinned(&self, reading: &str, text: &str) -> bool {
+    /// Returns the most recently pinned text for `reading`, if any.
+    pub fn pinned_for(&self, reading: &str) -> Option<&str> {
         for i in 0..self.pin_reading_off.len() {
             let r = Self::slice(&self.pin_arena, self.pin_reading_off[i], self.pin_reading_len[i]);
             if r == reading {
-                let t = Self::slice(&self.pin_arena, self.pin_text_off[i], self.pin_text_len[i]);
-                return t == text;
+                return Some(Self::slice(&self.pin_arena, self.pin_text_off[i], self.pin_text_len[i]));
             }
         }
-        false
+        None
+    }
+
+    /// Returns `true` if `text` is the most recently pinned choice for `reading`.
+    pub fn is_pinned(&self, reading: &str, text: &str) -> bool {
+        self.pinned_for(reading) == Some(text)
     }
 
     /// Returns a frequency boost score (`0..=2500`) for `text`.
@@ -279,5 +305,51 @@ impl ChoiceMemorySoA {
     pub fn compact_with_wal(&mut self, wal_data: &str) -> String {
         self.replay_wal(wal_data);
         self.serialize()
+    }
+}
+
+/// Reusable accumulator for merging multi-segment manual selections into a whole sentence.
+#[derive(Debug, Clone, Default)]
+pub struct SentenceRun {
+    reading: String,
+    text: String,
+    segments: usize,
+}
+
+impl SentenceRun {
+    pub fn with_capacity(cap: usize) -> Self {
+        Self {
+            reading: String::with_capacity(cap),
+            text: String::with_capacity(cap),
+            segments: 0,
+        }
+    }
+
+    pub fn clear(&mut self) {
+        self.reading.clear();
+        self.text.clear();
+        self.segments = 0;
+    }
+
+    pub fn push_segment(&mut self, raw_reading: &str, chosen: &str) {
+        if chosen.is_empty() {
+            return;
+        }
+        for b in raw_reading.bytes() {
+            if b != b'\'' {
+                self.reading.push(char::from(b));
+            }
+        }
+        self.text.push_str(chosen);
+        self.segments += 1;
+    }
+
+    #[inline]
+    pub fn ready_to_learn(&self) -> Option<(&str, &str)> {
+        if self.segments >= 2 && !self.reading.is_empty() && !self.text.is_empty() {
+            Some((&self.reading, &self.text))
+        } else {
+            None
+        }
     }
 }
