@@ -57,7 +57,15 @@ pub struct RootKey {
 /// The release root keys. **Empty until the developer generates the real root
 /// key** with the private signer (`meowpuut-sign root-init`) and pastes its
 /// output here. Never a `test-` kid: the assertion below stops the build.
-pub const RELEASE_ROOTS: &[RootKey] = &[];
+pub const RELEASE_ROOTS: &[RootKey] = &[RootKey {
+    kid: "root-1",
+    public: [
+        0x45, 0xf4, 0xfe, 0x97, 0xca, 0xfc, 0xeb, 0x6e,
+        0xd2, 0x1c, 0x51, 0xc9, 0x80, 0x0e, 0xb3, 0x34,
+        0x53, 0x9c, 0x47, 0x19, 0x69, 0x07, 0x51, 0xc3,
+        0x9d, 0x9d, 0x23, 0x05, 0xcf, 0x02, 0x6e, 0x82,
+    ],
+}];
 
 const fn has_test_kid(roots: &[RootKey]) -> bool {
     let mut i = 0;
